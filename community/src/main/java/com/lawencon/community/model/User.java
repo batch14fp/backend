@@ -37,9 +37,7 @@ public class User extends BaseEntity{
 	@Column(columnDefinition = "text", nullable=false)
 	private String userPassword;
 	
-	@Column(length = 64, nullable=false)
-	private String verificationCode;
-	
+
 	private Boolean isEnable;
 
 	public Role getRole() {
@@ -74,13 +72,6 @@ public class User extends BaseEntity{
 		this.userPassword = userPassword;
 	}
 
-	public String getVerificationCode() {
-		return verificationCode;
-	}
-
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}
 
 	public Boolean getIsEnable() {
 		return isEnable;
