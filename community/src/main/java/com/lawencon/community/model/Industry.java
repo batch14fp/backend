@@ -1,8 +1,16 @@
 package com.lawencon.community.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class Industry {
+import com.lawencon.base.BaseEntity;
+
+
+
+@Entity
+@Table(name = "t_industry")
+public class Industry extends BaseEntity{
 	@Column(length = 50, nullable = false)
 	private String industryName;
 

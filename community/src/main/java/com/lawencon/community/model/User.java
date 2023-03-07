@@ -1,27 +1,44 @@
 package com.lawencon.community.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
+
+@Entity
+@Table(name = "t_user",
+uniqueConstraints = {
+        @UniqueConstraint(name = "verification_code_bk", 
+                columnNames = {"verificationCode" }
+        ),
+        
+        @UniqueConstraint(name = "email_bk", 
+        columnNames = {"email" }
+        )
+		})
+
 
 public class User extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "profile_id", nullable = false)
 	private Profile profile;
 	
-	@Column(length = 50, nullable = false, unique = true)
+	@Column(length = 50, nullable = false)
 	private String email;
 	
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "text", nullable=false)
 	private String userPassword;
 	
-	@Column(length = 64)
+	@Column(length = 64, nullable=false)
 	private String verificationCode;
 	
 	private Boolean isEnable;

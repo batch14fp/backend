@@ -1,8 +1,14 @@
 package com.lawencon.community.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class File {
+import com.lawencon.base.BaseEntity;
+
+@Entity
+@Table(name = "t_file")
+public class File extends BaseEntity{
 	@Column(columnDefinition = "text")
 	private String fileContent;
 	
