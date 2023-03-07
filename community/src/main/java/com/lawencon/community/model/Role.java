@@ -1,8 +1,18 @@
 package com.lawencon.community.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class Role {
+import com.lawencon.base.BaseEntity;
+
+
+
+
+
+@Entity
+@Table(name = "t_role")
+public class Role extends BaseEntity{
 	@Column(unique = true, length = 5, nullable = false)
 	private String roleCode;
 	
