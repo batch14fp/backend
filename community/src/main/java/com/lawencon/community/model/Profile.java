@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -23,7 +22,7 @@ import com.lawencon.base.BaseEntity;
             )})
 public class Profile extends BaseEntity{
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "position_id", nullable = false)
 	private Position position;
 	
@@ -33,13 +32,13 @@ public class Profile extends BaseEntity{
 	private File imageProfile;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "socialmedia_id")
 	private SocialMedia socialmedia;
 	
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "industry_id", nullable = false)
 	private Industry industry;
 	
