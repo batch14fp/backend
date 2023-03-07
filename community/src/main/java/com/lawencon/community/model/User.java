@@ -3,7 +3,6 @@ package com.lawencon.community.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -24,7 +23,7 @@ uniqueConstraints = {
 
 
 public class User extends BaseEntity{
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 	
