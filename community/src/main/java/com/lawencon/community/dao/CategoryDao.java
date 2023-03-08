@@ -15,7 +15,7 @@ public class CategoryDao extends BaseMasterDao<Category>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Category> getAll() {
+	public List<Category> getAll() {
 		
 	    final String sql = "SELECT * FROM t_category WHERE is_active = TRUE";
 		
@@ -25,9 +25,8 @@ public class CategoryDao extends BaseMasterDao<Category>{
 	}
 
 	@Override
-	Optional<Category> getById(Long id) {
-	       final Category category = ConnHandler.getManager().find(Category.class, id);
-	        return Optional.ofNullable(category);
+	public Optional<Category> getById(Long id) {
+	        return Optional.ofNullable(super.getById(Category.class, id));
 	}
 	
 	
@@ -37,13 +36,11 @@ public class CategoryDao extends BaseMasterDao<Category>{
 		
 		return super.deleteById(entityClass, entityId);
 	}
+		
 	
-	
-	
-	@SuppressWarnings("hiding")
 	@Override
-	public <Category> Category getByIdRef(Class<Category> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Category> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Category.class, id));
 	}
 	
 	@SuppressWarnings("hiding")

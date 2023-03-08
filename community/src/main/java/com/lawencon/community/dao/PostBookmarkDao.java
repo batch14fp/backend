@@ -22,8 +22,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 
 	@Override
 	Optional<PostBookmark> getById(Long id) {
-	final PostBookmark postBookmark = ConnHandler.getManager().find(PostBookmark.class, id);
-		return Optional.ofNullable(postBookmark);
+		return Optional.ofNullable(super.getById(PostBookmark.class, id));
 	}
 	
 	
@@ -33,12 +32,12 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 		return super.deleteById(entityClass, entityId);
 	}	
 	
-	@SuppressWarnings("hiding")
 	@Override
-	public <PostBookmark> PostBookmark getByIdRef(Class<PostBookmark> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<PostBookmark> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(PostBookmark.class, id));
 	}
-
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	List<PostBookmark> getByOffsetLimit(Long offset, Long limit) {
@@ -51,4 +50,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 			
 			return res;
 	}
+
+
+	
 }

@@ -22,15 +22,15 @@ public class PositionDao extends BaseMasterDao<Position> {
 
 	@Override
 	Optional<Position> getById(Long id) {
-		final Position position = ConnHandler.getManager().find(Position.class, id);
-		return Optional.ofNullable(position);
+		return Optional.ofNullable(super.getById(Position.class, id));
 	}
 
-	@SuppressWarnings("hiding")
 	@Override
-	public <Position> Position getByIdRef(Class<Position> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Position> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Position.class, id));
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	List<Position> getByOffsetLimit(Long offset, Long limit) {
@@ -41,4 +41,6 @@ public class PositionDao extends BaseMasterDao<Position> {
 
 		return res;
 	}
+	
+	
 }

@@ -23,15 +23,13 @@ public class VerifyTokenDao extends BaseMasterDao<VerifyToken>{
 
 	@Override
 	Optional<VerifyToken> getById(Long id) {
-		final VerifyToken verifyToken = ConnHandler.getManager().find(VerifyToken.class, id);
-		return Optional.ofNullable(verifyToken);
-	}
-	
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <VerifyToken> VerifyToken getByIdRef(Class<VerifyToken> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+		return Optional.ofNullable(super.getById(VerifyToken.class, id));
 	}
 
+	@Override
+	Optional<VerifyToken> getByIdRef(Long id) {
+			return Optional.ofNullable(super.getByIdRef(VerifyToken.class, id));
+	}
+	
+	
 }

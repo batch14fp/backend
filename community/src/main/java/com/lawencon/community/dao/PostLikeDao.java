@@ -15,7 +15,7 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<PostLike> getAll() {
+	public List<PostLike> getAll() {
 		final String sql = "SELECT * FROM t_post_like WHERE  is_active = TRUE";	
 		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class).getResultList();
 		
@@ -23,9 +23,8 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 	}
 
 	@Override
-	Optional<PostLike> getById(Long id) {
-		final PostLike postLike = ConnHandler.getManager().find(PostLike.class, id);
-		return Optional.ofNullable(postLike);
+	public Optional<PostLike> getById(Long id) {
+		return Optional.ofNullable(super.getById(PostLike.class, id));
 	}
 	
 	
@@ -53,6 +52,11 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 					.getResultList();
 			
 			return res;
+	}
+
+	@Override
+	Optional<PostLike> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(PostLike.class, id));
 	}
 
 }

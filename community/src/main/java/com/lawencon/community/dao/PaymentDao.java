@@ -24,16 +24,15 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 
 	@Override
 	Optional<Payment> getById(Long id) {
-		final Payment payment = ConnHandler.getManager().find(Payment.class, id);
-		return Optional.ofNullable(payment);
+		return Optional.ofNullable(super.getById(Payment.class, id));
 	}
 	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Payment> Payment getByIdRef(Class<Payment> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
-	}
 
+	@Override
+	Optional<Payment> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Payment.class, id));
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	List<Payment> getByOffsetLimit(Long offset, Long limit) {
@@ -47,4 +46,6 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 			return res;
 	}
 
+	
+	
 }

@@ -23,8 +23,7 @@ public class PostDao extends BaseMasterDao<Post>{
 
 	@Override
 	Optional<Post> getById(Long id) {
-		final Post post = ConnHandler.getManager().find(Post.class, id);
-		return Optional.ofNullable(post);
+		return Optional.ofNullable(super.getById(Post.class, id));
 	}
 	
 	@SuppressWarnings("hiding")
@@ -44,6 +43,11 @@ public class PostDao extends BaseMasterDao<Post>{
 					.getResultList();
 			
 			return res;
+	}
+
+	@Override
+	Optional<Post> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Post.class, id));
 	}
 
 }
