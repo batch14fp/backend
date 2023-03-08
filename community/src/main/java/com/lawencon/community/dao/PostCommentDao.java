@@ -23,8 +23,7 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 
 	@Override
 	Optional<PostComment> getById(Long id) {
-	final PostComment postComment = ConnHandler.getManager().find(PostComment.class, id);
-		return Optional.ofNullable(postComment);
+		return Optional.ofNullable(super.getById(PostComment.class, id));
 	}
 	
 	
@@ -34,12 +33,12 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 		return super.deleteById(entityClass, entityId);
 	}
 	
-	@SuppressWarnings("hiding")
 	@Override
-	public <PostComment> PostComment getByIdRef(Class<PostComment> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<PostComment> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(PostComment.class, id));
 	}
-
+	
+	
 
 	@SuppressWarnings("unchecked")
 	List<PostComment> getByOffsetLimit(Long offset, Long limit) {
@@ -53,5 +52,6 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 				
 				return res;
 	}
+	
 
 }

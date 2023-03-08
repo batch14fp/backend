@@ -3,27 +3,26 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Activity;
 
 public class ActivityDao extends BaseMasterDao<Activity>{
 
 	@Override
-	List<Activity> getAll() {
+	public List<Activity> getAll() {
 	
 		return null;
 	}
 
 	@Override
 	Optional<Activity> getById(Long id) {
-		final Activity activity = ConnHandler.getManager().find(Activity.class, id);
-		return Optional.ofNullable(activity);
+		return Optional.ofNullable(super.getById(Activity.class, id));
 		}
 	
-	@SuppressWarnings("hiding")
+
 	@Override
-	public <Activity> Activity getByIdRef(Class<Activity> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Activity> getByIdRef(Long id) {
+		// TODO Auto-generated method stub
+		return Optional.ofNullable(super.getByIdRef(null, id));
 	}
 
 }

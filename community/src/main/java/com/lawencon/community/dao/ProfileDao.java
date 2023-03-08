@@ -19,15 +19,15 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 
 	@Override
 	Optional<Profile> getById(Long id) {
-		final Profile profile = ConnHandler.getManager().find(Profile.class, id);
-		return Optional.ofNullable(profile);
+		return Optional.ofNullable(super.getById(Profile.class, id));
 	}
 	
-	@SuppressWarnings("hiding")
+	
 	@Override
-	public <Profile> Profile getByIdRef(Class<Profile> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Profile> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Profile.class, id));
 	}
+	
 	
 	@SuppressWarnings("hiding")
 	@Override

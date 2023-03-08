@@ -24,17 +24,16 @@ public class UserDao extends BaseMasterDao<User>{
 
 	@Override
 	Optional<User> getById(Long id) {
-		final User user = ConnHandler.getManager().find(User.class, id);
-		return Optional.ofNullable(user);
+		return Optional.ofNullable(super.getById(User.class, id));
 	}
 
 	
 	
-	@SuppressWarnings("hiding")
 	@Override
-	public <User> User getByIdRef(Class<User> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<User> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(User.class, id));
 	}
+	
 	@SuppressWarnings("hiding")
 	@Override
 	public <User extends BaseEntity> User save(User entity) {

@@ -8,30 +8,27 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.SocialMedia;
 
-
 @Repository
-public class SocialMediaDao extends BaseMasterDao<SocialMedia>{
+public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	List<SocialMedia> getAll() {
-		final String sql = "SELECT * FROM t_social_media WHERE  is_active = TRUE";	
-		final List<SocialMedia> res = ConnHandler.getManager().createNativeQuery(sql, SocialMedia.class).getResultList();
-		
+		final String sql = "SELECT * FROM t_social_media WHERE  is_active = TRUE";
+		final List<SocialMedia> res = ConnHandler.getManager().createNativeQuery(sql, SocialMedia.class)
+				.getResultList();
+
 		return res;
 	}
 
 	@Override
 	Optional<SocialMedia> getById(Long id) {
-		final SocialMedia socialMedia= ConnHandler.getManager().find(SocialMedia.class, id);
-		return Optional.ofNullable(socialMedia);
+		return Optional.ofNullable(super.getById(SocialMedia.class, id));
 	}
-	
-	@SuppressWarnings("hiding")
+
 	@Override
-	public <SocialMedia> SocialMedia getByIdRef(Class<SocialMedia> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<SocialMedia> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(SocialMedia.class, id));
 	}
-	
 
 }

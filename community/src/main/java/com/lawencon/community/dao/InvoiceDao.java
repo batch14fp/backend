@@ -26,12 +26,12 @@ public class InvoiceDao extends BaseMasterDao<Invoice>{
 		final Invoice invoice = ConnHandler.getManager().find(Invoice.class, id);
 		return Optional.ofNullable(invoice);
 	}
-	@SuppressWarnings("hiding")
+	
+	
 	@Override
-	public <Invoice> Invoice getByIdRef(Class<Invoice> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Invoice> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Invoice.class, id));
 	}
-
 
 	@SuppressWarnings("unchecked")
 	List<Invoice> getByOffsetLimit(Long offset, Long limit) {

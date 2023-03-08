@@ -24,8 +24,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 
 	@Override
 	Optional<MemberPost> getById(Long id) {
-		final MemberPost memberPost = ConnHandler.getManager().find(MemberPost.class, id);
-		return Optional.ofNullable(memberPost);
+		return Optional.ofNullable(super.getById(MemberPost.class, id));
 	}
 
 	@SuppressWarnings("hiding")
@@ -45,6 +44,12 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 					.getResultList();
 			
 			return res;
+	}
+
+	@Override
+	Optional<MemberPost> getByIdRef(Long id) {
+		// TODO Auto-generated method stub
+		return Optional.ofNullable(super.getByIdRef(MemberPost.class, id));
 	}
 	
 	

@@ -22,17 +22,13 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 
 	@Override
 	Optional<Industry> getById(Long id) {
-		final Industry industry = ConnHandler.getManager().find(Industry.class, id);
-		return Optional.ofNullable(industry);
+		return Optional.ofNullable(super.getById(Industry.class, id));
 	}
 	
-	
-	@SuppressWarnings("hiding")
 	@Override
-	public <Industry> Industry getByIdRef(Class<Industry> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<Industry> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(Industry.class, id));
 	}
-
 
 	@SuppressWarnings("unchecked")
 	List<Industry> getByOffsetLimit(Long offset, Long limit) {

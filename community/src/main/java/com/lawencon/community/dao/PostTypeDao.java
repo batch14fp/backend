@@ -15,7 +15,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<PostType> getAll() {
+	public List<PostType> getAll() {
 		final String sql = "SELECT * FROM t_post_type WHERE  is_active = TRUE";	
 		final List<PostType> res = ConnHandler.getManager().createNativeQuery(sql, PostType.class).getResultList();
 		
@@ -24,8 +24,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 
 	@Override
 	Optional<PostType> getById(Long id) {
-		final PostType postType = ConnHandler.getManager().find(PostType.class, id);
-		return Optional.ofNullable(postType);
+		return Optional.ofNullable(super.getById(PostType.class, id));
 	}
 	
 	@SuppressWarnings("hiding")
@@ -35,11 +34,11 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	}
 	
 	
-	@SuppressWarnings("hiding")
 	@Override
-	public <PostType> PostType getByIdRef(Class<PostType> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
+	Optional<PostType> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(PostType.class, id));
 	}
+	
 	
 	
 	@SuppressWarnings("hiding")

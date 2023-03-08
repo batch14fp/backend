@@ -10,17 +10,22 @@ public class ActivityTypeDao extends BaseMasterDao<ActivityType>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<ActivityType> getAll() {
+	public List<ActivityType> getAll() {
 		final String sql = "SELECT * FROM t_activity_type WHERE is_active = TRUE";
-		final List<ActivityType> res = ConnHandler.getManager().createNativeQuery(sql, ActivityType.class).getResultList();
+		final List<ActivityType> res = 	ConnHandler.getManager().createNativeQuery(sql, ActivityType.class).getResultList();
 		
 		return res;
 	}
 
 	@Override
 	Optional<ActivityType> getById(Long id) {
-	final ActivityType activityType = ConnHandler.getManager().find(ActivityType.class, id);
-		return Optional.ofNullable(activityType);
+		return Optional.ofNullable(super.getById(ActivityType.class, id));
 	}
+	
+	@Override
+	Optional<ActivityType> getByIdRef(Long id) {
+		return Optional.ofNullable(super.getByIdRef(ActivityType.class, id));
+	}
+	
 
 }
