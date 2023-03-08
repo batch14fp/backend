@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_verify_token")
 public class VerifyToken {
-
 	@Column(length = 50, nullable = false)
 	private String email;
 
