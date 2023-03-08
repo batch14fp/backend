@@ -1,0 +1,16 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_post_type")
+public class PostType {
+	
+	
+	@ManyToOne
+	private File file;
+	private String title;
+	private String contentArticle; 
+
+}

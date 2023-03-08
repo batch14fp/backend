@@ -1,0 +1,9 @@
+package com.lawencon.community.model;
+
+public class PollingRespon {
+	
+	
+	private PollingOption pollingOption;
+	private User user;
+
+}

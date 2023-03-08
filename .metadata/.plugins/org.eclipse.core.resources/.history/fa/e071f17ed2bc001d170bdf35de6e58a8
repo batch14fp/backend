@@ -1,0 +1,71 @@
+package com.lawencon.community.model;
+
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_payment")
+public class Payment {
+	
+
+	@OneToOne
+	@JoinColumn(name="invoice_id", nullable=false)
+	private Invoice invoice;
+	
+	
+	private Boolean isPaid;
+	
+
+	@OneToOne
+	@JoinColumn(name="file_id", nullable=false)
+	private File file;
+	
+	
+	private LocalDate expired;
+
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
+
+	public Boolean getIsPaid() {
+		return isPaid;
+	}
+
+
+	public void setIsPaid(Boolean isPaid) {
+		this.isPaid = isPaid;
+	}
+
+
+	public File getFile() {
+		return file;
+	}
+
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+
+	public LocalDate getExpired() {
+		return expired;
+	}
+
+
+	public void setExpired(LocalDate expired) {
+		this.expired = expired;
+	}
+	
+
+}

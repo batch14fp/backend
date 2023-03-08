@@ -1,0 +1,8 @@
+package com.lawencon.community.model;
+
+public class PostLike {
+	
+	private User user;
+	private Post post;
+
+}

@@ -1,0 +1,11 @@
+package com.lawencon.community.model;
+
+public class VerifyToken {
+	
+	
+	
+	email  varchar(50) NOT NULL,
+	token_verify varchar(32) NOT NULL,
+	expired_at timestamp, ''
+
+}

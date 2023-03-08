@@ -19,7 +19,7 @@ public class Activity extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name="type_activity_id", nullable=false)
-	private TypeActivity typeActivity;
+	private ActivityType typeActivity;
 	
 	
 	@ManyToOne
@@ -57,10 +57,10 @@ public class Activity extends BaseEntity{
 	
 	
 	
-	public TypeActivity getTypeActivity() {
+	public ActivityType getTypeActivity() {
 		return typeActivity;
 	}
-	public void setTypeActivity(TypeActivity typeActivity) {
+	public void setTypeActivity(ActivityType typeActivity) {
 		this.typeActivity = typeActivity;
 	}
 	public Category getCategory() {

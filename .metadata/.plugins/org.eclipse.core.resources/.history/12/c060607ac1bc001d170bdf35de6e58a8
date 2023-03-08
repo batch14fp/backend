@@ -1,0 +1,28 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name="t_voucher",
+uniqueConstraints = {
+        @UniqueConstraint(name = "voucher_bk", 
+                columnNames = {"phoneNumber" }
+        )})
+public class Voucher {
+	
+	private Integer limitApplied;
+	
+	private Integer usedCount;
+	
+	@Column(length= 12, nullable= false)
+	private String voucherCode;
+	
+	private Float discountPercent;
+	
+
+	
+
+}

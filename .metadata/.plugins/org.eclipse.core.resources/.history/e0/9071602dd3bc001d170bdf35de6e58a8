@@ -1,0 +1,7 @@
+package com.lawencon.community.model;
+
+public class Article {
+	private File file;
+	private String title;
+	private String contentArticle;
+}

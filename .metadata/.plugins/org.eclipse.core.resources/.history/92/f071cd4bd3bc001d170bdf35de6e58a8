@@ -1,0 +1,15 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_article")
+public class Article {
+	
+	
+	
+	private File file;
+	private String title;
+	private String contentArticle;
+}

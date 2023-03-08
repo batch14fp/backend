@@ -1,0 +1,13 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_post_bookmark")
+public class PostBookmark {
+	
+	private User user;
+	private Post post;
+
+}

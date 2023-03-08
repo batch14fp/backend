@@ -1,0 +1,22 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+
+
+
+@Entity
+@Table(name="t_invoice",
+uniqueConstraints = {
+        @UniqueConstraint(name = "voucher_code_bk", 
+                columnNames = {"voucherCode" }
+        )})
+public class Invoice {
+	
+	
+	private Activity activity;
+	private Voucher voucher;
+	private String invoiceCode;
+}

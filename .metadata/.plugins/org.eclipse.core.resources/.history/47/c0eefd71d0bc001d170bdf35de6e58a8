@@ -1,0 +1,10 @@
+package com.lawencon.community.model;
+
+public class Post {
+
+	private Category category;
+	private File file;
+	private PostType postType;
+	private String title;
+	private String contentPost;
+}

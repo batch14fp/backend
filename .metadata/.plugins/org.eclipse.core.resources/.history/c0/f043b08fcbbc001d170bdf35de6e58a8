@@ -1,0 +1,8 @@
+package com.lawencon.community.model;
+
+public class PostComment {
+	
+	
+	private PostComment comment;
+	private Post post;
+}

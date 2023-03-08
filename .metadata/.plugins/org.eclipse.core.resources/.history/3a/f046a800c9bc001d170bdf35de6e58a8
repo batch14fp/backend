@@ -1,0 +1,136 @@
+package com.lawencon.community.model;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="t_activity")
+public class Activity {
+	
+	
+	@ManyToOne
+	@JoinColumn(name="type_activity_id", nullable=false)
+	private TypeActivity typeActivity;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="category_id", nullable=false)
+	private Category category;
+		
+	@ManyToOne
+	@JoinColumn(name="file_id")
+	private File file;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="voucher_id", nullable=false)
+	private Voucher voucher;
+	
+	
+	@Column(length=50)
+	private String title;
+	
+	private Float price;
+	
+	@Column(length=36)
+	private String provider;
+	
+	@Column(length=50)
+	private String activityLocation;
+
+	
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private LocalTime startTime ;
+	private LocalTime end_time;
+	
+	
+	
+	
+	
+	public TypeActivity getTypeActivity() {
+		return typeActivity;
+	}
+	public void setTypeActivity(TypeActivity typeActivity) {
+		this.typeActivity = typeActivity;
+	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
+	}
+	public Voucher getVoucher() {
+		return voucher;
+	}
+	public void setVoucher(Voucher voucher) {
+		this.voucher = voucher;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getProvider() {
+		return provider;
+	}
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+	public String getActivityLocation() {
+		return activityLocation;
+	}
+	public void setActivityLocation(String activityLocation) {
+		this.activityLocation = activityLocation;
+	}
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+	public LocalTime getEnd_time() {
+		return end_time;
+	}
+	public void setEnd_time(LocalTime end_time) {
+		this.end_time = end_time;
+	}
+	public Float getPrice() {
+		return price;
+	}
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+	
+	
+	
+	
+
+
+}
