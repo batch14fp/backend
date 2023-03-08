@@ -6,10 +6,6 @@ import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
-
-
-
-
 @Entity
 @Table(name = "t_role")
 public class Role extends BaseEntity{
