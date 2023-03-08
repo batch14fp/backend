@@ -24,6 +24,12 @@ uniqueConstraints = {
         columnNames = {"profile_id", "role_id" }
         )
 		})
+<<<<<<< HEAD
+
+
+public class User extends BaseEntity{
+=======
+>>>>>>> 432a5377476b30480719d73696d04f3ac3ef73c5
 =======
 @Table(name = "t_user", uniqueConstraints = {
 		@UniqueConstraint(name = "verification_code_bk", columnNames = { "verificationCode" }),
@@ -32,6 +38,10 @@ uniqueConstraints = {
 		@UniqueConstraint(name = "email_bk", columnNames = { "email" }) })
 
 public class User extends BaseEntity {
+<<<<<<< HEAD
+>>>>>>> 761927d4ee827b1cf2b8675e1cfdd490b62dfc62
+=======
+>>>>>>> 432a5377476b30480719d73696d04f3ac3ef73c5
 	@OneToOne
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
