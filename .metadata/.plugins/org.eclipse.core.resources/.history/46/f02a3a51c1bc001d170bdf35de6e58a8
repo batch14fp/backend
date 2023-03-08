@@ -1,0 +1,47 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_voucher")
+public class Voucher {
+	
+	private Integer limit_applied;
+	
+	private Integer used_count;
+	
+	@Column(length= 12, nullable= false)
+	private String voucher_code;
+	
+	private Float discount_percent;
+	
+	public Integer getLimit_applied() {
+		return limit_applied;
+	}
+	public void setLimit_applied(Integer limit_applied) {
+		this.limit_applied = limit_applied;
+	}
+	public Integer getUsed_count() {
+		return used_count;
+	}
+	public void setUsed_count(Integer used_count) {
+		this.used_count = used_count;
+	}
+	public String getVoucher_code() {
+		return voucher_code;
+	}
+	public void setVoucher_code(String voucher_code) {
+		this.voucher_code = voucher_code;
+	}
+	public Float getDiscount_percent() {
+		return discount_percent;
+	}
+	public void setDiscount_percent(Float discount_percent) {
+		this.discount_percent = discount_percent;
+	}
+	
+	
+
+}

@@ -1,0 +1,20 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_post_type")
+public class PostType {
+	
+	@ManyToOne
+	@JoinColumn(name="polling_id")
+	private Polling polling;
+	
+	@Column(length=15)
+	private String typeName;
+
+}

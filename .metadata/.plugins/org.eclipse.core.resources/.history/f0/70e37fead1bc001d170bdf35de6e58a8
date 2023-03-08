@@ -1,0 +1,14 @@
+package com.lawencon.community.model;
+
+import java.time.LocalDate;
+
+public class Payment {
+
+	
+	private Invoice invoice;
+	private Boolean isPaid;
+	private File file;
+	private LocalDate expired;
+	
+
+}

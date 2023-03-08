@@ -1,0 +1,31 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name="t_post_type",
+uniqueConstraints = {
+        @UniqueConstraint(name = "post_type_bk", 
+                columnNames = {"typeName" }
+        )})
+public class PostType {
+	
+	@ManyToOne
+	@JoinColumn(name="polling_id")
+	private Polling polling;
+	
+	@Column(length=15, nullable=false)
+	private String typeName;
+	
+	
+	
+	
+	
+	
+
+}
