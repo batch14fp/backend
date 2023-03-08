@@ -1,0 +1,11 @@
+package com.lawencon.community.model;
+
+public class VerifyToken {
+	
+	
+	
+	email 
+	tokenVerify
+	expiredAt 
+
+}

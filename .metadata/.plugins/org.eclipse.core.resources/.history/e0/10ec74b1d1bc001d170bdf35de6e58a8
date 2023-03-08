@@ -1,0 +1,8 @@
+package com.lawencon.community.model;
+
+public class PollingOption {
+	
+	private Polling polling;
+	private String contentPolling;
+
+}

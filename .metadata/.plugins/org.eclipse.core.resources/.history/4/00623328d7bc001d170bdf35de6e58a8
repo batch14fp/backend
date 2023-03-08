@@ -1,0 +1,8 @@
+package com.lawencon.community.model;
+
+public class Snippet {
+	public static void main(String[] args) {
+		t_verify_token
+	}
+}
+

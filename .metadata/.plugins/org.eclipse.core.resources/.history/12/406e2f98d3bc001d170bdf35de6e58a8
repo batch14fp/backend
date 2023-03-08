@@ -1,0 +1,23 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="t_article")
+public class Article {
+	
+	
+	@OneToOne
+	@JoinColumn(name="file_id", nullable=false)
+	private File file;
+
+	@Column(lenght=50)
+	private String title;
+	
+	@Column
+	private String contentArticle;
+}

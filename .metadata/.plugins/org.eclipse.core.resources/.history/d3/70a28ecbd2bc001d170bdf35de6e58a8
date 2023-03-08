@@ -1,0 +1,9 @@
+package com.lawencon.community.model;
+
+public class Invoice {
+	
+	
+	private Activity activity;
+	private Voucher voucher;
+	private String invoiceCode;
+}

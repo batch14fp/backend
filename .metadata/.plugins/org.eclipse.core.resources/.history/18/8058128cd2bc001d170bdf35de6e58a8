@@ -1,0 +1,9 @@
+package com.lawencon.community.model;
+
+public class MemberPost {
+	
+	private User member;
+	private Post post;
+	
+
+}

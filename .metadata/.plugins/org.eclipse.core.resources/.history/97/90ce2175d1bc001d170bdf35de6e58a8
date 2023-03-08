@@ -1,0 +1,16 @@
+package com.lawencon.community.model;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+public class PollingRespon {
+	
+	@OneToOne
+	@JoinColumn(name="polling_option_id", nullable=false)
+	private PollingOption pollingOption;
+	
+	@OneToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+
+}

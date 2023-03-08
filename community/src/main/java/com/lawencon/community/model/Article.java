@@ -17,7 +17,7 @@ public class Article  extends BaseEntity{
 	@JoinColumn(name="file_id", nullable=false)
 	private File file;
 
-	@Column(length=50)
+	@Column(length=50, nullable=false)
 	private String title;
 	
 

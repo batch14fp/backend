@@ -1,0 +1,27 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name="t_post_like",
+uniqueConstraints = {
+        @UniqueConstraint(name = "post_like_ck", 
+                columnNames = {"user_id", "post_id" }
+        )})
+public class PostLike {
+
+	
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name="post_id", nullable=false)
+	private Post post;
+
+
+}

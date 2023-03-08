@@ -12,7 +12,7 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name="t_post_type",
 uniqueConstraints = {
-        @UniqueConstraint(name = "post_type_bk", 
+        @UniqueConstraint(name = "type_code_bk", 
                 columnNames = {"typeName" }
         )})
 public class PostType  extends BaseEntity{
@@ -21,6 +21,9 @@ public class PostType  extends BaseEntity{
 	@JoinColumn(name="polling_id")
 	private Polling polling;
 	
+	@Column(length=5, nullable=false)
+	private String typeCode;
+
 	@Column(length=15, nullable=false)
 	private String typeName;
 

@@ -1,0 +1,18 @@
+package com.lawencon.community.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name="t_post_type",
+uniqueConstraints = {
+        @UniqueConstraint(name = "post_bookmark_ck", 
+                columnNames = {"user_id", "post_id" }
+        )})
+public class PostLike {
+	
+	private User user;
+	private Post post;
+
+}

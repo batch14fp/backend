@@ -5,13 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name=" t_post")
+@Table(name="t_post",
+uniqueConstraints = {
+        @UniqueConstraint(name = "type_category_ck", 
+                columnNames = {"category_id", "post_type_id" }
+        )})
 public class Post  extends BaseEntity{
-	
 	
 	@OneToOne
 	@JoinColumn(name="category_id", nullable=false)
