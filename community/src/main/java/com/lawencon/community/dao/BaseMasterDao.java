@@ -10,4 +10,6 @@ public abstract class BaseMasterDao<T> extends AbstractJpaDao{
 
     abstract List<T> getAll();
     abstract Optional<T> getById(Long id);
+    abstract Optional<T> getByIdRef(Long id);
+   
 }
