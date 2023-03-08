@@ -10,33 +10,25 @@ import javax.persistence.UniqueConstraint;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "t_user",
-uniqueConstraints = {
-        @UniqueConstraint(name = "verification_code_bk", 
-                columnNames = {"verificationCode" }
-        ),
-        
-        @UniqueConstraint(name = "email_bk", 
-        columnNames = {"email" }
-        )
-		})
+@Table(name = "t_user", uniqueConstraints = {
+		@UniqueConstraint(name = "verification_code_bk", columnNames = { "verificationCode" }),
 
+		@UniqueConstraint(name = "email_bk", columnNames = { "email" }) })
 
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
-	
+
 	@OneToOne
 	@JoinColumn(name = "profile_id", nullable = false)
 	private Profile profile;
-	
+
 	@Column(length = 50, nullable = false)
 	private String email;
-	
-	@Column(columnDefinition = "text", nullable=false)
+
+	@Column(columnDefinition = "text", nullable = false)
 	private String userPassword;
-	
 
 	private Boolean isEnable;
 
@@ -72,7 +64,6 @@ public class User extends BaseEntity{
 		this.userPassword = userPassword;
 	}
 
-
 	public Boolean getIsEnable() {
 		return isEnable;
 	}
@@ -80,5 +71,5 @@ public class User extends BaseEntity{
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-	
+
 }
