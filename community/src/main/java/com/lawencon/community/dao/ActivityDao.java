@@ -24,5 +24,12 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 		
 		return Optional.ofNullable(super.getByIdRef(Activity.class, id));
 	}
+	
+	@Override
+	public Optional<Activity> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Activity.class, id));
+
+	}
 
 }

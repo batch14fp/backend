@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseEntity;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PostType;
 
@@ -26,36 +25,21 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	Optional<PostType> getById(String id) {
 		return Optional.ofNullable(super.getById(PostType.class, id));
 	}
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <PostType> boolean deleteById(Class<PostType> entityClass, Object entityId) {
-		return super.deleteById(entityClass, entityId);
-	}
-	
+
 	
 	@Override
 	Optional<PostType> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostType.class, id));
 	}
 	
-	
-	
-	@SuppressWarnings("hiding")
 	@Override
-	public <PostType extends BaseEntity> PostType save(PostType entity) {
-		
-		return super.save(entity);
+	public Optional<PostType> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(PostType.class, id));
+
 	}
 	
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <PostType extends BaseEntity> PostType saveAndFlush(PostType entity) {
-		return super.saveAndFlush(entity);
-	}
-	
-	
+
 	
 	
 	

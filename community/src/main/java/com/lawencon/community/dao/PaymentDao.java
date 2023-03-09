@@ -47,5 +47,12 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 	}
 
 	
+	@Override
+	public Optional<Payment> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Payment.class, id));
+
+	}
+	
 	
 }

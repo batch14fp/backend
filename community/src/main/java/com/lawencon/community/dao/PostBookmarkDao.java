@@ -26,11 +26,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 	}
 	
 	
-	@SuppressWarnings("hiding")
-	@Override
-	public <PostBookmark> boolean deleteById(Class<PostBookmark> entityClass, Object entityId) {
-		return super.deleteById(entityClass, entityId);
-	}	
+
 	
 	@Override
 	Optional<PostBookmark> getByIdRef(String id) {
@@ -49,6 +45,13 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 					.getResultList();
 			
 			return res;
+	}
+	
+	@Override
+	public Optional<PostBookmark> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(PostBookmark.class, id));
+
 	}
 
 
