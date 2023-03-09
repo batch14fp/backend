@@ -11,10 +11,9 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.position.PojoPostionReq;
 import com.lawencon.community.pojo.position.PojoResGetPostion;
-import com.lawencon.community.util.GenerateId;
 
 @Service
-public class PositionService {
+public class PositionService extends BaseService<PojoResGetPostion>{
 
 	private final PositionDao positionDao;
 
@@ -23,6 +22,8 @@ public class PositionService {
 
 	}
 
+	
+	@Override
 	public List<PojoResGetPostion> getAll() {
 		final List<PojoResGetPostion> positions = new ArrayList<>();
 		positionDao.getAll().forEach(data -> {
@@ -35,7 +36,6 @@ public class PositionService {
 		return positions;
 
 	}
-	
 	public PojoRes deleteById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
@@ -83,6 +83,10 @@ public class PositionService {
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
+	
+	
+	
+	
 	
 	
 
