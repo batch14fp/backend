@@ -1,8 +1,6 @@
 package com.lawencon.community.pojo.posttype;
 
 public class PojoResGetPostType {
-	
-	
 	private String postTypeName;
 	private String postTypeCode;
 	public String getPostTypeName() {
