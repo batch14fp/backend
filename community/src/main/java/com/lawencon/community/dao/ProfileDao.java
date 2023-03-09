@@ -3,7 +3,6 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
-import com.lawencon.base.BaseEntity;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Profile;
 
@@ -28,19 +27,14 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 		return Optional.ofNullable(super.getByIdRef(Profile.class, id));
 	}
 	
-	
-	@SuppressWarnings("hiding")
 	@Override
-	public <Profile extends BaseEntity> Profile save(Profile entity) {
-		return super.save(entity);
+	public Optional<Profile> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Profile.class, id));
+
 	}
 	
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Profile extends BaseEntity> Profile saveAndFlush(Profile entity) {
-		return super.saveAndFlush(entity);
-	}
+
 	
 	
 	

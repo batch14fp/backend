@@ -25,12 +25,6 @@ public class PostDao extends BaseMasterDao<Post>{
 	Optional<Post> getById(String id) {
 		return Optional.ofNullable(super.getById(Post.class, id));
 	}
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Post> Post getByIdRef(Class<Post> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
-	}
 
 
 	@SuppressWarnings("unchecked")
@@ -48,6 +42,12 @@ public class PostDao extends BaseMasterDao<Post>{
 	@Override
 	Optional<Post> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Post.class, id));
+	}
+	@Override
+	public Optional<Post> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Post.class, id));
+
 	}
 
 }

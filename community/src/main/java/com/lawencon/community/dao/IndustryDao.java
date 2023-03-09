@@ -41,6 +41,12 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 			
 			return res;
 	}
+	@Override
+	public Optional<Industry> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Industry.class, id));
+
+	}
 	
 	
 	

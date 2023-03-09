@@ -46,6 +46,12 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 		return Optional.ofNullable(super.getByIdRef(MemberPost.class, id));
 	}
 	
+	@Override
+	public Optional<MemberPost> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(MemberPost.class, id));
+
+	}
 	
 	
 }

@@ -53,6 +53,13 @@ public class CategoryDao extends BaseMasterDao<Category>{
 	
 	}	
 	
+	@Override
+	public Optional<Category> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Category.class, id));
+
+	}
+	
 	
 	
 

@@ -26,13 +26,8 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 		return Optional.ofNullable(super.getById(PostComment.class, id));
 	}
 	
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <PostComment> boolean deleteById(Class<PostComment> entityClass, Object entityId) {
-		return super.deleteById(entityClass, entityId);
-	}
-	
+
+
 	@Override
 	Optional<PostComment> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostComment.class, id));
@@ -51,6 +46,13 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 						.getResultList();
 				
 				return res;
+	}
+	
+	@Override
+	public Optional<PostComment> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(PostComment.class, id));
+
 	}
 	
 

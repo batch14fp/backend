@@ -22,5 +22,12 @@ public class FileDao extends BaseMasterDao<File>{
 	Optional<File> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(File.class, id));
 	}
+	
+	@Override
+	public Optional<File> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(File.class, id));
+
+	}
 
 }
