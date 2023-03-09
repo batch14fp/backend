@@ -17,10 +17,10 @@ import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.User;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
 	private UserDao userDao;
 	
-	@Autowired
+	@Autowired	
 	private PasswordEncoder encoder;
 	
 	@PersistenceContext
@@ -45,5 +45,10 @@ public class UserService implements UserDetailsService{
 	public Optional<User> login(final String email) {
 		return userDao.login(email);
 	}
+
+
+
+	
+	
 
 }

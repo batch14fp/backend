@@ -13,7 +13,7 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<BankPayment> getAll() {
+	public List<BankPayment> getAll() {
 		final String sql = "SELECT * FROM t_bank_payement WHERE  is_active = TRUE";
 		final List<BankPayment> res = ConnHandler.getManager().createNativeQuery(sql, BankPayment.class)
 				.getResultList();

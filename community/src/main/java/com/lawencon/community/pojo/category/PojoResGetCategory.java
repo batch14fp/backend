@@ -4,6 +4,7 @@ public class PojoResGetCategory {
 	private String categoryId;
 	private String categoryCode;
 	private String categoryName;
+	private Boolean isActive;
 	public String getCategoryId() {
 		return categoryId;
 	}
@@ -21,6 +22,12 @@ public class PojoResGetCategory {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	
