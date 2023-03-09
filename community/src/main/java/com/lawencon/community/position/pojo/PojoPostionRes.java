@@ -2,6 +2,7 @@ package com.lawencon.community.position.pojo;
 
 public class PojoPostionRes {
 	private String positionId;
+	private String positionCode;
 	private String positionName;
 	public String getPositionId() {
 		return positionId;
@@ -14,6 +15,12 @@ public class PojoPostionRes {
 	}
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
+	}
+	public String getPositionCode() {
+		return positionCode;
+	}
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
 	}
 	
 }

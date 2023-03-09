@@ -21,7 +21,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 	}
 
 	@Override
-	Optional<PostBookmark> getById(Long id) {
+	Optional<PostBookmark> getById(String id) {
 		return Optional.ofNullable(super.getById(PostBookmark.class, id));
 	}
 	
@@ -33,7 +33,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 	}	
 	
 	@Override
-	Optional<PostBookmark> getByIdRef(Long id) {
+	Optional<PostBookmark> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostBookmark.class, id));
 	}
 	

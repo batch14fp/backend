@@ -23,7 +23,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getById(Long id) {
+	Optional<MemberPost> getById(String id) {
 		return Optional.ofNullable(super.getById(MemberPost.class, id));
 	}
 
@@ -47,7 +47,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getByIdRef(Long id) {
+	Optional<MemberPost> getByIdRef(String id) {
 		// TODO Auto-generated method stub
 		return Optional.ofNullable(super.getByIdRef(MemberPost.class, id));
 	}
