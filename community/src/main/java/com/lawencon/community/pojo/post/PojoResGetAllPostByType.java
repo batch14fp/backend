@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoAllPostByTypeRes {
+public class PojoResGetAllPostByType {
 	private String userId;
 	private String fullname;
 	private String timeAgo;
@@ -17,7 +17,7 @@ public class PojoAllPostByTypeRes {
 	private boolean isBookmark;
 	private String titlePolling;
 	private String pollingOptionId;
-	private PojoPollingOptionRes pollingOption;
+	private PojoResGetPollingOption pollingOption;
 	public String getUserId() {
 		return userId;
 	}
@@ -114,10 +114,10 @@ public class PojoAllPostByTypeRes {
 	public void setPollingOptionId(String pollingOptionId) {
 		this.pollingOptionId = pollingOptionId;
 	}
-	public PojoPollingOptionRes getPollingOption() {
+	public PojoResGetPollingOption getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 }

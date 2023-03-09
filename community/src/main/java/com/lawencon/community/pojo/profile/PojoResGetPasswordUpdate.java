@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-public class PojoPasswordUpdateRes {
+public class PojoResGetPasswordUpdate {
 	private String message;
 
 	public String getMessage() {

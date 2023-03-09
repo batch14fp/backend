@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-public class PojoProfileVerifyReq {
+public class PojoProfileVerifyReqInsert {
 	private String verificationCode;
 
 	public String getVerificationCode() {

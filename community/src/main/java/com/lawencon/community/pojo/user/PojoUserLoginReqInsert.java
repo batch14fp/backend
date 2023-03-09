@@ -1,16 +1,8 @@
 package com.lawencon.community.pojo.user;
 
-public class PojoSignUpReq {
-	private String fullname;
+public class PojoUserLoginReqInsert {
 	private String email;
 	private String password;
-	
-	public String getFullname() {
-		return fullname;
-	}
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
 	public String getEmail() {
 		return email;
 	}

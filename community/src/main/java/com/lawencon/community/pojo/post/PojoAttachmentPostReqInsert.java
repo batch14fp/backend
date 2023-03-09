@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoAttachmentPostInsertReq {
+public class PojoAttachmentPostReqInsert {
 	private String fileCodes;
 	private String extensions;
 	private String postId;

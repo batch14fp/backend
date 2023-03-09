@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-public class PojoProfileDetailRes {
+public class PojoResGetProfileDetail {
 	private String userId;
 	private String fullname;
 	private String email;

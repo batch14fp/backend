@@ -1,9 +1,9 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoPollingInsertReq {
+public class PojoPollingReqInsert {
 	private String pollingTitle;
 	private String endAt;
-	private PojoPollingOptionRes pollingOption;
+	private PojoResGetPollingOption pollingOption;
 	public String getPollingTitle() {
 		return pollingTitle;
 	}
@@ -16,10 +16,10 @@ public class PojoPollingInsertReq {
 	public void setEndAt(String endAt) {
 		this.endAt = endAt;
 	}
-	public PojoPollingOptionRes getPollingOption() {
+	public PojoResGetPollingOption getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 	

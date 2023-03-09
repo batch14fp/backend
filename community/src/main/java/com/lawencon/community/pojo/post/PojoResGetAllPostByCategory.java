@@ -1,20 +1,23 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoAllPostLikeRes {
+public class PojoResGetAllPostByCategory {
 	private String userId;
 	private String fullname;
 	private String timeAgo;
 	private String title;
 	private String content;
+	private String typeCode;
 	private String typeName;
-	private String imgPostId;
 	private String categoryCode;
 	private String categoryName;
+	private String imgPostId;
 	private int countPostLike;
 	private int countPostComment;
 	private boolean isLike;
 	private boolean isBookmark;
-	private PojoPollingOptionRes pollingOption;
+	private String titlePolling;
+	private String pollingOptionId;
+	private PojoResGetPollingOption pollingOption;
 	public String getUserId() {
 		return userId;
 	}
@@ -45,17 +48,17 @@ public class PojoAllPostLikeRes {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getTypeCode() {
+		return typeCode;
+	}
+	public void setTypeCode(String typeCode) {
+		this.typeCode = typeCode;
+	}
 	public String getTypeName() {
 		return typeName;
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
-	}
-	public String getImgPostId() {
-		return imgPostId;
-	}
-	public void setImgPostId(String imgPostId) {
-		this.imgPostId = imgPostId;
 	}
 	public String getCategoryCode() {
 		return categoryCode;
@@ -68,6 +71,12 @@ public class PojoAllPostLikeRes {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public String getImgPostId() {
+		return imgPostId;
+	}
+	public void setImgPostId(String imgPostId) {
+		this.imgPostId = imgPostId;
 	}
 	public int getCountPostLike() {
 		return countPostLike;
@@ -93,10 +102,22 @@ public class PojoAllPostLikeRes {
 	public void setBookmark(boolean isBookmark) {
 		this.isBookmark = isBookmark;
 	}
-	public PojoPollingOptionRes getPollingOption() {
+	public String getTitlePolling() {
+		return titlePolling;
+	}
+	public void setTitlePolling(String titlePolling) {
+		this.titlePolling = titlePolling;
+	}
+	public String getPollingOptionId() {
+		return pollingOptionId;
+	}
+	public void setPollingOptionId(String pollingOptionId) {
+		this.pollingOptionId = pollingOptionId;
+	}
+	public PojoResGetPollingOption getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 }

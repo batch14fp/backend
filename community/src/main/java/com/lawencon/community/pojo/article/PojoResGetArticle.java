@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.article;
 
-public class PojoArticleRes {
+public class PojoResGetArticle {
 	private String articleId;
 	private String title;
 	private String content;

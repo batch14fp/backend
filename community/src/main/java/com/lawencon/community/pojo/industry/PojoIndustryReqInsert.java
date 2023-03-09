@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.industry;
 
-public class PojoIndustryReq {
+public class PojoIndustryReqInsert {
 	private String industryName;
 
 	public String getIndustryName() {

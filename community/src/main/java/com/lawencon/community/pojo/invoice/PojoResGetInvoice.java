@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.invoice;
 
-public class PojoInvoiceRes {
+public class PojoResGetInvoice {
 	private String activityName;
 	private String typeName;
 	private String categoryName;

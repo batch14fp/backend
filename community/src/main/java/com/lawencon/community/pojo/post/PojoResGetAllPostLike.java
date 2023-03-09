@@ -1,12 +1,11 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoAllPostRes {
+public class PojoResGetAllPostLike {
 	private String userId;
 	private String fullname;
 	private String timeAgo;
 	private String title;
 	private String content;
-	private String typeCode;
 	private String typeName;
 	private String imgPostId;
 	private String categoryCode;
@@ -15,9 +14,7 @@ public class PojoAllPostRes {
 	private int countPostComment;
 	private boolean isLike;
 	private boolean isBookmark;
-	private String titlePolling;
-	private String pollingOptionId;
-	private PojoPollingOptionRes pollingOption;
+	private PojoResGetPollingOption pollingOption;
 	public String getUserId() {
 		return userId;
 	}
@@ -47,12 +44,6 @@ public class PojoAllPostRes {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getTypeCode() {
-		return typeCode;
-	}
-	public void setTypeCode(String typeCode) {
-		this.typeCode = typeCode;
 	}
 	public String getTypeName() {
 		return typeName;
@@ -102,22 +93,10 @@ public class PojoAllPostRes {
 	public void setBookmark(boolean isBookmark) {
 		this.isBookmark = isBookmark;
 	}
-	public String getTitlePolling() {
-		return titlePolling;
-	}
-	public void setTitlePolling(String titlePolling) {
-		this.titlePolling = titlePolling;
-	}
-	public String getPollingOptionId() {
-		return pollingOptionId;
-	}
-	public void setPollingOptionId(String pollingOptionId) {
-		this.pollingOptionId = pollingOptionId;
-	}
-	public PojoPollingOptionRes getPollingOption() {
+	public PojoResGetPollingOption getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 }
