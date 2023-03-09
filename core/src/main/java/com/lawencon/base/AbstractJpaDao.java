@@ -1,6 +1,7 @@
 package com.lawencon.base;
 
 import java.util.UUID;
+
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
