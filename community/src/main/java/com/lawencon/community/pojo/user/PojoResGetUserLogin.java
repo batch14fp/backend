@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.user;
 
-public class PojoUserResLogin {
+public class PojoResGetUserLogin {
 	private String roleCode;
 	private String token;
 	private String fullName;

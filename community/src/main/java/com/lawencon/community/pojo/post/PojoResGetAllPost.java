@@ -1,20 +1,23 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoAllPostBookmarkRes {
+public class PojoResGetAllPost {
 	private String userId;
 	private String fullname;
 	private String timeAgo;
 	private String title;
 	private String content;
-	private String imgPostId;
 	private String typeCode;
 	private String typeName;
+	private String imgPostId;
 	private String categoryCode;
 	private String categoryName;
-	private String countPostLike;
-	private String isLike;
-	private String isBookmark;
-	private PojoPollingOptionRes pollingOption;
+	private int countPostLike;
+	private int countPostComment;
+	private boolean isLike;
+	private boolean isBookmark;
+	private String titlePolling;
+	private String pollingOptionId;
+	private PojoResGetPollingOption pollingOption;
 	public String getUserId() {
 		return userId;
 	}
@@ -45,12 +48,6 @@ public class PojoAllPostBookmarkRes {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getImgPostId() {
-		return imgPostId;
-	}
-	public void setImgPostId(String imgPostId) {
-		this.imgPostId = imgPostId;
-	}
 	public String getTypeCode() {
 		return typeCode;
 	}
@@ -62,6 +59,12 @@ public class PojoAllPostBookmarkRes {
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
+	}
+	public String getImgPostId() {
+		return imgPostId;
+	}
+	public void setImgPostId(String imgPostId) {
+		this.imgPostId = imgPostId;
 	}
 	public String getCategoryCode() {
 		return categoryCode;
@@ -75,28 +78,46 @@ public class PojoAllPostBookmarkRes {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	public String getCountPostLike() {
+	public int getCountPostLike() {
 		return countPostLike;
 	}
-	public void setCountPostLike(String countPostLike) {
+	public void setCountPostLike(int countPostLike) {
 		this.countPostLike = countPostLike;
 	}
-	public String getIsLike() {
+	public int getCountPostComment() {
+		return countPostComment;
+	}
+	public void setCountPostComment(int countPostComment) {
+		this.countPostComment = countPostComment;
+	}
+	public boolean isLike() {
 		return isLike;
 	}
-	public void setIsLike(String isLike) {
+	public void setLike(boolean isLike) {
 		this.isLike = isLike;
 	}
-	public String getIsBookmark() {
+	public boolean isBookmark() {
 		return isBookmark;
 	}
-	public void setIsBookmark(String isBookmark) {
+	public void setBookmark(boolean isBookmark) {
 		this.isBookmark = isBookmark;
 	}
-	public PojoPollingOptionRes getPollingOption() {
+	public String getTitlePolling() {
+		return titlePolling;
+	}
+	public void setTitlePolling(String titlePolling) {
+		this.titlePolling = titlePolling;
+	}
+	public String getPollingOptionId() {
+		return pollingOptionId;
+	}
+	public void setPollingOptionId(String pollingOptionId) {
+		this.pollingOptionId = pollingOptionId;
+	}
+	public PojoResGetPollingOption getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 }

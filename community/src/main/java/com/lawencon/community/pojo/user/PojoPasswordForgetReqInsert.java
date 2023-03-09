@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.user;
 
-public class PojoPasswordForgetReq {
+public class PojoPasswordForgetReqInsert {
 	private String email;
 
 	public String getEmail() {

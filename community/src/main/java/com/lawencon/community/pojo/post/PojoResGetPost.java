@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoPostRes {
+public class PojoResGetPost {
 	private String userId;
 	private String fullname;
 	private String timeAgo;

@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.article;
 
-public class PojoArticleReq {
+public class PojoArticleReqInsert {
 	private String title;
 	private String content;
 	private String imageArticle;

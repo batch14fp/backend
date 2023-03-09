@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.category;
 
-public class PojoCategoryReq {
+public class PojoCategoryReqInsert {
 	private String categoryName;
 	private String categoryCode;
 

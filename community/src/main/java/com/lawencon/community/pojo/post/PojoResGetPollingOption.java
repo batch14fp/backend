@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.post;
 
-public class PojoPollingOptionRes {
+public class PojoResGetPollingOption {
 	private String pollingContent;
 
 	public String getPollingContent() {

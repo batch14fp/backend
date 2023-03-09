@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.payment;
 
-public class PojoPaymentRes {
+public class PojoResGetPayment {
 	private String message;
 
 	public String getMessage() {

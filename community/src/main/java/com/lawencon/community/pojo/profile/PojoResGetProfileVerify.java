@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-public class PojoProfileVerifyRes {
+public class PojoResGetProfileVerify {
 	private String message;
 
 	public String getMessage() {

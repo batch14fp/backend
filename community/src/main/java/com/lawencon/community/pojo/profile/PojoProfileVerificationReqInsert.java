@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-public class PojoProfileVerificationReq {
+public class PojoProfileVerificationReqInsert {
 	private String email;
 
 	public String getEmail() {

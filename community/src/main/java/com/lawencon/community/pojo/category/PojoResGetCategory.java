@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.category;
 
-public class PojoCategoryRes {
+public class PojoResGetCategory {
 	private String categoryId;
 	private String categoryCode;
 	private String categoryName;
