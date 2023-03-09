@@ -25,7 +25,7 @@ public class CategoryDao extends BaseMasterDao<Category>{
 	}
 
 	@Override
-	public Optional<Category> getById(Long id) {
+	public Optional<Category> getById(String id) {
 	        return Optional.ofNullable(super.getById(Category.class, id));
 	}
 	
@@ -39,7 +39,7 @@ public class CategoryDao extends BaseMasterDao<Category>{
 		
 	
 	@Override
-	Optional<Category> getByIdRef(Long id) {
+	Optional<Category> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Category.class, id));
 	}
 	
