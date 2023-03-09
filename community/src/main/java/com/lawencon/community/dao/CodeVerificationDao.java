@@ -15,7 +15,7 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 	@SuppressWarnings("unchecked")
 	@Override
 	List<CodeVerification> getAll() {
-		final String sql = "SELECT * FROM t_code_verification WHERE  is_active = TRUE";	
+		final String sql = "SELECT * FROM t_code_verification";	
 		final List<CodeVerification> res = ConnHandler.getManager().createNativeQuery(sql, CodeVerification.class).getResultList();
 		
 		return res;
