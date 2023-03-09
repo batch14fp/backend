@@ -13,13 +13,13 @@ public class FileDao extends BaseMasterDao<File>{
 	}
 
 	@Override
-	Optional<File> getById(Long id) {
+	Optional<File> getById(String id) {
 		return Optional.of(super.getById(File.class, id));
 	}
 	
 	
 	@Override
-	Optional<File> getByIdRef(Long id) {
+	Optional<File> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(File.class, id));
 	}
 

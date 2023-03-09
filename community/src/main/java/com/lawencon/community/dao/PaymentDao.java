@@ -23,13 +23,13 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 	}
 
 	@Override
-	Optional<Payment> getById(Long id) {
+	Optional<Payment> getById(String id) {
 		return Optional.ofNullable(super.getById(Payment.class, id));
 	}
 	
 
 	@Override
-	Optional<Payment> getByIdRef(Long id) {
+	Optional<Payment> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Payment.class, id));
 	}
 	

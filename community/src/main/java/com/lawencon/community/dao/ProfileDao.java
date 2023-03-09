@@ -18,13 +18,13 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 	}
 
 	@Override
-	Optional<Profile> getById(Long id) {
+	Optional<Profile> getById(String id) {
 		return Optional.ofNullable(super.getById(Profile.class, id));
 	}
 	
 	
 	@Override
-	Optional<Profile> getByIdRef(Long id) {
+	Optional<Profile> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Profile.class, id));
 	}
 	

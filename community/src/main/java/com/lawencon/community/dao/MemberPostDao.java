@@ -23,15 +23,10 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getById(Long id) {
+	Optional<MemberPost> getById(String id) {
 		return Optional.ofNullable(super.getById(MemberPost.class, id));
 	}
 
-	@SuppressWarnings("hiding")
-	@Override
-	public <MemberPost> MemberPost getByIdRef(Class<MemberPost> entityClass, Object id) {
-		return super.getByIdRef(entityClass, id);
-	}
 
 
 	@SuppressWarnings("unchecked")
@@ -47,8 +42,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getByIdRef(Long id) {
-		// TODO Auto-generated method stub
+	Optional<MemberPost> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(MemberPost.class, id));
 	}
 	

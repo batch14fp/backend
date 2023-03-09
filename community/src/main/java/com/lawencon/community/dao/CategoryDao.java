@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseEntity;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
 
@@ -25,35 +24,18 @@ public class CategoryDao extends BaseMasterDao<Category>{
 	}
 
 	@Override
-	public Optional<Category> getById(Long id) {
+	public Optional<Category> getById(String id) {
 	        return Optional.ofNullable(super.getById(Category.class, id));
 	}
-	
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Category> boolean deleteById(Class<Category> entityClass, Object entityId) {
-		
-		return super.deleteById(entityClass, entityId);
-	}
+
 		
 	
 	@Override
-	Optional<Category> getByIdRef(Long id) {
+	Optional<Category> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Category.class, id));
 	}
 	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Category extends BaseEntity> Category save(Category entity) {
-		return super.save(entity);
-	}
-	
-	@SuppressWarnings("hiding")
-	@Override
-	public <Category extends BaseEntity> Category saveAndFlush(Category entity) {
-		return super.saveAndFlush(entity);
-	}
+
 
 	@SuppressWarnings("unchecked")
 

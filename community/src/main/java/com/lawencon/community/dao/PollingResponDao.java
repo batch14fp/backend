@@ -3,7 +3,9 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
-public class PollingRespon extends BaseMasterDao<PollingRespon>{
+import com.lawencon.community.model.PollingRespon;
+
+public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 
 	@Override
 	List<PollingRespon> getAll() {
@@ -11,12 +13,12 @@ public class PollingRespon extends BaseMasterDao<PollingRespon>{
 	}
 
 	@Override
-	Optional<PollingRespon> getById(Long id) {
+	Optional<PollingRespon> getById(String id) {
 		return Optional.ofNullable(super.getById(PollingRespon.class, id));
 	}
 
 	@Override
-	Optional<PollingRespon> getByIdRef(Long id) {
+	Optional<PollingRespon> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PollingRespon.class, id));
 	}
 

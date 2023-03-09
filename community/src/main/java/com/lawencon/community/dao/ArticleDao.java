@@ -13,12 +13,12 @@ public class ArticleDao extends BaseMasterDao<Article>{
 	}
 
 	@Override
-	public Optional<Article> getById(Long id) {
+	public Optional<Article> getById(String id) {
 		return Optional.ofNullable(super.getById(Article.class, id));
 	}
 
 	@Override
-	Optional<Article> getByIdRef(Long id) {
+	Optional<Article> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Article.class, id));
 	}
 }

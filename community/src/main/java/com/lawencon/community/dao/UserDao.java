@@ -23,14 +23,14 @@ public class UserDao extends BaseMasterDao<User>{
 	}
 
 	@Override
-	public Optional<User> getById(Long id) {
+	public Optional<User> getById(String id) {
 		return Optional.ofNullable(super.getById(User.class, id));
 	}
 
 	
 	
 	@Override
-	public Optional<User> getByIdRef(Long id) {
+	public Optional<User> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(User.class, id));
 	}
 	
@@ -41,7 +41,7 @@ public class UserDao extends BaseMasterDao<User>{
 		try {
 		
 			StringBuilder sqlQuery = new StringBuilder();
-			 sqlQuery.append("SELECT u.id, u.email, r.role_code, u.is_active FROM t_user u ");
+			 sqlQuery.append("SELECT u.id, u.email, r.role_code,u.profile_id, u.profile_social_media_id, u.is_active FROM t_user u ");
 			 sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 			 sqlQuery.append("WHERE u.email= :email AND u.is_active = TRUE");
 			 
