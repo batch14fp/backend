@@ -45,7 +45,7 @@ public class PositionService extends BaseService<PojoResGetPostion>{
 
 		Boolean result = positionDao.deleteById(Position.class, id);
 		ConnHandler.commit();
-		if (result == true) {
+		if (result) {
 			return pojoRes;
 		} else {
 			return pojoResFail;

@@ -23,6 +23,11 @@ public class CodeVerification extends BaseEntity{
 	@Column(length = 50, nullable = false)
 	private String email;
 
+
+	@Column(columnDefinition = "text", nullable = false)
+	private String userPassword;
+
+
 	@Column(length = 6, nullable = false)
 	private String code;
 	private LocalDateTime expiredAt;
