@@ -10,13 +10,8 @@ import javax.persistence.UniqueConstraint;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-
 @Table(name = "t_user",
 uniqueConstraints = {
-        @UniqueConstraint(name = "verification_code_bk", 
-                columnNames = {"verificationCode" }
-        ),
-        
         @UniqueConstraint(name = "email_bk", 
         columnNames = {"email" }
         ),

@@ -22,7 +22,7 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 	}
 
 	@Override
-	Optional<PostComment> getById(Long id) {
+	Optional<PostComment> getById(String id) {
 		return Optional.ofNullable(super.getById(PostComment.class, id));
 	}
 	
@@ -34,7 +34,7 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 	}
 	
 	@Override
-	Optional<PostComment> getByIdRef(Long id) {
+	Optional<PostComment> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostComment.class, id));
 	}
 	

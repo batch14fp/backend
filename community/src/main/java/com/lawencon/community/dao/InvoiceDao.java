@@ -22,14 +22,14 @@ public class InvoiceDao extends BaseMasterDao<Invoice>{
 	}
 
 	@Override
-	Optional<Invoice> getById(Long id) {
+	Optional<Invoice> getById(String id) {
 		final Invoice invoice = ConnHandler.getManager().find(Invoice.class, id);
 		return Optional.ofNullable(invoice);
 	}
 	
 	
 	@Override
-	Optional<Invoice> getByIdRef(Long id) {
+	Optional<Invoice> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Invoice.class, id));
 	}
 

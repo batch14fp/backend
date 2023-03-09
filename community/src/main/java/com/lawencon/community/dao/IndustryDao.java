@@ -21,12 +21,12 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 	}
 
 	@Override
-	Optional<Industry> getById(Long id) {
+	Optional<Industry> getById(String id) {
 		return Optional.ofNullable(super.getById(Industry.class, id));
 	}
 	
 	@Override
-	Optional<Industry> getByIdRef(Long id) {
+	Optional<Industry> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Industry.class, id));
 	}
 

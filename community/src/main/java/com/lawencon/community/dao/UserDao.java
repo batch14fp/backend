@@ -23,14 +23,14 @@ public class UserDao extends BaseMasterDao<User>{
 	}
 
 	@Override
-	public Optional<User> getById(Long id) {
+	public Optional<User> getById(String id) {
 		return Optional.ofNullable(super.getById(User.class, id));
 	}
 
 	
 	
 	@Override
-	public Optional<User> getByIdRef(Long id) {
+	public Optional<User> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(User.class, id));
 	}
 	

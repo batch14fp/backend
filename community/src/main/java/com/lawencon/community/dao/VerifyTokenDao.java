@@ -6,29 +6,29 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.community.model.VerifyToken;
+import com.lawencon.community.model.CodeVerification;
 
 
 @Repository
-public class VerifyTokenDao extends BaseMasterDao<VerifyToken>{
+public class VerifyTokenDao extends BaseMasterDao<CodeVerification>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<VerifyToken> getAll() {
+	List<CodeVerification> getAll() {
 		final String sql = "SELECT * FROM t_verify_token WHERE  is_active = TRUE";	
-		final List<VerifyToken> res = ConnHandler.getManager().createNativeQuery(sql, VerifyToken.class).getResultList();
+		final List<CodeVerification> res = ConnHandler.getManager().createNativeQuery(sql, CodeVerification.class).getResultList();
 		
 		return res;
 	}
 
 	@Override
-	Optional<VerifyToken> getById(Long id) {
-		return Optional.ofNullable(super.getById(VerifyToken.class, id));
+	Optional<CodeVerification> getById(String id) {
+		return Optional.ofNullable(super.getById(CodeVerification.class, id));
 	}
 
 	@Override
-	Optional<VerifyToken> getByIdRef(Long id) {
-			return Optional.ofNullable(super.getByIdRef(VerifyToken.class, id));
+	Optional<CodeVerification> getByIdRef(String id) {
+			return Optional.ofNullable(super.getByIdRef(CodeVerification.class, id));
 	}
 	
 	

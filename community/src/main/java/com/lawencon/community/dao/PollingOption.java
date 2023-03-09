@@ -11,12 +11,12 @@ public class PollingOption extends BaseMasterDao<Polling>{
 	}
 
 	@Override
-	Optional<Polling> getById(Long id) {
+	Optional<Polling> getById(String id) {
 		return Optional.ofNullable(super.getById(Polling.class, id));
 	}
 
 	@Override
-	Optional<Polling> getByIdRef(Long id) {
+	Optional<Polling> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Polling.class, id));
 	}
 
