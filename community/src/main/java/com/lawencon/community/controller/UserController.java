@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.User;
-import com.lawencon.community.pojo.user.PojoUserLoginReqInsert;
-import com.lawencon.community.pojo.user.PojoResGetUserLogin;
+import com.lawencon.community.pojo.login.PojoLoginReq;
+import com.lawencon.community.pojo.login.PojoLoginRes;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
 
@@ -37,7 +37,7 @@ public class UserController {
 	}
 	
 	@PostMapping("login")
-	public ResponseEntity<?> login(@Validated @RequestBody PojoUserLoginReqInsert user) {
+	public ResponseEntity<?> login(@Validated @RequestBody PojoLoginReq user) {
 		final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 
 		authenticationManager.authenticate(auth);
@@ -51,9 +51,10 @@ public class UserController {
 		claims.put("exp", cal.getTime());
 		claims.put("id", userOptional.get().getId());
 
-		final PojoResGetUserLogin loginRes = new PojoResGetUserLogin();
+		final PojoLoginRes loginRes = new PojoLoginRes();
 		loginRes.setToken(jwtService.generateJwt(claims));
-		loginRes.setFullName(userOptional.get().getProfile().getFullname());
+		loginRes.setUserId(userOptional.get().getId());
+		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
 		loginRes.setImgProfileId(userOptional.get().getProfile().getImageProfile().getId());
 

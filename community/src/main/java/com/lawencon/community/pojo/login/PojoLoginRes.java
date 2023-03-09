@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.login;
 
 public class PojoLoginRes {
+	private String userId;
 	private String roleCode;
 	private String fullname;
 	private String token;
@@ -28,6 +29,12 @@ public class PojoLoginRes {
 	}
 	public void setImgProfileId(String imgProfileId) {
 		this.imgProfileId = imgProfileId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	
