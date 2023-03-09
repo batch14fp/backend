@@ -33,9 +33,8 @@ public class Profile extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name = "socialmedia_id")
-	private SocialMedia socialmedia;
-	
+	@JoinColumn(name = "profile_social_media_id")
+	private ProfileSocialMedia profileSocialMedia;
 	
 	
 	@OneToOne
@@ -82,12 +81,13 @@ public class Profile extends BaseEntity{
 		this.imageProfile = imageProfile;
 	}
 
-	public SocialMedia getSocialmedia() {
-		return socialmedia;
+
+	public ProfileSocialMedia getProfileSocialMedia() {
+		return profileSocialMedia;
 	}
 
-	public void setSocialmedia(SocialMedia socialmedia) {
-		this.socialmedia = socialmedia;
+	public void setProfileSocialMedia(ProfileSocialMedia profileSocialMedia) {
+		this.profileSocialMedia = profileSocialMedia;
 	}
 
 	public Industry getIndustry() {

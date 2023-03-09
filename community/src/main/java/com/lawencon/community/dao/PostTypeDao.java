@@ -23,7 +23,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	}
 
 	@Override
-	Optional<PostType> getById(Long id) {
+	Optional<PostType> getById(String id) {
 		return Optional.ofNullable(super.getById(PostType.class, id));
 	}
 	
@@ -35,7 +35,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	
 	
 	@Override
-	Optional<PostType> getByIdRef(Long id) {
+	Optional<PostType> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostType.class, id));
 	}
 	

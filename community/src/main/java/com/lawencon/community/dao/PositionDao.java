@@ -21,12 +21,12 @@ public class PositionDao extends BaseMasterDao<Position> {
 	}
 
 	@Override
-	Optional<Position> getById(Long id) {
+	Optional<Position> getById(String id) {
 		return Optional.ofNullable(super.getById(Position.class, id));
 	}
 
 	@Override
-	Optional<Position> getByIdRef(Long id) {
+	Optional<Position> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Position.class, id));
 	}
 	
