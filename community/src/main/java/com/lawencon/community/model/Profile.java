@@ -134,14 +134,6 @@ public class Profile extends BaseEntity{
 		this.city = city;
 	}
 
-	public String getProvience() {
-		return provience;
-	}
-
-	public void setProvience(String provience) {
-		this.provience = provience;
-	}
-
 	public String getPostalCode() {
 		return postalCode;
 	}
