@@ -2,4 +2,8 @@
 /wecommunity/target
 application.properties
 /.metadata/
+<<<<<<< HEAD
 /community/target/
+=======
+/community/target
+>>>>>>> 89d36fd5998d3c84f029e5cba906289c544b495b
