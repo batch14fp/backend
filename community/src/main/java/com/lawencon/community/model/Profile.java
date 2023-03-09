@@ -56,7 +56,7 @@ public class Profile extends BaseEntity{
 	private String city;
 	
 	@Column(length=30)
-	private String provience;
+	private String province;
 	
 	@Column(length=10)
 	private String postalCode;
@@ -132,14 +132,6 @@ public class Profile extends BaseEntity{
 
 	public void setCity(String city) {
 		this.city = city;
-	}
-
-	public String getProvience() {
-		return provience;
-	}
-
-	public void setProvience(String provience) {
-		this.provience = provience;
 	}
 
 	public String getPostalCode() {

@@ -41,7 +41,7 @@ public class UserDao extends BaseMasterDao<User>{
 		try {
 		
 			StringBuilder sqlQuery = new StringBuilder();
-			 sqlQuery.append("SELECT u.id, u.email, r.role_code,u.profile_id, u.profile_social_media_id, u.is_active FROM t_user u ");
+			 sqlQuery.append("SELECT *  FROM t_user u ");
 			 sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 			 sqlQuery.append("WHERE u.email= :email AND u.is_active = TRUE");
 			 
@@ -55,7 +55,7 @@ public class UserDao extends BaseMasterDao<User>{
 		
 	}
 	
-	
+	//u.id, u.email, r.role_code,u.profile_id, u.profile_social_media_id, u.is_active 
 	
 	
 	

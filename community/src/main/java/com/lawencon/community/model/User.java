@@ -42,7 +42,7 @@ public class User extends BaseEntity {
 	@Column(columnDefinition = "text", nullable = false)
 	private String userPassword;
 
-	private Boolean isEnable;
+
 
 	public Role getRole() {
 		return role;
@@ -76,13 +76,7 @@ public class User extends BaseEntity {
 		this.userPassword = userPassword;
 	}
 
-	public Boolean getIsEnable() {
-		return isEnable;
-	}
 
-	public void setIsEnable(Boolean isEnable) {
-		this.isEnable = isEnable;
-	}
 
 	public ProfileSocialMedia getProfileSocialMedia() {
 		return profileSocialMedia;
