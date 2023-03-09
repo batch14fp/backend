@@ -2,13 +2,6 @@
 /wecommunity/target
 application.properties
 /.metadata/
-<<<<<<< HEAD
-<<<<<<< HEAD
 /community/target/
-=======
-/community/target
->>>>>>> 89d36fd5998d3c84f029e5cba906289c544b495b
-=======
-/community/target
 community/target/classes/META-INF/maven/com.lawencon/wecommunity/pom.properties
->>>>>>> 363928e52c8e614b470e670697410dd5aba34c72
+
