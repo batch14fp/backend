@@ -44,5 +44,12 @@ public class InvoiceDao extends BaseMasterDao<Invoice>{
 			
 			return res;
 	}
+	
+	@Override
+	public Optional<Invoice> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Invoice.class, id));
+
+	}
 
 }

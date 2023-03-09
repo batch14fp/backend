@@ -13,7 +13,7 @@ public class PositionDao extends BaseMasterDao<Position> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Position> getAll() {
+	public List<Position> getAll() {
 		final String sql = "SELECT * FROM t_position WHERE  is_active = TRUE";
 		final List<Position> res = ConnHandler.getManager().createNativeQuery(sql, Position.class).getResultList();
 
@@ -21,19 +21,17 @@ public class PositionDao extends BaseMasterDao<Position> {
 	}
 
 	@Override
-	Optional<Position> getById(String id) {
+	public Optional<Position> getById(String id) {
 		return Optional.ofNullable(super.getById(Position.class, id));
 	}
 
 	@Override
-	Optional<Position> getByIdRef(String id) {
+	public Optional<Position> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Position.class, id));
 	}
-	
-	
 
 	@SuppressWarnings("unchecked")
-	List<Position> getByOffsetLimit(Long offset, Long limit) {
+	public List<Position> getByOffsetLimit(Long offset, Long limit) {
 		final String sql = "SELECT * FROM t_position WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 
 		final List<Position> res = ConnHandler.getManager().createNativeQuery(sql, Position.class)
@@ -41,6 +39,12 @@ public class PositionDao extends BaseMasterDao<Position> {
 
 		return res;
 	}
-	
-	
+
+	@Override
+	public Optional<Position> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(Position.class, id));
+
+	}
+
 }

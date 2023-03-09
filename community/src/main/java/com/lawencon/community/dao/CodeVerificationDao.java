@@ -1,6 +1,7 @@
 package com.lawencon.community.dao;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -31,5 +32,11 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 			return Optional.ofNullable(super.getByIdRef(CodeVerification.class, id));
 	}
 	
+	@Override
+	public Optional<CodeVerification> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(CodeVerification.class, id));
+
+	}
 	
 }

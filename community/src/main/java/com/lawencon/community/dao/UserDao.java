@@ -55,6 +55,13 @@ public class UserDao extends BaseMasterDao<User>{
 		
 	}
 	
+	@Override
+	public Optional<User> getByIdAndDetach(String id) {
+
+		return Optional.ofNullable(super.getByIdAndDetach(User.class, id));
+
+	}
+	
 	//u.id, u.email, r.role_code,u.profile_id, u.profile_social_media_id, u.is_active 
 	
 	

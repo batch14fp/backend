@@ -13,7 +13,22 @@ public class PojoProfileUpdateReq {
 	private String industryId;
 	private String positionId;
 	private List<String> socialMedia;
+	private Integer ver;
+	private Boolean isActive;
 	
+	
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 	public String getUserId() {
 		return userId;
 	}
