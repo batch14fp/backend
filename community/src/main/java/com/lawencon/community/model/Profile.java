@@ -56,7 +56,7 @@ public class Profile extends BaseEntity{
 	private String city;
 	
 	@Column(length=30)
-	private String provience;
+	private String province;
 	
 	@Column(length=10)
 	private String postalCode;
