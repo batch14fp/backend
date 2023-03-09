@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 public class PojoResGetPost {
+	private String postId;
 	private String userId;
 	private String fullname;
 	private String timeAgo;
@@ -15,6 +16,13 @@ public class PojoResGetPost {
 	private int countPostComment;
 	private boolean isLike;
 	private boolean isBookmark;
+	
+	public String getPostId() {
+		return postId;
+	}
+	public void setPostId(String postId) {
+		this.postId = postId;
+	}
 	public String getUserId() {
 		return userId;
 	}

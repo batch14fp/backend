@@ -14,7 +14,7 @@ public class PostDao extends BaseMasterDao<Post>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Post> getAll() {
+	public List<Post> getAll() {
 		final String sql = "SELECT * FROM t_post WHERE  is_active = TRUE";	
 		final List<Post> res = ConnHandler.getManager().createNativeQuery(sql, Post.class).getResultList();
 		

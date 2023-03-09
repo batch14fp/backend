@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 public class PojoResGetAllPost {
+	private String postId;
 	private String userId;
 	private String fullname;
 	private String timeAgo;
@@ -18,6 +19,13 @@ public class PojoResGetAllPost {
 	private String titlePolling;
 	private String pollingOptionId;
 	private PojoResGetPollingOption pollingOption;
+	
+	public String getPostId() {
+		return postId;
+	}
+	public void setPostId(String postId) {
+		this.postId = postId;
+	}
 	public String getUserId() {
 		return userId;
 	}

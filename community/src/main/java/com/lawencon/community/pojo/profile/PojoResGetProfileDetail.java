@@ -1,10 +1,13 @@
 package com.lawencon.community.pojo.profile;
 
+import java.time.LocalDate;
+
 public class PojoResGetProfileDetail {
 	private String userId;
 	private String fullname;
 	private String email;
 	private String phoneNumber;
+	private LocalDate dob;
 	private String country;
 	private String province;
 	private String city;
@@ -30,6 +33,13 @@ public class PojoResGetProfileDetail {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public LocalDate getDob() {
+		return dob;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;
