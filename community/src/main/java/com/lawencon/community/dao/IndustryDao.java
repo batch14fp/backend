@@ -13,7 +13,7 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Industry> getAll() {
+	public List<Industry> getAll() {
 		final String sql = "SELECT * FROM t_industry WHERE  is_active = TRUE";	
 		final List<Industry> res = ConnHandler.getManager().createNativeQuery(sql, Industry.class).getResultList();
 		
