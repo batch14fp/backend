@@ -22,10 +22,14 @@ public class Payment  extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name="file_id", nullable=false)
 	private File file;
+	
+	
+	@OneToOne
+	@JoinColumn(name="bank_payment_id", nullable=false)
+	private BankPayment bankPayment;
 
 	private Boolean isPaid;
 	
-
 	
 	private LocalDate expired;
 
@@ -67,6 +71,16 @@ public class Payment  extends BaseEntity{
 
 	public void setExpired(LocalDate expired) {
 		this.expired = expired;
+	}
+
+
+	public BankPayment getBankPayment() {
+		return bankPayment;
+	}
+
+
+	public void setBankPayment(BankPayment bankPayment) {
+		this.bankPayment = bankPayment;
 	}
 	
 

@@ -1,5 +1,5 @@
 package com.lawencon.community.dao;
 
-public class Polling {
+public class ProfileSocialMediaDao {
 
 }
