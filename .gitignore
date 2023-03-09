@@ -2,4 +2,5 @@
 /wecommunity/target
 application.properties
 /.metadata/
-/community/target/
+/community/target
+community/target/classes/META-INF/maven/com.lawencon/wecommunity/pom.properties
