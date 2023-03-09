@@ -50,7 +50,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 
 		Boolean result = industryDao.deleteById(Category.class, id);
 		ConnHandler.commit();
-		if (result == true) {
+		if (result) {
 			return pojoRes;
 		} else {
 			return pojoResFail;

@@ -47,7 +47,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 
 		Boolean result = categoryDao.deleteById(Category.class, id);
 		ConnHandler.commit();
-		if (result == true) {
+		if (result) {
 			return pojoRes;
 		} else {
 			return pojoResFail;
