@@ -29,7 +29,13 @@ public class User extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "profile_id", nullable = false)
 	private Profile profile;
+	
+	
+	@OneToOne
+	@JoinColumn(name = "profile_social_media_id")
+	private ProfileSocialMedia profileSocialMedia;
 
+	
 	@Column(length = 50, nullable = false)
 	private String email;
 
@@ -76,6 +82,14 @@ public class User extends BaseEntity {
 
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
+	}
+
+	public ProfileSocialMedia getProfileSocialMedia() {
+		return profileSocialMedia;
+	}
+
+	public void setProfileSocialMedia(ProfileSocialMedia profileSocialMedia) {
+		this.profileSocialMedia = profileSocialMedia;
 	}
 
 }
