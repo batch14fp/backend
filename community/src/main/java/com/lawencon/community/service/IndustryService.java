@@ -5,10 +5,9 @@ import java.util.List;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.IndustryDao;
-import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.category.PojoCategoryReq;
+import com.lawencon.community.pojo.industry.PojoIndustryReq;
 import com.lawencon.community.pojo.industry.PojoResGetIndustry;
 
 public class IndustryService extends BaseService<PojoResGetIndustry>{
@@ -48,7 +47,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 
-		Boolean result = industryDao.deleteById(Category.class, id);
+		Boolean result = industryDao.deleteById(Industry.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;
@@ -58,23 +57,23 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 
 	}
 	
-	public PojoRes save(PojoCategoryReq data) {
+	public PojoRes save(PojoIndustryReq data) {
 		ConnHandler.begin();
 
 
 		Industry industry = new Industry();
 
-		if (data.getCategoryId() != null) {
+		if (data.getIndustryId() != null) {
 
-			industry = industryDao.getByIdAndDetach(data.getCategoryId()).get();
-			industry.setIndustryName(data.getCategoryName());
+			industry = industryDao.getByIdAndDetach(data.getIndustryId()).get();
+			industry.setIndustryName(data.getIndustryName());
 			industry.setIsActive(data.getIsActive());
 			industry.setVersion(data.getVer());
 			
 			
 
 		} else {
-			industry.setIndustryName(data.getCategoryName());
+			industry.setIndustryName(data.getIndustryName());
 			industry.setIsActive(true);
 			
 		}
