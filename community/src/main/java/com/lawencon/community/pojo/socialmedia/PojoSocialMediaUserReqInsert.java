@@ -4,6 +4,9 @@ public class PojoSocialMediaUserReqInsert {
 	private String userId;
 	private String socialMediaId;
 	private String url;
+	private Boolean isActive;
+	private Integer ver;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -22,4 +25,17 @@ public class PojoSocialMediaUserReqInsert {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	
 }
