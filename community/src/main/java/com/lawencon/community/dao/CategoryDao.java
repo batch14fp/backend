@@ -31,8 +31,8 @@ public class CategoryDao extends BaseMasterDao<Category>{
 		
 	
 	@Override
-	Optional<Category> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Category.class, id));
+	public Category getByIdRef(String id) {
+		return super.getByIdRef(Category.class, id);
 	}
 	
 

@@ -29,8 +29,8 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 	
 
 	@Override
-	public Optional<Payment> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Payment.class, id));
+	public Payment getByIdRef(String id) {
+		return super.getByIdRef(Payment.class, id);
 	}
 	
 

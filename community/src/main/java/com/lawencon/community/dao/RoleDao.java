@@ -22,7 +22,7 @@ public class RoleDao extends AbstractJpaDao{
 			StringBuilder sqlQuery = new StringBuilder();
 			sqlQuery.append("SELECT *  FROM t_role r ");
 			sqlQuery.append("WHERE r.role_code = :roleCode ");
-			sqlQuery.append("AND u.is_active = TRUE ");
+			sqlQuery.append("AND r.is_active = TRUE ");
 
 			roles = ConnHandler.getManager().createNativeQuery((sqlQuery.toString()), Role.class)
 					.setParameter("roleCode", roleCode).getResultList();

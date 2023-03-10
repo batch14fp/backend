@@ -55,8 +55,8 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 	}
 
 	@Override
-	public Optional<PostLike> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(PostLike.class, id));
+	public PostLike getByIdRef(String id) {
+		return super.getByIdRef(PostLike.class, id);
 	}
 	
 	@Override

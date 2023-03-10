@@ -23,7 +23,7 @@ import com.lawencon.base.BaseEntity;
 public class Profile extends BaseEntity{
 	
 	@OneToOne
-	@JoinColumn(name = "position_id", nullable = false)
+	@JoinColumn(name = "position_id")
 	private Position position;
 	
 	
@@ -34,15 +34,15 @@ public class Profile extends BaseEntity{
 
 	
 	@OneToOne
-	@JoinColumn(name = "industry_id", nullable = false)
+	@JoinColumn(name = "industry_id")
 	private Industry industry;
 	
 	
 	
-	@Column(length=50, nullable = false )
+	@Column(length=50)
 	private String fullname;
 	
-	@Column(length=50, nullable = false )
+	@Column(length=50)
 	private String companyName;
 	
 	private LocalDate dob;

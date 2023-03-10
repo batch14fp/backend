@@ -3,6 +3,8 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.IndustryDao;
 import com.lawencon.community.model.Industry;
@@ -10,7 +12,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.industry.PojoIndustryReq;
 import com.lawencon.community.pojo.industry.PojoResGetIndustry;
-
+@Service
 public class IndustryService extends BaseService<PojoResGetIndustry>{
 	
 	

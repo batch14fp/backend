@@ -33,17 +33,17 @@ public class ProfileController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
-	@PutMapping("/edit")
-	public ResponseEntity<PojoProfileUpdateReq>updateProfile(@RequestBody PojoProfileUpdateReq data){
-		PojoProfileUpdateReq resGet = profileService.save(data);
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
-	}
-	
-	@PutMapping("/password")
-	public ResponseEntity<PojoPasswordUpdateReq>updatePass(@RequestBody PojoPasswordUpdateReq data){
-		PojoPasswordUpdateReq resGet = profileService.updatePassword(data);
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
-	}
+//	@PutMapping("/edit")
+//	public ResponseEntity<PojoProfileUpdateReq>updateProfile(@RequestBody PojoProfileUpdateReq data){
+//		PojoProfileUpdateReq resGet = profileService.save(data);
+//		return new ResponseEntity<>(resGet, HttpStatus.OK);
+//	}
+//	
+//	@PutMapping("/password")
+//	public ResponseEntity<PojoPasswordUpdateReq>updatePass(@RequestBody PojoPasswordUpdateReq data){
+//		PojoPasswordUpdateReq resGet = profileService.updatePassword(data);
+//		return new ResponseEntity<>(resGet, HttpStatus.OK);
+//	}
 	
 //	@PostMapping("/verification")
 //	public ResponseEntity<PojoInsertRes>getVerification(@RequestBody PojoProfileVerificationReqInsert data){
