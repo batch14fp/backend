@@ -1,11 +1,9 @@
 package com.lawencon.community.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.lawencon.community.dao.SocialMediaDao;
+import com.lawencon.community.model.SocialMedia;
 import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
 
 @Service
@@ -16,7 +14,11 @@ public class SocialMediaService {
 		this.socialMediaDao = socialMediaDao;
 	}
 	
-	public PojoResGetSocialMedia getByIdSocialMedia(Long id){
-		return null;
+	public PojoResGetSocialMedia getById(String id) {
+		SocialMedia socialMedia = socialMediaDao.getByIdRef(id).get();
+		PojoResGetSocialMedia resGetSocialMedia = new PojoResGetSocialMedia();
+		resGetSocialMedia.setPlatformName(socialMedia.getPlatformName());
+		resGetSocialMedia.setUrl(socialMedia.getUrl());
+		return resGetSocialMedia;
 	}
 }

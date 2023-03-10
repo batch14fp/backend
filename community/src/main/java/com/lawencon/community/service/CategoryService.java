@@ -73,7 +73,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 			
 
 		} else {
-			category.setCategoryCode(data.getCategoryCode());;
+			category.setCategoryCode(data.getCategoryCode());
 			category.setCategoryName(data.getCategoryName());
 			category.setIsActive(true);
 			
