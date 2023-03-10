@@ -8,17 +8,17 @@ import com.lawencon.community.model.PollingOption;
 public class PollingOptionDao extends BaseMasterDao<PollingOption>{
 
 	@Override
-	List<PollingOption> getAll() {
+	public List<PollingOption> getAll() {
 		return null;
 	}
 
 	@Override
-	Optional<PollingOption> getById(String id) {
+	public Optional<PollingOption> getById(String id) {
 		return Optional.ofNullable(super.getById(PollingOption.class, id));
 	}
 
 	@Override
-	Optional<PollingOption> getByIdRef(String id) {
+	public Optional<PollingOption> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PollingOption.class, id));
 	}
 	@Override

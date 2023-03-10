@@ -14,7 +14,7 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<PostComment> getAll() {
+	public List<PostComment> getAll() {
 		final String sql = "SELECT * FROM t_post_comment WHERE  is_active = TRUE";	
 		final List<PostComment> res = ConnHandler.getManager().createNativeQuery(sql, PostComment.class).getResultList();
 		
@@ -22,21 +22,21 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 	}
 
 	@Override
-	Optional<PostComment> getById(String id) {
+	public Optional<PostComment> getById(String id) {
 		return Optional.ofNullable(super.getById(PostComment.class, id));
 	}
 	
 
 
 	@Override
-	Optional<PostComment> getByIdRef(String id) {
+	public Optional<PostComment> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostComment.class, id));
 	}
 	
 	
 
 	@SuppressWarnings("unchecked")
-	List<PostComment> getByOffsetLimit(Long offset, Long limit) {
+	public List<PostComment> getByOffsetLimit(Long offset, Long limit) {
 	
 			  final String sql = "SELECT * FROM t_post_comment WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 				

@@ -13,7 +13,7 @@ import com.lawencon.community.model.Polling;
 public class PollingDao extends BaseMasterDao<Polling>{
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Polling> getAll() {
+	public List<Polling> getAll() {
 		final String sql = "SELECT * FROM t_poliing WHERE  is_active = TRUE";	
 		final List<Polling> res = ConnHandler.getManager().createNativeQuery(sql, Polling.class).getResultList();
 		
@@ -21,13 +21,13 @@ public class PollingDao extends BaseMasterDao<Polling>{
 	}
 
 	@Override
-	Optional<Polling> getById(String id) {
+	public Optional<Polling> getById(String id) {
 		return Optional.ofNullable(super.getById(Polling.class, id));
 	}
 	
 
 	@Override
-	Optional<Polling> getByIdRef(String id) {
+	public Optional<Polling> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Polling.class, id));
 	}
 	

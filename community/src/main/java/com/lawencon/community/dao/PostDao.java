@@ -14,7 +14,7 @@ public class PostDao extends BaseMasterDao<Post>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Post> getAll() {
+	public List<Post> getAll() {
 		final String sql = "SELECT * FROM t_post WHERE  is_active = TRUE";	
 		final List<Post> res = ConnHandler.getManager().createNativeQuery(sql, Post.class).getResultList();
 		
@@ -22,13 +22,13 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 
 	@Override
-	Optional<Post> getById(String id) {
+	public Optional<Post> getById(String id) {
 		return Optional.ofNullable(super.getById(Post.class, id));
 	}
 
 
 	@SuppressWarnings("unchecked")
-	List<Post> getByOffsetLimit(Long offset, Long limit) {
+	public List<Post> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_post WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<Post> res = ConnHandler.getManager().createNativeQuery(sql, Post.class)
@@ -40,7 +40,7 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 
 	@Override
-	Optional<Post> getByIdRef(String id) {
+	public Optional<Post> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Post.class, id));
 	}
 	@Override

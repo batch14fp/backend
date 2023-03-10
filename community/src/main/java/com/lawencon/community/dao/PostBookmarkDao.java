@@ -13,7 +13,7 @@ import com.lawencon.community.model.PostComment;
 public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 	@SuppressWarnings("unchecked")
 	@Override
-	List<PostBookmark> getAll() {
+	public List<PostBookmark> getAll() {
 		final String sql = "SELECT * FROM t_post_bookmark WHERE  is_active = TRUE";	
 		final List<PostBookmark> res = ConnHandler.getManager().createNativeQuery(sql, PostComment.class).getResultList();
 		
@@ -21,7 +21,7 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 	}
 
 	@Override
-	Optional<PostBookmark> getById(String id) {
+	public Optional<PostBookmark> getById(String id) {
 		return Optional.ofNullable(super.getById(PostBookmark.class, id));
 	}
 	
@@ -29,14 +29,14 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 
 	
 	@Override
-	Optional<PostBookmark> getByIdRef(String id) {
+	public Optional<PostBookmark> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostBookmark.class, id));
 	}
 	
 	
 	
 	@SuppressWarnings("unchecked")
-	List<PostBookmark> getByOffsetLimit(Long offset, Long limit) {
+	public List<PostBookmark> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_post_bookmark WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<PostBookmark> res = ConnHandler.getManager().createNativeQuery(sql, PostBookmark.class)

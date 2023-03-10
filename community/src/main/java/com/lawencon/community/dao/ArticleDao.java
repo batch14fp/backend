@@ -18,7 +18,7 @@ public class ArticleDao extends BaseMasterDao<Article>{
 	}
 
 	@Override
-	Optional<Article> getByIdRef(String id) {
+	public Optional<Article> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Article.class, id));
 	}
 	

@@ -15,7 +15,7 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Payment> getAll() {
+	public List<Payment> getAll() {
 		final String sql = "SELECT * FROM t_payment WHERE  is_active = TRUE";	
 		final List<Payment> res = ConnHandler.getManager().createNativeQuery(sql, Payment.class).getResultList();
 		
@@ -23,19 +23,19 @@ public class PaymentDao extends BaseMasterDao<Payment>{
 	}
 
 	@Override
-	Optional<Payment> getById(String id) {
+	public Optional<Payment> getById(String id) {
 		return Optional.ofNullable(super.getById(Payment.class, id));
 	}
 	
 
 	@Override
-	Optional<Payment> getByIdRef(String id) {
+	public Optional<Payment> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Payment.class, id));
 	}
 	
 
 	@SuppressWarnings("unchecked")
-	List<Payment> getByOffsetLimit(Long offset, Long limit) {
+	public List<Payment> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_payment WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<Payment> res = ConnHandler.getManager().createNativeQuery(sql, Payment.class)
