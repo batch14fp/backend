@@ -29,8 +29,8 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 
 
 	@Override
-	public Optional<PostComment> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(PostComment.class, id));
+	public PostComment getByIdRef(String id) {
+		return super.getByIdRef(PostComment.class, id);
 	}
 	
 	

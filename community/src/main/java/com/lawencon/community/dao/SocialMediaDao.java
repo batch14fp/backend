@@ -27,8 +27,8 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 	}
 
 	@Override
-	public Optional<SocialMedia> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(SocialMedia.class, id));
+	public SocialMedia getByIdRef(String id) {
+		return super.getByIdRef(SocialMedia.class, id);
 	}
 	
 	@Override

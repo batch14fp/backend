@@ -22,19 +22,19 @@ public class InvoiceDao extends BaseMasterDao<Invoice>{
 	}
 
 	@Override
-	Optional<Invoice> getById(String id) {
+	public Optional<Invoice> getById(String id) {
 		final Invoice invoice = ConnHandler.getManager().find(Invoice.class, id);
 		return Optional.ofNullable(invoice);
 	}
 	
 	
 	@Override
-	Optional<Invoice> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Invoice.class, id));
+	public Invoice getByIdRef(String id) {
+		return super.getByIdRef(Invoice.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
-	List<Invoice> getByOffsetLimit(Long offset, Long limit) {
+	public List<Invoice> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_invoice WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<Invoice> res = ConnHandler.getManager().createNativeQuery(sql, Invoice.class)

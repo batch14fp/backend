@@ -2,7 +2,7 @@ package com.lawencon.community.constant;
 
 public enum RoleEnum {
 	
-	MEMBER("MB","MEMBER" ), ADMIN("AD", "ADMIN"), SUPERADMIN("SA", "SUPER ADMIN"), SYSTEM("SY", "SYSTEM");
+	MEMBER("MMBR","MEMBER" ), ADMIN("ADMIN", "ADMIN"), SUPERADMIN("SPADM", "SUPER ADMIN"), SYSTEM("SYSTM", "SYSTEM");
 	
 	
 	

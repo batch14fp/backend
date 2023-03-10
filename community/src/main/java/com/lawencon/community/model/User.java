@@ -14,10 +14,11 @@ import com.lawencon.base.BaseEntity;
 uniqueConstraints = {
         @UniqueConstraint(name = "email_bk", 
         columnNames = {"email" }
-        ),
-        @UniqueConstraint(name = "user_role_ck", 
-        columnNames = {"profile_id", "role_id" }
         )
+        
+//        @UniqueConstraint(name = "user_role_ck", 
+//        columnNames = {"profile_id", "role_id" }
+//        )
 		})
 
 public class User extends BaseEntity {
@@ -27,7 +28,7 @@ public class User extends BaseEntity {
 	private Role role;
 
 	@OneToOne
-	@JoinColumn(name = "profile_id", nullable = false)
+	@JoinColumn(name = "profile_id")
 	private Profile profile;
 	
 	

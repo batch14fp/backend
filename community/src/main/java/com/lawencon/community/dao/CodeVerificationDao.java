@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.CodeVerification;
+import com.lawencon.community.model.User;
 
 
 @Repository
@@ -28,8 +30,8 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 	}
 
 	@Override
-	public Optional<CodeVerification> getByIdRef(String id) {
-			return Optional.ofNullable(super.getByIdRef(CodeVerification.class, id));
+	public CodeVerification getByIdRef(String id) {
+			return super.getByIdRef(CodeVerification.class, id);
 	}
 	
 	@Override
@@ -37,6 +39,25 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 
 		return Optional.ofNullable(super.getByIdAndDetach(CodeVerification.class, id));
 
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public Optional<CodeVerification> getByCode(String code){
+		List<CodeVerification> codeVerifications = new ArrayList<>();
+		try {
+
+			StringBuilder sqlQuery = new StringBuilder();
+			sqlQuery.append("SELECT *  FROM t_code_verification c ");
+			sqlQuery.append("WHERE c.code = :code ");
+			sqlQuery.append("AND  NOW() <= c.expired_at ");
+
+			codeVerifications = ConnHandler.getManager().createNativeQuery((sqlQuery.toString()), User.class)
+					.setParameter("code", code).getResultList();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(codeVerifications.get(0));
 	}
 	
 }

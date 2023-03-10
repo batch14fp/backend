@@ -28,8 +28,8 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 
 	
 	@Override
-	public Optional<PostType> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(PostType.class, id));
+	public PostType getByIdRef(String id) {
+		return super.getByIdRef(PostType.class, id);
 	}
 	
 	@Override

@@ -27,8 +27,8 @@ public class PollingDao extends BaseMasterDao<Polling>{
 	
 
 	@Override
-	public Optional<Polling> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Polling.class, id));
+	public Polling getByIdRef(String id) {
+		return super.getByIdRef(Polling.class, id);
 	}
 	
 	@Override

@@ -26,8 +26,8 @@ public class PositionDao extends BaseMasterDao<Position> {
 	}
 
 	@Override
-	public Optional<Position> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Position.class, id));
+	public Position getByIdRef(String id) {
+		return super.getByIdRef(Position.class, id);
 	}
 
 	@SuppressWarnings("unchecked")

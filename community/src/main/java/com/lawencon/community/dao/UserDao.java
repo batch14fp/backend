@@ -27,8 +27,8 @@ public class UserDao extends BaseMasterDao<User> {
 	}
 
 	@Override
-	public Optional<User> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(User.class, id));
+	public User getByIdRef(String id) {
+		return super.getByIdRef(User.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ public class UserDao extends BaseMasterDao<User> {
 	@SuppressWarnings("unchecked")
 	public List<User> getAllUserByRoleId(String id) {
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT * FROM t_user u");
+		sqlQuery.append("SELECT * FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ");
 		sqlQuery.append("ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ");
@@ -76,15 +76,13 @@ public class UserDao extends BaseMasterDao<User> {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getUserByRoleCode(String roleCode) {
-
-		
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT * FROM t_user u");
+		sqlQuery.append("SELECT * FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ");
 		sqlQuery.append("ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ");
 		sqlQuery.append("ON p.id = u.profile_id ");
-		sqlQuery.append("WHERE u.role_code = :roleCode ");
+		sqlQuery.append("WHERE r.role_code = :roleCode ");
 		sqlQuery.append("AND u.is_active = TRUE ");
 		final List<User> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), User.class)
 				.setParameter("roleCode",roleCode)

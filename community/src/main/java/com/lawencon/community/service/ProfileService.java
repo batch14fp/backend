@@ -1,22 +1,26 @@
 package com.lawencon.community.service;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
 
+
+
+@Service
 public class ProfileService {
 	private ProfileDao profileDao;
-	private PrincipalService principalService;
-	
-	public ProfileService(ProfileDao profileDao, PrincipalService principalService) {
+
+	public ProfileService(ProfileDao profileDao) {
 		this.profileDao = profileDao;
-		this.principalService = principalService;
+	
 	}
 	
 	public PojoResGetProfileDetail getById(String id) {
 		Profile profile = profileDao.getByIdAndDetach(id).get();
 		PojoResGetProfileDetail resGetProfile = new PojoResGetProfileDetail();
-		resGetProfile.setUserId(principalService.getAuthPrincipal());
+		//resGetProfile.setUserId(principalService.getAuthPrincipal());
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setCompany(profile.getCompanyName());
 		resGetProfile.setIndustryId(profile.getIndustry().getId());

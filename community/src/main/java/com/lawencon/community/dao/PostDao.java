@@ -40,8 +40,8 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 
 	@Override
-	public Optional<Post> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Post.class, id));
+	public Post getByIdRef(String id) {
+		return super.getByIdRef(Post.class, id);
 	}
 	@Override
 	public Optional<Post> getByIdAndDetach(String id) {
