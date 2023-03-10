@@ -6,6 +6,7 @@ import java.util.List;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.model.Post;
+import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.post.PojoPostReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
@@ -71,7 +72,9 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		} else {
 			post.setTitle(data.getTitle());
 			post.setContentPost(data.getContent());
-//			post.setPostType(data.getTypeId());
+	
+			
+		//	post.setPostType(data.getTypeId());
 			post.setIsActive(true);
 			
 		}

@@ -28,6 +28,8 @@ public class UserService implements UserDetailsService {
 	private UserDao userDao;
 	private ProfileDao profileDao;
 	private RoleDao roleDao;
+	private EmailSenderService emailSenderService;
+	
 
 	@Autowired	
 	private PasswordEncoder encoder;
@@ -35,10 +37,11 @@ public class UserService implements UserDetailsService {
 	@PersistenceContext
 	private EntityManager em;
 	
-	public UserService(final UserDao userDao, final  ProfileDao profileDao, final RoleDao roleDao) {
+	public UserService(final UserDao userDao, final  ProfileDao profileDao, final RoleDao roleDao, final EmailSenderService emailSenderService) {
 		this.userDao = userDao;
 		this.profileDao = profileDao;
 		this.roleDao = roleDao;
+		this.emailSenderService = emailSenderService;
 		};
 	
 	
@@ -57,13 +60,13 @@ public class UserService implements UserDetailsService {
 		return userDao.login(email);
 	}
 	
-	public PojoInsertRes insertUser(final PojoSignUpReqInsert  data) {
+	public PojoInsertRes userRegistration(final PojoSignUpReqInsert  data) {
 		final PojoInsertRes res = new PojoInsertRes();
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
 		final User user = new User();
 	
 		user.setEmail(data.getEmail());
-		user.setUserPassword(data.getPassword());
+		user.setUserPassword(encoder.encode(data.getPassword()));
 	
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);
@@ -73,10 +76,23 @@ public class UserService implements UserDetailsService {
 		profileDao.saveNoLogin(profile, ()->system.getId());
 		user.setProfile(profile);
 		
-		userDao.saveNoLogin(user, ()->system.getId());
+		final User userNew = userDao.saveNoLogin(user, ()->system.getId());
 		user.setCreatedBy(system.getId());
+		
+		
+		res.setId(userNew.getId());
+		res.setMessage("Registration is Success");
+		final String password = data.getPassword();
+
+		new Thread(() -> emailSenderService.sendEmail(data.getEmail(),
+				"  Hi, Welcome to WeCommunityApp \n  ",
+				" Email  : " + data.getEmail() + "\n  Password  : " + password
+						+ "\n  Berhasil Melakukan Registrasi,   Silahkan Login  Kembali Meggunakan Password dibawah ini"))
+				.start();
 
 		return res;
+		
+		
 	}
 	
 	
