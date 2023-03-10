@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.model.Category;
+import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.category.PojoCategoryReq;
 import com.lawencon.community.pojo.category.PojoResGetCategory;
@@ -55,7 +56,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 
 	}
 	
-	public PojoRes save(PojoCategoryReq data) {
+	public PojoInsertRes save(PojoCategoryReq data) {
 		ConnHandler.begin();
 
 
@@ -81,7 +82,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 		categoryDao.save(category);
 		ConnHandler.commit();
 
-		final PojoRes pojoRes = new PojoRes();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}

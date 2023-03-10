@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.model.Position;
+import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.position.PojoPostionReq;
 import com.lawencon.community.pojo.position.PojoResGetPostion;
@@ -53,7 +54,7 @@ public class PositionService extends BaseService<PojoResGetPostion>{
 
 	}
 	
-	public PojoRes save(PojoPostionReq data) {
+	public PojoInsertRes save(PojoPostionReq data) {
 		ConnHandler.begin();
 
 
@@ -79,7 +80,7 @@ public class PositionService extends BaseService<PojoResGetPostion>{
 		positionDao.save(position);
 		ConnHandler.commit();
 
-		final PojoRes pojoRes = new PojoRes();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
