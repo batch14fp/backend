@@ -61,16 +61,14 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 
 
 		Category category = new Category();
-
-		if (data.getCategoryId() != null) {
-
-			category = categoryDao.getByIdAndDetach(data.getCategoryId()).get();
+		final Category categoryRef = categoryDao.getByIdRef(data.getCategoryId());
+		if (categoryRef.getId() != null) {
+			
+			category = categoryDao.getByIdAndDetach(categoryRef.getId()).get();
 			category.setCategoryCode(data.getCategoryCode());;
 			category.setCategoryName(data.getCategoryName());
 			category.setIsActive(data.getIsActive());
 			category.setVersion(data.getVer());
-			
-			
 
 		} else {
 			category.setCategoryCode(data.getCategoryCode());;
@@ -79,10 +77,11 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 			
 		}
 
-		categoryDao.save(category);
+		final Category categoryNew = categoryDao.save(category);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(categoryNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
