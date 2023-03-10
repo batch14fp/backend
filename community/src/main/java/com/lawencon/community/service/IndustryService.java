@@ -6,6 +6,7 @@ import java.util.List;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.IndustryDao;
 import com.lawencon.community.model.Industry;
+import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.industry.PojoIndustryReq;
 import com.lawencon.community.pojo.industry.PojoResGetIndustry;
@@ -57,7 +58,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 
 	}
 	
-	public PojoRes save(PojoIndustryReq data) {
+	public PojoInsertRes save(PojoIndustryReq data) {
 		ConnHandler.begin();
 
 
@@ -81,7 +82,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 		industryDao.save(industry);
 		ConnHandler.commit();
 
-		final PojoRes pojoRes = new PojoRes();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
