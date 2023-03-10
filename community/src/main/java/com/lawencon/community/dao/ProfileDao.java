@@ -10,20 +10,20 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Profile> getAll() {
+	public List<Profile> getAll() {
 		final String sql = "SELECT * FROM t_profile WHERE  is_active = TRUE";	
 		final List<Profile> res = ConnHandler.getManager().createNativeQuery(sql, Profile.class).getResultList();
 		return res;
 	}
 
 	@Override
-	Optional<Profile> getById(String id) {
+	public Optional<Profile> getById(String id) {
 		return Optional.ofNullable(super.getById(Profile.class, id));
 	}
 	
 	
 	@Override
-	Optional<Profile> getByIdRef(String id) {
+	public Optional<Profile> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Profile.class, id));
 	}
 	

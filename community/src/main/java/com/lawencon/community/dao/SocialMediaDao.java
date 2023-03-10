@@ -13,7 +13,7 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<SocialMedia> getAll() {
+	public List<SocialMedia> getAll() {
 		final String sql = "SELECT * FROM t_social_media WHERE  is_active = TRUE";
 		final List<SocialMedia> res = ConnHandler.getManager().createNativeQuery(sql, SocialMedia.class)
 				.getResultList();
@@ -22,12 +22,12 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 	}
 
 	@Override
-	Optional<SocialMedia> getById(String id) {
+	public Optional<SocialMedia> getById(String id) {
 		return Optional.ofNullable(super.getById(SocialMedia.class, id));
 	}
 
 	@Override
-	Optional<SocialMedia> getByIdRef(String id) {
+	public Optional<SocialMedia> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(SocialMedia.class, id));
 	}
 	

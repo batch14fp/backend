@@ -21,17 +21,17 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 	}
 
 	@Override
-	Optional<Industry> getById(String id) {
+	public Optional<Industry> getById(String id) {
 		return Optional.ofNullable(super.getById(Industry.class, id));
 	}
 	
 	@Override
-	Optional<Industry> getByIdRef(String id) {
+	public Optional<Industry> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(Industry.class, id));
 	}
 
 	@SuppressWarnings("unchecked")
-	List<Industry> getByOffsetLimit(Long offset, Long limit) {
+	public List<Industry> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_industry WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<Industry> res = ConnHandler.getManager().createNativeQuery(sql, Industry.class)

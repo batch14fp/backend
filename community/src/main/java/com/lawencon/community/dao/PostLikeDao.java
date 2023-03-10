@@ -43,7 +43,7 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 
 
 	@SuppressWarnings("unchecked")
-	List<PostLike> getByOffsetLimit(Long offset, Long limit) {
+	public List<PostLike> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_post_like WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class)
@@ -55,7 +55,7 @@ public class PostLikeDao extends BaseMasterDao<PostLike>{
 	}
 
 	@Override
-	Optional<PostLike> getByIdRef(String id) {
+	public Optional<PostLike> getByIdRef(String id) {
 		return Optional.ofNullable(super.getByIdRef(PostLike.class, id));
 	}
 	

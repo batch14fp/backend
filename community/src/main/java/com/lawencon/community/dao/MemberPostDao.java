@@ -23,14 +23,14 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getById(String id) {
+	public Optional<MemberPost> getById(String id) {
 		return Optional.ofNullable(super.getById(MemberPost.class, id));
 	}
 
 
 
 	@SuppressWarnings("unchecked")
-	List<MemberPost> getByOffsetLimit(Long offset, Long limit) {
+	public List<MemberPost> getByOffsetLimit(Long offset, Long limit) {
 		  final String sql = "SELECT * FROM t_member_post WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
 			
 			final List<MemberPost> res = ConnHandler.getManager().createNativeQuery(sql, MemberPost.class)

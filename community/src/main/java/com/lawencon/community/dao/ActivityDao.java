@@ -14,13 +14,13 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 	}
 
 	@Override
-	Optional<Activity> getById(String id) {
+	public Optional<Activity> getById(String id) {
 		return Optional.ofNullable(super.getById(Activity.class, id));
 		}
 	
 
 	@Override
-	Optional<Activity> getByIdRef(String id) {
+	public Optional<Activity> getByIdRef(String id) {
 		
 		return Optional.ofNullable(super.getByIdRef(Activity.class, id));
 	}
