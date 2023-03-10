@@ -17,14 +17,19 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.RoleEnum;
 import com.lawencon.community.dao.CodeVerificationDao;
+import com.lawencon.community.dao.IndustryDao;
+import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.CodeVerification;
+import com.lawencon.community.model.Industry;
+import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.util.GenerateId;
@@ -36,6 +41,8 @@ public class UserService implements UserDetailsService {
 	private RoleDao roleDao;
 	private CodeVerificationDao codeVerificationDao;
 	private EmailSenderService emailSenderService;
+	private PositionDao positionDao;
+	private IndustryDao industryDao;
 
 	@Autowired
 	private PasswordEncoder encoder;
@@ -44,10 +51,13 @@ public class UserService implements UserDetailsService {
 	private EntityManager em;
 
 	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
-			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao) {
+			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao, final PositionDao positionDao,
+			final IndustryDao industryDao) {
 		this.userDao = userDao;
 		this.profileDao = profileDao;
 		this.roleDao = roleDao;
+		this.positionDao = positionDao;
+		this.industryDao = industryDao;
 		this.emailSenderService = emailSenderService;
 		this.codeVerificationDao = codeVerificationDao;
 	};
@@ -72,12 +82,18 @@ public class UserService implements UserDetailsService {
 		ConnHandler.begin();
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
 
-		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCodeVerfication());
+		final Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCodeVerfication());
 		// if(codeVerification.isPresent()) {
 
 		final Profile profile = new Profile();
-
+		final Position position= positionDao.getByIdRef(data.getPositionId());
+		profile.setPosition(position);
+		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
+		profile.setIndustry(industry);
+		profile.setFullname(data.getFullName());
+		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
+		
 		Profile profileNew = profileDao.saveNoLogin(profile, () -> system.getId());
 
 		res.setId(profileNew.getId());
@@ -133,5 +149,20 @@ public class UserService implements UserDetailsService {
 		return res;
 
 	}
+	
+//	public PojoResGetAllUserByRole getAllUserByRole(String roleCode) {
+//		PojoResGetAllUserByRole res = new PojoResGetAllUserByRole();
+//		
+//		
+//		
+//		
+//		
+//		
+//		
+//		
+//	}
+//	
+	
+	
 
 }
