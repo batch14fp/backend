@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class PojoVerificationCodeReq {
 	private String email;
-	private String code;
 	private String password;
 	private LocalDateTime expiredAt;
 	
@@ -13,12 +12,6 @@ public class PojoVerificationCodeReq {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
 	}
 	public String getPassword() {
 		return password;

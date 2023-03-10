@@ -5,8 +5,7 @@ import java.util.Random;
 public class GenerateId {
 	public static String generateCode(final int totalLength) {
 		final int leftLimit = 48;
-		final int rightLimit = 122;
-		
+		final int rightLimit = 58;
 		final Random random = new Random();
 
 		final String generatedString = random.ints(leftLimit, rightLimit + 1)

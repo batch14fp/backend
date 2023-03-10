@@ -15,7 +15,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<MemberPost> getAll() {
+	public List<MemberPost> getAll() {
 		final String sql = "SELECT * FROM t_member_post WHERE  is_active = TRUE";	
 		final List<MemberPost> res = ConnHandler.getManager().createNativeQuery(sql, MemberPost.class).getResultList();
 		
@@ -42,8 +42,8 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	}
 
 	@Override
-	Optional<MemberPost> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(MemberPost.class, id));
+	public MemberPost getByIdRef(String id) {
+		return super.getByIdRef(MemberPost.class, id);
 	}
 	
 	@Override

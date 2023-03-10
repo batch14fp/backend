@@ -52,6 +52,14 @@ public class CodeVerification extends BaseEntity{
 	}
 	public void setExpiredAt(LocalDateTime expiredAt) {
 		this.expiredAt = expiredAt;
+	}
+
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	} 
 
 }

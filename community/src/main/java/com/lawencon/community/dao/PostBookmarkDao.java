@@ -29,8 +29,8 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 
 	
 	@Override
-	public Optional<PostBookmark> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(PostBookmark.class, id));
+	public PostBookmark getByIdRef(String id) {
+		return super.getByIdRef(PostBookmark.class, id);
 	}
 	
 	

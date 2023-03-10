@@ -3,7 +3,6 @@ package com.lawencon.community.controller;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +20,8 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.login.PojoLoginReq;
 import com.lawencon.community.pojo.login.PojoLoginRes;
-import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
 
@@ -43,19 +39,24 @@ public class UserController {
 	}
 	
 	@PostMapping("sign-up")
-	public ResponseEntity<PojoInsertRes>insert(@RequestBody PojoSignUpReqInsert data){
-		PojoInsertRes res = userService.insertUser(data);
+	public ResponseEntity<PojoInsertRes>VerificationCode(@RequestBody  PojoVerificationCodeReq data){
+		PojoInsertRes res = userService.verificationCode(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
-	@GetMapping("/{roleCode}")
-	public ResponseEntity<List<PojoResGetAllUserByRole>>getAllUserCode(@PathVariable("roleCode")String roleCode){
-		List<PojoResGetAllUserByRole> resGet = userService.getUserByCode(roleCode);
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	@PostMapping("sign-up/verify")
+	public ResponseEntity<PojoInsertRes>insert(@RequestBody PojoSignUpReqInsert data){
+		PojoInsertRes res = userService.userRegistration(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
+//	
+//	@GetMapping("/{roleCode}")
+//	public ResponseEntity<List<PojoResGetAllUserByRole>>getAllUserCode(@PathVariable("roleCode")String roleCode){
+//		List<PojoResGetAllUserByRole> resGet = userService.getUserByCode(roleCode);
+//		return new ResponseEntity<>(resGet, HttpStatus.OK);
+//	}
 	
 	@PostMapping("login")
-	public ResponseEntity<?> login(@Validated @RequestBody PojoLoginReq user) {
+	public ResponseEntity<?> login(@RequestBody PojoLoginReq user) {
 		final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 
 		authenticationManager.authenticate(auth);

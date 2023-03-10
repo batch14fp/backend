@@ -28,8 +28,8 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 	
 	
 	@Override
-	public Optional<Profile> getByIdRef(String id) {
-		return Optional.ofNullable(super.getByIdRef(Profile.class, id));
+	public Profile getByIdRef(String id) {
+		return super.getByIdRef(Profile.class, id);
 	}
 	
 	@Override
