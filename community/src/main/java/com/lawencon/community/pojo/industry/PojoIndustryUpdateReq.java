@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.industry;
 
-public class PojoIndustryReq {
+public class PojoIndustryUpdateReq {
 	private String industryId;
 	private String industryName;
 	private Integer ver;

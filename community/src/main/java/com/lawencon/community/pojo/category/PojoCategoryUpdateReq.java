@@ -1,12 +1,12 @@
 package com.lawencon.community.pojo.category;
 
-public class PojoCategoryReq {
+public class PojoCategoryUpdateReq {
+
 	private String categoryId;
 	private String categoryName;
 	private String categoryCode;
 	private Integer ver;
 	private Boolean isActive;
-	
 
 	public String getCategoryId() {
 		return categoryId;
@@ -47,5 +47,5 @@ public class PojoCategoryReq {
 	public void setCategoryCode(String categoryCode) {
 		this.categoryCode = categoryCode;
 	}
-	
+
 }

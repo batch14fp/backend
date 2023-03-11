@@ -10,39 +10,38 @@ import com.lawencon.community.dao.IndustryDao;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.industry.PojoIndustryReq;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
+import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 import com.lawencon.community.pojo.industry.PojoResGetIndustry;
+
 @Service
-public class IndustryService extends BaseService<PojoResGetIndustry>{
-	
-	
+public class IndustryService extends BaseService<PojoResGetIndustry> {
+
 	private IndustryDao industryDao;
-	
-	public IndustryService(final  IndustryDao industryDao) {
-		
+
+	public IndustryService(final IndustryDao industryDao) {
+
 		this.industryDao = industryDao;
 	}
-	
 
 	@Override
 	public List<PojoResGetIndustry> getAll() {
 
 		final List<PojoResGetIndustry> res = new ArrayList<>();
-		
-		industryDao.getAll().forEach(data->{
+
+		industryDao.getAll().forEach(data -> {
 			final PojoResGetIndustry pojoResGetIndustry = new PojoResGetIndustry();
 			pojoResGetIndustry.setIndustryId(data.getId());
 			pojoResGetIndustry.setIndustryName(data.getIndustryName());
 			pojoResGetIndustry.setIsActive(data.getIsActive());
 			res.add(pojoResGetIndustry);
-			
+
 		});
-		
+
 		return res;
 	}
-	
-	
-	
+
 	public PojoRes deleteById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
@@ -59,34 +58,47 @@ public class IndustryService extends BaseService<PojoResGetIndustry>{
 		}
 
 	}
-	
-	public PojoInsertRes save(PojoIndustryReq data) {
+
+	public PojoInsertRes save(PojoIndustryInsertReq data) {
 		ConnHandler.begin();
-
-
 		Industry industry = new Industry();
 
-		if (data.getIndustryId() != null) {
+		industry.setIndustryName(data.getIndustryName());
+		industry.setIsActive(true);
 
-			industry = industryDao.getByIdAndDetach(data.getIndustryId()).get();
-			industry.setIndustryName(data.getIndustryName());
-			industry.setIsActive(data.getIsActive());
-			industry.setVersion(data.getVer());
-			
-			
-
-		} else {
-			industry.setIndustryName(data.getIndustryName());
-			industry.setIsActive(true);
-			
-		}
-
-		industryDao.save(industry);
+		final Industry industryNew = industryDao.save(industry);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(industryNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
+	}
+
+	public PojoUpdateRes update(PojoIndustryUpdateReq data) {
+		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
+		try {
+			ConnHandler.begin();
+			final Industry industry  = industryDao.getByIdRef(data.getIndustryId());
+			industryDao.getByIdAndDetach(Industry.class, industry.getId());
+			industry.setId(industry.getId());
+			industry.setIndustryName(data.getIndustryId());
+			industry.setIsActive(data.getIsActive());
+			industry.setVersion(data.getVer());
+
+			final Industry industryNew = industryDao.saveAndFlush(industry);
+			ConnHandler.commit();
+	
+			pojoUpdateRes.setId(industryNew.getId());
+			pojoUpdateRes.setMessage("Save Success!");
+			pojoUpdateRes.setVer(industryNew.getVersion());
+		
+		} catch (Exception e) {
+			pojoUpdateRes.setId(data.getIndustryId());
+			pojoUpdateRes.setMessage("Something wrong,you cannot update this data");
+		}
+		return pojoUpdateRes;
+		
 	}
 
 }

@@ -6,7 +6,9 @@ public abstract class BaseService<T> {
 	
 	
 	abstract List<T> getAll();
+
 	
+
 	
 
 }

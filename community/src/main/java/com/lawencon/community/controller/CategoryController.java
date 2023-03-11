@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.category.PojoCategoryReq;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
+import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.pojo.category.PojoResGetCategory;
 import com.lawencon.community.service.CategoryService;
 
@@ -34,14 +36,14 @@ public class CategoryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoCategoryReq data){
+	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoCategoryInsertReq data){
 		PojoInsertRes resGet = categoryService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoInsertRes> updateCategory(@RequestBody PojoCategoryReq data){
-		PojoInsertRes resGet = categoryService.save(data);
+	public ResponseEntity<PojoUpdateRes> updateCategory(@RequestBody PojoCategoryUpdateReq data){
+		PojoUpdateRes resGet = categoryService.update(data);	
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	

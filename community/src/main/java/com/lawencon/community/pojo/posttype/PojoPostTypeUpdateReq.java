@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.posttype;
 
-public class PojoPostTypeReq {
+public class PojoPostTypeUpdateReq {
 	private String postTypeId;
 	private String postTypeName;
 	private String postTypeCode;
