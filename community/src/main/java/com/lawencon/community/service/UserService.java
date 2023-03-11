@@ -31,6 +31,7 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.util.GenerateId;
 
@@ -76,14 +77,30 @@ public class UserService implements UserDetailsService {
 	public Optional<User> login(final String email) {
 		return userDao.login(email);
 	}
+	
+	public PojoResGetVerification getVerified(String code) {
+		PojoResGetVerification res = new PojoResGetVerification();
+		
+		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(code);
+		
+		codeVerification.ifPresent(data -> {
+			res.setCode(data.getCode());
+			res.setEmail(data.getEmail());
+			res.setExpiredAt(data.getExpiredAt());
+			res.setPassword(data.getUserPassword());
+		});
+		
+		if(codeVerification.isEmpty()) {
+			throw new Error("Code verification wrong !");
+		}
+		
+		return res;
+	}
 
 	public PojoInsertRes userRegistration(PojoSignUpReqInsert data) {
 		final PojoInsertRes res = new PojoInsertRes();
 		ConnHandler.begin();
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
-
-		final Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCodeVerfication());
-		// if(codeVerification.isPresent()) {
 
 		final Profile profile = new Profile();
 		final Position position= positionDao.getByIdRef(data.getPositionId());
@@ -113,12 +130,6 @@ public class UserService implements UserDetailsService {
 		res.setMessage("Registration is Success");
 
 		return res;
-//		}
-//		else {
-//			res.setMessage("Code Verification is wrong");
-//		
-//		return res;
-//		}
 	}
 
 	public PojoInsertRes verificationCode(final PojoVerificationCodeReq data) {
