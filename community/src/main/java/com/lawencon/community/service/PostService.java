@@ -3,6 +3,8 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.PostBookmarkDao;
@@ -24,6 +26,7 @@ import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
+import com.lawencon.security.principal.PrincipalService;
 
 
 public class PostService extends BaseService<PojoResGetAllPost>{
@@ -33,6 +36,10 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostLikeDao postLikeDao;
 	private PostBookmarkDao postBookmarkDao;
 	private UserDao userDao;
+
+
+	@Inject
+	private PrincipalService principalService;
 	
 	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao) {
 		this.postDao = postDao;
@@ -46,6 +53,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	@Override
 	public List<PojoResGetAllPost> getAll() {
 		final List<PojoResGetAllPost> res = new ArrayList<>();
+	
 		postDao.getAll().forEach(data->{
 			final PojoResGetAllPost pojoResGetAllPost = new PojoResGetAllPost();
 			pojoResGetAllPost.setPostId(data.getId());
@@ -56,10 +64,19 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			pojoResGetAllPost.setTypeName(data.getPostType().getTypeName());
 			pojoResGetAllPost.setCategoryCode(data.getCategory().getCategoryCode());
 			pojoResGetAllPost.setCategoryName(data.getCategory().getCategoryName());
+			pojoResGetAllPost.setCountPostComment(0);
+			pojoResGetAllPost.setCountPostLike(getCountPostLike(data.getId(), principalService.getAuthPrincipal()));
+			pojoResGetAllPost.setBookmark(false);
+			pojoResGetAllPost.setLike(false);
 			res.add(pojoResGetAllPost);
 			
 		});
 		return res;
+	}
+	
+	private int getCountPostLike(String userId, String postId) {
+		int countLike = postLikeDao.countPostLike(userId, postId);
+		return countLike;
 	}
 	
 	public PojoRes deleteById(String id) {
@@ -147,7 +164,23 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		return pojoRes;
 	}
 	
-	public PojoInsertRes savePostLike(PojoPostBookmarkInsertReq data) {
+	public PojoRes deletePostLikeById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+
+		Boolean result = postLikeDao.deleteById(PostLike.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
+	}
+	
+	public PojoInsertRes savePostBookmark(PojoPostBookmarkInsertReq data) {
 		ConnHandler.begin();
 		final PostBookmark postBookmark = new PostBookmark();
 		final Post post = postDao.getByIdRef(data.getPostId());
@@ -161,6 +194,22 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		pojoRes.setId(postBookmarkNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
+	}
+	
+	public PojoRes deletePostBookmarkById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+
+		Boolean result = postBookmarkDao.deleteById(PostBookmark.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
 	}
 	
 	
