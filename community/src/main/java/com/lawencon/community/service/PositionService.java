@@ -65,10 +65,11 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 		position.setPositionCode(data.getPostionCode());
 		position.setIsActive(true);
 
-		positionDao.save(position);
+		final Position positionNew = positionDao.save(position);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(positionNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
@@ -80,7 +81,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			final Position position = positionDao.getByIdRef(data.getPositionId());
 			positionDao.getByIdAndDetach(Position.class, position.getId());
 			position.setId(position.getId());
-			position.setPositionName(data.getPositionId());
+			position.setPositionName(data.getPostionName());
 			position.setIsActive(data.getIsActive());
 			position.setVersion(data.getVer());
 

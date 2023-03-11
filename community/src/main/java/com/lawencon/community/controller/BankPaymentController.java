@@ -31,25 +31,25 @@ public class BankPaymentController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PojoResGetBankPayment>> getCategory() {
+	public ResponseEntity<List<PojoResGetBankPayment>> getAllBankPayment() {
 		List<PojoResGetBankPayment> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoBankPaymentInsertReq data) {
+	public ResponseEntity<PojoInsertRes> insertBankPayment(@RequestBody PojoBankPaymentInsertReq data) {
 		PojoInsertRes resGet = bankPaymentService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateCategory(@RequestBody PojoBankPaymentUpdateReq data) {
+	public ResponseEntity<PojoUpdateRes> updateBankPayment(@RequestBody PojoBankPaymentUpdateReq data) {
 		PojoUpdateRes resGet = bankPaymentService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<PojoRes> deleteCategory(@RequestBody String id) {
+	public ResponseEntity<PojoRes> deleteBankPayment(@RequestBody String id) {
 		PojoRes resDelete = bankPaymentService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

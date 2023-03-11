@@ -4,17 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
-import com.lawencon.community.pojo.profile.PojoProfileUpdateReq;
-import com.lawencon.community.pojo.profile.PojoProfileVerificationReqInsert;
-import com.lawencon.community.pojo.profile.PojoProfileVerifyReqInsert;
 import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
 import com.lawencon.community.service.ProfileService;
 

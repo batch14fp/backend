@@ -5,18 +5,22 @@ import java.util.List;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PostDao;
+import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.post.PojoPostReq;
+import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
 
 
 public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostDao postDao;
+	private PostTypeDao postTypeDao;
 	
-	public PostService(final PostDao postDao) {
+	public PostService(final PostDao postDao, final PostTypeDao postTypeDao) {
 		this.postDao = postDao;
+		this.postTypeDao = postTypeDao;
 	}
 	
 	@Override
@@ -54,37 +58,23 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		}
 	}
 	
-	public PojoRes save(PojoPostReq data) {
-		ConnHandler.begin();
-
-
-		Post post = new Post();
-
-		if (data.getPostId() != null) {
-
-			post = postDao.getByIdAndDetach(data.getPostId()).get();
-			post.setTitle(data.getTitle());
-			post.setContentPost(data.getContent());
-//			post.setPostType(data.getTypeId());
-			post.setIsActive(data.getIsActive());
-			post.setVersion(data.getVer());
-
-		} else {
-			post.setTitle(data.getTitle());
-			post.setContentPost(data.getContent());
 	
+	public PojoInsertRes save(PojoPostInsertReq data) {
+		ConnHandler.begin();
+			final Post post = new Post();
+			post.setTitle(data.getTitle());
+			post.setContentPost(data.getContent());
 			
-		//	post.setPostType(data.getTypeId());
+			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
+			post.setPostType(postType);
 			post.setIsActive(true);
-			
-		}
-
-		postDao.save(post);
+		final Post postNew = postDao.save(post);
 		ConnHandler.commit();
 
-		final PojoRes pojoRes = new PojoRes();
-		pojoRes.setMessage("Save Success!");
-		return pojoRes;
+		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
+		pojoInsertRes.setId(postNew.getId());
+		pojoInsertRes.setMessage("Save Success!");
+		return pojoInsertRes;
 	}
 
 	

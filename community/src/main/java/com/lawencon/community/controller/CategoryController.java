@@ -30,7 +30,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetCategory>> getCategory(){
+	public ResponseEntity<List<PojoResGetCategory>> getAllCategory(){
 		List<PojoResGetCategory> resGet = categoryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
