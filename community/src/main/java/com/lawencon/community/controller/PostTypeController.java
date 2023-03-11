@@ -22,7 +22,7 @@ import com.lawencon.community.service.PostTypeService;
 
 
 @RestController
-@RequestMapping("post-type")
+@RequestMapping("post-types")
 public class PostTypeController {
 	private PostTypeService postTypeService;
 	
@@ -31,26 +31,26 @@ public class PostTypeController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPostType>> getPosition(){
+	public ResponseEntity<List<PojoResGetPostType>> getAllPostType(){
 		List<PojoResGetPostType> resGet = postTypeService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPosition(@RequestBody PojoPostTypeInsertReq data){
+	public ResponseEntity<PojoInsertRes> updatePostType(@RequestBody PojoPostTypeInsertReq data){
 		PojoInsertRes resGet = postTypeService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePosition(@RequestBody PojoPostTypeUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatePostType(@RequestBody PojoPostTypeUpdateReq data){
 		PojoUpdateRes resGet = postTypeService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	
 	@DeleteMapping
-	public ResponseEntity<PojoRes> deleteCategory(@RequestBody String id) {
+	public ResponseEntity<PojoRes> deletePostType(@RequestBody String id) {
 		PojoRes resDelete = postTypeService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

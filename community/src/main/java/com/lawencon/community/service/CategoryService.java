@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
-import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;

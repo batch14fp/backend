@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.socialmedia;
 
-public class PojoSocialMediaAdminReqInsert {
+public class PojoSocialMediaAdminInsertReq {
 	private String platformName;
 
 	public String getPlatformName() {
