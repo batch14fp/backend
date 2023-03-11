@@ -1,5 +1,6 @@
 package com.lawencon.community.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -39,7 +40,7 @@ public class Activity extends BaseEntity{
 	@Column(length=50)
 	private String title;
 	
-	private Float price;
+	private BigDecimal price;
 	
 	@Column(length=36)
 	private String provider;
@@ -51,7 +52,7 @@ public class Activity extends BaseEntity{
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private LocalTime startTime ;
-	private LocalTime end_time;
+	private LocalTime endTime;
 	
 	
 	
@@ -117,16 +118,16 @@ public class Activity extends BaseEntity{
 	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
-	public LocalTime getEnd_time() {
-		return end_time;
+	public LocalTime getEndTime() {
+		return endTime;
 	}
-	public void setEnd_time(LocalTime end_time) {
-		this.end_time = end_time;
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
 	}
-	public Float getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Float price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	
