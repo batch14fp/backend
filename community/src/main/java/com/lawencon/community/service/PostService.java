@@ -73,7 +73,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		});
 		return res;
 	}
-	
+
 	public PojoResGetAllPost getById(String id) {
 			final Post data = postDao.getByIdRef(id);
 			final PojoResGetAllPost res = new PojoResGetAllPost();
@@ -92,7 +92,6 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	
 		return res;
 	}
-	
 	private int getCountPostLike(String userId, String postId) {
 		int countLike = postLikeDao.countPostLike(userId, postId);
 		return countLike;
