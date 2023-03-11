@@ -8,12 +8,14 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostLikeDao;
 import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostBookmark;
@@ -38,18 +40,20 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostLikeDao postLikeDao;
 	private PostBookmarkDao postBookmarkDao;
 	private UserDao userDao;
+	private CategoryDao categoryDao;
 
 
 	@Inject
 	private PrincipalService principalService;
 	
-	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao) {
+	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
 		this.fileDao = fileDao;
 		this.postLikeDao = postLikeDao;
 		this.userDao = userDao;
 		this.postBookmarkDao = postBookmarkDao;
+		this.categoryDao = categoryDao;
 	}
 	
 	@Override
@@ -123,6 +127,8 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			post.setContentPost(data.getContent());
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
+			final Category category = categoryDao.getByIdRef(data.getCategoryId());
+			post.setCategory(category);
 			final File file = fileDao.getByIdRef(data.getImagePostId());
 			post.setFile(file);
 			post.setIsActive(true);
@@ -145,6 +151,8 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			post.setContentPost(data.getContent());
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
+			final Category category = categoryDao.getByIdRef(data.getCategoryId());
+			post.setCategory(category);
 			final File file = fileDao.getByIdRef(data.getImagePostId());
 			post.setFile(file);
 			post.setIsActive(true);
