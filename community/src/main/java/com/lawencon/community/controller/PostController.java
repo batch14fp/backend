@@ -2,6 +2,7 @@ package com.lawencon.community.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -85,4 +87,19 @@ public class PostController {
 		PojoRes resDelete = postService.deletePostBookmarkById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
+	
+	@GetMapping("/test-offset")
+	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) {
+	        int offset = (page - 1) * size;
+	        List<PojoResGetAllPost> dataList = postService.getData(offset, size);
+	        int totalCount = postService.getTotalCount();
+	        int pageCount = postService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	    }
+	
+	
 }

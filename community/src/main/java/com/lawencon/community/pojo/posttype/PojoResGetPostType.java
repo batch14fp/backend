@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.posttype;
 
 public class PojoResGetPostType {
+	private String postTypeId;
 	private String postTypeName;
 	private String postTypeCode;
 	public String getPostTypeName() {
@@ -14,6 +15,12 @@ public class PojoResGetPostType {
 	}
 	public void setPostTypeCode(String postTypeCode) {
 		this.postTypeCode = postTypeCode;
+	}
+	public String getPostTypeId() {
+		return postTypeId;
+	}
+	public void setPostTypeId(String postTypeId) {
+		this.postTypeId = postTypeId;
 	}
 	
 	
