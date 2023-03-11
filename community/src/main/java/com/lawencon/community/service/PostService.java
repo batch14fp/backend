@@ -232,12 +232,42 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		}
 	}
 	
-	
-	
+	    
+	    public List<PojoResGetAllPost> getData(int offset, int limit) {
+	    	final List<PojoResGetAllPost>  listPost= new ArrayList<>();
+	     postDao.getByOffsetLimit(offset, limit).forEach(data->{
+	    	 final PojoResGetAllPost res = new PojoResGetAllPost();
+	    	 res.setPostId(data.getId());
+				res.setTitle(data.getTitle());
+				res.setContent(data.getContentPost());
+				res.setImgPostId(data.getFile().getId());
+				res.setTypeCode(data.getPostType().getTypeCode());
+				res.setTypeName(data.getPostType().getTypeName());
+				res.setCategoryCode(data.getCategory().getCategoryCode());
+				res.setCategoryName(data.getCategory().getCategoryName());
+				res.setCountPostComment(0);
+				res.setCountPostLike(getCountPostLike(data.getId(), principalService.getAuthPrincipal()));
+				res.setBookmark(false);
+				res.setLike(false); 
+	     });;
 
+		return listPost;
+	      
+	    }
+	    public int getTotalCount() {
+	      
+	        return postDao.getTotalCount();
+	    }
+	    
+	    public int getPageCount(int totalCount, int pageSize) {
+	        int pageCount = totalCount / pageSize;
+	        if (totalCount % pageSize > 0) {
+	            pageCount++;
+	        }
+	        return pageCount;
 	
 	
-	
+	    }
 
 
 	
