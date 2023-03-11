@@ -3,14 +3,25 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Activity;
 
+
+
+
+@Repository
 public class ActivityDao extends BaseMasterDao<Activity>{
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Activity> getAll() {
-	
-		return null;
+		
+		final String sql = "SELECT * FROM t_activity WHERE is_active = TRUE";
+		final List<Activity> res = 	ConnHandler.getManager().createNativeQuery(sql, Activity.class).getResultList();
+		
+		return res;
 	}
 
 	@Override

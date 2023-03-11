@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.PostBookmarkDao;
@@ -28,7 +30,7 @@ import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
 import com.lawencon.security.principal.PrincipalService;
 
-
+@Service
 public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostDao postDao;
 	private PostTypeDao postTypeDao;

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PollingOption;
 
+@Repository
 public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 
 	@Override
