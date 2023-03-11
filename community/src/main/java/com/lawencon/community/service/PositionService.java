@@ -63,6 +63,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 
 		position.setPositionName(data.getPostionName());
 		position.setPositionCode(data.getPostionCode());
+		
 		position.setIsActive(true);
 
 		final Position positionNew = positionDao.save(position);

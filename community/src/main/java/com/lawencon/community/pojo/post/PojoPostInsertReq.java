@@ -6,6 +6,7 @@ public class PojoPostInsertReq {
 	private String title;
 	private String content;
 	private String typeId;
+	private String imagePostId;
 	private PojoAttachmentPostReqInsert attachmentPost;
 	private List<PojoPollingReqInsert>  pollingInsert;
 
@@ -38,6 +39,12 @@ public class PojoPostInsertReq {
 	}
 	public void setPollingInsert(List<PojoPollingReqInsert> pollingInsert) {
 		this.pollingInsert = pollingInsert;
+	}
+	public String getImagePostId() {
+		return imagePostId;
+	}
+	public void setImagePostId(String imagePostId) {
+		this.imagePostId = imagePostId;
 	}
 
 	

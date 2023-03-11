@@ -9,6 +9,7 @@ public class PojoPostUpdateReq {
 	private String typeId;
 	private PojoAttachmentPostReqInsert attachmentPost;
 	private List<PojoPollingReqInsert>  pollingInsert;
+	private String imagePostId;
 	private Boolean isActive;
 	private Integer ver;
 	
@@ -60,5 +61,12 @@ public class PojoPostUpdateReq {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
+	public String getImagePostId() {
+		return imagePostId;
+	}
+	public void setImagePostId(String imagePostId) {
+		this.imagePostId = imagePostId;
+	}
+	
 	
 }

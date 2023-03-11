@@ -4,23 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostDao;
+import com.lawencon.community.dao.PostLikeDao;
 import com.lawencon.community.dao.PostTypeDao;
+import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
+import com.lawencon.community.model.PostBookmark;
+import com.lawencon.community.model.PostLike;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
+import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
+import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
 
 
 public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostDao postDao;
 	private PostTypeDao postTypeDao;
+	private FileDao fileDao;
+	private PostLikeDao postLikeDao;
+	private PostBookmarkDao postBookmarkDao;
+	private UserDao userDao;
 	
-	public PostService(final PostDao postDao, final PostTypeDao postTypeDao) {
+	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
+		this.fileDao = fileDao;
+		this.postLikeDao = postLikeDao;
+		this.userDao = userDao;
+		this.postBookmarkDao = postBookmarkDao;
 	}
 	
 	@Override
@@ -64,9 +84,10 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			final Post post = new Post();
 			post.setTitle(data.getTitle());
 			post.setContentPost(data.getContent());
-			
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
+			final File file = fileDao.getByIdRef(data.getImagePostId());
+			post.setFile(file);
 			post.setIsActive(true);
 		final Post postNew = postDao.save(post);
 		ConnHandler.commit();
@@ -76,6 +97,79 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		pojoInsertRes.setMessage("Save Success!");
 		return pojoInsertRes;
 	}
+	
+	public PojoUpdateRes update(PojoPostUpdateReq data) {
+		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
+		try {
+			ConnHandler.begin();
+			final Post post = postDao.getByIdRef(data.getPostId());
+			postDao.getByIdAndDetach(Post.class, post.getId());
+			post.setTitle(data.getTitle());
+			post.setContentPost(data.getContent());
+			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
+			post.setPostType(postType);
+			final File file = fileDao.getByIdRef(data.getImagePostId());
+			post.setFile(file);
+			post.setIsActive(true);
+
+			final Post postNew = postDao.saveAndFlush(post);
+			ConnHandler.commit();
+
+			pojoUpdateRes.setId(postNew.getId());
+			pojoUpdateRes.setMessage("Save Success!");
+			pojoUpdateRes.setVer(postNew.getVersion());
+
+		} catch (Exception e) {
+			pojoUpdateRes.setId(data.getPostId());
+			pojoUpdateRes.setMessage("Something wrong,you cannot update this data");
+		}
+		return pojoUpdateRes;
+
+	}
+	
+	
+	public PojoInsertRes savePostLike(PojoPostLikeInsertReq data) {
+		ConnHandler.begin();
+
+		final PostLike postLike = new PostLike();
+		
+		final Post post = postDao.getByIdRef(data.getPostId());
+		final User user = userDao.getByIdRef(data.getUserId());	
+		postLike.setPost(post);
+		postLike.setUser(user);
+		postLike.setIsActive(true);
+		final PostLike postLikeNew = postLikeDao.save(postLike);
+		ConnHandler.commit();
+
+		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(postLikeNew.getId());
+		pojoRes.setMessage("Save Success!");
+		return pojoRes;
+	}
+	
+	public PojoInsertRes savePostLike(PojoPostBookmarkInsertReq data) {
+		ConnHandler.begin();
+		final PostBookmark postBookmark = new PostBookmark();
+		final Post post = postDao.getByIdRef(data.getPostId());
+		final User user = userDao.getByIdRef(data.getUserId());	
+		postBookmark.setPost(post);
+		postBookmark.setUser(user);
+		postBookmark.setIsActive(true);
+		final PostBookmark postBookmarkNew = postBookmarkDao.save(postBookmark);
+		ConnHandler.commit();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(postBookmarkNew.getId());
+		pojoRes.setMessage("Save Success!");
+		return pojoRes;
+	}
+	
+	
+	
+
+	
+	
+	
+
 
 	
 	
