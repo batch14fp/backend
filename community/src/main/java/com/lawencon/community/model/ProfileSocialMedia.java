@@ -40,7 +40,4 @@ public class ProfileSocialMedia extends BaseEntity {
 		this.socialMedia = socialMedia;
 	}
 	
-	
-	
-	
 }
