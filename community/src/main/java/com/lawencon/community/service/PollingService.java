@@ -10,5 +10,6 @@ public class PollingService {
 	
 	public PollingService(PollingDao pollingDao) {
 		
+		
 	}
 }
