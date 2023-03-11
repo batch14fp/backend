@@ -3,6 +3,8 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.model.ActivityType;
@@ -13,6 +15,8 @@ import com.lawencon.community.pojo.activitytype.PojoActivityTypeInsertReq;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeUpdateReq;
 import com.lawencon.community.pojo.activitytype.PojoResGetActivityType;
 
+
+@Service
 public class ActivityTypeService {
 
 	

@@ -29,7 +29,6 @@ import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
@@ -107,6 +106,7 @@ public class UserService implements UserDetailsService {
 		profile.setPosition(position);
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
+		profile.setPhoneNumber(data.getPhoneNumber());
 		profile.setFullname(data.getFullName());
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());

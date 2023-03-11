@@ -3,9 +3,13 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.ActivityType;
 
+
+@Repository
 public class ActivityTypeDao extends BaseMasterDao<ActivityType>{
 
 	@SuppressWarnings("unchecked")

@@ -28,7 +28,7 @@ public class Profile extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name = "imageProfile_Id", nullable=false)
+	@JoinColumn(name = "imageProfile_Id")
 	private File imageProfile;
 	
 
