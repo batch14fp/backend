@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.industry.PojoIndustryReq;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
+import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 import com.lawencon.community.pojo.industry.PojoResGetIndustry;
 import com.lawencon.community.service.IndustryService;
 
@@ -34,13 +36,13 @@ public class IndustryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryReq data){
+	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryInsertReq data){
 		PojoInsertRes resGet = industryService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	@PutMapping
-	public ResponseEntity<PojoInsertRes> updateIndustry(@RequestBody PojoIndustryReq data){
-		PojoInsertRes resGet = industryService.save(data);
+	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoIndustryUpdateReq data){
+		PojoUpdateRes resGet = industryService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	@DeleteMapping

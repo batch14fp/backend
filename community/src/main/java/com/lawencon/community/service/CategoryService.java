@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
+import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.category.PojoCategoryReq;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
+import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.pojo.category.PojoResGetCategory;
 
 
@@ -56,33 +59,43 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 
 	}
 	
-	public PojoInsertRes save(PojoCategoryReq data) {
+	public PojoUpdateRes update(PojoCategoryUpdateReq data) {
+		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
+		try {
+			ConnHandler.begin();
+			Category category = categoryDao.getByIdRef(data.getCategoryId());
+			categoryDao.getByIdAndDetach(Category.class, category.getId());
+				category.setId(category.getId());
+				category.setCategoryCode(data.getCategoryCode());;
+				category.setCategoryName(data.getCategoryName());
+				category.setIsActive(data.getIsActive());
+				category.setVersion(data.getVer());
+			final Category categoryNew = categoryDao.saveAndFlush(category);
+			ConnHandler.commit();
+			pojoUpdateRes.setId(categoryNew.getId());
+			pojoUpdateRes.setMessage("Save Success!");
+			pojoUpdateRes.setVer(categoryNew.getVersion());
+		
+		} catch (Exception e) {
+			pojoUpdateRes.setId(data.getCategoryId());
+			pojoUpdateRes.setMessage("Something wrong,you cannot update the data");
+		}
+		return pojoUpdateRes;
+		
+		
+	}
+	public PojoInsertRes save(PojoCategoryInsertReq data) {
 		ConnHandler.begin();
-
-
 		Category category = new Category();
-		final Category categoryRef = categoryDao.getByIdRef(data.getCategoryId());
-		if (categoryRef.getId() != null) {
-			
-			category = categoryDao.getByIdAndDetach(categoryRef.getId()).get();
 			category.setCategoryCode(data.getCategoryCode());;
-			category.setCategoryName(data.getCategoryName());
-			category.setIsActive(data.getIsActive());
-			category.setVersion(data.getVer());
-
-		} else {
-			category.setCategoryCode(data.getCategoryCode());
 			category.setCategoryName(data.getCategoryName());
 			category.setIsActive(true);
 			
-		}
-
 		final Category categoryNew = categoryDao.save(category);
 		ConnHandler.commit();
-
 		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setId(categoryNew.getId());
-		pojoRes.setMessage("Save Success!");
+		pojoRes.setMessage("Update Success!");
 		return pojoRes;
 	}
 	

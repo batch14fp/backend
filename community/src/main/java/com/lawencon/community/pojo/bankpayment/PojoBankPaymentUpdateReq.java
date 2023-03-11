@@ -1,10 +1,10 @@
 package com.lawencon.community.pojo.bankpayment;
 
-public class PojoBankPaymentReq {
+public class PojoBankPaymentUpdateReq {
 	private String bankPaymentId;
 	private String bankPaymentName;
-	private String isActive;
-	private String ver;
+	private Boolean isActive;
+	private Integer ver;
 	public String getBankPaymentId() {
 		return bankPaymentId;
 	}
@@ -17,17 +17,16 @@ public class PojoBankPaymentReq {
 	public void setBankPaymentName(String bankPaymentName) {
 		this.bankPaymentName = bankPaymentName;
 	}
-	public String getIsActive() {
+	public Boolean getIsActive() {
 		return isActive;
 	}
-	public void setIsActive(String isActive) {
+	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	public String getVer() {
+	public Integer getVer() {
 		return ver;
 	}
-	public void setVer(String ver) {
+	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-
 }

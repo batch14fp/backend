@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.position;
 
-public class PojoPostionReq {
+public class PojoPositionUpdateReq {
 	private String positionId;
 	private String postionCode;
 	private String postionName;
