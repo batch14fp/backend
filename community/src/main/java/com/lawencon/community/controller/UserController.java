@@ -11,16 +11,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.community.dao.CodeVerificationDao;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.login.PojoLoginReq;
 import com.lawencon.community.pojo.login.PojoLoginRes;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
@@ -32,7 +36,8 @@ public class UserController {
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
 
-	public UserController(final UserService userService, final JwtService jwtService, final AuthenticationManager authenticationManager) {
+	public UserController(final UserService userService, final JwtService jwtService, 
+			final AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.jwtService = jwtService;
 		this.authenticationManager = authenticationManager;
@@ -48,6 +53,13 @@ public class UserController {
 		PojoInsertRes res = userService.userRegistration(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("sign-up/verify-code/{code}")
+	public ResponseEntity<PojoResGetVerification>checkVerified(@PathVariable("code") String code){
+		PojoResGetVerification res = userService.getVerified(code);
+		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
+	}
+	
 //	
 //	@GetMapping("/{roleCode}")
 //	public ResponseEntity<List<PojoResGetAllUserByRole>>getAllUserCode(@PathVariable("roleCode")String roleCode){
