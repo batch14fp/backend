@@ -30,7 +30,7 @@ public class PositionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPostion>> getPosition(){
+	public ResponseEntity<List<PojoResGetPostion>> getAllPosition(){
 		List<PojoResGetPostion> resGet = positionService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
