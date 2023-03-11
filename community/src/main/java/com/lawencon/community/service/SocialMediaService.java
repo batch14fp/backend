@@ -1,16 +1,16 @@
 package com.lawencon.community.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.SocialMediaDao;
 import com.lawencon.community.model.SocialMedia;
-<<<<<<< HEAD
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-=======
->>>>>>> 5befb5d6f4a860f48c84b32f9231fc0582a52662
 import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminInsertReq;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminUpdateReq;
@@ -24,7 +24,6 @@ public class SocialMediaService {
 		this.socialMediaDao = socialMediaDao;
 	}
 	
-<<<<<<< HEAD
 
 
 	public List<PojoResGetSocialMedia> getAll() {
@@ -37,14 +36,6 @@ public class SocialMediaService {
 		});
 		return socialMedias;
 
-=======
-	public PojoResGetSocialMedia getById(String id) {
-		SocialMedia socialMedia = socialMediaDao.getByIdRef(id).get();
-		PojoResGetSocialMedia resGetSocialMedia = new PojoResGetSocialMedia();
-		resGetSocialMedia.setPlatformName(socialMedia.getPlatformName());
-		resGetSocialMedia.setUrl(socialMedia.getUrl());
-		return resGetSocialMedia;
->>>>>>> 5befb5d6f4a860f48c84b32f9231fc0582a52662
 	}
 
 	public PojoRes deleteById(String id) {
@@ -70,6 +61,7 @@ public class SocialMediaService {
 		SocialMedia socialMedia = new SocialMedia();
 
 		socialMedia.setPlatformName(data.getPlatformName());
+
 		socialMedia.setIsActive(true);
 
 		final SocialMedia socialMediaNew = socialMediaDao.save(socialMedia);
