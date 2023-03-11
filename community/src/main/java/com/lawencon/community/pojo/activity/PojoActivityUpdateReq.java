@@ -1,18 +1,39 @@
 package com.lawencon.community.pojo.activity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class PojoActivityUpdateReq {
+	private String activityId;
+	private String timeAgo;
 	private String title;
 	private String content;
+	private String providers;
+	private String typeId;
+	private String imgActivityId;
+	private BigDecimal price;
 	private String categoryId;
-	private String categoryName;
-	private Float price;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
+	private Boolean isActive;
+	private Integer ver;
+	public String getActivityId() {
+		return activityId;
+	}
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+	}
+	
+	
+	public String getTimeAgo() {
+		return timeAgo;
+	}
+	public void setTimeAgo(String timeAgo) {
+		this.timeAgo = timeAgo;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -25,24 +46,26 @@ public class PojoActivityUpdateReq {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getCategoryId() {
-		return categoryId;
+	public String getProviders() {
+		return providers;
 	}
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
+	public void setProviders(String providers) {
+		this.providers = providers;
 	}
-	public String getCategoryName() {
-		return categoryName;
+
+	public String getImgActivityId() {
+		return imgActivityId;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setImgActivityId(String imgActivityId) {
+		this.imgActivityId = imgActivityId;
 	}
-	public Float getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Float price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -67,5 +90,30 @@ public class PojoActivityUpdateReq {
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	public String getTypeId() {
+		return typeId;
+	}
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	
 	
 }

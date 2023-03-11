@@ -2,6 +2,7 @@ package com.lawencon.community.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -29,6 +30,7 @@ import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
@@ -51,8 +53,8 @@ public class UserService implements UserDetailsService {
 	private EntityManager em;
 
 	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
-			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao, final PositionDao positionDao,
-			final IndustryDao industryDao) {
+			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
+			final PositionDao positionDao, final IndustryDao industryDao) {
 		this.userDao = userDao;
 		this.profileDao = profileDao;
 		this.roleDao = roleDao;
@@ -76,20 +78,20 @@ public class UserService implements UserDetailsService {
 	public Optional<User> login(final String email) {
 		return userDao.login(email);
 	}
-	
+
 	public PojoResGetVerification getVerified(String code) {
 		PojoResGetVerification res = new PojoResGetVerification();
-		
+
 		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(code);
-		
+
 		codeVerification.ifPresent(data -> {
 			res.setCode(data.getCode());
 			res.setEmail(data.getEmail());
 			res.setExpiredAt(data.getExpiredAt());
 			res.setPassword(data.getUserPassword());
 		});
-		
-		if(codeVerification.isEmpty()) {
+
+		if (codeVerification.isEmpty()) {
 			throw new Error("Code verification wrong !");
 		}
 		return res;
@@ -101,7 +103,7 @@ public class UserService implements UserDetailsService {
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
 
 		final Profile profile = new Profile();
-		final Position position= positionDao.getByIdRef(data.getPositionId());
+		final Position position = positionDao.getByIdRef(data.getPositionId());
 		profile.setPosition(position);
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
@@ -109,7 +111,7 @@ public class UserService implements UserDetailsService {
 		profile.setFullname(data.getFullName());
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
-		
+
 		Profile profileNew = profileDao.saveNoLogin(profile, () -> system.getId());
 
 		res.setId(profileNew.getId());
@@ -159,20 +161,22 @@ public class UserService implements UserDetailsService {
 		return res;
 
 	}
-	
-//	public PojoResGetAllUserByRole getAllUserByRole(String roleCode) {
-//		PojoResGetAllUserByRole res = new PojoResGetAllUserByRole();
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//	}
-//	
-	
-	
+
+
+	public List<PojoResGetAllUserByRole> getAllUserByRole(String roleCode) {
+		final List<PojoResGetAllUserByRole> listRes = new ArrayList<>();
+		userDao.getUserByRoleCode(roleCode).forEach(data -> {
+			PojoResGetAllUserByRole res = new PojoResGetAllUserByRole();
+			res.setEmail(data.getEmail());
+			res.setRoleId(data.getRole().getRoleCode());
+			res.setFullname(data.getProfile().getFullname());
+			res.setRoleName(data.getRole().getRoleName());
+			listRes.add(res);
+
+		});
+
+		return listRes;
+
+	}
 
 }
