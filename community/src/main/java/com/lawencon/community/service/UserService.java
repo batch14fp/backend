@@ -92,7 +92,6 @@ public class UserService implements UserDetailsService {
 		if(codeVerification.isEmpty()) {
 			throw new Error("Code verification wrong !");
 		}
-		
 		return res;
 	}
 

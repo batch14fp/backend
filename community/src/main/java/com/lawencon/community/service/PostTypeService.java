@@ -65,11 +65,11 @@ public class PostTypeService {
 		postType.setTypeName(data.getPostTypeName());
 		postType.setTypeCode(data.getPostTypeCode());
 		postType.setIsActive(true);
-
-		postTypeDao.save(postType);
+		final PostType postTypeNew = postTypeDao.save(postType);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(postTypeNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}

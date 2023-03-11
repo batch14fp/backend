@@ -1,14 +1,12 @@
 package com.lawencon.community.pojo.post;
 
-import java.util.List;
-
 public class PojoPostInsertReq {
 	private String title;
 	private String content;
 	private String typeId;
 	private String imagePostId;
 	private PojoAttachmentPostReqInsert attachmentPost;
-	private List<PojoPollingReqInsert>  pollingInsert;
+	private PojoPollingInsertReq  pollingInsert;
 
 	public String getTitle() {
 		return title;
@@ -34,18 +32,21 @@ public class PojoPostInsertReq {
 	public void setAttachmentPost(PojoAttachmentPostReqInsert attachmentPost) {
 		this.attachmentPost = attachmentPost;
 	}
-	public List<PojoPollingReqInsert> getPollingInsert() {
-		return pollingInsert;
-	}
-	public void setPollingInsert(List<PojoPollingReqInsert> pollingInsert) {
-		this.pollingInsert = pollingInsert;
-	}
+	
 	public String getImagePostId() {
 		return imagePostId;
 	}
 	public void setImagePostId(String imagePostId) {
 		this.imagePostId = imagePostId;
 	}
+	public PojoPollingInsertReq getPollingInsert() {
+		return pollingInsert;
+	}
+	public void setPollingInsert(PojoPollingInsertReq pollingInsert) {
+		this.pollingInsert = pollingInsert;
+	}
 
+	
+	
 	
 }
