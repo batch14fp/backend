@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);
 		user.setEmail(data.getEmail());
-		user.setUserPassword(encoder.encode(data.getPassword()));
+		user.setUserPassword(encoder.encode(data.getPassword()).toString());
 		user.setCreatedBy(system.getId());
 		user.setProfile(profileNew);
 		final User userNew = userDao.saveNoLogin(user, () -> system.getId());
