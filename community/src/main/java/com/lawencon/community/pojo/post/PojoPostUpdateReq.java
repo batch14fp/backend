@@ -44,12 +44,12 @@ public class PojoPostUpdateReq {
 	public void setAttachmentPost(PojoAttachmentPostReqInsert attachmentPost) {
 		this.attachmentPost = attachmentPost;
 	}
-	public List<PojoPollingInsertReq> getPollingInsert() {
-		return pollingInsert;
-	}
-	public void setPollingInsert(List<PojoPollingInsertReq> pollingInsert) {
-		this.pollingInsert = pollingInsert;
-	}
+//	public List<PojoPollingInsertReq> getPollingInsert() {
+//		return pollingInsert;
+//	}
+//	public void setPollingInsert(List<PojoPollingInsertReq> pollingInsert) {
+//		this.pollingInsert = pollingInsert;
+//	}
 	public Boolean getIsActive() {
 		return isActive;
 	}
