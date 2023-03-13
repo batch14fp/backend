@@ -1,11 +1,17 @@
 package com.lawencon.community.pojo.profile;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 
 public class PojoResGetProfileDetail {
 	private String userId;
+	private String industryId;
+	private String positionId;
+	private String statusMemberId;
 	private String fullname;
 	private String email;
+	private BigInteger userBalance;
+	private String statusMember;
 	private String phoneNumber;
 	private LocalDate dob;
 	private String country;
@@ -13,8 +19,7 @@ public class PojoResGetProfileDetail {
 	private String city;
 	private String postalCode;
 	private String company;
-	private String industryId;
-	private String positionId;
+
 	
 	public String getUserId() {
 		return userId;
@@ -88,6 +93,24 @@ public class PojoResGetProfileDetail {
 	}
 	public void setPositionId(String positionId) {
 		this.positionId = positionId;
+	}
+	public String getStatusMemberId() {
+		return statusMemberId;
+	}
+	public void setStatusMemberId(String statusMemberId) {
+		this.statusMemberId = statusMemberId;
+	}
+	public BigInteger getUserBalance() {
+		return userBalance;
+	}
+	public void setUserBalance(BigInteger userBalance) {
+		this.userBalance = userBalance;
+	}
+	public String getStatusMember() {
+		return statusMember;
+	}
+	public void setStatusMember(String statusMember) {
+		this.statusMember = statusMember;
 	}
 	
 }

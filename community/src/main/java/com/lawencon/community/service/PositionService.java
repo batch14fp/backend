@@ -59,7 +59,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 	public PojoInsertRes save(PojoPositionInsertReq data) {
 		ConnHandler.begin();
 
-		Position position = new Position();
+		final Position position = new Position();
 
 		position.setPositionName(data.getPostionName());
 		position.setPositionCode(data.getPostionCode());
