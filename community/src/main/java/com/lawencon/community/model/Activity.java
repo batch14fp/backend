@@ -42,12 +42,12 @@ public class Activity extends BaseEntity{
 	private Voucher voucher;
 	
 	
-	@Column(length=50)
+	@Column(length=120, nullable= false)
 	private String title;
 	
 	private BigDecimal price;
 	
-	@Column(length=36)
+	@Column(length=36, nullable= false)
 	private String provider;
 	
 	@Column(length=50)

@@ -1,5 +1,6 @@
 package com.lawencon.community.service;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,17 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.RoleEnum;
+import com.lawencon.community.constant.StatusEnum;
 import com.lawencon.community.dao.CodeVerificationDao;
 import com.lawencon.community.dao.IndustryDao;
+import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.CodeVerification;
 import com.lawencon.community.model.Industry;
+import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
@@ -46,6 +50,7 @@ public class UserService implements UserDetailsService {
 	private EmailSenderService emailSenderService;
 	private PositionDao positionDao;
 	private IndustryDao industryDao;
+	private MemberStatusDao memberStatusDao;
 
 	@Autowired
 	private PasswordEncoder encoder;
@@ -55,13 +60,14 @@ public class UserService implements UserDetailsService {
 
 	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
-			final PositionDao positionDao, final IndustryDao industryDao) {
+			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
 		this.userDao = userDao;
 		this.profileDao = profileDao;
 		this.roleDao = roleDao;
 		this.positionDao = positionDao;
 		this.industryDao = industryDao;
 		this.emailSenderService = emailSenderService;
+		this.memberStatusDao = memberStatusDao;
 		this.codeVerificationDao = codeVerificationDao;
 	};
 
@@ -105,7 +111,10 @@ public class UserService implements UserDetailsService {
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
 		profile.setPhoneNumber(data.getPhoneNumber());
+		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
+		profile.setMemberStatus(memberStatus);
 		profile.setFullname(data.getFullName());
+		profile.setUserBalance(BigInteger.ZERO);
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
 
@@ -122,6 +131,9 @@ public class UserService implements UserDetailsService {
 		user.setCreatedBy(system.getId());
 		user.setProfile(profileNew);
 		final User userNew = userDao.saveNoLogin(user, () -> system.getId());
+		
+	
+		
 		ConnHandler.commit();
 
 		res.setId(userNew.getId());

@@ -35,7 +35,7 @@ public class Post  extends BaseEntity{
 	private PostType postType;
 	
 	
-	@Column(length=50)
+	@Column(length=120)
 	private String title;
 	
 	
