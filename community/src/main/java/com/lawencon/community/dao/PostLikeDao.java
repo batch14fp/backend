@@ -70,24 +70,16 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		final StringBuilder sql = new StringBuilder();
 		Long count =null;
 	
-		sql.append("SELECT id, COUNT(id) FROM t_post_like ");
+		sql.append("SELECT COUNT(id) FROM t_post_like ");
 		sql.append("WHERE post_id = :postId ");
 		sql.append("AND user_id = :userId ");	
-		sql.append("GROUP BY id");
-		final Object result = ConnHandler.getManager().createNativeQuery(sql.toString(), PostLike.class)
+
+		count= Long.valueOf(ConnHandler.getManager().createNativeQuery(sql.toString())
 				.setParameter("userId", userId)
 				.setParameter("postId",postId)
-				.getSingleResult();
-		if (result!=null) {
-			
-			final Object[] obj = (Object[]) result;
-			if (obj[0] != null) {
-			final PostLike postLike = new PostLike();
-			postLike.setId(obj[1].toString());
-			count = Long.valueOf(obj[0].toString());
-			}
-			
-		}	
+				.getSingleResult().toString());
+		
+	
 	return count;	
 		
 	}

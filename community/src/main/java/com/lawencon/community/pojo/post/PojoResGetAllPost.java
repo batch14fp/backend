@@ -13,7 +13,7 @@ public class PojoResGetAllPost {
 	private String categoryCode;
 	private String categoryName;
 	private Long countPostLike;
-	private int countPostComment;
+	private Long countPostComment;
 	private boolean isLike;
 	private boolean isBookmark;
 	private String titlePolling;
@@ -94,10 +94,11 @@ public class PojoResGetAllPost {
 	public void setCountPostLike(Long countPostLike) {
 		this.countPostLike = countPostLike;
 	}
-	public int getCountPostComment() {
+	
+	public Long getCountPostComment() {
 		return countPostComment;
 	}
-	public void setCountPostComment(int countPostComment) {
+	public void setCountPostComment(Long countPostComment) {
 		this.countPostComment = countPostComment;
 	}
 	public boolean isLike() {
