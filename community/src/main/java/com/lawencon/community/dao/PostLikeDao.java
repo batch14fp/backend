@@ -39,9 +39,16 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 
 	@SuppressWarnings("unchecked")
 	public List<PostLike> getByOffsetLimit(Long offset, Long limit) {
-		final String sql = "SELECT * FROM t_post_like WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
+		
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT * FROM t_post_like pl ");
+		sqlQuery.append("INNER JOIN t_post p ");
+		sqlQuery.append("ON p.id = pl.post_id ");
+		sqlQuery.append("INNER JOIN t_user u ");
+		sqlQuery.append("ON pl.user_id = u.id ");
+		sqlQuery.append(" WHERE pl.is_active = TRUE LIMIT :limit OFFSET :offset");
 
-		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class)
+		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), PostLike.class)
 				.setParameter("offset", offset).setParameter("limit", limit).getResultList();
 
 		return res;
@@ -59,22 +66,27 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 
 	}
 
-	public int countPostLike(String userId, String postId) {
+	public Long countPostLike(String userId, String postId) {
 		final StringBuilder sql = new StringBuilder();
-		int count =0;
-		long countPostLike = 0;
-		sql.append("SELECT COUNT(*) as total FROM t_post_like ");
+		Long count =null;
+	
+		sql.append("SELECT id, COUNT(id) FROM t_post_like ");
 		sql.append("WHERE post_id = :postId ");
-		sql.append("AND user_id = :userId ");
-		
-		final Object result = ConnHandler.getManager().createNativeQuery(sql.toString())
+		sql.append("AND user_id = :userId ");	
+		sql.append("GROUP BY id");
+		final Object result = ConnHandler.getManager().createNativeQuery(sql.toString(), PostLike.class)
 				.setParameter("userId", userId)
-				.setParameter("userId",userId)
+				.setParameter("postId",postId)
 				.getSingleResult();
 		if (result!=null) {
+			
 			final Object[] obj = (Object[]) result;
-			countPostLike = Long.valueOf(obj[0].toString());
-			count = (int) countPostLike;
+			if (obj[0] != null) {
+			final PostLike postLike = new PostLike();
+			postLike.setId(obj[1].toString());
+			count = Long.valueOf(obj[0].toString());
+			}
+			
 		}	
 	return count;	
 		

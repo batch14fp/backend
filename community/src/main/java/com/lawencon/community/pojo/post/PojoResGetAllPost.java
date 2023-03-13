@@ -1,7 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 public class PojoResGetAllPost {
-	private String postId;
+	private String id;
 	private String userId;
 	private String fullname;
 	private String timeAgo;
@@ -12,19 +12,19 @@ public class PojoResGetAllPost {
 	private String imgPostId;
 	private String categoryCode;
 	private String categoryName;
-	private int countPostLike;
+	private Long countPostLike;
 	private int countPostComment;
 	private boolean isLike;
 	private boolean isBookmark;
 	private String titlePolling;
 	private String pollingOptionId;
 	private PojoResGetPollingOption pollingOption;
-	
-	public String getPostId() {
-		return postId;
+
+	public String getId() {
+		return id;
 	}
-	public void setPostId(String postId) {
-		this.postId = postId;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getUserId() {
 		return userId;
@@ -86,10 +86,12 @@ public class PojoResGetAllPost {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	public int getCountPostLike() {
+	
+
+	public Long getCountPostLike() {
 		return countPostLike;
 	}
-	public void setCountPostLike(int countPostLike) {
+	public void setCountPostLike(Long countPostLike) {
 		this.countPostLike = countPostLike;
 	}
 	public int getCountPostComment() {
@@ -128,4 +130,7 @@ public class PojoResGetAllPost {
 	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
+	
+	
+	
 }
