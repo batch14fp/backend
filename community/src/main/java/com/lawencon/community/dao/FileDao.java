@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.community.model.CodeVerification;
 import com.lawencon.community.model.File;
 
 @Repository
