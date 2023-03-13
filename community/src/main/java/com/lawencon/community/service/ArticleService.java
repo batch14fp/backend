@@ -20,9 +20,6 @@ import com.lawencon.community.pojo.article.PojoResGetArticle;
 @Service
 public class ArticleService extends BaseService<PojoResGetArticle> {
 
-	
-	
-	
 	private final ArticleDao articleDao;
 	private final FileDao fileDao;
 	public ArticleService(final ArticleDao articleDao, final FileDao fileDao) {
