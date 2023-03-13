@@ -11,6 +11,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.PostBookmarkDao;
+import com.lawencon.community.dao.PostCommentDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostLikeDao;
 import com.lawencon.community.dao.PostTypeDao;
@@ -38,6 +39,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	private PostTypeDao postTypeDao;
 	private FileDao fileDao;
 	private PostLikeDao postLikeDao;
+	private PostCommentDao postCommentDao;
 	private PostBookmarkDao postBookmarkDao;
 	private UserDao userDao;
 	private CategoryDao categoryDao;
@@ -46,7 +48,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	@Inject
 	private PrincipalService principalService;
 	
-	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
+	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao ,final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
 		this.fileDao = fileDao;
@@ -54,6 +56,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		this.userDao = userDao;
 		this.postBookmarkDao = postBookmarkDao;
 		this.categoryDao = categoryDao;
+		this.postCommentDao = postCommentDao;
 	}
 	
 	@Override
@@ -70,7 +73,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			pojoResGetAllPost.setTypeName(data.getPostType().getTypeName());
 			pojoResGetAllPost.setCategoryCode(data.getCategory().getCategoryCode());
 			pojoResGetAllPost.setCategoryName(data.getCategory().getCategoryName());
-			pojoResGetAllPost.setCountPostComment(0);
+			pojoResGetAllPost.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
 			pojoResGetAllPost.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
 			pojoResGetAllPost.setBookmark(false);
 			pojoResGetAllPost.setLike(false);
@@ -92,7 +95,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
-			res.setCountPostComment(0);
+			res.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
 			res.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
 			res.setBookmark(false);
 			res.setLike(false);
@@ -102,6 +105,10 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	private Long getCountPostLike(String userId, String postId) {
 		Long countLike = postLikeDao.countPostLike(userId, postId);
 		return countLike;
+	}
+	private Long getCountPostComment(String userId, String postId) {
+		Long postComment = postCommentDao.countPostComment(userId, postId);
+		return postComment;
 	}
 	
 	public PojoRes deleteById(String id) {
@@ -254,7 +261,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());
-				res.setCountPostComment(0);
+				res.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
 				res.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
 				res.setBookmark(false);
 				res.setLike(false); 
@@ -267,6 +274,9 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	      
 	        return postDao.getTotalCount();
 	    }
+	    
+	    
+	    
 	    
 	    public int getPageCount(int totalCount, int pageSize) {
 	        int pageCount = totalCount / pageSize;

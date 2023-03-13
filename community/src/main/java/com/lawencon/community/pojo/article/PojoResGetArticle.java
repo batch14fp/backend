@@ -6,6 +6,8 @@ public class PojoResGetArticle {
 	private String content;
 	private String imageId;
 	private String nameUser;
+	private Integer ver;
+	private Boolean isActive;
 	public String getArticleId() {
 		return articleId;
 	}
@@ -36,4 +38,18 @@ public class PojoResGetArticle {
 	public void setNameUser(String nameUser) {
 		this.nameUser = nameUser;
 	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	
 }

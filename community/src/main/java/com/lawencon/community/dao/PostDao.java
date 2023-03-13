@@ -40,7 +40,6 @@ public class PostDao extends BaseMasterDao<Post>{
 			sqlQuery.append("ON pt.id = p.post_type_id ");
 			sqlQuery.append("INNER JOIN t_category c ");
 			sqlQuery.append("ON p.category_id = c.id ");
-			sqlQuery.append("WHERE p.is_active = TRUE ");
 			sqlQuery.append("LIMIT :limit OFFSET :offset");
 			final List<Post> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class)
 					.setParameter("offset", offset)
@@ -51,13 +50,10 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 
     public int getTotalCount() {
-        final String sql = "SELECT id, COUNT(*) AS p FROM t_post";
-        final Object result  = ConnHandler.getManager().createNativeQuery(sql).getSingleResult();
-        int totalCount =0;
-    	if (result!=null) {
-			final Object[] obj = (Object[]) result;
-		    totalCount = Integer.valueOf(obj[0].toString());
-    	}
+        final String sql = "SELECT COUNT(id) FROM t_post";
+        
+        int totalCount = Integer.valueOf(ConnHandler.getManager().createNativeQuery(sql).getSingleResult().toString()); 
+      
         return totalCount;
     }
 	

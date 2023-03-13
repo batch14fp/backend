@@ -55,5 +55,24 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 
 	}
 	
+	
+	public Long countPostComment(String userId, String postId) {
+		final StringBuilder sql = new StringBuilder();
+		Long count =null;
+	
+		sql.append("SELECT COUNT(id) FROM t_post_comment ");
+		sql.append("WHERE post_id = :postId ");
+		sql.append("AND user_id = :userId ");	
+
+		count= Long.valueOf(ConnHandler.getManager().createNativeQuery(sql.toString())
+				.setParameter("userId", userId)
+				.setParameter("postId",postId)
+				.getSingleResult().toString());
+		
+	
+	return count;	
+		
+	}
+	
 
 }

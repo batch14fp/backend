@@ -23,6 +23,11 @@ public class Activity extends BaseEntity{
 	private ActivityType typeActivity;
 	
 	
+
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
 	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
@@ -129,6 +134,12 @@ public class Activity extends BaseEntity{
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	
