@@ -90,10 +90,6 @@ public class UserService implements UserDetailsService {
 			res.setExpiredAt(data.getExpiredAt());
 			res.setPassword(data.getUserPassword());
 		});
-
-		if (codeVerification.isEmpty()) {
-			throw new Error("Code verification wrong !");
-		}
 		return res;
 	}
 
