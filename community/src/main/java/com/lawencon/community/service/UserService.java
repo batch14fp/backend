@@ -89,10 +89,6 @@ public class UserService implements UserDetailsService {
 			res.setPassword(data.getUserPassword());
 		});
 		
-		if(codeVerification.isEmpty()) {
-			throw new Error("Code verification wrong !");
-		}
-		
 		return res;
 	}
 
