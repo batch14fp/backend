@@ -49,6 +49,7 @@ public class PojoPostUpdateReq {
 	public void setAttachmentPost(PojoAttachmentPostReqInsert attachmentPost) {
 		this.attachmentPost = attachmentPost;
 	}
+
 	public PojoPollingInsertReq getPollingInsert() {
 		return pollingInsert;
 	}
