@@ -33,7 +33,6 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 			bankPayment.setBankPaymentName(data.getBankName());
 			bankPayment.setIsActive(data.getIsActive());
 			res.add(bankPayment);
-
 		});
 
 		return res;

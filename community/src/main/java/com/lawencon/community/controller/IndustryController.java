@@ -30,7 +30,7 @@ public class IndustryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetIndustry>> getIndustry(){
+	public ResponseEntity<List<PojoResGetIndustry>> getAllIndustry(){
 		List<PojoResGetIndustry> resGet = industryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

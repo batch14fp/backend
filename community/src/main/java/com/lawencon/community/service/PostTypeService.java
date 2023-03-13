@@ -22,14 +22,15 @@ public class PostTypeService {
 	private PostTypeDao postTypeDao;
 
 	public PostTypeService(final PostTypeDao postTypeDao) {
+		this.postTypeDao = postTypeDao;
 
 	}
 	public List<PojoResGetPostType> getAll() {
 		List<PojoResGetPostType> res = new ArrayList<>();
 
 		postTypeDao.getAll().forEach(data -> {
-
 			PojoResGetPostType postType = new PojoResGetPostType();
+			postType.setPostTypeId(data.getId());
 			postType.setPostTypeCode(data.getTypeCode());
 			postType.setPostTypeName(data.getTypeName());
 			
@@ -65,11 +66,11 @@ public class PostTypeService {
 		postType.setTypeName(data.getPostTypeName());
 		postType.setTypeCode(data.getPostTypeCode());
 		postType.setIsActive(true);
-
-		postTypeDao.save(postType);
+		final PostType postTypeNew = postTypeDao.save(postType);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(postTypeNew.getId());
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
@@ -80,7 +81,7 @@ public class PostTypeService {
 		try {
 			ConnHandler.begin();
 			final PostType postType  = postTypeDao.getByIdRef(data.getPostTypeId());
-			postTypeDao.getByIdAndDetach(Position.class, postType.getId());
+			postTypeDao.getByIdAndDetach(PostType.class, postType.getId());
 			postType.setId(postType.getId());
 			postType.setTypeName(data.getPostTypeName());
 			postType.setTypeCode(data.getPostTypeCode());

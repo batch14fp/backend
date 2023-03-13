@@ -3,10 +3,13 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.CodeVerification;
 import com.lawencon.community.model.File;
 
+@Repository
 public class FileDao extends BaseMasterDao<File> {
 
 	@SuppressWarnings("unchecked")
@@ -14,7 +17,7 @@ public class FileDao extends BaseMasterDao<File> {
 	public List<File> getAll() {
 
 		final String sql = "SELECT * FROM t_file";
-		final List<File> res = ConnHandler.getManager().createNativeQuery(sql, CodeVerification.class).getResultList();
+		final List<File> res = ConnHandler.getManager().createNativeQuery(sql, File.class).getResultList();
 		return res;
 	}
 
