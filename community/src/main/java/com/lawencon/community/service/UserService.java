@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -161,10 +162,13 @@ public class UserService implements UserDetailsService {
 		res.setId(codeNew.getId());
 		res.setMessage("Please Cek email to get verfication code");
 
-		new Thread(() -> emailSenderService.sendEmail(data.getEmail(), "  Hi, Welcome to WeCommunityApp \n  \n",
-				" Your Code  : " + codeGenerated + "\n "
-						+ "\n Please Input this code for verification your account\n\n\n\n Cheers,\n WeCommunity "))
-				.start();
+		new Thread(() -> {
+			try {
+				emailSenderService.sendEmail(data.getEmail(), codeGenerated);
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		}).start();; 
 		ConnHandler.commit();
 		return res;
 
