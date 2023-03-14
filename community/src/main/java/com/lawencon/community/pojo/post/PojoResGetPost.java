@@ -1,4 +1,4 @@
-ackage com.lawencon.community.pojo.post;
+package com.lawencon.community.pojo.post;
 
 public class PojoResGetPost {
 	private String postId;

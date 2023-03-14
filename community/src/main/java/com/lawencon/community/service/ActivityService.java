@@ -11,7 +11,6 @@ import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.Activity;
-import com.lawencon.community.model.Article;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;

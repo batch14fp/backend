@@ -279,18 +279,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	        return postDao.getTotalCount();
 	    }
 	    
-	    
-	    
-	    
-	    public int getPageCount(int totalCount, int pageSize) {
-	        int pageCount = totalCount / pageSize;
-	        if (totalCount % pageSize > 0) {
-	            pageCount++;
-	        }
-	        return pageCount;
-	
-	
-	    }
+
 
 
 	
