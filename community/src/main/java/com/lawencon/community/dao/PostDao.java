@@ -50,7 +50,7 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 
     public int getTotalCount() {
-        final String sql = "SELECT COUNT(id) FROM t_post";
+        final String sql = "SELECT COUNT(id) as total FROM t_post";
         
         int totalCount = Integer.valueOf(ConnHandler.getManager().createNativeQuery(sql).getSingleResult().toString()); 
       

@@ -92,7 +92,7 @@ public class PostController {
 	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        List<PojoResGetAllPost> dataList = postService.getData(offset, size);
+	        final List<PojoResGetAllPost> dataList = postService.getData(offset, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = postService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();

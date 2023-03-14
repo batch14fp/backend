@@ -21,12 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.login.PojoLoginReq;
 import com.lawencon.community.pojo.login.PojoLoginRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
+import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
 import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
+import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
@@ -58,8 +61,8 @@ public class UserController {
 	}
 	
 	@GetMapping("sign-up/verify-code")
-	public ResponseEntity<PojoResGetVerification>checkVerified(){
-		PojoResGetVerification res = userService.getVerified();
+	public ResponseEntity<PojoResGetVerification>checkVerified(@RequestBody PojoResGetVerificationCode data){
+		PojoResGetVerification res = userService.getVerified(data);
 		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
 	}
 	
@@ -96,19 +99,19 @@ public class UserController {
 	}
 	
 	@PostMapping("forgeten-password")
-	public ResponseEntity<PojoInsertRes>sendCode(@RequestBody PojoForgetPasswordEmailReq data){
+	public ResponseEntity<PojoInsertRes>getCodeVerify(@RequestBody PojoForgetPasswordEmailReq data){
 		PojoInsertRes res = userService.sendCode(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("forgeten-password/verify")
-	public ResponseEntity<PojoInsertRes>sendCode(@RequestBody PojoForgetPasswordEmailReq data){
-		PojoInsertRes res = userService.sendCode(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	public ResponseEntity<PojoResGetVerification>checkVerifiedCode(@RequestBody PojoResGetVerificationCode data){
+		PojoResGetVerification res = userService.getVerified(data);
+		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
 	}
 	@GetMapping("forgeten-password/verify/change-password")
-	public ResponseEntity<PojoInsertRes>sendCode(@RequestBody PojoForgetPasswordEmailReq data){
-		PojoInsertRes res = userService.sendCode(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	public ResponseEntity<PojoUpdateRes>updatePassword(@RequestBody PojoPasswordUpdateReq data){
+		PojoUpdateRes res = userService.updatePassword(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 }
