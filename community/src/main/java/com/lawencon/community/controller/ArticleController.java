@@ -54,8 +54,8 @@ public class ArticleController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deletePost(@RequestBody String id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
 		PojoRes resDelete = articleService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

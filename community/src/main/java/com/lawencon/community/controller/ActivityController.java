@@ -54,8 +54,8 @@ public class ActivityController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deleteActivity(@RequestBody String id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deleteActivity(@PathVariable ("id")String id){
 		PojoRes resDelete = activityService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

@@ -11,6 +11,7 @@ import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.Activity;
+import com.lawencon.community.model.Article;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -105,7 +106,7 @@ public class ActivityService {
 		try {
 			ConnHandler.begin();
 			final Activity activity = activityDao.getByIdRef(data.getActivityId());
-			
+			activityDao.getByIdAndDetach(Activity.class, activity.getId());
 			activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 			activity.setTitle(data.getTitle());
 			activity.setStartDate(data.getStartDate());
@@ -116,7 +117,6 @@ public class ActivityService {
 			activity.setEndTime(data.getEndTime());
 			activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 			activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
-			activity.setIsActive(true);
 			activity.setIsActive(data.getIsActive());
 			activity.setVersion(data.getVer());
 
