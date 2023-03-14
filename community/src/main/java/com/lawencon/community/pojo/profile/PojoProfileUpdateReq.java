@@ -9,6 +9,7 @@ public class PojoProfileUpdateReq {
 	private String country;
 	private String province;
 	private String city;
+	private String memberStatusId;
 	private String postalCode;
 	private String industryId;
 	private String positionId;
@@ -90,5 +91,12 @@ public class PojoProfileUpdateReq {
 	public void setSocialMedia(List<String> socialMedia) {
 		this.socialMedia = socialMedia;
 	}
+	public String getMemberStatusId() {
+		return memberStatusId;
+	}
+	public void setMemberStatusId(String memberStatusId) {
+		this.memberStatusId = memberStatusId;
+	}
+	
 	
 }
