@@ -41,6 +41,7 @@ import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
 import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
+import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.util.GenerateId;
 
@@ -89,15 +90,15 @@ public class UserService implements UserDetailsService {
 		return userDao.login(email);
 	}
 
-	public PojoResGetVerification getVerified() {
+	public PojoResGetVerification getVerified(PojoResGetVerificationCode data) {
 		PojoResGetVerification res = new PojoResGetVerification();
-		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(code);
+		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCode());
 
-		codeVerification.ifPresent(data -> {
-			res.setCode(data.getCode());
-			res.setEmail(data.getEmail());
-			res.setExpiredAt(data.getExpiredAt());
-			res.setPassword(data.getUserPassword());
+		codeVerification.ifPresent(result -> {
+			res.setCode(result.getCode());
+			res.setEmail(result.getEmail());
+			res.setExpiredAt(result.getExpiredAt());
+			res.setPassword(result.getUserPassword());
 		});
 		return res;
 	}

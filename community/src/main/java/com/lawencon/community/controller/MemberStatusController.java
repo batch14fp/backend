@@ -26,19 +26,19 @@ public class MemberStatusController {
 	}
 
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPolling(@RequestBody PojoMemberStatusInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertMembershipStatus(@RequestBody PojoMemberStatusInsertReq data){
 		PojoInsertRes resGet = memberStatusService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePolling(@RequestBody PojoMemberStatusUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateMembershipStatus(@RequestBody PojoMemberStatusUpdateReq data){
 		PojoUpdateRes resGet = memberStatusService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
+	public ResponseEntity<PojoRes> deleteMembershipStatus(@PathVariable ("id")String id){
 		PojoRes resDelete = memberStatusService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

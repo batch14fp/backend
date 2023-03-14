@@ -36,7 +36,7 @@ public class Profile extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name = "status_member_id")
+	@JoinColumn(name = "member_status_id")
 	private MemberStatus memberStatus;
 	
 	@OneToOne

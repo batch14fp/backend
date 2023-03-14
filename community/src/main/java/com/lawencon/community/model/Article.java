@@ -22,6 +22,8 @@ public class Article  extends BaseEntity{
 	
 
 	private String contentArticle;
+	
+	private Integer viewers;
 
 
 	public File getFile() {
@@ -51,6 +53,16 @@ public class Article  extends BaseEntity{
 
 	public void setContentArticle(String contentArticle) {
 		this.contentArticle = contentArticle;
+	}
+
+
+	public Integer getViewers() {
+		return viewers;
+	}
+
+
+	public void setViewers(Integer viewers) {
+		this.viewers = viewers;
 	}
 	
 	

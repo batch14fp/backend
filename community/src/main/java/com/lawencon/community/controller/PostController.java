@@ -23,6 +23,7 @@ import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
+import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.community.service.PostService;
 
 @RestController
@@ -41,8 +42,8 @@ public class PostController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetAllPost> getActivity(@PathVariable ("id")String id){
-		PojoResGetAllPost resGet = postService.getById(id);
+	public ResponseEntity<PojoResGetPost> getActivity(@PathVariable ("id")String id){
+		PojoResGetPost resGet = postService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
@@ -92,7 +93,7 @@ public class PostController {
 	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        List<PojoResGetAllPost> dataList = postService.getData(offset, size);
+	        final List<PojoResGetAllPost> dataList = postService.getData(offset, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = postService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();

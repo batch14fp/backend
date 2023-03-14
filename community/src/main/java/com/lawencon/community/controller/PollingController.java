@@ -39,7 +39,7 @@ public class PollingController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
+	public ResponseEntity<PojoRes> deletePolling(@PathVariable ("id")String id){
 		PojoRes resDelete = pollingService.delete(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

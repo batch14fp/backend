@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
@@ -13,12 +12,7 @@ import com.lawencon.base.BaseEntity;
 
 
 @Entity
-@Table(name = "t_code_verification",
-uniqueConstraints = {
-        @UniqueConstraint(name = "verification_code_bk", 
-                columnNames = {"code" }
-        )
-		})
+@Table(name = "t_code_verification")
 public class CodeVerification extends BaseEntity{
 	@Column(length = 50, nullable = false)
 	private String email;

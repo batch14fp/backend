@@ -31,6 +31,7 @@ import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
+import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -73,8 +74,8 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			pojoResGetAllPost.setTypeName(data.getPostType().getTypeName());
 			pojoResGetAllPost.setCategoryCode(data.getCategory().getCategoryCode());
 			pojoResGetAllPost.setCategoryName(data.getCategory().getCategoryName());
-			pojoResGetAllPost.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
-			pojoResGetAllPost.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
+			pojoResGetAllPost.setCountPostComment(getCountPostComment(data.getId()));
+			pojoResGetAllPost.setCountPostLike(getCountPostLike(data.getId()));
 			pojoResGetAllPost.setBookmark(false);
 			pojoResGetAllPost.setLike(false);
 			res.add(pojoResGetAllPost);
@@ -83,11 +84,11 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		return res;
 	}
 
-	public PojoResGetAllPost getById(String id) {
+	public PojoResGetPost getById(String id) {
 			final Post data = postDao.getByIdRef(id);
-			final PojoResGetAllPost res = new PojoResGetAllPost();
+			final PojoResGetPost res = new PojoResGetPost();
 			
-			res.setId(data.getId());
+			res.setPostId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setImgPostId(data.getFile().getId());
@@ -95,19 +96,19 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
-			res.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
-			res.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
+			res.setCountPostComment(getCountPostComment(data.getId()));
+			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setBookmark(false);
 			res.setLike(false);
 	
 		return res;
 	}
-	private Long getCountPostLike(String userId, String postId) {
-		Long countLike = postLikeDao.countPostLike(userId, postId);
+	private Long getCountPostLike(String postId) {
+		Long countLike = postLikeDao.countPostLike(postId);
 		return countLike;
 	}
-	private Long getCountPostComment(String userId, String postId) {
-		Long postComment = postCommentDao.countPostComment(userId, postId);
+	private Long getCountPostComment(String postId) {
+		Long postComment = postCommentDao.countPostComment( postId);
 		return postComment;
 	}
 	
@@ -133,6 +134,8 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			final Post post = new Post();
 			post.setTitle(data.getTitle());
 			post.setContentPost(data.getContent());
+			final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+			post.setUser(user);
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
@@ -187,7 +190,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		final PostLike postLike = new PostLike();
 		
 		final Post post = postDao.getByIdRef(data.getPostId());
-		final User user = userDao.getByIdRef(data.getUserId());	
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());	
 		postLike.setPost(post);
 		postLike.setUser(user);
 		postLike.setIsActive(true);
@@ -220,7 +223,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		ConnHandler.begin();
 		final PostBookmark postBookmark = new PostBookmark();
 		final Post post = postDao.getByIdRef(data.getPostId());
-		final User user = userDao.getByIdRef(data.getUserId());	
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());	
 		postBookmark.setPost(post);
 		postBookmark.setUser(user);
 		postBookmark.setIsActive(true);
@@ -251,7 +254,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	    
 	    public List<PojoResGetAllPost> getData(int offset, int limit) {
 	    	final List<PojoResGetAllPost>  listPost= new ArrayList<>();
-	     postDao.getByOffsetLimit(offset, limit).forEach(data->{
+	    	postDao.getByOffsetLimit(offset, limit).forEach(data->{
 	    	 final PojoResGetAllPost res = new PojoResGetAllPost();
 	    	 	res.setId(data.getId());
 				res.setTitle(data.getTitle());
@@ -261,10 +264,11 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());
-				res.setCountPostComment(getCountPostComment(principalService.getAuthPrincipal(),data.getId()));
-				res.setCountPostLike(getCountPostLike(principalService.getAuthPrincipal(),data.getId()));
+				res.setCountPostComment(getCountPostComment(data.getId()));
+				res.setCountPostLike(getCountPostLike(data.getId()));
 				res.setBookmark(false);
 				res.setLike(false); 
+				listPost.add(res);
 	     });;
 
 		return listPost;
