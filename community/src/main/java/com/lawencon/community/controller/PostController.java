@@ -1,5 +1,7 @@
 package com.lawencon.community.controller;
 
+
+
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -105,5 +107,15 @@ public class PostController {
 	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	    }
 	
-	
+//	@GetMapping("/")
+//	public ResponseEntity<List<PojoResGetAllPost>> getMostLike(@RequestParam("page") int page,
+//	                                         @RequestParam("size") int size) {
+//	        int offset = (page - 1) * size;
+//	            final List<PojoResGetAllPost> totalCount = postService.getMostLike(offset, offset);
+//	        int pageCount = paginationService.getPageCount(totalCount, size);
+//	        HttpHeaders headers = new HttpHeaders();
+//	        headers.add("X-Total-Count", String.valueOf(totalCount));
+//			headers.add("X-Total-Pages", String.valueOf(pageCount));
+//	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+//	    }
 }

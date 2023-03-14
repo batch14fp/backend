@@ -15,26 +15,24 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<BankPayment> getAll() {
-		   final StringBuilder sb = new StringBuilder();
-	        sb.append("SELECT id, bankName, url, ver, is_active ");
-	        sb.append("FROM t_bank_payment ");
-	        sb.append("WHERE is_active = TRUE");
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT id, bankName, url, ver, is_active ");
+		sb.append("FROM t_bank_payment ");
+		sb.append("WHERE is_active = TRUE");
 
-	  
+		final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
+		final List<BankPayment> bankPayments = new ArrayList<>();
 
-	        final List<Object[]> resultList =    ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
-	        List<BankPayment> bankPayments = new ArrayList<>();
+		for (Object[] obj : resultList) {
+			BankPayment bankPayment = new BankPayment();
+			bankPayment.setId(obj[0].toString());
+			bankPayment.setBankName(obj[1].toString());
+			bankPayment.setVersion(Integer.valueOf(obj[2].toString()));
+			bankPayment.setIsActive(Boolean.valueOf(obj[3].toString()));
+			bankPayments.add(bankPayment);
+		}
 
-	        for (Object[] obj : resultList) {
-	            BankPayment bankPayment = new BankPayment();
-	            bankPayment.setId(obj[0].toString());
-	            bankPayment.setBankName(obj[1].toString());
-	            bankPayment.setVersion(Integer.valueOf(obj[2].toString()));
-	            bankPayment.setIsActive(Boolean.valueOf(obj[3].toString()));
-	            bankPayments.add(bankPayment);
-	        }
-
-	        return bankPayments;
+		return bankPayments;
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 	public BankPayment getByIdRef(String id) {
 		return super.getByIdRef(BankPayment.class, id);
 	}
-	
+
 	@Override
 	public Optional<BankPayment> getByIdAndDetach(String id) {
 

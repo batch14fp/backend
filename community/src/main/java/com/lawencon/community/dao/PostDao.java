@@ -95,14 +95,130 @@ public class PostDao extends BaseMasterDao<Post>{
 			
 			return listPost;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Post> getByUserId(final String userId, final int offset, final int limit) {
+		final StringBuilder sqlQuery = new StringBuilder();
+		final List<Post> listPost = new ArrayList<>();
+		
+		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post, p.ver, p.is_active ");
+		sqlQuery.append("FROM t_post p ");
+		sqlQuery.append("INNER JOIN t_post_type pt ");
+		sqlQuery.append("ON pt.id = p.post_type_id ");
+		sqlQuery.append("INNER JOIN t_category c ");
+		sqlQuery.append("ON p.category_id = c.id ");
+		sqlQuery.append("WHERE p.user_id = :userId ");
+		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+		sqlQuery.append("ORDER BY p.created_at DESC");
+		final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class)
+				.setParameter("userId", userId)
+				.setParameter("offset", offset)
+				.setParameter("limit",limit)
+				.getResultList();
+		try {
+			for(final Object objs : result) {
+				final Object[] obj = (Object[]) objs;
+				final Post post = new Post();
+				post.setId(obj[0].toString());
+				
+				final Category category = new Category();
+				category.setId(obj[1].toString());
+				category.setCategoryCode(obj[2].toString());
+				post.setCategory(category);
+				
+				if(obj[5].toString()!=null) {
+					final File file = new File();
+					file.setId(obj[3].toString());
+					post.setFile(file);
+					}
+				final PostType postType = new PostType();
+				postType.setId(obj[4].toString());
+				postType.setTypeCode(obj[5].toString());
+				post.setPostType(postType);
+				
+				final User user = new User();
+				user.setId(obj[6].toString());
+				post.setUser(user);
+				
+				post.setTitle(obj[7].toString());
+				post.setEndAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime().toLocalTime());
+				post.setContentPost(obj[9].toString());
+				post.setVersion(Integer.valueOf(obj[10].toString()));
+				post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+				listPost.add(post);
+			}
+		}catch(final Exception e){
+			e.printStackTrace();
+			
+		}
+		
+		
+		return listPost;
+}
+	
+	
 
     public int getTotalCount() {
         final String sql = "SELECT COUNT(id) as total FROM t_post";
-        
         int totalCount = Integer.valueOf(ConnHandler.getManager().createNativeQuery(sql).getSingleResult().toString()); 
-      
         return totalCount;
     }
+    public int getByUserIdTotalCount(final String userId) {
+    	final StringBuilder sqlQuery = new StringBuilder();
+    	sqlQuery.append("SELECT COUNT(id) as total FROM t_post ");
+    	sqlQuery.append("WHERE user_id = :userId");
+        int totalCount = Integer.valueOf(ConnHandler.getManager()
+        		.createNativeQuery(sqlQuery.toString())
+        		.setParameter("userId", userId)
+        		.getSingleResult().toString()); 
+        return totalCount;
+    }
+    
+    
+    @SuppressWarnings("unchecked")
+	public List<Post> getPostsByMostLikes(final int offset, final int limit) throws Exception {
+     final List<Post> postList = new ArrayList<>();
+
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT p.id, p.title,p.category_id, p.content_post, c.category_name, c.category_code, p.post_type_id, pt.type_name, pt.type_code ");
+		sqlQuery.append("FROM t_post p ");
+		sqlQuery.append("JOIN t_category c ON p.category_id = c.id ");
+		sqlQuery.append("JOIN t_post_type pt ON p.post_type_id = pt.id ");
+		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
+
+
+		final List<Object> results =
+				ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				
+				.getResultList();
+
+		
+		for(final Object objs : results) {
+		
+		final Post post = new Post();
+		final Object[] obj = (Object[]) objs;
+		post.setId(obj[0].toString());
+		post.setTitle(obj[1].toString());
+		post.setContentPost(obj[2].toString());
+
+		Category category = new Category();
+		category.setId(obj[3].toString());
+		category.setCategoryName(obj[4].toString());
+		category.setCategoryCode(obj[5].toString());
+		post.setCategory(category);
+
+		PostType postType = new PostType();
+		postType.setId(obj[6].toString());
+		postType.setTypeName(obj[7].toString());
+		postType.setTypeCode((String) obj[8]);
+		post.setPostType(postType);
+		
+		postList.add(post);
+
+		}
+		return postList ;
+	}
 	
 	
 	@Override
