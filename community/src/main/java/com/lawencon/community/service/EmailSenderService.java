@@ -20,7 +20,7 @@ public class EmailSenderService {
 		MimeMessage message = mailSender.createMimeMessage();
 		message.setFrom("zelkiaanisa@gmail.com");
 		message.setRecipients(MimeMessage.RecipientType.TO, to);
-		message.setSubject(codeVerification);
+		message.setSubject("Code Verification Request");
 		
 		final String htmlContent = "<!DOCTYPE HTML\r\n"
 				+ "  PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n"
