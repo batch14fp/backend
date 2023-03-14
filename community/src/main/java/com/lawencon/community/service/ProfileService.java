@@ -54,7 +54,6 @@ public class ProfileService {
 			ConnHandler.begin();
 			final Profile profile = profileDao.getByIdRef(data.getProfileId());
 			profileDao.getByIdAndDetach(Profile.class, profile.getId());
-			
 			profile.setFullname(profile.getFullname());
 			profile.setCompanyName(profile.getCompanyName());
 			profile.setUserBalance(profile.getUserBalance());
@@ -80,6 +79,7 @@ public class ProfileService {
 		
 	}
 	
+
 	
 	
 }
