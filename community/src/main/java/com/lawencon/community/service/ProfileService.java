@@ -5,7 +5,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.ProfileDao;
+import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoProfileUpdateReq;
@@ -17,10 +19,12 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class ProfileService {
 	private ProfileDao profileDao;
+	private MemberStatusDao memberStatusDao;
 	@Inject
 	private PrincipalService principalService;
-	public ProfileService(ProfileDao profileDao) {
+	public ProfileService(final ProfileDao profileDao, final MemberStatusDao memberStatusDao) {
 		this.profileDao = profileDao;
+		this.memberStatusDao = memberStatusDao;	
 	
 	}
 	
@@ -56,6 +60,8 @@ public class ProfileService {
 			profile.setUserBalance(profile.getUserBalance());
 			profile.setCountry(profile.getCountry());
 			profile.setCity(profile.getCity());
+			final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMemberStatusId());
+			profile.setMemberStatus(memberStatus);
 			profile.setPostalCode(profile.getPostalCode());
 			profile.setPhoneNumber(profile.getPhoneNumber());
 			profile.setDob(profile.getDob());

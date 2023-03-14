@@ -6,6 +6,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
@@ -60,6 +61,22 @@ public class MemberStatusService {
 
 	}
 	
+	public PojoRes deleteById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+
+		Boolean result = memberStatusDao.deleteById(MemberStatus.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
+
+	}
 	
 
 }
