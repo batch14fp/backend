@@ -38,12 +38,12 @@ public class PostController {
 		this.paginationService = paginationService;
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<PojoResGetAllPost>> getAllPost(){
-		List<PojoResGetAllPost> resGet = postService.getAll();
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
-	}
-	
+//	@GetMapping
+//	public ResponseEntity<List<PojoResGetAllPost>> getAllPost(){
+//		List<PojoResGetAllPost> resGet = postService.getAll();
+//		return new ResponseEntity<>(resGet, HttpStatus.OK);
+//	}
+//	
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoResGetPost> getActivity(@PathVariable ("id")String id){
 		PojoResGetPost resGet = postService.getById(id);
@@ -92,7 +92,7 @@ public class PostController {
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
-	@GetMapping("/test-offset")
+	@GetMapping("/")
 	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;

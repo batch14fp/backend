@@ -11,7 +11,7 @@ import com.lawencon.base.BaseEntity;
 
 
 @Entity
-@Table(name = "t_position_respon")
+@Table(name = "t_polling_respon")
 public class PollingRespon  extends BaseEntity{
 	
 	@OneToOne

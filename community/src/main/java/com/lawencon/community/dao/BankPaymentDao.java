@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,13 +15,26 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<BankPayment> getAll() {
-		final StringBuilder sqlQuery = new StringBuilder();
-		
-		sqlQuery.append("SELECT * FROM t_bank_payement WHERE  is_active = TRUE");
-		final List<BankPayment> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), BankPayment.class)
-				.getResultList();
+		   final StringBuilder sb = new StringBuilder();
+	        sb.append("SELECT id, bankName, url, ver, is_active ");
+	        sb.append("FROM t_bank_payment ");
+	        sb.append("WHERE is_active = TRUE");
 
-		return res;
+	  
+
+	        final List<Object[]> resultList =    ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
+	        List<BankPayment> bankPayments = new ArrayList<>();
+
+	        for (Object[] obj : resultList) {
+	            BankPayment bankPayment = new BankPayment();
+	            bankPayment.setId(obj[0].toString());
+	            bankPayment.setBankName(obj[1].toString());
+	            bankPayment.setVersion(Integer.valueOf(obj[2].toString()));
+	            bankPayment.setIsActive(Boolean.valueOf(obj[3].toString()));
+	            bankPayments.add(bankPayment);
+	        }
+
+	        return bankPayments;
 	}
 
 	@Override
