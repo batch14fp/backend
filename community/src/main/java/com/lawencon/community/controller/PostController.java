@@ -24,15 +24,18 @@ import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
 import com.lawencon.community.pojo.post.PojoResGetPost;
+import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
 
 @RestController
 @RequestMapping("posts")
 public class PostController {
 	private PostService postService;
+	private PaginationService paginationService;
 	
-	public PostController(final PostService postService) {
+	public PostController(final PostService postService, final PaginationService paginationService) {
 		this.postService = postService;
+		this.paginationService = paginationService;
 	}
 	
 	@GetMapping
@@ -95,7 +98,7 @@ public class PostController {
 	        int offset = (page - 1) * size;
 	        final List<PojoResGetAllPost> dataList = postService.getData(offset, size);
 	        int totalCount = postService.getTotalCount();
-	        int pageCount = postService.getPageCount(totalCount, size);
+	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("X-Total-Count", String.valueOf(totalCount));
 			headers.add("X-Total-Pages", String.valueOf(pageCount));
