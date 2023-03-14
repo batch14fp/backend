@@ -60,7 +60,7 @@ public class UserController {
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("sign-up/verify-code")
+	@PostMapping("sign-up/verify-code")
 	public ResponseEntity<PojoResGetVerification>checkVerified(@RequestBody PojoResGetVerificationCode data){
 		PojoResGetVerification res = userService.getVerified(data);
 		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
