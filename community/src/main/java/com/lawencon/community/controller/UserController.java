@@ -98,18 +98,18 @@ public class UserController {
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
 	}
 	
-	@PostMapping("forgeten-password")
+	@PostMapping("recover")
 	public ResponseEntity<PojoInsertRes>getCodeVerify(@RequestBody PojoForgetPasswordEmailReq data){
 		PojoInsertRes res = userService.sendCode(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("forgeten-password/verify")
+	@GetMapping("recover/verify")
 	public ResponseEntity<PojoResGetVerification>checkVerifiedCode(@RequestBody PojoResGetVerificationCode data){
 		PojoResGetVerification res = userService.getVerified(data);
 		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
 	}
-	@GetMapping("forgeten-password/verify/change-password")
+	@GetMapping("recover/change-password")
 	public ResponseEntity<PojoUpdateRes>updatePassword(@RequestBody PojoPasswordUpdateReq data){
 		PojoUpdateRes res = userService.updatePassword(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
