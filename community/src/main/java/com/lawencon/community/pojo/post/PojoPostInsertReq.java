@@ -1,23 +1,16 @@
 package com.lawencon.community.pojo.post;
 
-import java.time.LocalTime;
-
 public class PojoPostInsertReq {
 	private String title;
 	private String content;
 	private String typeId;
-	private LocalTime endAt;
+
 	private String categoryId;
 	private String imagePostId;
 	private PojoAttachmentPostReqInsert attachmentPost;
 	private PojoPollingInsertReq  pollingInsert;
 
-	public LocalTime getEndAt() {
-		return endAt;
-	}
-	public void setEndAt(LocalTime endAt) {
-		this.endAt = endAt;
-	}
+	
 	public String getTitle() {
 		return title;
 	}

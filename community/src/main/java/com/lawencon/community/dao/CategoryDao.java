@@ -17,7 +17,7 @@ public class CategoryDao extends BaseMasterDao<Category> {
 	public List<Category> getAll() throws Exception {
 
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SELECT id, categoryName, categoryCode, ver, is_active ");
+		sb.append("SELECT id,  category_name, category_code, ver, is_active ");
 		sb.append("FROM t_category ");
 		sb.append("WHERE is_active = TRUE");
 
@@ -41,8 +41,8 @@ public class CategoryDao extends BaseMasterDao<Category> {
 
 	public Category findByCode(String categoryCode) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SELECT id, categoryName, categoryCode FROM t_category ");
-		sb.append("WHERE categoryCode = :code ");
+		sb.append("SELECT id, category_name, category_code FROM t_category ");
+		sb.append("WHERE category_code = :code ");
 		sb.append("AND is_active = TRUE");
 		final Object result = ConnHandler.getManager().createNativeQuery(sb.toString())
 				.setParameter("code", categoryCode).getSingleResult();
