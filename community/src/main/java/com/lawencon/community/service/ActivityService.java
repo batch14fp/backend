@@ -1,5 +1,8 @@
 package com.lawencon.community.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +13,16 @@ import com.lawencon.community.dao.ActivityDao;
 import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Activity;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityInsertReq;
 import com.lawencon.community.pojo.activity.PojoActivityUpdateReq;
 import com.lawencon.community.pojo.activity.PojoResGetActivity;
+
 
 
 @Service
@@ -26,13 +32,15 @@ public class ActivityService {
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
+	private final UserDao userDao;
 	private final FileDao fileDao;
 
-	public ActivityService(final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final UserDao userDao, final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
+		this.userDao = userDao;
 
 	}
 
@@ -105,8 +113,8 @@ public class ActivityService {
 			activityDao.getByIdAndDetach(Activity.class, activity.getId());
 			activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 			activity.setTitle(data.getTitle());
-//			activity.setStartDate(data.getStartDate());
-//			activity.setEndDate(data.getEndDate());
+			activity.setStartDate(data.getStartDate());
+			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
 			activity.setProvider(data.getProviders());
 			activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
@@ -149,6 +157,59 @@ public class ActivityService {
 		return activity;
 
 	}
+	
+	public List<PojoResGetActivity> getListActivityByCategoryAndType(String categoryCode, String typeCode) throws Exception {
+	    List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
+	    if (listActivity == null || listActivity.isEmpty()) {
+	        return null;
+	    }
+
+	    List<PojoResGetActivity> pojoList = new ArrayList<>();
+	    for (Activity activity : listActivity) {
+	    	final PojoResGetActivity pojo = new PojoResGetActivity();
+	        pojo.setActivityId(activity.getId());
+	        pojo.setTitle(activity.getTitle());
+	        pojo.setCategoryCode(activity.getCategory().getCategoryCode());
+	        pojo.setCategoryName(activity.getCategory().getCategoryName());
+	        pojo.setTypeCode(activity.getTypeActivity().getTypeCode());
+	        pojo.setTypeName(activity.getTypeActivity().getActivityName());
+	        pojo.setProviders(activity.getProvider());
+	        pojo.setPrice(activity.getPrice());
+	        pojo.setStartDate(activity.getStartDate());
+	        pojo.setEndDate(activity.getEndDate());
+	        pojo.setIsActive(activity.getIsActive());
+
+	       final LocalDateTime now = LocalDateTime.now();
+	       final Duration duration = Duration.between(activity.getCreatedAt(), now);
+	        String timeAgo = "";
+	        if (duration.toDays() > 0) {
+	            timeAgo = duration.toDays() + "d";
+	        } else if (duration.toHours() > 0) {
+	            timeAgo = duration.toHours() + "h";
+	        } else if (duration.toMinutes() > 0) {
+	            timeAgo = duration.toMinutes() + "m";
+	        } else {
+	            timeAgo = duration.getSeconds() + "s";
+	        }
+	        pojo.setTimeAgo(timeAgo);
+
+	    
+	        if (activity.getUser() != null) {
+	            String fullname = activity.getUser().getProfile().getFullname();
+	            pojo.setUserId(activity.getUser().getId());
+	            pojo.setFullname(fullname);
+	        }
+
+
+	        String imgActivityId = activity.getFile() != null ? activity.getFile().getId() : null;
+	        pojo.setImgActivityId(imgActivityId);
+
+	        pojoList.add(pojo);
+	    }
+
+	    return pojoList;
+	}
+
 	
 	
 
