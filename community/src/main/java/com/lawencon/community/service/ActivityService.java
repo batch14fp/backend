@@ -45,12 +45,10 @@ public class ActivityService {
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
 			activity.setTitle(data.getTitle());
-//			activity.setStartDate(data.getStartDate());
-//			activity.setEndDate(data.getEndDate());
-//			activity.setStartTime(data.getStartTime());
+			activity.setStartDate(data.getStartDate());
+			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
-			//activity.setEndTime(data.getEndTime());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
 			activity.setTypeName(data.getTypeActivity().getActivityName());
 			activity.setUserId(data.getCreatedBy());
@@ -83,9 +81,9 @@ public class ActivityService {
 		final Activity activity = new Activity();
 		activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 		activity.setTitle(data.getTitle());
-//		activity.setStartDate(data.getStartDate());
-//		activity.setEndDate(data.getEndDate());
-//	
+		activity.setStartDate(data.getStartDate());
+		activity.setEndDate(data.getEndDate());
+	
 		activity.setPrice(data.getPrice());
 		activity.setProvider(data.getProviders());
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
@@ -139,8 +137,8 @@ public class ActivityService {
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
 			activity.setTitle(data.getTitle());
-//			activity.setStartDate(data.getStartDate());
-//			activity.setEndDate(data.getEndDate());
+			activity.setStartDate(data.getStartDate());
+			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());

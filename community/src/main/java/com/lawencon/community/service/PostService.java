@@ -115,7 +115,7 @@ public class PostService {
 			post.setContentPost(data.getContent());
 			final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 			post.setUser(user);
-			post.setEndAt(data.getEndAt());
+			
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
@@ -144,7 +144,7 @@ public class PostService {
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
 			post.setCategory(category);
-			post.setEndAt(data.getEndAt());
+		
 			final File file = fileDao.getByIdRef(data.getImagePostId());
 			post.setFile(file);
 			post.setIsActive(true);
@@ -244,7 +244,7 @@ public class PostService {
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setUserId(data.getUser().getId());
-				//res.setEndAt(data.getEndAt());
+	
 				res.setFullname(data.getUser().getProfile().getFullname());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());

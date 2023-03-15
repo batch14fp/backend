@@ -1,7 +1,5 @@
 package com.lawencon.community.model;
 
-import java.time.LocalTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -39,7 +37,7 @@ public class Post  extends BaseEntity{
 	private String title;
 	
 	
-	private LocalTime endAt;
+
 	
 	
 	private String contentPost;
@@ -105,14 +103,6 @@ public class Post  extends BaseEntity{
 	}
 
 
-	public LocalTime getEndAt() {
-		return endAt;
-	}
-
-
-	public void setEndAt(LocalTime endAt) {
-		this.endAt = endAt;
-	}
 	
 	
 	

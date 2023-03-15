@@ -1,6 +1,5 @@
 package com.lawencon.community.dao;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class PostDao extends AbstractJpaDao{
 			final StringBuilder sqlQuery = new StringBuilder();
 			final List<Post> listPost = new ArrayList<>();
 			
-			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 			sqlQuery.append("FROM t_post p ");
 			sqlQuery.append("INNER JOIN t_post_type pt ");
 			sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -76,19 +75,15 @@ public class PostDao extends AbstractJpaDao{
 					user.setId(obj[6].toString());
 					
 					final Profile profile = new Profile();
-					profile.setFullname(obj[10].toString());
+					profile.setFullname(obj[9].toString());
 					user.setProfile(profile);
 					post.setUser(user);
 					
 					post.setTitle(obj[7].toString());
-					post.setEndAt(Time.valueOf(obj[8].toString()).toLocalTime());
-					post.setContentPost(obj[9].toString());
-					
-				
-					
-					post.setVersion(Integer.valueOf(obj[11].toString()));
-					post.setIsActive(Boolean.valueOf(obj[12].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
-					post.setCreatedAt(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
+					post.setContentPost(obj[8].toString());
+					post.setVersion(Integer.valueOf(obj[10].toString()));
+					post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+					post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
 					listPost.add(post);
 				}
 			}catch(final Exception e){
@@ -105,7 +100,7 @@ public class PostDao extends AbstractJpaDao{
 		final StringBuilder sqlQuery = new StringBuilder();
 		final List<Post> listPost = new ArrayList<>();
 		
-		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -149,17 +144,16 @@ public class PostDao extends AbstractJpaDao{
 				user.setId(obj[6].toString());
 				
 				final Profile profile = new Profile();
-				profile.setFullname(obj[10].toString());
+				profile.setFullname(obj[9].toString());
 				user.setProfile(profile);
 				post.setUser(user);
 				
 				post.setTitle(obj[7].toString());
-				post.setEndAt(Time.valueOf(obj[8].toString()).toLocalTime());
-				post.setContentPost(obj[9].toString());
+				post.setContentPost(obj[8].toString());
 			
-				post.setVersion(Integer.valueOf(obj[11].toString()));
-				post.setIsActive(Boolean.valueOf(obj[12].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
+				post.setVersion(Integer.valueOf(obj[10].toString()));
+				post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 				listPost.add(post);
 			}
 		}catch(final Exception e){
