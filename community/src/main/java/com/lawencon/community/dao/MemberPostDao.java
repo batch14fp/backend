@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.MemberPost;
+import com.lawencon.community.model.Post;
+import com.lawencon.community.model.User;
 
 
 
@@ -16,10 +19,30 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<MemberPost> getAll() {
-		final String sql = "SELECT * FROM t_member_post WHERE  is_active = TRUE";	
-		final List<MemberPost> res = ConnHandler.getManager().createNativeQuery(sql, MemberPost.class).getResultList();
-		
-		return res;
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT mp.id, u.id, p.id ");
+		sb.append("FROM t_member_post mp ");
+		sb.append("INNER JOIN m_user u ON u.id = mp.member_id ");
+		sb.append("INNER JOIN t_post p ON p.id = mp.post_id ");
+
+
+		final List<Object[]> result = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
+		final List<MemberPost> memberPosts = new ArrayList<>();
+		for (Object[] obj : result) {
+		    MemberPost memberPost = new MemberPost();
+		    memberPost.setId(obj[0].toString());
+		    
+		    final User user = new User();
+		    user.setId(obj[1].toString());
+		    memberPost.setMember(user);
+		    
+		    final Post post = new Post();
+		    post.setId(obj[2].toString());
+		    memberPost.setPost(post);
+		    memberPosts.add(memberPost);
+		}
+		return memberPosts;
+
 	}
 
 	@Override
@@ -29,17 +52,6 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 
 
 
-	@SuppressWarnings("unchecked")
-	public List<MemberPost> getByOffsetLimit(Long offset, Long limit) {
-		  final String sql = "SELECT * FROM t_member_post WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
-			
-			final List<MemberPost> res = ConnHandler.getManager().createNativeQuery(sql, MemberPost.class)
-					.setParameter("offset", offset)
-					.setParameter("limit",limit)
-					.getResultList();
-			
-			return res;
-	}
 
 	@Override
 	public MemberPost getByIdRef(String id) {

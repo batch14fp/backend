@@ -1,16 +1,28 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalTime;
+
 public class PojoPostUpdateReq {
 	private String postId;
 	private String title;
 	private String content;
 	private String typeId;
+	private LocalTime endAt;
 	private String categoryId;
 	private PojoAttachmentPostReqInsert attachmentPost;
 	private PojoPollingInsertReq  pollingInsert;
 	private String imagePostId;
 	private Boolean isActive;
 	
+	
+	
+	
+	public LocalTime getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalTime endAt) {
+		this.endAt = endAt;
+	}
 	public Boolean getIsActive() {
 		return isActive;
 	}

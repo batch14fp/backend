@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +14,28 @@ import com.lawencon.community.model.Polling;
 public class PollingDao extends BaseMasterDao<Polling>{
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Polling> getAll() {
-		final String sql = "SELECT * FROM t_poliing WHERE  is_active = TRUE";	
-		final List<Polling> res = ConnHandler.getManager().createNativeQuery(sql, Polling.class).getResultList();
-		
-		return res;
+	public List<Polling> getAll() throws Exception  {
+	    final StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT id, title, ver,is_active FROM t_polling");
+
+	    final List<Polling> listResult = new ArrayList<>();
+
+	    try {
+	        final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sql.toString()).getResultList();
+
+	        for (Object[] obj : listObj) {
+	            final Polling polling = new Polling();
+	            polling.setId(obj[0].toString());
+	            polling.setTitle(obj[1].toString());
+	            polling.setVersion(Integer.valueOf(obj[2].toString()));
+	            polling.setIsActive(Boolean.valueOf(obj[3].toString()));
+	            listResult.add(polling);
+	        }
+	    } catch (Exception e) {
+	        throw new Exception("Failed to retrieve data from database", e);
+	    }
+
+	    return listResult;
 	}
 
 	@Override

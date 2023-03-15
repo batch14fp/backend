@@ -26,7 +26,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 
 	@Override
 	public List<PojoResGetBankPayment> getAll() {
-		List<PojoResGetBankPayment> res = new ArrayList<>();
+		final List<PojoResGetBankPayment> res = new ArrayList<>();
 		bankPaymentDao.getAll().forEach(data -> {
 			PojoResGetBankPayment bankPayment = new PojoResGetBankPayment();
 			bankPayment.setBankPaymentId(data.getId());
@@ -73,7 +73,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
-			BankPayment bankPayment = bankPaymentDao.getByIdRef(data.getBankPaymentId());
+			final BankPayment bankPayment = bankPaymentDao.getByIdRef(data.getBankPaymentId());
 			bankPaymentDao.getByIdAndDetach(BankPayment.class, bankPayment.getId());
 			bankPayment.setId(bankPayment.getId());
 			bankPayment.setBankName(data.getBankPaymentName());

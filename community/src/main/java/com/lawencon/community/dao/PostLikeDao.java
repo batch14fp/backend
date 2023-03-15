@@ -1,12 +1,15 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostLike;
+import com.lawencon.community.model.User;
 
 @Repository
 public class PostLikeDao extends BaseMasterDao<PostLike> {
@@ -14,10 +17,30 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PostLike> getAll() {
-		final String sql = "SELECT * FROM t_post_like WHERE  is_active = TRUE";
-		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class).getResultList();
+		 StringBuilder sb = new StringBuilder();
+		    sb.append("SELECT id, user_id, post_id ");
+		    sb.append("FROM t_post_like ");
 
-		return res;
+		    final List<Object[]> postLikeList =  ConnHandler
+				    .getManager()
+				    .createNativeQuery(sb.toString())
+				    .getResultList();
+		    final List<PostLike> result = new ArrayList<>();
+		    for (Object[] obj : postLikeList) {
+		        final PostLike postLike = new PostLike();
+		        postLike.setId((String) obj[0]);
+
+		        final User user = new User();
+		        user.setId((String) obj[1]);
+		        postLike.setUser(user);
+
+		        final Post post = new Post();
+		        post.setId((String) obj[2]);
+		        postLike.setPost(post);
+
+		        result.add(postLike);
+		    }
+		    return result;
 	}
 
 	@Override

@@ -1,8 +1,7 @@
 package com.lawencon.community.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,13 +53,12 @@ public class Activity extends BaseEntity{
 	private String activityLocation;
 
 	
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private LocalTime startTime ;
-	private LocalTime endTime;
 	
+	@Column(nullable=false)
+	private LocalDateTime startDate;
 	
-	
+	@Column(nullable=false)
+	private LocalDateTime endDate;
 	
 	
 	public ActivityType getTypeActivity() {
@@ -105,29 +103,18 @@ public class Activity extends BaseEntity{
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
 	}
-	public LocalDate getStartDate() {
+
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
-	}
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
 	}
 	public BigDecimal getPrice() {
 		return price;

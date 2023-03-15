@@ -1,5 +1,7 @@
 package com.lawencon.community.controller;
 
+
+
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -22,7 +24,6 @@ import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
-import com.lawencon.community.pojo.post.PojoResGetAllPost;
 import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
@@ -37,13 +38,7 @@ public class PostController {
 		this.postService = postService;
 		this.paginationService = paginationService;
 	}
-	
-	@GetMapping
-	public ResponseEntity<List<PojoResGetAllPost>> getAllPost(){
-		List<PojoResGetAllPost> resGet = postService.getAll();
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
-	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoResGetPost> getActivity(@PathVariable ("id")String id){
 		PojoResGetPost resGet = postService.getById(id);
@@ -92,11 +87,11 @@ public class PostController {
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
-	@GetMapping("/test-offset")
-	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
+	@GetMapping
+	public ResponseEntity<List<PojoResGetPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        final List<PojoResGetAllPost> dataList = postService.getData(offset, size);
+	        final List<PojoResGetPost> dataList = postService.getData(offset, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -105,5 +100,29 @@ public class PostController {
 	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	    }
 	
+	@GetMapping("/most-like")
+	public ResponseEntity<List<PojoResGetPost>> getAllPostByMostLike(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) throws Exception{
+	        int offset = (page - 1) * size;
+	        final List<PojoResGetPost> dataList = postService.getMostLike(offset, size);
+	        int totalCount = postService.getTotalCount();
+	        int pageCount = paginationService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	    }
 	
+	@GetMapping("/user")
+	public ResponseEntity<List<PojoResGetPost>> getAllPostByUser(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) throws Exception{
+	        int offset = (page - 1) * size;
+	        final List<PojoResGetPost> dataList = postService.getAllPostByUserId(offset, size);
+	        int totalCount = postService.getTotalCountByUserId();
+	        int pageCount = paginationService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	    }
 }

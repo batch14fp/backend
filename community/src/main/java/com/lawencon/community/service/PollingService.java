@@ -65,7 +65,7 @@ public class PollingService {
 	}
 	
 	
-	public PojoRes delete(String id) {
+	public PojoRes delete(String id) throws Exception {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

@@ -1,6 +1,5 @@
 package com.lawencon.community.model;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -70,8 +69,6 @@ public class Profile extends BaseEntity{
 	private String postalCode;
 	
 	
-	private BigInteger userBalance;
-
 	public Position getPosition() {
 		return position;
 	}
@@ -171,15 +168,7 @@ public class Profile extends BaseEntity{
 		this.memberStatus = memberStatus;
 	}
 
-	public BigInteger getUserBalance() {
-		return userBalance;
-	}
 
-	public void setUserBalance(BigInteger userBalance) {
-		this.userBalance = userBalance;
-	}
-	
-	
 	
 	
 	
