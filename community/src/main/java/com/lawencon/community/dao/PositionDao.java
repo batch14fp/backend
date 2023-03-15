@@ -16,7 +16,7 @@ public class PositionDao extends BaseMasterDao<Position> {
 	@Override
 	public List<Position> getAll() {
 		final StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT id, positionCode, positionName ");
+	    sb.append("SELECT id, position_code, position_name ");
 	    sb.append("FROM t_position ");
 	    sb.append("WHERE is_active = TRUE");
 

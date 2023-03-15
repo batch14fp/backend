@@ -1,10 +1,12 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PojoPollingInsertReq {
+	private String postId;
 	private String pollingTitle;
-//	private String endAt;
+	private LocalDateTime endAt;
 	private List<PojoPollingOptionInsertReq> pollingOptions;
 	public String getPollingTitle() {
 		return pollingTitle;
@@ -18,11 +20,18 @@ public class PojoPollingInsertReq {
 	public void setPollingOptions(List<PojoPollingOptionInsertReq> pollingOptions) {
 		this.pollingOptions = pollingOptions;
 	}
-
-	/*
-	 * public String getEndAt() { return endAt; } public void setEndAt(String endAt)
-	 * { this.endAt = endAt; }
-	 */
+	public LocalDateTime getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDateTime endAt) {
+		this.endAt = endAt;
+	}
+	public String getPostId() {
+		return postId;
+	}
+	public void setPostId(String postId) {
+		this.postId = postId;
+	}
 	
 	
 }

@@ -1,19 +1,13 @@
 package com.lawencon.community.pojo.voucher;
 
-public class PojoVoucherReq {
-	private String voucherId;
+public class PojoVoucherInsertReq {
+
 	private String vourcherName;
 	private Integer limitApplied;
 	private Integer usedCount;
 	private String voucherCode;
 	private Float discountPercent;
-	private Boolean isActive;
-	public String getVoucherId() {
-		return voucherId;
-	}
-	public void setVoucherId(String voucherId) {
-		this.voucherId = voucherId;
-	}
+	
 	public String getVourcherName() {
 		return vourcherName;
 	}
@@ -44,12 +38,6 @@ public class PojoVoucherReq {
 	public void setDiscountPercent(Float discountPercent) {
 		this.discountPercent = discountPercent;
 	}
-	public Boolean getIsActive() {
-		return isActive;
-	}
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
-	
+
 	
 }

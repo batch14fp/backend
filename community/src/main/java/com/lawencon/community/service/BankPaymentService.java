@@ -30,6 +30,8 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 		bankPaymentDao.getAll().forEach(data -> {
 			PojoResGetBankPayment bankPayment = new PojoResGetBankPayment();
 			bankPayment.setBankPaymentId(data.getId());
+			bankPayment.setAccountName(data.getAccountName());
+			bankPayment.setAccountNumber(data.getAccountNumber());
 			bankPayment.setBankPaymentName(data.getBankName());
 			bankPayment.setIsActive(data.getIsActive());
 			res.add(bankPayment);
@@ -59,6 +61,8 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 		ConnHandler.begin();
 		final BankPayment bankPayment = new BankPayment();
 		bankPayment.setBankName(data.getBankPaymentName());
+		bankPayment.setAccountName(data.getAccountName());
+		bankPayment.setAccountNumber(data.getAccountNumber());
 		bankPayment.setIsActive(true);
 		final BankPayment bankPaymentNew = bankPaymentDao.save(bankPayment);
 		ConnHandler.commit();
@@ -77,6 +81,8 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 			bankPaymentDao.getByIdAndDetach(BankPayment.class, bankPayment.getId());
 			bankPayment.setId(bankPayment.getId());
 			bankPayment.setBankName(data.getBankPaymentName());
+			bankPayment.setAccountName(data.getAccountName());
+			bankPayment.setAccountNumber(data.getAccountNumber());
 			bankPayment.setIsActive(data.getIsActive());
 			bankPayment.setVersion(data.getVer());
 			final BankPayment bankPaymentUpdated = bankPaymentDao.save(bankPayment);

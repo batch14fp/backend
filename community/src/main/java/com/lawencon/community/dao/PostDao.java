@@ -82,8 +82,8 @@ public class PostDao extends AbstractJpaDao{
 					post.setTitle(obj[7].toString());
 					post.setContentPost(obj[8].toString());
 					post.setVersion(Integer.valueOf(obj[10].toString()));
-					post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
-					post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
+					post.setIsActive(Boolean.valueOf(obj[11].toString()));
+					post.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 					listPost.add(post);
 				}
 			}catch(final Exception e){
@@ -152,7 +152,7 @@ public class PostDao extends AbstractJpaDao{
 				post.setContentPost(obj[8].toString());
 			
 				post.setVersion(Integer.valueOf(obj[10].toString()));
-				post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+				post.setIsActive(Boolean.valueOf(obj[11].toString()));
 				post.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 				listPost.add(post);
 			}

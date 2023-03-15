@@ -3,6 +3,8 @@ package com.lawencon.community.pojo.activity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
+
 public class PojoActivityInsertReq {
 	private String timeAgo;
 	private String title;
@@ -14,6 +16,11 @@ public class PojoActivityInsertReq {
 	private String categoryId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
+	private String vourcherName;
+	private Integer limitApplied;
+	private Integer usedCount;
+	private String voucherCode;
+	private Float discountPercent;
 
 	private Boolean isActive;
 	
@@ -85,6 +92,36 @@ public class PojoActivityInsertReq {
 	}
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
+	}
+	public String getVourcherName() {
+		return vourcherName;
+	}
+	public void setVourcherName(String vourcherName) {
+		this.vourcherName = vourcherName;
+	}
+	public Integer getLimitApplied() {
+		return limitApplied;
+	}
+	public void setLimitApplied(Integer limitApplied) {
+		this.limitApplied = limitApplied;
+	}
+	public Integer getUsedCount() {
+		return usedCount;
+	}
+	public void setUsedCount(Integer usedCount) {
+		this.usedCount = usedCount;
+	}
+	public String getVoucherCode() {
+		return voucherCode;
+	}
+	public void setVoucherCode(String voucherCode) {
+		this.voucherCode = voucherCode;
+	}
+	public Float getDiscountPercent() {
+		return discountPercent;
+	}
+	public void setDiscountPercent(Float discountPercent) {
+		this.discountPercent = discountPercent;
 	}
 	
 	

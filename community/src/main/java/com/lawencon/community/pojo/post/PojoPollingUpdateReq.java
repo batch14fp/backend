@@ -1,5 +1,6 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PojoPollingUpdateReq {
@@ -8,7 +9,7 @@ public class PojoPollingUpdateReq {
 	private String pollingOptionId;
 	
 	private String pollingTitle;
-//	private String endAt;
+	private LocalDateTime endAt;
 	private List<PojoPollingOptionUpdateReq> pollingOptions;
 	private Boolean isActive;
 	private Integer ver;
@@ -20,13 +21,12 @@ public class PojoPollingUpdateReq {
 		this.pollingTitle = pollingTitle;
 	}
 
-	/*
-	 * public String getEndAt() { return endAt; } public void setEndAt(String endAt)
-	 * { this.endAt = endAt; }
-	 */	
-	
-	
-	
+	public LocalDateTime getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDateTime endAt) {
+		this.endAt = endAt;
+	}
 	public String getPollingId() {
 		return pollingId;
 	}

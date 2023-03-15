@@ -12,8 +12,9 @@ import com.lawencon.community.dao.ActivityDao;
 import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
-import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Activity;
+import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -30,12 +31,14 @@ public class ActivityService {
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
+	private final VoucherDao voucherDao;
 
 	private final FileDao fileDao;
 
-	public ActivityService( final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
+		this.voucherDao = voucherDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
 	
@@ -52,6 +55,7 @@ public class ActivityService {
 			activity.setTitle(data.getTitle());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
+			activity.setContent(data.getDescription());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
@@ -84,11 +88,20 @@ public class ActivityService {
 	public PojoInsertRes save(PojoActivityInsertReq data) {
 		ConnHandler.begin();
 		final Activity activity = new Activity();
+		final Voucher voucher = new Voucher();
+		voucher.setUsedCount(data.getUsedCount());
+		voucher.setIsActive(true);
+		voucher.setVoucherCode(data.getVoucherCode());
+		voucher.setLimitApplied(data.getLimitApplied());
+		voucher.setDiscountPercent(data.getDiscountPercent());
+		final Voucher voucherNew = voucherDao.save(voucher);
+		
+		activity.setVoucher(voucherNew);
 		activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 		activity.setTitle(data.getTitle());
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
-	
+		activity.setDescription(data.getContent());
 		activity.setPrice(data.getPrice());
 		activity.setProvider(data.getProviders());
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
@@ -110,6 +123,7 @@ public class ActivityService {
 			activityDao.getByIdAndDetach(Activity.class, activity.getId());
 			activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 			activity.setTitle(data.getTitle());
+			activity.setDescription(data.getContent());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
@@ -156,16 +170,17 @@ public class ActivityService {
 	}
 	
 	public List<PojoResGetActivity> getListActivityByCategoryAndType(String categoryCode, String typeCode) throws Exception {
-	    List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
+	   final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
 	    if (listActivity == null || listActivity.isEmpty()) {
 	        return null;
 	    }
 
-	    List<PojoResGetActivity> pojoList = new ArrayList<>();
+	    final List<PojoResGetActivity> pojoList = new ArrayList<>();
 	    for (Activity activity : listActivity) {
 	    	final PojoResGetActivity pojo = new PojoResGetActivity();
 	        pojo.setActivityId(activity.getId());
 	        pojo.setTitle(activity.getTitle());
+	        pojo.setContent(activity.getDescription());
 	        pojo.setCategoryCode(activity.getCategory().getCategoryCode());
 	        pojo.setCategoryName(activity.getCategory().getCategoryName());
 	        pojo.setTypeCode(activity.getTypeActivity().getTypeCode());

@@ -70,7 +70,7 @@ public class PostService {
 			res.setImgPostId(data.getFile().getId());
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
-			
+	
 			res.setUserId(data.getUser().getId());
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
