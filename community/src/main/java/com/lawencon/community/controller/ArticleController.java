@@ -47,6 +47,23 @@ public class ArticleController {
 			headers.add("X-Total-Pages", String.valueOf(pageCount));
 	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	    }
+	
+	
+	
+	@GetMapping("/most-viewer")
+	public ResponseEntity<List<PojoResGetArticle>> getAllByMostViewer(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) {
+	        int offset = (page - 1) * size;
+	        final List<PojoResGetArticle> dataList = articleService.getAllByMostViewer(offset, size);
+	        int totalCount = articleService.getTotalCount();
+	        int pageCount = paginationService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	    }
+	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoResGetArticle> getArticle(@PathVariable ("id")String id){
 		PojoResGetArticle resGet = articleService.getById(id);
