@@ -26,8 +26,9 @@ public class ArticleDao extends AbstractJpaDao{
 		sqlQuery.append("SELECT id, file_id, title, content_article, ver,is_active ");
 		sqlQuery.append("FROM t_article ");
 		sqlQuery.append("WHERE is_active = TRUE ");
+		sqlQuery.append("ORDER BY p.created_at DESC ");
 		sqlQuery.append("LIMIT :limit OFFSET :offset ");
-		sqlQuery.append("ORDER BY p.created_at DESC");
+
 		try {
 		final List<Object> result = ConnHandler.getManager()
 				.createNativeQuery(sqlQuery.toString())

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
@@ -124,23 +126,36 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 	
 	
 
-//    public List<Activity> findByCategoryAndType(String category, String type) {
-//        final StringBuilder sb = new StringBuilder("SELECT p FROM Product p WHERE 1=1");
-//        if (category != null && !category.isEmpty()) {
-//            sb.append(" AND p.category = :category");
-//        }
-//        if (type != null && !type.isEmpty()) {
-//            sb.append(" AND p.type = :type");
-//        }
-//        Query query = entityManager.createQuery(sb.toString(), Product.class);
-//        if (category != null && !category.isEmpty()) {
-//            query.setParameter("category", category);
-//        }
-//        if (type != null && !type.isEmpty()) {
-//            query.setParameter("type", type);
-//        }
-//        return query.getResultList();
-//    }
+    public List<Activity> findByCategoryAndType(String category, String type) {
+    	final List<Activity> listActivity = new ArrayList<>();
+    	
+        final StringBuilder sb = new StringBuilder("SELECT a FROM Activity a WHERE 1=1");
+        if (category != null && !category.isEmpty()) {
+            sb.append(" AND p.category = :category");
+        }
+        if (type != null && !type.isEmpty()) {
+            sb.append(" AND p.type = :type");
+        }
+        final Query result = ConnHandler.getManager().createQuery(sb.toString(), Activity.class);
+        if (category != null && !category.isEmpty()) {
+        result.setParameter("category", category);
+        }
+        if (type != null && !type.isEmpty()) {
+        	result.setParameter("type", type);
+        }
+        final List<Object[]> data =  result.getResultList();
+        
+        
+        for (final Object objs : data) {
+       
+        	
+        }
+       
+        
+        
+        return listActivity;
+        
+    }
 
 
 }
