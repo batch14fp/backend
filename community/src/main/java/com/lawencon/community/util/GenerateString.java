@@ -1,8 +1,13 @@
 package com.lawencon.community.util;
-
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
-public class GenerateId {
+
+public class GenerateString {
+    private static int counter = 0;
+    
 	public static String generateCode(final int totalLength) {
 		final int leftLimit = 48;
 		final int rightLimit = 58;
@@ -13,6 +18,16 @@ public class GenerateId {
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
 		return generatedString.toUpperCase();
+	}
+	
+	    public static String generateInvoice() {
+	        String pattern = "yyMMdd";
+	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	        String date = simpleDateFormat.format(new Date());
+	        DecimalFormat decimalFormat = new DecimalFormat("000000");
+	        String counterString = decimalFormat.format(++counter);
+	        return date + counterString;
+	  
 	}
 
 }

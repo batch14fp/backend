@@ -43,7 +43,7 @@ import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
-import com.lawencon.community.util.GenerateId;
+import com.lawencon.community.util.GenerateString;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -154,7 +154,7 @@ public class UserService implements UserDetailsService {
 		final CodeVerification codeVerification = new CodeVerification();
 
 		codeVerification.setEmail(data.getEmail());
-		final String codeGenerated = GenerateId.generateCode(6);
+		final String codeGenerated = GenerateString.generateCode(6);
 		codeVerification.setCode(codeGenerated);
 		codeVerification.setExpiredAt(LocalDateTime.now().plusMinutes(2));
 
@@ -229,7 +229,7 @@ public class UserService implements UserDetailsService {
 
 		codeVerification.setEmail(data.getEmail());
 		
-		final String codeGenerated = GenerateId.generateCode(6);
+		final String codeGenerated = GenerateString.generateCode(6);
 		codeVerification.setCode(codeGenerated);
 		codeVerification.setExpiredAt(LocalDateTime.now().plusMinutes(2));
 		

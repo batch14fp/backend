@@ -83,8 +83,8 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 					activity.setActivityLocation(obj[11].toString());
 					activity.setStartDate(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 					activity.setEndDate(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
-					activity.setVersion(Integer.valueOf(obj[16].toString()));
-					activity.setIsActive(Boolean.valueOf(obj[17].toString()));
+					activity.setVersion(Integer.valueOf(obj[14].toString()));
+					activity.setIsActive(Boolean.valueOf(obj[15].toString()));
 				
 					listActivities.add(activity);
 					
