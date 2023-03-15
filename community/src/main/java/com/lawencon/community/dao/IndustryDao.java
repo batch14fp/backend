@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,10 +15,27 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Industry> getAll() {
-		final String sql = "SELECT * FROM t_industry WHERE  is_active = TRUE";	
-		final List<Industry> res = ConnHandler.getManager().createNativeQuery(sql, Industry.class).getResultList();
 		
-		return res;
+		 final StringBuilder sb = new StringBuilder();
+		    sb.append("SELECT id, industry_name, ver, is_active ");
+		    sb.append("FROM t_industry ");
+		    sb.append("WHERE  is_active = TRUE");
+		    List<Object[]> resultList = ConnHandler.getManager()
+		    .createNativeQuery(sb.toString())
+		    .getResultList();
+
+		    final List<Industry> industryList = new ArrayList<>();
+		    for (Object[] obj : resultList) {
+		        Industry industry = new Industry();
+		        industry.setId(obj[0].toString());
+		        industry.setIndustryName(obj[1].toString());
+		        industry.setVersion(Integer.valueOf(obj[2].toString()));
+		        industry.setIsActive(Boolean.valueOf(obj[3].toString()));
+		        industryList.add(industry);
+		    }
+
+		    return industryList;
+	
 	}
 
 	@Override
@@ -30,17 +48,7 @@ public class IndustryDao extends BaseMasterDao<Industry>{
 		return super.getByIdRef(Industry.class, id);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Industry> getByOffsetLimit(Long offset, Long limit) {
-		  final String sql = "SELECT * FROM t_industry WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
-			
-			final List<Industry> res = ConnHandler.getManager().createNativeQuery(sql, Industry.class)
-					.setParameter("offset", offset)
-					.setParameter("limit",limit)
-					.getResultList();
-			
-			return res;
-	}
+
 	@Override
 	public Optional<Industry> getByIdAndDetach(String id) {
 

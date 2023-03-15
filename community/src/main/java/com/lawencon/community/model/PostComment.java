@@ -1,5 +1,6 @@
 package com.lawencon.community.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -22,6 +23,17 @@ public class PostComment  extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name="post_id", nullable=false)
 	private Post post;
+	
+	@Column(nullable=false)
+	private String body;
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
 
 	public PostComment getComment() {
 		return comment;

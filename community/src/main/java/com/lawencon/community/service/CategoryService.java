@@ -23,13 +23,14 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 	
 	
 	@Override
-	public List<PojoResGetCategory> getAll(){
+	public List<PojoResGetCategory> getAll() throws Exception{
 		final List<PojoResGetCategory>  listPojoResGetCategory = new ArrayList<>();
 		categoryDao.getAll().forEach(data ->{
 			PojoResGetCategory pojoResGetCategory = new PojoResGetCategory();
 			pojoResGetCategory.setCategoryId(data.getId());
 			pojoResGetCategory.setCategoryCode(data.getCategoryCode());
 			pojoResGetCategory.setCategoryName(data.getCategoryName());
+			pojoResGetCategory.setVer(data.getVersion());
 			pojoResGetCategory.setIsActive(data.getIsActive());
 			listPojoResGetCategory.add(pojoResGetCategory);
 		
@@ -46,7 +47,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 
-		Boolean result = categoryDao.deleteById(Category.class, id);
+		final Boolean result = categoryDao.deleteById(Category.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;

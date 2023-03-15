@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Article;
 import com.lawencon.community.model.File;
@@ -13,19 +14,26 @@ import com.lawencon.community.model.File;
 
 
 @Repository
-public class ArticleDao extends BaseMasterDao<Article>{
+public class ArticleDao extends AbstractJpaDao{
 
+	
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<Article> getAll() {
+	public List<Article> getAll(int offset, int limit) {
 		
 		final List<Article> listArticle = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
 		
 		sqlQuery.append("SELECT id, file_id, title, content_article, ver,is_active ");
-		sqlQuery.append("FROM t_article WHERE is_active = TRUE ");	
+		sqlQuery.append("FROM t_article ");
+		sqlQuery.append("WHERE is_active = TRUE ");
+		sqlQuery.append("ORDER BY p.created_at DESC ");
+		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+
 		try {
-		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+		final List<Object> result = ConnHandler.getManager()
+				.createNativeQuery(sqlQuery.toString())
+				.setParameter("offset", offset)
+				.setParameter("limit",limit)
 				.getResultList();
 		
 		for(final Object objs : result) {
@@ -54,18 +62,30 @@ public class ArticleDao extends BaseMasterDao<Article>{
 		
 		return listArticle;
 	}
+	
+	
+	
 
-	@Override
+    public int getTotalCount() {
+    	final StringBuilder sqlQuery = new StringBuilder();
+    	sqlQuery.append("SELECT COUNT(id) as total FROM t_article");
+    	sqlQuery.append("WHERE is_active = TRUE ");
+        int totalCount = Integer.valueOf(ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+        .getSingleResult().toString()); 
+        return totalCount;
+    }
+
+
 	public Optional<Article> getById(String id) {
 		return Optional.ofNullable(super.getById(Article.class, id));
 	}
 
-	@Override
+
 	public Article getByIdRef(String id) {
 		return super.getByIdRef(Article.class, id);
 	}
 	
-	@Override
+
 	public Optional<Article> getByIdAndDetach(String id) {
 
 		return Optional.ofNullable(super.getByIdAndDetach(Article.class, id));

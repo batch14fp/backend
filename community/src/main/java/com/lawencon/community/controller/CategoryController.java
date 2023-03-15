@@ -31,7 +31,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetCategory>> getAllCategory(){
+	public ResponseEntity<List<PojoResGetCategory>> getAllCategory() throws Exception{
 		List<PojoResGetCategory> resGet = categoryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

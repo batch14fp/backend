@@ -117,7 +117,7 @@ public class UserService implements UserDetailsService {
 		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
 		profile.setMemberStatus(memberStatus);
 		profile.setFullname(data.getFullName());
-		profile.setUserBalance(BigInteger.ZERO);
+
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
 
@@ -126,6 +126,7 @@ public class UserService implements UserDetailsService {
 		res.setId(profileNew.getId());
 
 		final User user = new User();
+		user.setUserBalance(BigInteger.ZERO);
 
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);

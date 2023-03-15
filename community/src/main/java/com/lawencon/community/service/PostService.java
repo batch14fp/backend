@@ -30,12 +30,11 @@ import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
-import com.lawencon.community.pojo.post.PojoResGetAllPost;
 import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class PostService extends BaseService<PojoResGetAllPost>{
+public class PostService {
 	private PostDao postDao;
 	private PostTypeDao postTypeDao;
 	private FileDao fileDao;
@@ -59,41 +58,21 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 		this.categoryDao = categoryDao;
 		this.postCommentDao = postCommentDao;
 	}
-	
-	@Override
-	public List<PojoResGetAllPost> getAll() {
-		final List<PojoResGetAllPost> res = new ArrayList<>();
-	
-		postDao.getAll().forEach(data->{
-			final PojoResGetAllPost pojoResGetAllPost = new PojoResGetAllPost();
-			pojoResGetAllPost.setId(data.getId());
-			pojoResGetAllPost.setTitle(data.getTitle());
-			pojoResGetAllPost.setContent(data.getContentPost());
-			pojoResGetAllPost.setImgPostId(data.getFile().getId());
-			pojoResGetAllPost.setTypeCode(data.getPostType().getTypeCode());
-			pojoResGetAllPost.setTypeName(data.getPostType().getTypeName());
-			pojoResGetAllPost.setCategoryCode(data.getCategory().getCategoryCode());
-			pojoResGetAllPost.setCategoryName(data.getCategory().getCategoryName());
-			pojoResGetAllPost.setCountPostComment(getCountPostComment(data.getId()));
-			pojoResGetAllPost.setCountPostLike(getCountPostLike(data.getId()));
-			pojoResGetAllPost.setBookmark(false);
-			pojoResGetAllPost.setLike(false);
-			res.add(pojoResGetAllPost);
-			
-		});
-		return res;
-	}
+
 
 	public PojoResGetPost getById(String id) {
 			final Post data = postDao.getByIdRef(id);
 			final PojoResGetPost res = new PojoResGetPost();
 			
-			res.setPostId(data.getId());
+			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setImgPostId(data.getFile().getId());
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
+			
+			res.setUserId(data.getUser().getId());
+			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
 			res.setCountPostComment(getCountPostComment(data.getId()));
@@ -136,6 +115,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			post.setContentPost(data.getContent());
 			final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 			post.setUser(user);
+			post.setEndAt(data.getEndAt());
 			final PostType postType = postTypeDao.getByIdRef(data.getTypeId());
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
@@ -164,6 +144,7 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
 			post.setCategory(category);
+			post.setEndAt(data.getEndAt());
 			final File file = fileDao.getByIdRef(data.getImagePostId());
 			post.setFile(file);
 			post.setIsActive(true);
@@ -252,16 +233,19 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	}
 	
 	    
-	    public List<PojoResGetAllPost> getData(int offset, int limit) {
-	    	final List<PojoResGetAllPost>  listPost= new ArrayList<>();
-	    	postDao.getByOffsetLimit(offset, limit).forEach(data->{
-	    	 final PojoResGetAllPost res = new PojoResGetAllPost();
+	    public List<PojoResGetPost> getData(int offset, int limit) {
+	    	final List<PojoResGetPost>  listPost= new ArrayList<>();
+	    	postDao.getGetAllPost(offset, limit).forEach(data->{
+	    	 final PojoResGetPost res = new PojoResGetPost();
 	    	 	res.setId(data.getId());
 				res.setTitle(data.getTitle());
 				res.setContent(data.getContentPost());
 				res.setImgPostId(data.getFile().getId());
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
+				res.setUserId(data.getUser().getId());
+				//res.setEndAt(data.getEndAt());
+				res.setFullname(data.getUser().getProfile().getFullname());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());
 				res.setCountPostComment(getCountPostComment(data.getId()));
@@ -278,10 +262,64 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	      
 	        return postDao.getTotalCount();
 	    }
+	    public int getTotalCountByUserId() {
+		      
+	        return postDao.getByUserIdTotalCount(principalService.getAuthPrincipal());
+	    }
 	    
+	    
+	    
+	    
+	    
+	    public List<PojoResGetPost> getMostLike(int offset, int limit) throws Exception {
+	    	final List<PojoResGetPost>  listPost= new ArrayList<>();
+	    	postDao.getPostsByMostLikes(offset, limit).forEach(data->{
+	    	 final PojoResGetPost res = new PojoResGetPost();
+	    	 	res.setId(data.getId());
+				res.setTitle(data.getTitle());
+				res.setContent(data.getContentPost());
+				res.setImgPostId(data.getFile().getId());
+				res.setTypeCode(data.getPostType().getTypeCode());
+				res.setTypeName(data.getPostType().getTypeName());
+				res.setCategoryCode(data.getCategory().getCategoryCode());
+				res.setCategoryName(data.getCategory().getCategoryName());
+				res.setCountPostComment(getCountPostComment(data.getId()));
+				res.setCountPostLike(getCountPostLike(data.getId()));
+				res.setTimeAgo(data.getCreatedAt());
+				res.setBookmark(false);
+				res.setLike(false); 
+				listPost.add(res);
+	     });;
 
+		return listPost;
+	      
+	    }
+	    
+	    
+	    
+	    public List<PojoResGetPost> getAllPostByUserId(int offset, int limit) throws Exception {
+	    	final List<PojoResGetPost>  listPost= new ArrayList<>();
+	    	postDao.getByUserId(principalService.getAuthPrincipal(),offset, limit).forEach(data->{
+	    	 final PojoResGetPost res = new PojoResGetPost();
+	    	 	res.setId(data.getId());
+				res.setTitle(data.getTitle());
+				res.setContent(data.getContentPost());
+				res.setImgPostId(data.getFile().getId());
+				res.setTypeCode(data.getPostType().getTypeCode());
+				res.setTypeName(data.getPostType().getTypeName());
+				res.setUserId(data.getUser().getId());
+				res.setFullname(data.getUser().getProfile().getFullname());
+				res.setCategoryCode(data.getCategory().getCategoryCode());
+				res.setCategoryName(data.getCategory().getCategoryName());
+				res.setCountPostComment(getCountPostComment(data.getId()));
+				res.setCountPostLike(getCountPostLike(data.getId()));
+				res.setBookmark(false);
+				res.setLike(false); 
+				listPost.add(res);
+	     });;
 
-
-	
-	
+		return listPost;
+	      
+	    }
+	    
 }
