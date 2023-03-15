@@ -61,7 +61,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 
 	public PojoInsertRes save(PojoIndustryInsertReq data) {
 		ConnHandler.begin();
-		Industry industry = new Industry();
+		final Industry industry = new Industry();
 
 		industry.setIndustryName(data.getIndustryName());
 		industry.setIsActive(true);
