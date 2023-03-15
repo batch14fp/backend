@@ -1,5 +1,6 @@
 package com.lawencon.community.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -32,6 +33,59 @@ public class Payment  extends BaseEntity{
 	
 	
 	private LocalDate expired;
+	
+	
+	private BigDecimal discAmount;
+	
+	
+	private BigDecimal taxAmount;
+	
+	
+	private BigDecimal subtotal;
+	
+	
+	private BigDecimal total;
+	
+	
+
+	public BigDecimal getDiscAmount() {
+		return discAmount;
+	}
+
+
+	public void setDiscAmount(BigDecimal discAmount) {
+		this.discAmount = discAmount;
+	}
+
+
+	public BigDecimal getTaxAmount() {
+		return taxAmount;
+	}
+
+
+	public void setTaxAmount(BigDecimal taxAmount) {
+		this.taxAmount = taxAmount;
+	}
+
+
+	public BigDecimal getSubtotal() {
+		return subtotal;
+	}
+
+
+	public void setSubtotal(BigDecimal subtotal) {
+		this.subtotal = subtotal;
+	}
+
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
 
 
 	public Invoice getInvoice() {

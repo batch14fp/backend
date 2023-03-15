@@ -1,21 +1,35 @@
 package com.lawencon.community.pojo.salessetting;
 
 public class PojoResGetSalesSetting {
-	private float system_income;
-	private float member_income;
+	private float systemIncome;
+	private float memberIncome;
 	private float tax;
+	private Boolean isActive;
+	private Integer ver;
 	
-	public float getSystem_income() {
-		return system_income;
+	public Boolean getIsActive() {
+		return isActive;
 	}
-	public void setSystem_income(float system_income) {
-		this.system_income = system_income;
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
-	public float getMember_income() {
-		return member_income;
+	public Integer getVer() {
+		return ver;
 	}
-	public void setMember_income(float member_income) {
-		this.member_income = member_income;
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public float getSystemIncome() {
+		return systemIncome;
+	}
+	public void setSystemIncome(float systemIncome) {
+		this.systemIncome = systemIncome;
+	}
+	public float getMemberIncome() {
+		return memberIncome;
+	}
+	public void setMemberIncome(float memberIncome) {
+		this.memberIncome = memberIncome;
 	}
 	public float getTax() {
 		return tax;
