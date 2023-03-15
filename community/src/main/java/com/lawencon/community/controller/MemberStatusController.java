@@ -3,6 +3,7 @@ package com.lawencon.community.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,19 +26,19 @@ public class MemberStatusController {
 	}
 
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPolling(@RequestBody PojoMemberStatusInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertMembershipStatus(@RequestBody PojoMemberStatusInsertReq data){
 		PojoInsertRes resGet = memberStatusService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePolling(@RequestBody PojoMemberStatusUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateMembershipStatus(@RequestBody PojoMemberStatusUpdateReq data){
 		PojoUpdateRes resGet = memberStatusService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deletePost(@RequestBody String id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deleteMembershipStatus(@PathVariable ("id")String id){
 		PojoRes resDelete = memberStatusService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

@@ -37,7 +37,7 @@ public class ArticleController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetArticle> getActivity(@PathVariable ("id")String id){
+	public ResponseEntity<PojoResGetArticle> getArticle(@PathVariable ("id")String id){
 		PojoResGetArticle resGet = articleService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
@@ -54,8 +54,8 @@ public class ArticleController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deletePost(@RequestBody String id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deleteArticle(@PathVariable ("id")String id){
 		PojoRes resDelete = articleService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

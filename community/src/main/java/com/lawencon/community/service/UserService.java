@@ -35,9 +35,13 @@ import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
+import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
 import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
+import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
 import com.lawencon.community.util.GenerateId;
 
@@ -86,16 +90,15 @@ public class UserService implements UserDetailsService {
 		return userDao.login(email);
 	}
 
-	public PojoResGetVerification getVerified(String code) {
+	public PojoResGetVerification getVerified(PojoResGetVerificationCode data) {
 		PojoResGetVerification res = new PojoResGetVerification();
+		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCode());
 
-		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(code);
-
-		codeVerification.ifPresent(data -> {
-			res.setCode(data.getCode());
-			res.setEmail(data.getEmail());
-			res.setExpiredAt(data.getExpiredAt());
-			res.setPassword(data.getUserPassword());
+		codeVerification.ifPresent(result -> {
+			res.setCode(result.getCode());
+			res.setEmail(result.getEmail());
+			res.setExpiredAt(result.getExpiredAt());
+			res.setPassword(result.getUserPassword());
 		});
 		return res;
 	}
@@ -190,5 +193,68 @@ public class UserService implements UserDetailsService {
 		return listRes;
 
 	}
+	
+	
+	public PojoUpdateRes updatePassword(PojoPasswordUpdateReq data) {
+		ConnHandler.begin();
+		final PojoUpdateRes res = new PojoUpdateRes();
+		final User user = userDao.getUserByProfileId(data.getProfileId());
+		final User userRef = userDao.getByIdRef(user.getId());
+		userDao.getByIdAndDetach(User.class, userRef.getId());
+		if (data.getConfirmNewPassword().equals(data.getNewPassword())) {
+		userRef.setUserPassword(data.getConfirmNewPassword());
+		userRef.setVersion(data.getVer());
+		final User userNew = userDao.saveAndFlush(userRef);
+		ConnHandler.commit();
+		res.setId(userNew.getId());
+		res.setMessage("Password is updated");
+		res.setVer(userNew.getVersion());
+		
+		}
+		else {
+			res.setId(userRef.getId());
+			res.setMessage("Passwords did not match");
+			res.setVer(userRef.getVersion());
+		}
+		return res;
+	}
+	
+	public PojoInsertRes  sendCode(PojoForgetPasswordEmailReq data) {
+		final PojoInsertRes res = new PojoInsertRes();
+
+		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
+
+		final CodeVerification codeVerification = new CodeVerification();
+
+		codeVerification.setEmail(data.getEmail());
+		
+		final String codeGenerated = GenerateId.generateCode(6);
+		codeVerification.setCode(codeGenerated);
+		codeVerification.setExpiredAt(LocalDateTime.now().plusMinutes(2));
+		
+		codeVerification.setUserPassword(userDao.getUserByEmail(data.getEmail()).getUserPassword());
+		ConnHandler.begin();
+		final CodeVerification codeNew = codeVerificationDao.saveNoLogin(codeVerification, () -> system.getId());
+		codeVerification.setCreatedBy(system.getId());
+
+		res.setId(codeNew.getId());
+		res.setMessage("Please Cek email to get verfication code");
+
+		new Thread(() -> {
+			try {
+				emailSenderService.sendEmail(data.getEmail(), codeGenerated);
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		}).start();; 
+		ConnHandler.commit();
+		return res;
+		
+	}
+	
+	
+	
+	
+	
 
 }

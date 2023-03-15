@@ -12,10 +12,10 @@ public class PojoResGetPost {
 	private String typeName;
 	private String categoryCode;
 	private String categoryName;
-	private int countPostLike;
-	private int countPostComment;
-	private boolean isLike;
-	private boolean isBookmark;
+	private Long countPostLike;
+	private Long countPostComment;
+	private Boolean isLike;
+	private Boolean isBookmark;
 	
 	public String getPostId() {
 		return postId;
@@ -83,17 +83,30 @@ public class PojoResGetPost {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	public int getCountPostLike() {
+
+	public Long getCountPostLike() {
 		return countPostLike;
 	}
-	public void setCountPostLike(int countPostLike) {
+	public void setCountPostLike(Long countPostLike) {
 		this.countPostLike = countPostLike;
 	}
-	public int getCountPostComment() {
+	public Long getCountPostComment() {
 		return countPostComment;
 	}
-	public void setCountPostComment(int countPostComment) {
+	public void setCountPostComment(Long countPostComment) {
 		this.countPostComment = countPostComment;
+	}
+	public Boolean getIsLike() {
+		return isLike;
+	}
+	public void setIsLike(Boolean isLike) {
+		this.isLike = isLike;
+	}
+	public Boolean getIsBookmark() {
+		return isBookmark;
+	}
+	public void setIsBookmark(Boolean isBookmark) {
+		this.isBookmark = isBookmark;
 	}
 	public boolean isLike() {
 		return isLike;

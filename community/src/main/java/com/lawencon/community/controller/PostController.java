@@ -23,15 +23,19 @@ import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetAllPost;
+import com.lawencon.community.pojo.post.PojoResGetPost;
+import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
 
 @RestController
 @RequestMapping("posts")
 public class PostController {
 	private PostService postService;
+	private PaginationService paginationService;
 	
-	public PostController(final PostService postService) {
+	public PostController(final PostService postService, final PaginationService paginationService) {
 		this.postService = postService;
+		this.paginationService = paginationService;
 	}
 	
 	@GetMapping
@@ -41,8 +45,8 @@ public class PostController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetAllPost> getActivity(@PathVariable ("id")String id){
-		PojoResGetAllPost resGet = postService.getById(id);
+	public ResponseEntity<PojoResGetPost> getActivity(@PathVariable ("id")String id){
+		PojoResGetPost resGet = postService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
@@ -70,20 +74,20 @@ public class PostController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deletePost(@RequestBody String id){
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
 		PojoRes resDelete = postService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/like/{id}")
-	public ResponseEntity<PojoRes> deletePostLike(@RequestBody String id){
+	public ResponseEntity<PojoRes> deletePostLike(@PathVariable ("id")String id){
 		PojoRes resDelete = postService.deletePostLikeById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/bookmark/{id}")
-	public ResponseEntity<PojoRes> deletePostBookmark(@RequestBody String id){
+	public ResponseEntity<PojoRes> deletePostBookmark(@PathVariable ("id")String id){
 		PojoRes resDelete = postService.deletePostBookmarkById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
@@ -92,9 +96,9 @@ public class PostController {
 	public ResponseEntity<List<PojoResGetAllPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        List<PojoResGetAllPost> dataList = postService.getData(offset, size);
+	        final List<PojoResGetAllPost> dataList = postService.getData(offset, size);
 	        int totalCount = postService.getTotalCount();
-	        int pageCount = postService.getPageCount(totalCount, size);
+	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("X-Total-Count", String.valueOf(totalCount));
 			headers.add("X-Total-Pages", String.valueOf(pageCount));
