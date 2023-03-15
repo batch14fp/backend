@@ -28,6 +28,18 @@ public class Invoice  extends BaseEntity{
 	@JoinColumn(name="voucher_id", nullable=false)
 	private Voucher voucher;
 	
+	@OneToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Column(length=12, nullable= false)
 	private String invoiceCode;
 
