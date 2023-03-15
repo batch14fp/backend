@@ -61,8 +61,8 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 
 		final Position position = new Position();
 
-		position.setPositionName(data.getPositionName());
-		position.setPositionCode(data.getPositionCode());
+		position.setPositionName(data.getPostionName());
+		position.setPositionCode(data.getPostionCode());
 		
 		position.setIsActive(true);
 

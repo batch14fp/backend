@@ -34,7 +34,6 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 			final PojoResGetIndustry pojoResGetIndustry = new PojoResGetIndustry();
 			pojoResGetIndustry.setIndustryId(data.getId());
 			pojoResGetIndustry.setIndustryName(data.getIndustryName());
-			pojoResGetIndustry.setVer(data.getVersion());
 			pojoResGetIndustry.setIsActive(data.getIsActive());
 			res.add(pojoResGetIndustry);
 
@@ -83,7 +82,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 			final Industry industry  = industryDao.getByIdRef(data.getIndustryId());
 			industryDao.getByIdAndDetach(Industry.class, industry.getId());
 			industry.setId(industry.getId());
-			industry.setIndustryName(data.getIndustryName());
+			industry.setIndustryName(data.getIndustryId());
 			industry.setIsActive(data.getIsActive());
 			industry.setVersion(data.getVer());
 

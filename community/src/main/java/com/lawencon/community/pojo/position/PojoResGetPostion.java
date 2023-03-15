@@ -4,20 +4,6 @@ public class PojoResGetPostion {
 	private String positionId;
 	private String positionCode;
 	private String positionName;
-	private Integer ver;
-	private Boolean isActive;
-	public Integer getVer() {
-		return ver;
-	}
-	public void setVer(Integer ver) {
-		this.ver = ver;
-	}
-	public Boolean getIsActive() {
-		return isActive;
-	}
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
 	public String getPositionId() {
 		return positionId;
 	}
