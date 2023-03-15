@@ -54,9 +54,17 @@ public class Activity extends BaseEntity{
 	private String activityLocation;
 
 	
+	
+	@Column(nullable=false)
 	private LocalDate startDate;
+	
+	@Column(nullable=false)
 	private LocalDate endDate;
+	
+	@Column(nullable=false)
 	private LocalTime startTime ;
+	
+	@Column(nullable=false)
 	private LocalTime endTime;
 	
 	

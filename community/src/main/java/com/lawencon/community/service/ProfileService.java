@@ -40,7 +40,6 @@ public class ProfileService {
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setCompany(profile.getCompanyName());
-		resGetProfile.setUserBalance(profile.getUserBalance());
 		resGetProfile.setStatusMemberId(profile.getMemberStatus().getId());
 		resGetProfile.setStatusMember(profile.getMemberStatus().getStatusName());
 		resGetProfile.setIndustryId(profile.getIndustry().getId());
@@ -63,7 +62,6 @@ public class ProfileService {
 			profileDao.getByIdAndDetach(Profile.class, profile.getId());
 			profile.setFullname(profile.getFullname());
 			profile.setCompanyName(profile.getCompanyName());
-			profile.setUserBalance(profile.getUserBalance());
 			profile.setCountry(profile.getCountry());
 			profile.setCity(profile.getCity());
 			profile.setProvince(profile.getProvince());
