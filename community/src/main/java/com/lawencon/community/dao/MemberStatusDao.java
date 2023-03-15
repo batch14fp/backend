@@ -12,8 +12,8 @@ public class MemberStatusDao extends AbstractJpaDao{
 	public MemberStatus getByCode(final String statusCode) {
 		final MemberStatus memberStatus = new MemberStatus();
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT id, status_name, status_code, period_day FROM t_member_status ");
-		sqlQuery.append("WHERE status_code = status_code ");
+		sqlQuery.append("SELECT id, status_name, code_status, period_day FROM t_member_status ");
+		sqlQuery.append("WHERE code_status = :statusCode ");
 		sqlQuery.append("AND is_active = TRUE ");
 		
 		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("statusCode", statusCode)
