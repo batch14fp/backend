@@ -2,7 +2,6 @@ package com.lawencon.community.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Activity;
-import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -32,16 +30,15 @@ public class ActivityService {
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
-	private final UserDao userDao;
+
 	private final FileDao fileDao;
 
-	public ActivityService(final UserDao userDao, final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService( final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
-		this.userDao = userDao;
-
+	
 	}
 
 	
