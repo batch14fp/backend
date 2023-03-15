@@ -244,6 +244,7 @@ public class PostService {
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setUserId(data.getUser().getId());
+				//res.setEndAt(data.getEndAt());
 				res.setFullname(data.getUser().getProfile().getFullname());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());

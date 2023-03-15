@@ -3,6 +3,7 @@ package com.lawencon.community.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,6 +21,19 @@ public class Article  extends BaseEntity{
 	@Column(length=120, nullable=false)
 	private String title;
 	
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 	private String contentArticle;
 	

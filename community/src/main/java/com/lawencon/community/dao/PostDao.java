@@ -32,6 +32,7 @@ public class PostDao extends AbstractJpaDao{
 	public List<Post> getGetAllPost(int offset, int limit) {
 			final StringBuilder sqlQuery = new StringBuilder();
 			final List<Post> listPost = new ArrayList<>();
+			
 			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 			sqlQuery.append("FROM t_post p ");
 			sqlQuery.append("INNER JOIN t_post_type pt ");

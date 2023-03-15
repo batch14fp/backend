@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class PojoResGetPost {
 	private String id;
@@ -12,6 +13,7 @@ public class PojoResGetPost {
 	private String typeCode;
 	private String typeName;
 	private String imgPostId;
+	private LocalTime endAt;
 	private String categoryCode;
 	private String categoryName;
 	private Long countPostLike;
