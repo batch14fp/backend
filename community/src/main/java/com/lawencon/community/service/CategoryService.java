@@ -30,6 +30,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 			pojoResGetCategory.setCategoryId(data.getId());
 			pojoResGetCategory.setCategoryCode(data.getCategoryCode());
 			pojoResGetCategory.setCategoryName(data.getCategoryName());
+			pojoResGetCategory.setVer(data.getVersion());
 			pojoResGetCategory.setIsActive(data.getIsActive());
 			listPojoResGetCategory.add(pojoResGetCategory);
 		
