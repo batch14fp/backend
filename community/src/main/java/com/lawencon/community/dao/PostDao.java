@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,6 @@ public class PostDao extends AbstractJpaDao{
 	public List<Post> getGetAllPost(int offset, int limit) {
 			final StringBuilder sqlQuery = new StringBuilder();
 			final List<Post> listPost = new ArrayList<>();
-			
 			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 			sqlQuery.append("FROM t_post p ");
 			sqlQuery.append("INNER JOIN t_post_type pt ");
@@ -42,10 +42,10 @@ public class PostDao extends AbstractJpaDao{
 			sqlQuery.append("ON u.id =  p.user_id ");
 			sqlQuery.append("INNER JOIN t_profile pr ");
 			sqlQuery.append("ON pr.id = u.profile_id  ");
-			sqlQuery.append("WHERE p.user_id = :userId ");
+			sqlQuery.append("ORDER BY p.created_at DESC ");
 			sqlQuery.append("LIMIT :limit OFFSET :offset ");
-			sqlQuery.append("ORDER BY p.created_at DESC");
-			final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class)
+		
+			final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 					.setParameter("offset", offset)
 					.setParameter("limit",limit)
 					.getResultList();
@@ -80,7 +80,7 @@ public class PostDao extends AbstractJpaDao{
 					post.setUser(user);
 					
 					post.setTitle(obj[7].toString());
-					post.setEndAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime().toLocalTime());
+					post.setEndAt(Time.valueOf(obj[8].toString()).toLocalTime());
 					post.setContentPost(obj[9].toString());
 					
 				
@@ -115,9 +115,10 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("INNER JOIN t_profile pr ");
 		sqlQuery.append("ON pr.id = u.profile_id  ");
 		sqlQuery.append("WHERE p.user_id = :userId ");
+		sqlQuery.append("ORDER BY p.created_at DESC ");
 		sqlQuery.append("LIMIT :limit OFFSET :offset ");
-		sqlQuery.append("ORDER BY p.created_at DESC");
-		final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class)
+
+		final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("userId", userId)
 				.setParameter("offset", offset)
 				.setParameter("limit",limit)
@@ -152,7 +153,7 @@ public class PostDao extends AbstractJpaDao{
 				post.setUser(user);
 				
 				post.setTitle(obj[7].toString());
-				post.setEndAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime().toLocalTime());
+				post.setEndAt(Time.valueOf(obj[8].toString()).toLocalTime());
 				post.setContentPost(obj[9].toString());
 			
 				post.setVersion(Integer.valueOf(obj[11].toString()));
@@ -199,8 +200,9 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("ON p.category_id = c.id ");
 		sqlQuery.append("JOIN t_post_type pt ");
 		sqlQuery.append("ON p.post_type_id = pt.id ");
-		sqlQuery.append("LIMIT :limit OFFSET :offset ");
 		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
+		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+
 
 
 		final List<Object> results =
