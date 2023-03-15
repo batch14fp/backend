@@ -58,10 +58,12 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 					activityType.setActivityName(obj[4].toString());
 					activity.setTypeActivity(activityType);
 					
+
+					if(obj[5].toString()!=null) {
 					final File file = new File();
 					file.setId(obj[5].toString());
 					activity.setFile(file);
-					
+					}
 					
 					final Voucher voucher = new Voucher();
 					voucher.setId(obj[6].toString());

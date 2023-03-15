@@ -1,5 +1,7 @@
 package com.lawencon.community.model;
 
+import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -43,6 +45,16 @@ public class User extends BaseEntity {
 	private String userPassword;
 
 
+	private BigInteger userBalance;
+
+
+	public BigInteger getUserBalance() {
+		return userBalance;
+	}
+
+	public void setUserBalance(BigInteger userBalance) {
+		this.userBalance = userBalance;
+	}
 
 	public Role getRole() {
 		return role;

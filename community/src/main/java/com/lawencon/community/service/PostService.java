@@ -279,6 +279,33 @@ public class PostService extends BaseService<PojoResGetAllPost>{
 	        return postDao.getTotalCount();
 	    }
 	    
+	    
+	    
+	    
+	    
+	    public List<PojoResGetAllPost> getMostLike(int offset, int limit) throws Exception {
+	    	final List<PojoResGetAllPost>  listPost= new ArrayList<>();
+	    	postDao.getPostsByMostLikes(offset, limit).forEach(data->{
+	    	 final PojoResGetAllPost res = new PojoResGetAllPost();
+	    	 	res.setId(data.getId());
+				res.setTitle(data.getTitle());
+				res.setContent(data.getContentPost());
+				res.setImgPostId(data.getFile().getId());
+				res.setTypeCode(data.getPostType().getTypeCode());
+				res.setTypeName(data.getPostType().getTypeName());
+				res.setCategoryCode(data.getCategory().getCategoryCode());
+				res.setCategoryName(data.getCategory().getCategoryName());
+				res.setCountPostComment(getCountPostComment(data.getId()));
+				res.setCountPostLike(getCountPostLike(data.getId()));
+				res.setBookmark(false);
+				res.setLike(false); 
+				listPost.add(res);
+	     });;
+
+		return listPost;
+	      
+	    }
+	    
 
 
 

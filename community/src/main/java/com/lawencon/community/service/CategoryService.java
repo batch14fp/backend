@@ -23,7 +23,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 	
 	
 	@Override
-	public List<PojoResGetCategory> getAll(){
+	public List<PojoResGetCategory> getAll() throws Exception{
 		final List<PojoResGetCategory>  listPojoResGetCategory = new ArrayList<>();
 		categoryDao.getAll().forEach(data ->{
 			PojoResGetCategory pojoResGetCategory = new PojoResGetCategory();

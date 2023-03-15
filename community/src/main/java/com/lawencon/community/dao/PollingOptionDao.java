@@ -18,7 +18,7 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PollingOption> getAllOptionByPollingId(String id) {
+	public List<PollingOption> getAllOptionByPollingId(String id) throws Exception {
 
 		final List<PollingOption> listPollingOption = new ArrayList<>();
 
@@ -41,9 +41,11 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 					listPollingOption.add(pollingOption);
 
 				}
-			}
-		} catch (final Exception e) {
-			e.printStackTrace();
+		
+		} 
+		}catch (Exception e) {
+	        throw new Exception("Failed to retrieve data from database", e);
+	    
 		}
 
 		return listPollingOption;
