@@ -48,7 +48,7 @@ public class CategoryController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deleteCategory(@PathVariable ("id")String id){
 		PojoRes resDelete = categoryService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
