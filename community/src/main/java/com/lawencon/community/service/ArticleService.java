@@ -18,7 +18,7 @@ import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
 import com.lawencon.community.pojo.article.PojoResGetArticle;
 
 @Service
-public class ArticleService extends BaseService<PojoResGetArticle> {
+public class ArticleService {
 
 	private final ArticleDao articleDao;
 	private final FileDao fileDao;
@@ -28,16 +28,15 @@ public class ArticleService extends BaseService<PojoResGetArticle> {
 	}
 	
 	
-	@Override
-	public List<PojoResGetArticle> getAll(){
+	public List<PojoResGetArticle> getAll(int offset, int limit){
 		final List<PojoResGetArticle>  res = new ArrayList<>();
-		articleDao.getAll().forEach(data ->{
+		articleDao.getAll(offset,limit).forEach(data ->{
 			PojoResGetArticle article = new PojoResGetArticle();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
 			article.setIsActive(data.getIsActive());
-			article.setNameUser("Perlu ditambah");
+			article.setNameUser("perlu ditambah");
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
 			res.add(article);
@@ -121,4 +120,8 @@ public class ArticleService extends BaseService<PojoResGetArticle> {
 		pojoRes.setMessage("Update Success!");
 		return pojoRes;
 	}
+	  public int getTotalCount() {
+	      
+	        return articleDao.getTotalCount();
+	    }
 }

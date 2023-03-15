@@ -7,48 +7,42 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 
 
 @Repository
-public class PostDao extends BaseMasterDao<Post>{
+public class PostDao extends AbstractJpaDao{
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Post> getAll() {
-		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT * FROM t_post p ");
-		sqlQuery.append("INNER JOIN t_post_type pt ");
-		sqlQuery.append("ON pt.id = p.post_type_id ");
-		sqlQuery.append("INNER JOIN t_category c ");
-		sqlQuery.append("ON p.category_id = c.id ");
-		final List<Post> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class).getResultList();
-		
-		return res;
-	}
 
-	@Override
+
 	public Optional<Post> getById(String id) {
 		return Optional.ofNullable(super.getById(Post.class, id));
 	}
 
 
 	@SuppressWarnings("unchecked")
-	public List<Post> getByOffsetLimit(int offset, int limit) {
+	public List<Post> getGetAllPost(int offset, int limit) {
 			final StringBuilder sqlQuery = new StringBuilder();
 			final List<Post> listPost = new ArrayList<>();
 			
-			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post, p.ver, p.is_active ");
+			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 			sqlQuery.append("FROM t_post p ");
 			sqlQuery.append("INNER JOIN t_post_type pt ");
 			sqlQuery.append("ON pt.id = p.post_type_id ");
 			sqlQuery.append("INNER JOIN t_category c ");
 			sqlQuery.append("ON p.category_id = c.id ");
+			sqlQuery.append("INNER JOIN t_user u ");
+			sqlQuery.append("ON u.id =  p.user_id ");
+			sqlQuery.append("INNER JOIN t_profile pr ");
+			sqlQuery.append("ON pr.id = u.profile_id  ");
+			sqlQuery.append("WHERE p.user_id = :userId ");
 			sqlQuery.append("LIMIT :limit OFFSET :offset ");
 			sqlQuery.append("ORDER BY p.created_at DESC");
 			final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Post.class)
@@ -76,15 +70,24 @@ public class PostDao extends BaseMasterDao<Post>{
 					postType.setTypeCode(obj[5].toString());
 					post.setPostType(postType);
 					
+					
 					final User user = new User();
 					user.setId(obj[6].toString());
+					
+					final Profile profile = new Profile();
+					profile.setFullname(obj[10].toString());
+					user.setProfile(profile);
 					post.setUser(user);
 					
 					post.setTitle(obj[7].toString());
 					post.setEndAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime().toLocalTime());
 					post.setContentPost(obj[9].toString());
-					post.setVersion(Integer.valueOf(obj[10].toString()));
-					post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+					
+				
+					
+					post.setVersion(Integer.valueOf(obj[11].toString()));
+					post.setIsActive(Boolean.valueOf(obj[12].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+					post.setCreatedAt(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
 					listPost.add(post);
 				}
 			}catch(final Exception e){
@@ -101,12 +104,16 @@ public class PostDao extends BaseMasterDao<Post>{
 		final StringBuilder sqlQuery = new StringBuilder();
 		final List<Post> listPost = new ArrayList<>();
 		
-		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post, p.ver, p.is_active ");
+		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.end_at,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
 		sqlQuery.append("INNER JOIN t_category c ");
 		sqlQuery.append("ON p.category_id = c.id ");
+		sqlQuery.append("INNER JOIN t_user u ");
+		sqlQuery.append("ON u.id =  p.user_id ");
+		sqlQuery.append("INNER JOIN t_profile pr ");
+		sqlQuery.append("ON pr.id = u.profile_id  ");
 		sqlQuery.append("WHERE p.user_id = :userId ");
 		sqlQuery.append("LIMIT :limit OFFSET :offset ");
 		sqlQuery.append("ORDER BY p.created_at DESC");
@@ -138,13 +145,19 @@ public class PostDao extends BaseMasterDao<Post>{
 				
 				final User user = new User();
 				user.setId(obj[6].toString());
+				
+				final Profile profile = new Profile();
+				profile.setFullname(obj[10].toString());
+				user.setProfile(profile);
 				post.setUser(user);
 				
 				post.setTitle(obj[7].toString());
 				post.setEndAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime().toLocalTime());
 				post.setContentPost(obj[9].toString());
-				post.setVersion(Integer.valueOf(obj[10].toString()));
-				post.setIsActive(Boolean.valueOf(obj[11].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+			
+				post.setVersion(Integer.valueOf(obj[11].toString()));
+				post.setIsActive(Boolean.valueOf(obj[12].toString()));post.setIsActive(Boolean.valueOf(obj[0].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
 				listPost.add(post);
 			}
 		}catch(final Exception e){
@@ -182,8 +195,10 @@ public class PostDao extends BaseMasterDao<Post>{
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT p.id, p.title,p.category_id, p.content_post, c.category_name, c.category_code, p.post_type_id, pt.type_name, pt.type_code ");
 		sqlQuery.append("FROM t_post p ");
-		sqlQuery.append("JOIN t_category c ON p.category_id = c.id ");
-		sqlQuery.append("JOIN t_post_type pt ON p.post_type_id = pt.id ");
+		sqlQuery.append("JOIN t_category c ");
+		sqlQuery.append("ON p.category_id = c.id ");
+		sqlQuery.append("JOIN t_post_type pt ");
+		sqlQuery.append("ON p.post_type_id = pt.id ");
 		sqlQuery.append("LIMIT :limit OFFSET :offset ");
 		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
 
@@ -221,11 +236,11 @@ public class PostDao extends BaseMasterDao<Post>{
 	}
 	
 	
-	@Override
+
 	public Post getByIdRef(String id) {
 		return super.getByIdRef(Post.class, id);
 	}
-	@Override
+	
 	public Optional<Post> getByIdAndDetach(String id) {
 
 		return Optional.ofNullable(super.getByIdAndDetach(Post.class, id));
