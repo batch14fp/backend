@@ -121,5 +121,26 @@ public class ActivityDao extends BaseMasterDao<Activity>{
 		return Optional.ofNullable(super.getByIdAndDetach(Activity.class, id));
 
 	}
+	
+	
+
+//    public List<Activity> findByCategoryAndType(String category, String type) {
+//        final StringBuilder sb = new StringBuilder("SELECT p FROM Product p WHERE 1=1");
+//        if (category != null && !category.isEmpty()) {
+//            sb.append(" AND p.category = :category");
+//        }
+//        if (type != null && !type.isEmpty()) {
+//            sb.append(" AND p.type = :type");
+//        }
+//        Query query = entityManager.createQuery(sb.toString(), Product.class);
+//        if (category != null && !category.isEmpty()) {
+//            query.setParameter("category", category);
+//        }
+//        if (type != null && !type.isEmpty()) {
+//            query.setParameter("type", type);
+//        }
+//        return query.getResultList();
+//    }
+
 
 }

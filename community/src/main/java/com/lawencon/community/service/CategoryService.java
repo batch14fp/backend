@@ -46,7 +46,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 
-		Boolean result = categoryDao.deleteById(Category.class, id);
+		final Boolean result = categoryDao.deleteById(Category.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;

@@ -34,7 +34,7 @@ public class ProfileService {
 	
 	public PojoResGetProfileDetail getById(String id) {
 		final Profile profile = profileDao.getByIdRef(id);
-		PojoResGetProfileDetail resGetProfile = new PojoResGetProfileDetail();
+		final PojoResGetProfileDetail resGetProfile = new PojoResGetProfileDetail();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
 		resGetProfile.setFullname(profile.getFullname());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -56,7 +56,6 @@ public class ProfileService {
 	
 	public PojoUpdateRes update(PojoProfileUpdateReq data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
-		try {
 			ConnHandler.begin();
 			final Profile profile = profileDao.getByIdRef(data.getProfileId());
 			profileDao.getByIdAndDetach(Profile.class, profile.getId());
@@ -76,10 +75,6 @@ public class ProfileService {
 			pojoUpdateRes.setMessage("Save Success!");
 			pojoUpdateRes.setVer(profileNew.getVersion());
 		
-		} catch (Exception e) {
-			pojoUpdateRes.setId(data.getProfileId());
-			pojoUpdateRes.setMessage("Something wrong,you cannot update the data");
-		}
 		return pojoUpdateRes;
 		
 		
