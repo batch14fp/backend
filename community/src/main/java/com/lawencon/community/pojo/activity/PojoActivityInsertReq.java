@@ -1,8 +1,7 @@
 package com.lawencon.community.pojo.activity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class PojoActivityInsertReq {
 	private String timeAgo;
@@ -13,10 +12,9 @@ public class PojoActivityInsertReq {
 	private String imgActivityId;
 	private BigDecimal price;
 	private String categoryId;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+
 	private Boolean isActive;
 	
 	
@@ -58,29 +56,17 @@ public class PojoActivityInsertReq {
 		this.price = price;
 	}
 
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
-	}
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
 	}
 	public Boolean getIsActive() {
 		return isActive;
