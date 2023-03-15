@@ -47,10 +47,8 @@ public class ActivityService {
 			activity.setTitle(data.getTitle());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
-			activity.setStartTime(data.getStartTime());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
-			activity.setEndTime(data.getEndTime());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
 			activity.setTypeName(data.getTypeActivity().getActivityName());
 			activity.setUserId(data.getCreatedBy());
@@ -85,10 +83,9 @@ public class ActivityService {
 		activity.setTitle(data.getTitle());
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
-		activity.setStartTime(data.getStartTime());
+	
 		activity.setPrice(data.getPrice());
 		activity.setProvider(data.getProviders());
-		activity.setEndTime(data.getEndTime());
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
 		activity.setIsActive(true);
@@ -108,12 +105,10 @@ public class ActivityService {
 			activityDao.getByIdAndDetach(Activity.class, activity.getId());
 			activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 			activity.setTitle(data.getTitle());
-			activity.setStartDate(data.getStartDate());
-			activity.setEndDate(data.getEndDate());
-			activity.setStartTime(data.getStartTime());
+//			activity.setStartDate(data.getStartDate());
+//			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
 			activity.setProvider(data.getProviders());
-			activity.setEndTime(data.getEndTime());
 			activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 			activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
 			activity.setIsActive(data.getIsActive());
@@ -144,10 +139,8 @@ public class ActivityService {
 			activity.setTitle(data.getTitle());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
-			activity.setStartTime(data.getStartTime());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
-			activity.setEndTime(data.getEndTime());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
 			activity.setTypeName(data.getTypeActivity().getActivityName());
 			activity.setUserId(data.getCreatedBy());

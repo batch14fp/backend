@@ -3,10 +3,19 @@ package com.lawencon.community.pojo.category;
 public class PojoResGetCategory {
 	private String categoryId;
 	private String categoryCode;
+
 	private String categoryName;
+	private Integer ver;
 	private Boolean isActive;
 	public String getCategoryId() {
 		return categoryId;
+	}
+	
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;

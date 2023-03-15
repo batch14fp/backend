@@ -12,6 +12,7 @@ public class PojoResGetPost {
 	private String typeCode;
 	private String typeName;
 	private String imgPostId;
+
 	private String categoryCode;
 	private String categoryName;
 	private Long countPostLike;

@@ -18,7 +18,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	@Override
 	public List<PostType> getAll() {
 		   final StringBuilder sb = new StringBuilder();
-		    sb.append("SELECT id, typeCode, typeName, polling_id ");
+		    sb.append("SELECT id, type_code, type_name, polling_id ");
 		    sb.append("FROM t_post_type ");
 		    final List<Object[]> postTypeList = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
 		    final List<PostType> result = new ArrayList<>();
