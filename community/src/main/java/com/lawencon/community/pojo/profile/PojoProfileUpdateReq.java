@@ -3,13 +3,14 @@ package com.lawencon.community.pojo.profile;
 import java.util.List;
 
 public class PojoProfileUpdateReq {
-	private String userId;
+	private String profileId;
 	private String fullname;
+	private String company;
 	private String country;
 	private String province;
 	private String city;
+	private String memberStatusId;
 	private String postalCode;
-	private String company;
 	private String industryId;
 	private String positionId;
 	private List<String> socialMedia;
@@ -29,11 +30,12 @@ public class PojoProfileUpdateReq {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	public String getUserId() {
-		return userId;
+
+	public String getProfileId() {
+		return profileId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
 	}
 	public String getFullname() {
 		return fullname;
@@ -89,5 +91,12 @@ public class PojoProfileUpdateReq {
 	public void setSocialMedia(List<String> socialMedia) {
 		this.socialMedia = socialMedia;
 	}
+	public String getMemberStatusId() {
+		return memberStatusId;
+	}
+	public void setMemberStatusId(String memberStatusId) {
+		this.memberStatusId = memberStatusId;
+	}
+	
 	
 }

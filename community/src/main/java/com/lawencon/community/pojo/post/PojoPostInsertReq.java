@@ -4,10 +4,13 @@ public class PojoPostInsertReq {
 	private String title;
 	private String content;
 	private String typeId;
+
+	private String categoryId;
 	private String imagePostId;
 	private PojoAttachmentPostReqInsert attachmentPost;
 	private PojoPollingInsertReq  pollingInsert;
 
+	
 	public String getTitle() {
 		return title;
 	}
@@ -44,6 +47,12 @@ public class PojoPostInsertReq {
 	}
 	public void setPollingInsert(PojoPollingInsertReq pollingInsert) {
 		this.pollingInsert = pollingInsert;
+	}
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	

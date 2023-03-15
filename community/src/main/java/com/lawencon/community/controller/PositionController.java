@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class PositionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPostion>> getPosition(){
+	public ResponseEntity<List<PojoResGetPostion>> getAllPosition(){
 		List<PojoResGetPostion> resGet = positionService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
@@ -48,8 +49,8 @@ public class PositionController {
 	}
 	
 	
-	@DeleteMapping
-	public ResponseEntity<PojoRes> deleteCategory(@RequestBody String id) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deleteCategory(@PathVariable ("id")String id) {
 		PojoRes resDelete = positionService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}

@@ -3,21 +3,17 @@ package com.lawencon.community.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_post",
-uniqueConstraints = {
-        @UniqueConstraint(name = "type_category_ck", 
-                columnNames = {"category_id", "post_type_id" }
-        )})
+@Table(name="t_post")
 public class Post  extends BaseEntity{
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
 	
@@ -25,14 +21,23 @@ public class Post  extends BaseEntity{
 	@JoinColumn(name="file_id", nullable=false)
 	private File file;
 	
+
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user ;
 	
-	@OneToOne
+	
+	
+	@ManyToOne
 	@JoinColumn(name="post_type_id", nullable=false)
 	private PostType postType;
 	
 	
-	@Column(length=50)
+	@Column(length=120)
 	private String title;
+	
+	
+
 	
 	
 	private String contentPost;
@@ -86,6 +91,20 @@ public class Post  extends BaseEntity{
 	public void setContentPost(String contentPost) {
 		this.contentPost = contentPost;
 	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+	
+	
 	
 	
 	

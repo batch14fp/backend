@@ -1,18 +1,52 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
 import org.springframework.stereotype.Repository;
 
+=======
+import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.PollingOption;
+>>>>>>> refs/remotes/origin/main
 import com.lawencon.community.model.PollingRespon;
+import com.lawencon.community.model.User;
 
 @Repository
 public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PollingRespon> getAll() {
-		return null;
+		 StringBuilder sql = new StringBuilder();
+		  sql.append("SELECT pr.id, po.id AS polling_option_id, po.content_polling, ");
+		  sql.append("u.id AS user_id ");
+		  sql.append("FROM t_polling_respon pr ");
+		  sql.append("INNER JOIN t_polling_option po ON pr.polling_option_id = po.id ");
+		  sql.append("INNER JOIN t_user u ON pr.user_id = u.id ");
+
+		  final List<PollingRespon> listResult = new ArrayList<>();
+		  final List<Object> listObj = ConnHandler.getManager().createNativeQuery(sql.toString()).getResultList();
+		  for (Object obj : listObj) {
+		    final  Object[] objArr = (Object[]) obj;
+		    PollingRespon pollingRespon = new PollingRespon();
+		    pollingRespon.setId((String) objArr[0]);
+
+		    final PollingOption pollingOption = new PollingOption();
+		    pollingOption.setId((String) objArr[1]);
+		    pollingOption.setContentPolling((String) objArr[2]);
+		    pollingRespon.setPollingOption(pollingOption);
+
+		    final User user = new User();
+		    user.setId((String) objArr[3]);
+		    pollingRespon.setUser(user);
+
+		    listResult.add(pollingRespon);
+		  }
+
+		  return listResult;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.lawencon.community.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -17,11 +18,26 @@ public class Article  extends BaseEntity{
 	@JoinColumn(name="file_id", nullable=false)
 	private File file;
 
-	@Column(length=50, nullable=false)
+	@Column(length=120, nullable=false)
 	private String title;
 	
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 	private String contentArticle;
+	
+	private Integer viewers;
 
 
 	public File getFile() {
@@ -51,6 +67,16 @@ public class Article  extends BaseEntity{
 
 	public void setContentArticle(String contentArticle) {
 		this.contentArticle = contentArticle;
+	}
+
+
+	public Integer getViewers() {
+		return viewers;
+	}
+
+
+	public void setViewers(Integer viewers) {
+		this.viewers = viewers;
 	}
 	
 	

@@ -1,7 +1,7 @@
 package com.lawencon.community.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +22,11 @@ public class Activity extends BaseEntity{
 	private ActivityType typeActivity;
 	
 	
+
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User user;
+	
 	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
@@ -36,25 +41,24 @@ public class Activity extends BaseEntity{
 	private Voucher voucher;
 	
 	
-	@Column(length=50)
+	@Column(length=120, nullable= false)
 	private String title;
 	
-	private Float price;
+	private BigDecimal price;
 	
-	@Column(length=36)
+	@Column(length=36, nullable= false)
 	private String provider;
 	
 	@Column(length=50)
 	private String activityLocation;
 
 	
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private LocalTime startTime ;
-	private LocalTime end_time;
 	
+	@Column(nullable=false)
+	private LocalDateTime startDate;
 	
-	
+	@Column(nullable=false)
+	private LocalDateTime endDate;
 	
 	
 	public ActivityType getTypeActivity() {
@@ -99,35 +103,30 @@ public class Activity extends BaseEntity{
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
 	}
-	public LocalDate getStartDate() {
+
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-	public LocalTime getEnd_time() {
-		return end_time;
-	}
-	public void setEnd_time(LocalTime end_time) {
-		this.end_time = end_time;
-	}
-	public Float getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Float price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

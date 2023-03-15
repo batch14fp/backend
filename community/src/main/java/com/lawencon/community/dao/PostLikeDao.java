@@ -1,12 +1,15 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostLike;
+import com.lawencon.community.model.User;
 
 @Repository
 public class PostLikeDao extends BaseMasterDao<PostLike> {
@@ -14,10 +17,30 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PostLike> getAll() {
-		final String sql = "SELECT * FROM t_post_like WHERE  is_active = TRUE";
-		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class).getResultList();
+		 StringBuilder sb = new StringBuilder();
+		    sb.append("SELECT id, user_id, post_id ");
+		    sb.append("FROM t_post_like ");
 
-		return res;
+		    final List<Object[]> postLikeList =  ConnHandler
+				    .getManager()
+				    .createNativeQuery(sb.toString())
+				    .getResultList();
+		    final List<PostLike> result = new ArrayList<>();
+		    for (Object[] obj : postLikeList) {
+		        final PostLike postLike = new PostLike();
+		        postLike.setId((String) obj[0]);
+
+		        final User user = new User();
+		        user.setId((String) obj[1]);
+		        postLike.setUser(user);
+
+		        final Post post = new Post();
+		        post.setId((String) obj[2]);
+		        postLike.setPost(post);
+
+		        result.add(postLike);
+		    }
+		    return result;
 	}
 
 	@Override
@@ -39,9 +62,16 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 
 	@SuppressWarnings("unchecked")
 	public List<PostLike> getByOffsetLimit(Long offset, Long limit) {
-		final String sql = "SELECT * FROM t_post_like WHERE is_active = TRUE LIMIT :limit OFFSET :offset";
+		
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT * FROM t_post_like pl ");
+		sqlQuery.append("INNER JOIN t_post p ");
+		sqlQuery.append("ON p.id = pl.post_id ");
+		sqlQuery.append("INNER JOIN t_user u ");
+		sqlQuery.append("ON pl.user_id = u.id ");
+		sqlQuery.append(" WHERE pl.is_active = TRUE LIMIT :limit OFFSET :offset");
 
-		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sql, PostLike.class)
+		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), PostLike.class)
 				.setParameter("offset", offset).setParameter("limit", limit).getResultList();
 
 		return res;
@@ -59,23 +89,18 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 
 	}
 
-	public int countPostLike(String userId, String postId) {
+	public Long countPostLike( String postId) {
 		final StringBuilder sql = new StringBuilder();
-		int count =0;
-		long countPostLike = 0;
-		sql.append("SELECT COUNT(*) as total FROM t_post_like ");
-		sql.append("WHERE post_id = :postId ");
-		sql.append("AND user_id = :userId ");
+		Long count =null;
+	
+		sql.append("SELECT COUNT(id) FROM t_post_like ");
+		sql.append("WHERE post_id = :postId ");	
+
+		count= Long.valueOf(ConnHandler.getManager().createNativeQuery(sql.toString())
+				.setParameter("postId",postId)
+				.getSingleResult().toString());
 		
-		final Object result = ConnHandler.getManager().createNativeQuery(sql.toString())
-				.setParameter("userId", userId)
-				.setParameter("userId",userId)
-				.getSingleResult();
-		if (result!=null) {
-			final Object[] obj = (Object[]) result;
-			countPostLike = Long.valueOf(obj[0].toString());
-			count = (int) countPostLike;
-		}	
+	
 	return count;	
 		
 	}

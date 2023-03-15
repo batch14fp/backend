@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +16,30 @@ public class ActivityTypeDao extends BaseMasterDao<ActivityType>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ActivityType> getAll() {
-		final String sql = "SELECT * FROM t_activity_type WHERE is_active = TRUE";
-		final List<ActivityType> res = 	ConnHandler.getManager().createNativeQuery(sql, ActivityType.class).getResultList();
+		final List<ActivityType>  activityTypes = new ArrayList<>();
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT id, type_code, activity_name,ver,is_active ");
+		sqlQuery.append("FROM t_activity_type ");
+		sqlQuery.append("WHERE is_active = TRUE");
 		
-		return res;
+		final List<Object> result = 	ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).getResultList();
+		try {
+			for (final Object objs : result) {
+				final Object[] obj = (Object[]) objs;
+				final ActivityType activityType = new ActivityType();
+				activityType.setId( obj[0].toString());
+				activityType.setTypeCode( obj[1].toString());
+				activityType.setActivityName( obj[2].toString());
+				activityType.setVersion(Integer.valueOf(obj[3].toString()));
+				activityType.setIsActive(Boolean.valueOf(obj[4].toString()));
+			
+				activityTypes.add(activityType);
+			}
+			
+		}catch(final Exception e) {
+			e.printStackTrace();
+		}
+		return activityTypes;
 	}
 
 	@Override

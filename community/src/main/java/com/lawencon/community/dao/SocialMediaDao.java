@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +15,24 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SocialMedia> getAll() {
-		final String sql = "SELECT * FROM t_social_media WHERE  is_active = TRUE";
-		final List<SocialMedia> res = ConnHandler.getManager().createNativeQuery(sql, SocialMedia.class)
-				.getResultList();
+		    StringBuilder sql = new StringBuilder();
+		    sql.append("SELECT platform_name, url, ver, is_active ");
+		    sql.append("FROM t_social_media");
 
-		return res;
+		    List<SocialMedia> socialMediaList = new ArrayList<>();
+		    List<Object[]> result = ConnHandler.getManager().createNativeQuery(sql.toString()).getResultList();
+
+		    for (Object[] obj : result) {
+		        SocialMedia socialMedia = new SocialMedia();
+		        socialMedia.setPlatformName(obj[0].toString());
+		        socialMedia.setUrl(obj[1].toString());
+		        socialMedia.setVersion(Integer.valueOf(obj[2].toString()));
+		        socialMedia.setIsActive(Boolean.valueOf(obj[3].toString()));
+		        socialMediaList.add(socialMedia);
+		    }
+
+		    return socialMediaList;
+		
 	}
 
 	@Override

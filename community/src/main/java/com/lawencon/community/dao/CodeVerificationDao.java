@@ -2,15 +2,12 @@ package com.lawencon.community.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.CodeVerification;
-import com.lawencon.community.model.User;
-import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 
 
 @Repository

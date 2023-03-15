@@ -20,6 +20,7 @@ import com.lawencon.base.BaseEntity;
             @UniqueConstraint(name = "phone_number_bk", 
                     columnNames = {"phoneNumber", }
             )})
+			
 public class Profile extends BaseEntity{
 	
 	@OneToOne
@@ -31,7 +32,11 @@ public class Profile extends BaseEntity{
 	@JoinColumn(name = "imageProfile_Id")
 	private File imageProfile;
 	
-
+	
+	
+	@OneToOne
+	@JoinColumn(name = "member_status_id")
+	private MemberStatus memberStatus;
 	
 	@OneToOne
 	@JoinColumn(name = "industry_id", nullable=false)
@@ -62,7 +67,8 @@ public class Profile extends BaseEntity{
 	
 	@Column(length=10)
 	private String postalCode;
-
+	
+	
 	public Position getPosition() {
 		return position;
 	}
@@ -153,6 +159,17 @@ public class Profile extends BaseEntity{
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
+
+	public MemberStatus getMemberStatus() {
+		return memberStatus;
+	}
+
+	public void setMemberStatus(MemberStatus memberStatus) {
+		this.memberStatus = memberStatus;
+	}
+
+
+	
 	
 	
 
