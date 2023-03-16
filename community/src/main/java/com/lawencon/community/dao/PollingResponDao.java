@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PollingOption;
 import com.lawencon.community.model.PollingRespon;
 import com.lawencon.community.model.User;
 
+@Repository
 public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 
 	@SuppressWarnings("unchecked")
