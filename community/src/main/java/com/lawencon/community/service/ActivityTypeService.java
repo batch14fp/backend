@@ -36,6 +36,7 @@ public class ActivityTypeService {
 			activityType.setTypeCode(data.getTypeCode());
 			activityType.setTypeName(data.getActivityName());
 			activityType.setIsActive(true);
+			activityType.setVer(data.getVersion());
 			activityList.add(activityType);
 		});
 		return activityList;

@@ -49,7 +49,7 @@ public class BankPaymentController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deleteBankPayment(@PathVariable ("id")String id) {
 		PojoRes resDelete = bankPaymentService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
