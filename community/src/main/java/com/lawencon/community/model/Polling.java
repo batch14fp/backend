@@ -1,6 +1,6 @@
 package com.lawencon.community.model;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,18 +14,12 @@ public class Polling extends BaseEntity{
 	
 	@Column(length=120,nullable=false )
 	private String title;
-	private LocalTime endAt;
+	
+	@Column(nullable=false )
+	private LocalDate endAt;
 	@Column(nullable=false )
 	private Boolean isOpen;
 	
-	public LocalTime getEndAt() {
-		return endAt;
-	}
-	public void setEndAt(LocalTime endAt) {
-		this.endAt = endAt;
-	}
-	
-
 	public String getTitle() {
 		return title;
 	}
@@ -37,6 +31,12 @@ public class Polling extends BaseEntity{
 	}
 	public void setIsOpen(Boolean isOpen) {
 		this.isOpen = isOpen;
+	}
+	public LocalDate getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDate endAt) {
+		this.endAt = endAt;
 	}
 	
 	

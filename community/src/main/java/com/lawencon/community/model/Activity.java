@@ -61,6 +61,9 @@ public class Activity extends BaseEntity{
 	private LocalDateTime endDate;
 	
 	
+	private String description;
+	
+	
 	public ActivityType getTypeActivity() {
 		return typeActivity;
 	}
@@ -127,6 +130,12 @@ public class Activity extends BaseEntity{
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
