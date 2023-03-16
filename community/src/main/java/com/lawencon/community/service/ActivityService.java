@@ -60,6 +60,10 @@ public class ActivityService {
 	
 	public List<PojoResGetActivity> getAll(int offset, int limit) {
 		final List<PojoResGetActivity> activityList = new ArrayList<>();
+		
+		
+		
+		
 		activityDao.getAll(offset, limit).forEach(data -> {
 			PojoResGetActivity activity = new PojoResGetActivity();
 			activity.setActivityId(data.getId());
@@ -83,6 +87,59 @@ public class ActivityService {
 		return activityList;
 
 	}
+	
+	public List<PojoResGetActivity> getAllByHighestPrice(int offset, int limit) {
+		final List<PojoResGetActivity> activityList = new ArrayList<>();
+		activityDao.getAllByHighestPrice(offset, limit).forEach(data -> {
+			PojoResGetActivity activity = new PojoResGetActivity();
+			activity.setActivityId(data.getId());
+			activity.setCategoryCode(data.getCategory().getCategoryCode());
+			activity.setCategoryName(data.getCategory().getCategoryName());
+			activity.setTitle(data.getTitle());
+			activity.setUserId(data.getUser().getId());
+			activity.setFullname(data.getUser().getProfile().getFullname());
+			activity.setStartDate(data.getStartDate());
+			activity.setEndDate(data.getEndDate());
+			activity.setActivityLocation(data.getActivityLocation());
+			activity.setContent(data.getDescription());
+			activity.setPrice(data.getPrice());
+			activity.setProviders(data.getProvider());
+			activity.setTypeCode(data.getTypeActivity().getTypeCode());
+			activity.setTypeName(data.getTypeActivity().getActivityName());
+			activity.setImgActivityId(data.getFile().getId());
+			activity.setIsActive(data.getIsActive());
+			activityList.add(activity);
+		});
+		return activityList;
+
+	}
+	
+	public List<PojoResGetActivity> getAllByLowestPrice(int offset, int limit) {
+		final List<PojoResGetActivity> activityList = new ArrayList<>();
+		activityDao.getAllByLowestPrice(offset, limit).forEach(data -> {
+			PojoResGetActivity activity = new PojoResGetActivity();
+			activity.setActivityId(data.getId());
+			activity.setCategoryCode(data.getCategory().getCategoryCode());
+			activity.setCategoryName(data.getCategory().getCategoryName());
+			activity.setTitle(data.getTitle());
+			activity.setUserId(data.getUser().getId());
+			activity.setFullname(data.getUser().getProfile().getFullname());
+			activity.setStartDate(data.getStartDate());
+			activity.setEndDate(data.getEndDate());
+			activity.setActivityLocation(data.getActivityLocation());
+			activity.setContent(data.getDescription());
+			activity.setPrice(data.getPrice());
+			activity.setProviders(data.getProvider());
+			activity.setTypeCode(data.getTypeActivity().getTypeCode());
+			activity.setTypeName(data.getTypeActivity().getActivityName());
+			activity.setImgActivityId(data.getFile().getId());
+			activity.setIsActive(data.getIsActive());
+			activityList.add(activity);
+		});
+		return activityList;
+
+	}
+
 
 	public int getTotalCount() {
 
@@ -198,7 +255,9 @@ public class ActivityService {
 			activity.setProviders(data.getProvider());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
 			activity.setTypeName(data.getTypeActivity().getActivityName());
-			activity.setUserId(data.getCreatedBy());
+			activity.setUserId(data.getUser().getId());
+			activity.setFullname(data.getUser().getProfile().getFullname());
+			activity.setActivityLocation(data.getActivityLocation());
 			activity.setImgActivityId(data.getFile().getId());
 			activity.setIsActive(data.getIsActive());
 		return activity;

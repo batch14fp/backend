@@ -100,6 +100,168 @@ public class ActivityDao extends AbstractJpaDao {
 		return listActivities;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public List<Activity> getAllByHighestPrice(int offset, int limit) {
+		final StringBuilder sqlQuery = new StringBuilder();
+		final List<Activity> listActivities = new ArrayList<>();
+
+		sqlQuery.append("SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, at.id AS at_id, at.type_code, at.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+		sqlQuery.append("FROM t_activity a ");
+		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
+		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
+		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
+		sqlQuery.append("WHERE a.is_active = TRUE ");
+		sqlQuery.append("ORDER BY a.price DESC LIMIT :limit OFFSET :offset");
+
+		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("offset", offset).setParameter("limit", limit).getResultList();
+		
+		try {
+			if (result != null) {
+				for (final Object objs : result) {
+
+					final Activity activity = new Activity();
+					final Object[] obj = (Object[]) objs;
+					activity.setId(obj[0].toString());
+
+					final Category category = new Category();
+					category.setId(obj[1].toString());
+					category.setCategoryCode(obj[2].toString());
+					category.setCategoryName(obj[3].toString());
+					activity.setCategory(category);
+
+					final ActivityType activityType = new ActivityType();
+					activityType.setTypeCode(obj[5].toString());
+					activityType.setActivityName(obj[6].toString());
+					activity.setTypeActivity(activityType);
+
+					if (obj[7].toString() != null) {
+						final File file = new File();
+						file.setId(obj[7].toString());
+						activity.setFile(file);
+					}
+
+					
+					final User user = new User();
+					
+					
+					
+					final Profile profile = new Profile();
+					profile.setId(obj[16].toString());
+					profile.setFullname(obj[17].toString());
+					user.setProfile(profile);
+					user.setId(obj[8].toString());
+					activity.setUser(user);
+
+					activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[9].toString())));
+					activity.setTitle(obj[10].toString());
+					activity.setProvider(obj[11].toString());
+					activity.setActivityLocation(obj[12].toString());
+					activity.setStartDate(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
+					activity.setEndDate(Timestamp.valueOf(obj[14].toString()).toLocalDateTime());
+					activity.setDescription(obj[15].toString());
+					activity.setVersion(Integer.valueOf(obj[18].toString()));
+					activity.setIsActive(Boolean.valueOf(obj[19].toString()));
+
+					listActivities.add(activity);
+
+				}
+
+			}
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return listActivities;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Activity> getAllByLowestPrice(int offset, int limit) {
+		final StringBuilder sqlQuery = new StringBuilder();
+		final List<Activity> listActivities = new ArrayList<>();
+
+		sqlQuery.append("SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, at.id AS at_id, at.type_code, at.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+		sqlQuery.append("FROM t_activity a ");
+		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
+		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
+		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
+		sqlQuery.append("WHERE a.is_active = TRUE ");
+		sqlQuery.append("ORDER BY a.price DESC LIMIT :limit OFFSET :offset");
+
+		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("offset", offset).setParameter("limit", limit).getResultList();
+		
+		try {
+			if (result != null) {
+				for (final Object objs : result) {
+
+					final Activity activity = new Activity();
+					final Object[] obj = (Object[]) objs;
+					activity.setId(obj[0].toString());
+
+					final Category category = new Category();
+					category.setId(obj[1].toString());
+					category.setCategoryCode(obj[2].toString());
+					category.setCategoryName(obj[3].toString());
+					activity.setCategory(category);
+
+					final ActivityType activityType = new ActivityType();
+					activityType.setTypeCode(obj[5].toString());
+					activityType.setActivityName(obj[6].toString());
+					activity.setTypeActivity(activityType);
+
+					if (obj[7].toString() != null) {
+						final File file = new File();
+						file.setId(obj[7].toString());
+						activity.setFile(file);
+					}
+
+					
+					final User user = new User();
+					
+					
+					
+					final Profile profile = new Profile();
+					profile.setId(obj[16].toString());
+					profile.setFullname(obj[17].toString());
+					user.setProfile(profile);
+					user.setId(obj[8].toString());
+					activity.setUser(user);
+
+					activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[9].toString())));
+					activity.setTitle(obj[10].toString());
+					activity.setProvider(obj[11].toString());
+					activity.setActivityLocation(obj[12].toString());
+					activity.setStartDate(Timestamp.valueOf(obj[13].toString()).toLocalDateTime());
+					activity.setEndDate(Timestamp.valueOf(obj[14].toString()).toLocalDateTime());
+					activity.setDescription(obj[15].toString());
+					activity.setVersion(Integer.valueOf(obj[18].toString()));
+					activity.setIsActive(Boolean.valueOf(obj[19].toString()));
+
+					listActivities.add(activity);
+
+				}
+
+			}
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return listActivities;
+	}
+
+
+	
+	
+	
+	
+
 	public int getTotalCount() {
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT COUNT(id) as total FROM t_activity ");
