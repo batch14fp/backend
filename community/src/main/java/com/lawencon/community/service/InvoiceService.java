@@ -43,11 +43,12 @@ public class InvoiceService {
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		invoice.setUser(user);
 		
-		final Activity activity = activityDao.getByIdRef(data.getActivityId());
-		invoice.setActivity(activity);
 		
 		final Voucher voucher = voucherDao.getByIdRef(Voucher.class, data.getVoucherId());
 		invoice.setVoucher(voucher);
+		
+		final Activity activity = activityDao.getByIdRef(data.getActivityId());
+		invoice.setActivity(activity);
 		
 		invoice.setInvoiceCode(GenerateString.generateInvoice());
 		
@@ -60,5 +61,6 @@ public class InvoiceService {
 
 		return pojoInsertRes;
 	}
+	
 	
 }

@@ -21,10 +21,6 @@ uniqueConstraints = {
 public class Invoice  extends BaseEntity{
 	
 	@OneToOne
-	@JoinColumn(name="member_id", nullable=false)
-	private Activity activity;
-
-	@OneToOne
 	@JoinColumn(name="voucher_id", nullable=false)
 	private Voucher voucher;
 	
@@ -32,6 +28,18 @@ public class Invoice  extends BaseEntity{
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	
+	@OneToOne
+	@JoinColumn(name="activity_id", nullable=false)
+	private Activity activity;
+	
+	public Activity getActivity() {
+		return activity;
+	}
+
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -42,14 +50,6 @@ public class Invoice  extends BaseEntity{
 
 	@Column(length=12, nullable= false)
 	private String invoiceCode;
-
-	public Activity getActivity() {
-		return activity;
-	}
-
-	public void setActivity(Activity activity) {
-		this.activity = activity;
-	}
 
 	public Voucher getVoucher() {
 		return voucher;
