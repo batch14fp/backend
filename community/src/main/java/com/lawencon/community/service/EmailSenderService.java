@@ -14,19 +14,9 @@ public class EmailSenderService {
 	@Autowired
 	private JavaMailSender mailSender;
 
-
-<<<<<<< HEAD
-	public void sendEmail(String toEmail, String subject, String body) {
-		final SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("ariprayoga007@gmail.com");
-		message.setTo(toEmail);
-		message.setSubject(subject);
-		message.setText(body);
-
-=======
 	public void sendEmail(final String to, final String codeVerification) throws MessagingException {
 		MimeMessage message = mailSender.createMimeMessage();
-		message.setFrom("zelkiaanisa@gmail.com");
+		message.setFrom("ariprayoga007@gmail.com");
 		message.setRecipients(MimeMessage.RecipientType.TO, to);
 		message.setSubject("Code Verification Request");
 		
@@ -748,7 +738,6 @@ public class EmailSenderService {
 				+ "\r\n"
 				+ "</html>";
 		message.setContent(htmlContent, "text/html; charset=utf-8");
->>>>>>> refs/remotes/origin/main
 		mailSender.send(message);
 		
 	}

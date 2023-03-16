@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-<<<<<<< HEAD
 import org.springframework.stereotype.Repository;
 
-=======
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PollingOption;
->>>>>>> refs/remotes/origin/main
 import com.lawencon.community.model.PollingRespon;
 import com.lawencon.community.model.User;
 
