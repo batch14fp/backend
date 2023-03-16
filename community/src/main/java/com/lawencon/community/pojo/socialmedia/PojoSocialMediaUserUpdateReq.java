@@ -1,24 +1,12 @@
 package com.lawencon.community.pojo.socialmedia;
 
-public class PojoSocialMediaUserReqInsert {
-	private String userId;
-	private String socialMediaId;
+public class PojoSocialMediaUserUpdateReq {
+	private String profileSocialMediaId;
 	private String url;
 	private Boolean isActive;
 	private Integer ver;
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getSocialMediaId() {
-		return socialMediaId;
-	}
-	public void setSocialMediaId(String socialMediaId) {
-		this.socialMediaId = socialMediaId;
-	}
+	
 	public String getUrl() {
 		return url;
 	}
@@ -36,6 +24,12 @@ public class PojoSocialMediaUserReqInsert {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getProfileSocialMediaId() {
+		return profileSocialMediaId;
+	}
+	public void setProfileSocialMediaId(String profileSocialMediaId) {
+		this.profileSocialMediaId = profileSocialMediaId;
 	}
 	
 }

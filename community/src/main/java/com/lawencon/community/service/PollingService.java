@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
+import com.lawencon.community.dao.PostDao;
+import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.model.Post;
+import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -17,17 +21,37 @@ import com.lawencon.community.pojo.post.PojoPollingUpdateReq;
 
 @Service
 public class PollingService {
+	private PostDao postDao;
 	private PollingDao pollingDao;
+	private PostTypeDao postTypeDao;
 	private PollingOptionDao pollingOptionDao;
-	public PollingService(final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
+	public PollingService(final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
 		this.pollingOptionDao = pollingOptionDao;
-		this.pollingDao = pollingDao;	
+		this.pollingDao = pollingDao;
+		this.postDao  = postDao;
+		this.postTypeDao = postTypeDao;
 	}
 	
 	public PojoInsertRes save(PojoPollingInsertReq data) {
 		ConnHandler.begin();
+		
+		
 		final Polling polling = new Polling();
 		polling.setTitle(data.getPollingTitle());
+		polling.setEndAt(data.getEndAt());
+		
+		final Post post = postDao.getByIdRef(data.getPostId());
+		postDao.getByIdAndDetach(Post.class, post.getId());
+		
+		
+		final PostType postType = postTypeDao.getByIdRef(post.getPostType().getId());
+		
+		
+		post.setPostType(postType);
+		
+	
+		
+		
 		final Polling pollingNew = pollingDao.save(polling);
 		data.getPollingOptions().forEach(option->{
 			final PollingOption pollingOptions = new PollingOption();
@@ -48,6 +72,7 @@ public class PollingService {
 		ConnHandler.begin();
 		final Polling polling  = pollingDao.getByIdRef(data.getPollingId());
 		pollingDao.getByIdAndDetach(Polling.class, polling.getId());
+		polling.setEndAt(data.getEndAt());
 		polling.setTitle(data.getPollingTitle());
 		data.getPollingOptions().forEach(option->{
 			final PollingOption pollingOptions = pollingOptionDao.getByIdRef(option.getPollingOptionId());

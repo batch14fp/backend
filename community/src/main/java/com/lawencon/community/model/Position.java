@@ -18,7 +18,7 @@ public class Position extends BaseEntity{
 	
 	@Column(length = 50, nullable = false)
 	private String positionName;
-	
+
 	public String getPositionCode() {
 		return positionCode;
 	}

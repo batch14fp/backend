@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,8 +57,6 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder encoder;
 
-	@PersistenceContext
-	private EntityManager em;
 
 	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,

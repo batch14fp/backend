@@ -3,7 +3,7 @@ package com.lawencon.community.pojo.position;
 public class PojoPositionUpdateReq {
 	private String positionId;
 	private String positionCode;
-	private String postionName;
+	private String positionName;
 	private Integer ver;
 	private Boolean isActive;
 	
@@ -32,12 +32,18 @@ public class PojoPositionUpdateReq {
 	public void setPositionId(String positionId) {
 		this.positionId = positionId;
 	}
-	public String getPostionName() {
-		return postionName;
+	public String getPositionCode() {
+		return positionCode;
 	}
-	public void setPostionName(String postionName) {
-		this.postionName = postionName;
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
 	}
-	
+	public String getPositionName() {
+		return positionName;
+	}
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
 	
 }

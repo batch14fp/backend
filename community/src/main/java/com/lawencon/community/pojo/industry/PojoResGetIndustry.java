@@ -4,13 +4,6 @@ public class PojoResGetIndustry {
 	private String industryId;
 	private String industryName;
 	private Boolean isActive;
-	private Integer ver;
-	public Integer getVer() {
-		return ver;
-	}
-	public void setVer(Integer ver) {
-		this.ver = ver;
-	}
 	public String getIndustryId() {
 		return industryId;
 	}

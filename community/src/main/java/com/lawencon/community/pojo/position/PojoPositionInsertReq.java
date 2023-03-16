@@ -17,4 +17,5 @@ public class PojoPositionInsertReq {
 		this.positionName = positionName;
 	}
 
+	
 }
