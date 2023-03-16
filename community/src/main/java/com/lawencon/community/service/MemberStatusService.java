@@ -1,5 +1,8 @@
 package com.lawencon.community.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -8,6 +11,8 @@ import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.industry.PojoResGetIndustry;
+import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
 
@@ -18,6 +23,25 @@ public class MemberStatusService {
 	public MemberStatusService(final MemberStatusDao memberStatusDao) {
 		this.memberStatusDao = memberStatusDao;
 	}
+
+	public List<PojoResGetMemberStatus> getAll() {
+
+		final List<PojoResGetMemberStatus> res = new ArrayList<>();
+
+		memberStatusDao.getAll().forEach(data -> {
+			final PojoResGetMemberStatus memberStatus = new PojoResGetMemberStatus();
+			memberStatus.setMemberStatusId(data.getId());
+			memberStatus.setCodeStatus(data.getCodeStatus());
+			memberStatus.setPeriodDay(data.getPeriodDay());
+			memberStatus.setStatusName(data.getStatusName());
+			memberStatus.setIsActive(data.getIsActive());
+			res.add(memberStatus);
+
+		});
+
+		return res;
+	}
+
 	
 	
 	public PojoInsertRes save(PojoMemberStatusInsertReq data) {
@@ -40,8 +64,7 @@ public class MemberStatusService {
 			ConnHandler.begin();
 			final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMemberStatusId());
 			memberStatusDao.getByIdAndDetach(MemberStatus.class, memberStatus.getId());
-			memberStatus.setId(memberStatus.getId());
-			memberStatus.setCodeStatus(data.getCodeStatus());
+		
 			memberStatus.setStatusName(data.getStatusName());
 			memberStatus.setPeriodDay(data.getPeriodDay());
 			memberStatus.setVersion(data.getVer());

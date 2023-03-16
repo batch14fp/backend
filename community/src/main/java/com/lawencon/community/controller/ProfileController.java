@@ -28,7 +28,7 @@ public class ProfileController {
 	private UserService userService;
 	private SocialMediaService socialMediaService;
 	
-	public ProfileController(final ProfileService profileService, final UserService userService ) {
+	public ProfileController(final SocialMediaService socialMediaService, final ProfileService profileService, final UserService userService ) {
 		this.profileService = profileService;
 		this.userService = userService;
 		this.socialMediaService = socialMediaService;
