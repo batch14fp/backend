@@ -1,12 +1,15 @@
 package com.lawencon.community.pojo.voucher;
 
-public class PojoVoucherReq {
+import java.time.LocalDate;
+
+public class PojoVoucherUpdateReq {
 	private String voucherId;
 	private String vourcherName;
 	private Integer limitApplied;
 	private Integer usedCount;
 	private String voucherCode;
 	private Float discountPercent;
+	private LocalDate expDate;
 	private Boolean isActive;
 	public String getVoucherId() {
 		return voucherId;
@@ -50,6 +53,13 @@ public class PojoVoucherReq {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
+	public LocalDate getExpDate() {
+		return expDate;
+	}
+	public void setExpDate(LocalDate expDate) {
+		this.expDate = expDate;
+	}
+	
 	
 	
 }

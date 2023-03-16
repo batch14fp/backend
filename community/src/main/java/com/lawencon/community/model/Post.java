@@ -37,7 +37,9 @@ public class Post  extends BaseEntity{
 	private String title;
 	
 	
-
+	@OneToOne
+	@JoinColumn(name="polling_id")
+	private Polling polling;
 	
 	
 	private String contentPost;
@@ -100,6 +102,16 @@ public class Post  extends BaseEntity{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+
+	public Polling getPolling() {
+		return polling;
+	}
+
+
+	public void setPolling(Polling polling) {
+		this.polling = polling;
 	}
 
 

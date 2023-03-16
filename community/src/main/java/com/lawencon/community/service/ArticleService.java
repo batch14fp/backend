@@ -44,18 +44,40 @@ public class ArticleService {
 		});
 		return res;
 	}
+	
+	
+	public List<PojoResGetArticle> getAllByMostViewer(int offset, int limit) {
+		final List<PojoResGetArticle> res = new ArrayList<>();
+		articleDao.getAllByMostViewer(offset, limit).forEach(data -> {
+			PojoResGetArticle article = new PojoResGetArticle();
+			article.setArticleId(data.getId());
+			article.setContent(data.getContentArticle());
+			article.setImageId(data.getFile().getId());
+			article.setIsActive(data.getIsActive());
+			article.setNameUser(data.getUser().getProfile().getFullname());
+			article.setTitle(data.getTitle());
+			article.setVer(data.getVersion());
+			res.add(article);
 
-	public PojoResGetArticle getById(String id) {
+		});
+		return res;
+	}
+
+	public PojoResGetArticle getById(String id){
 		final PojoResGetArticle article = new PojoResGetArticle();
+		ConnHandler.begin();
 		final Article data = articleDao.getByIdRef(id);
+		final Article dataUpdate = articleDao.getByIdAndDetach(data.getId()).get();
+		dataUpdate.setViewers(dataUpdate.getViewers()+ 1);
+	    articleDao.saveAndFlush(dataUpdate);
+	    ConnHandler.commit();
 		article.setArticleId(data.getId());
 		article.setContent(data.getContentArticle());
 		article.setImageId(data.getFile().getId());
 		article.setIsActive(data.getIsActive());
-		article.setNameUser("Perlu ditambah");
+		article.setNameUser(data.getUser().getProfile().getFullname());
 		article.setTitle(data.getTitle());
 		article.setVer(data.getVersion());
-
 		return article;
 	}
 

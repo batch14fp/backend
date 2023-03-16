@@ -9,7 +9,7 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_sales_settings")
 public class SalesSettings extends BaseEntity{
 	private Float tax;
-	private Float systemiIncome;
+	private Float systemIncome;
 	private Float memberIncome;
 	public Float getTax() {
 		return tax;
@@ -17,11 +17,13 @@ public class SalesSettings extends BaseEntity{
 	public void setTax(Float tax) {
 		this.tax = tax;
 	}
-	public Float getSystemiIncome() {
-		return systemiIncome;
+
+	
+	public Float getSystemIncome() {
+		return systemIncome;
 	}
-	public void setSystemiIncome(Float systemiIncome) {
-		this.systemiIncome = systemiIncome;
+	public void setSystemIncome(Float systemIncome) {
+		this.systemIncome = systemIncome;
 	}
 	public Float getMemberIncome() {
 		return memberIncome;

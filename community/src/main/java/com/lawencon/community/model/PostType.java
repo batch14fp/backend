@@ -2,8 +2,6 @@ package com.lawencon.community.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -17,9 +15,7 @@ uniqueConstraints = {
         )})
 public class PostType  extends BaseEntity{
 	
-	@OneToOne
-	@JoinColumn(name="polling_id")
-	private Polling polling;
+	
 	
 	@Column(length=5, nullable=false)
 	private String typeCode;
@@ -27,14 +23,7 @@ public class PostType  extends BaseEntity{
 	@Column(length=15, nullable=false)
 	private String typeName;
 
-	public Polling getPolling() {
-		return polling;
-	}
-
-	public void setPolling(Polling polling) {
-		this.polling = polling;
-	}
-
+	
 	public String getTypeName() {
 		return typeName;
 	}

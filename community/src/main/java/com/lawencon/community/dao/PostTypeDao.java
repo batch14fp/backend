@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PostType;
 
 
@@ -18,7 +17,7 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 	@Override
 	public List<PostType> getAll() {
 		   final StringBuilder sb = new StringBuilder();
-		    sb.append("SELECT id, type_code, type_name, polling_id ");
+		    sb.append("SELECT id, type_code, type_name ");
 		    sb.append("FROM t_post_type ");
 		    final List<Object[]> postTypeList = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
 		    final List<PostType> result = new ArrayList<>();
@@ -27,9 +26,8 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 		        postType.setId((String) obj[0]);
 		        postType.setTypeCode((String) obj[1]);
 		        postType.setTypeName((String) obj[2]);
-		        Polling polling = new Polling();
-		        polling.setId((String) obj[3]);
-		        postType.setPolling(polling);
+		      
+		   
 		        result.add(postType);
 		    }
 		    return result;

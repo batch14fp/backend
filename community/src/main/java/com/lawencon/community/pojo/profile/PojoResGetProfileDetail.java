@@ -2,8 +2,12 @@ package com.lawencon.community.pojo.profile;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
 
 public class PojoResGetProfileDetail {
+	
 	private String userId;
 	private String industryId;
 	private String positionId;
@@ -19,6 +23,7 @@ public class PojoResGetProfileDetail {
 	private String city;
 	private String postalCode;
 	private String company;
+	private List<PojoResGetSocialMedia> socialMediaList;
 
 	
 	public String getUserId() {
@@ -111,6 +116,12 @@ public class PojoResGetProfileDetail {
 	}
 	public void setStatusMember(String statusMember) {
 		this.statusMember = statusMember;
+	}
+	public List<PojoResGetSocialMedia> getSocialMediaList() {
+		return socialMediaList;
+	}
+	public void setSocialMediaList(List<PojoResGetSocialMedia> socialMediaList) {
+		this.socialMediaList = socialMediaList;
 	}
 	
 }

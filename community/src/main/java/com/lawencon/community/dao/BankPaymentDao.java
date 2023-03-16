@@ -16,7 +16,7 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 	@Override
 	public List<BankPayment> getAll() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SELECT id, bank_name, ver, is_active ");
+		sb.append("SELECT id, bank_name,account_name, account_number, ver, is_active ");
 		sb.append("FROM t_bank_payment ");
 		sb.append("WHERE is_active = TRUE");
 
@@ -27,8 +27,10 @@ public class BankPaymentDao extends BaseMasterDao<BankPayment> {
 			BankPayment bankPayment = new BankPayment();
 			bankPayment.setId(obj[0].toString());
 			bankPayment.setBankName(obj[1].toString());
-			bankPayment.setVersion(Integer.valueOf(obj[2].toString()));
-			bankPayment.setIsActive(Boolean.valueOf(obj[3].toString()));
+			bankPayment.setAccountName(obj[2].toString());
+			bankPayment.setAccountNumber(obj[3].toString());
+			bankPayment.setVersion(Integer.valueOf(obj[4].toString()));
+			bankPayment.setIsActive(Boolean.valueOf(obj[5].toString()));
 			bankPayments.add(bankPayment);
 		}
 

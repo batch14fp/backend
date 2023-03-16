@@ -28,13 +28,13 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetProfileDetail> getProfileDetail(@PathVariable("id") String id){
+	public ResponseEntity<PojoResGetProfileDetail> getProfileDetail(@PathVariable("id") String id) throws Exception{
 		PojoResGetProfileDetail resGet = profileService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PutMapping("/edit")
-	public ResponseEntity<PojoUpdateRes>updateProfile(@RequestBody PojoProfileUpdateReq data){
+	public ResponseEntity<PojoUpdateRes>updateProfile(@RequestBody PojoProfileUpdateReq data) throws Exception{
 		PojoUpdateRes resGet = profileService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

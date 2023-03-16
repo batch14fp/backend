@@ -2,7 +2,6 @@ package com.lawencon.community.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +10,13 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ActivityDao;
 import com.lawencon.community.dao.ActivityTypeDao;
+import com.lawencon.community.dao.ActivityVoucherDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
-import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Activity;
-import com.lawencon.community.model.User;
+import com.lawencon.community.model.ActivityVoucher;
+import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -32,16 +33,19 @@ public class ActivityService {
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
-	private final UserDao userDao;
+	private final VoucherDao voucherDao;
+	private final ActivityVoucherDao activityVoucherDao;
+
 	private final FileDao fileDao;
 
-	public ActivityService(final UserDao userDao, final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final ActivityVoucherDao activityVoucherDao , final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
+		this.voucherDao = voucherDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
-		this.userDao = userDao;
-
+		this.activityVoucherDao = activityVoucherDao;
+	
 	}
 
 	
@@ -55,6 +59,7 @@ public class ActivityService {
 			activity.setTitle(data.getTitle());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
+			activity.setContent(data.getDescription());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
@@ -86,18 +91,39 @@ public class ActivityService {
 
 	public PojoInsertRes save(PojoActivityInsertReq data) {
 		ConnHandler.begin();
+		Voucher voucherNew = null; 
 		final Activity activity = new Activity();
+		final Voucher voucher = new Voucher();
+		if(data.getVoucherCode()!=null && data.getUsedCount()!=null) {
+		voucher.setUsedCount(data.getUsedCount());
+		voucher.setIsActive(true);
+		voucher.setVoucherCode(data.getVoucherCode());
+		voucher.setLimitApplied(data.getLimitApplied());
+		voucher.setExpDate(data.getEndAt());
+		voucher.setDiscountPercent((data.getDiscountPercent()/100));
+		voucherNew = voucherDao.save(voucher);
+		
+		}
+	
 		activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 		activity.setTitle(data.getTitle());
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
-	
+		activity.setDescription(data.getContent());
 		activity.setPrice(data.getPrice());
 		activity.setProvider(data.getProviders());
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
 		activity.setIsActive(true);
 		final Activity activityNew = activityDao.save(activity);
+		
+		if(activityNew.getId()!=null && voucherNew.getId()!=null) {
+			final ActivityVoucher activityVoucher = new ActivityVoucher();
+			activityVoucher.setActivity(activityNew);
+			activityVoucher.setVoucher(voucher);
+			activityVoucherDao.save(voucher);
+		}
+		
 		ConnHandler.commit();
 		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setId(activityNew.getId());
@@ -113,6 +139,7 @@ public class ActivityService {
 			activityDao.getByIdAndDetach(Activity.class, activity.getId());
 			activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 			activity.setTitle(data.getTitle());
+			activity.setDescription(data.getContent());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
@@ -159,16 +186,17 @@ public class ActivityService {
 	}
 	
 	public List<PojoResGetActivity> getListActivityByCategoryAndType(String categoryCode, String typeCode) throws Exception {
-	    List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
+	   final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
 	    if (listActivity == null || listActivity.isEmpty()) {
 	        return null;
 	    }
 
-	    List<PojoResGetActivity> pojoList = new ArrayList<>();
+	    final List<PojoResGetActivity> pojoList = new ArrayList<>();
 	    for (Activity activity : listActivity) {
 	    	final PojoResGetActivity pojo = new PojoResGetActivity();
 	        pojo.setActivityId(activity.getId());
 	        pojo.setTitle(activity.getTitle());
+	        pojo.setContent(activity.getDescription());
 	        pojo.setCategoryCode(activity.getCategory().getCategoryCode());
 	        pojo.setCategoryName(activity.getCategory().getCategoryName());
 	        pojo.setTypeCode(activity.getTypeActivity().getTypeCode());
