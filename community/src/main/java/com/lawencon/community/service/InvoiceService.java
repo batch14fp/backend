@@ -14,7 +14,6 @@ import com.lawencon.community.model.Invoice;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.activity.PojoResGetActivity;
 import com.lawencon.community.pojo.invoice.PojoInvoiceInsertReq;
 import com.lawencon.community.pojo.invoice.PojoResGetInvoice;
 import com.lawencon.community.util.GenerateString;
@@ -66,16 +65,28 @@ public class InvoiceService {
 	
 	
 	
-//	public PojoResGetInvoice getById (String id) {
-//		final PojoResGetInvoice res = new PojoResGetInvoice();
-//		res.setActivityId(id);
-//		res.
-//		
-//		
-//		
-//		return res;
-//		
-//	}
+	public PojoResGetInvoice getById (String id) {
+		final PojoResGetInvoice res = new PojoResGetInvoice();
+		final Invoice invoice = invoiceDao.getById(id).get();
+		
+		res.setActivityId(invoice.getActivity().getId());
+		res.setActivityTitle(invoice.getActivity().getTitle());
+		res.setCategoryName(invoice.getActivity().getCategory().getCategoryName());
+		res.setEndDate(invoice.getActivity().getEndDate());
+		res.setInvoiceCode(invoice.getInvoiceCode());
+		res.setInvoiceId(invoice.getId());
+		res.setPrice(invoice.getActivity().getPrice());
+	
+		
+		res.setStartDate(invoice.getActivity().getStartDate());
+		res.setTypeName(id);
+		res.setVoucherId(id);
+		
+		
+		
+		return res;
+		
+	}
 	
 	
 }
