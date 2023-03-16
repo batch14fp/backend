@@ -1,9 +1,7 @@
 package com.lawencon.community.pojo.activity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class PojoResGetActivity {
 	private String activityId;

@@ -14,6 +14,12 @@ public class File extends BaseEntity{
 	
 	@Column(length = 5)
 	private String fileExtension;
+	
+	
+
+	@Column(length = 50)
+	private String fileName;
+	
 
 	public String getFileContent() {
 		return fileContent;
@@ -29,6 +35,14 @@ public class File extends BaseEntity{
 
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 	
