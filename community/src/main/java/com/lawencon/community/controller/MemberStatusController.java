@@ -1,8 +1,11 @@
 package com.lawencon.community.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +18,8 @@ import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
+import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
+import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
 import com.lawencon.community.service.MemberStatusService;
 
 @RestController
@@ -24,6 +29,14 @@ public class MemberStatusController {
 	public MemberStatusController(final MemberStatusService memberStatusService) {
 		this.memberStatusService = memberStatusService;
 	}
+	
+	
+	@GetMapping
+	public ResponseEntity<List<PojoResGetMemberStatus>>getAll(){
+		List<PojoResGetMemberStatus> resGet = memberStatusService.getAll();;
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
 
 	@PostMapping
 	public ResponseEntity<PojoInsertRes> insertMembershipStatus(@RequestBody PojoMemberStatusInsertReq data){
