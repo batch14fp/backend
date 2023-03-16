@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ActivityDao;
 import com.lawencon.community.dao.ActivityTypeDao;
+import com.lawencon.community.dao.ActivityVoucherDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Activity;
+import com.lawencon.community.model.ActivityVoucher;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
@@ -32,15 +34,17 @@ public class ActivityService {
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
 	private final VoucherDao voucherDao;
+	private final ActivityVoucherDao activityVoucherDao;
 
 	private final FileDao fileDao;
 
-	public ActivityService(final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final ActivityVoucherDao activityVoucherDao , final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
 		this.voucherDao = voucherDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
+		this.activityVoucherDao = activityVoucherDao;
 	
 	}
 
@@ -87,16 +91,20 @@ public class ActivityService {
 
 	public PojoInsertRes save(PojoActivityInsertReq data) {
 		ConnHandler.begin();
+		Voucher voucherNew = null; 
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
+		if(data.getVoucherCode()!=null && data.getUsedCount()!=null) {
 		voucher.setUsedCount(data.getUsedCount());
 		voucher.setIsActive(true);
 		voucher.setVoucherCode(data.getVoucherCode());
 		voucher.setLimitApplied(data.getLimitApplied());
-		voucher.setDiscountPercent(data.getDiscountPercent());
-		final Voucher voucherNew = voucherDao.save(voucher);
+		voucher.setExpDate(data.getEndAt());
+		voucher.setDiscountPercent((data.getDiscountPercent()/100));
+		voucherNew = voucherDao.save(voucher);
 		
-		activity.setVoucher(voucherNew);
+		}
+	
 		activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 		activity.setTitle(data.getTitle());
 		activity.setStartDate(data.getStartDate());
@@ -108,6 +116,14 @@ public class ActivityService {
 		activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
 		activity.setIsActive(true);
 		final Activity activityNew = activityDao.save(activity);
+		
+		if(activityNew.getId()!=null && voucherNew.getId()!=null) {
+			final ActivityVoucher activityVoucher = new ActivityVoucher();
+			activityVoucher.setActivity(activityNew);
+			activityVoucher.setVoucher(voucher);
+			activityVoucherDao.save(voucher);
+		}
+		
 		ConnHandler.commit();
 		final PojoInsertRes pojoRes = new PojoInsertRes();
 		pojoRes.setId(activityNew.getId());

@@ -23,6 +23,9 @@ public class ProfileSocialMedia extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name="social_media_id", nullable= false)
 	private SocialMedia socialMedia;
+	
+	
+	private String url;
 
 	public Profile getProfile() {
 		return profile;
@@ -39,5 +42,14 @@ public class ProfileSocialMedia extends BaseEntity {
 	public void setSocialMedia(SocialMedia socialMedia) {
 		this.socialMedia = socialMedia;
 	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 	
 }

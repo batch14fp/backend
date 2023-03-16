@@ -33,6 +33,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			pojoResGetPostion.setPositionId(data.getId());
 			pojoResGetPostion.setPositionCode(data.getPositionCode());
 			pojoResGetPostion.setPositionName(data.getPositionName());
+			pojoResGetPostion.setVer(data.getVersion());
 			positions.add(pojoResGetPostion);
 		});
 		return positions;
@@ -61,8 +62,8 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 
 		final Position position = new Position();
 
-		position.setPositionName(data.getPostionName());
-		position.setPositionCode(data.getPostionCode());
+		position.setPositionName(data.getPositionName());
+		position.setPositionCode(data.getPositionCode());
 		
 		position.setIsActive(true);
 
@@ -82,10 +83,10 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			final Position position = positionDao.getByIdRef(data.getPositionId());
 			positionDao.getByIdAndDetach(Position.class, position.getId());
 			position.setId(position.getId());
-			position.setPositionName(data.getPostionName());
+			position.setPositionCode(data.getPositionCode());
+			position.setPositionName(data.getPositionName());
 			position.setIsActive(data.getIsActive());
 			position.setVersion(data.getVer());
-
 			final Position poistionNew = positionDao.saveAndFlush(position);
 			ConnHandler.commit();
 
@@ -94,6 +95,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			pojoUpdateRes.setVer(poistionNew.getVersion());
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			pojoUpdateRes.setId(data.getPositionId());
 			pojoUpdateRes.setMessage("Something wrong,you cannot update this data");
 		}

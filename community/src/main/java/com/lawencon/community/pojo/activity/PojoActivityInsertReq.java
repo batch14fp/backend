@@ -1,9 +1,8 @@
 package com.lawencon.community.pojo.activity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
 
 public class PojoActivityInsertReq {
 	private String timeAgo;
@@ -16,6 +15,7 @@ public class PojoActivityInsertReq {
 	private String categoryId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
+	private LocalDate endAt;
 	private String vourcherName;
 	private Integer limitApplied;
 	private Integer usedCount;
@@ -122,6 +122,12 @@ public class PojoActivityInsertReq {
 	}
 	public void setDiscountPercent(Float discountPercent) {
 		this.discountPercent = discountPercent;
+	}
+	public LocalDate getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDate endAt) {
+		this.endAt = endAt;
 	}
 	
 	

@@ -1,5 +1,7 @@
 package com.lawencon.community.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,6 +25,10 @@ public class Voucher extends BaseEntity{
 	private String voucherCode;
 	
 	private Float discountPercent;
+	
+	
+	
+	private LocalDate expDate;
 
 	public Integer getLimitApplied() {
 		return limitApplied;
@@ -55,6 +61,16 @@ public class Voucher extends BaseEntity{
 	public void setDiscountPercent(Float discountPercent) {
 		this.discountPercent = discountPercent;
 	}
+
+	public LocalDate getExpDate() {
+		return expDate;
+	}
+
+	public void setExpDate(LocalDate expDate) {
+		this.expDate = expDate;
+	}
+	
+	
 	
 
 	

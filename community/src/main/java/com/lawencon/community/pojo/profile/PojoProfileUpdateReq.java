@@ -2,6 +2,8 @@ package com.lawencon.community.pojo.profile;
 
 import java.util.List;
 
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserUpdateReq;
+
 public class PojoProfileUpdateReq {
 	private String profileId;
 	private String fullname;
@@ -13,7 +15,9 @@ public class PojoProfileUpdateReq {
 	private String postalCode;
 	private String industryId;
 	private String positionId;
-	private List<String> socialMedia;
+	private List<PojoSocialMediaUserUpdateReq> profileSocialMediaList;
+	
+	
 	private Integer ver;
 	private Boolean isActive;
 	
@@ -85,17 +89,19 @@ public class PojoProfileUpdateReq {
 	public void setPositionId(String positionId) {
 		this.positionId = positionId;
 	}
-	public List<String> getSocialMedia() {
-		return socialMedia;
-	}
-	public void setSocialMedia(List<String> socialMedia) {
-		this.socialMedia = socialMedia;
-	}
+
+
 	public String getMemberStatusId() {
 		return memberStatusId;
 	}
 	public void setMemberStatusId(String memberStatusId) {
 		this.memberStatusId = memberStatusId;
+	}
+	public List<PojoSocialMediaUserUpdateReq> getProfileSocialMediaList() {
+		return profileSocialMediaList;
+	}
+	public void setProfileSocialMediaList(List<PojoSocialMediaUserUpdateReq> profileSocialMediaList) {
+		this.profileSocialMediaList = profileSocialMediaList;
 	}
 	
 	

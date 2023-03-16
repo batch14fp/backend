@@ -189,7 +189,7 @@ public class PostDao extends AbstractJpaDao{
      final List<Post> postList = new ArrayList<>();
 
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT p.id, p.title,p.category_id, p.content_post, c.category_name, c.category_code, p.post_type_id, pt.type_name, pt.type_code ");
+		sqlQuery.append("SELECT p.id, p.title,p.category_id, p.content_post, c.category_name, c.category_code, p.post_type_id, pt.type_name, pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("JOIN t_category c ");
 		sqlQuery.append("ON p.category_id = c.id ");
@@ -202,7 +202,8 @@ public class PostDao extends AbstractJpaDao{
 
 		final List<Object> results =
 				ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				
+				.setParameter("offset", offset)
+				.setParameter("limit",limit)
 				.getResultList();
 
 		
@@ -226,6 +227,23 @@ public class PostDao extends AbstractJpaDao{
 		postType.setTypeCode((String) obj[8]);
 		post.setPostType(postType);
 		
+		
+		
+		
+		final User user = new User();
+		user.setId(obj[9].toString());
+		
+		final Profile profile = new Profile();
+		profile.setFullname(obj[12].toString());
+		user.setProfile(profile);
+		post.setUser(user);
+		
+		post.setTitle(obj[10].toString());
+		post.setContentPost(obj[11].toString());
+	
+		post.setVersion(Integer.valueOf(obj[13].toString()));
+		post.setIsActive(Boolean.valueOf(obj[14].toString()));
+		post.setCreatedAt(Timestamp.valueOf(obj[15].toString()).toLocalDateTime());
 		postList.add(post);
 
 		}

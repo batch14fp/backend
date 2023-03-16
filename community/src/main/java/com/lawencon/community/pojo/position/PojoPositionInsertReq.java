@@ -2,22 +2,20 @@ package com.lawencon.community.pojo.position;
 
 public class PojoPositionInsertReq {
 
-	private String postionCode;
-	private String postionName;
+	private String positionCode;
+	private String positionName;
+	public String getPositionCode() {
+		return positionCode;
+	}
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
+	}
+	public String getPositionName() {
+		return positionName;
+	}
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
 
-	
-	public String getPostionCode() {
-		return postionCode;
-	}
-	public void setPostionCode(String postionCode) {
-		this.postionCode = postionCode;
-	}
-	public String getPostionName() {
-		return postionName;
-	}
-	public void setPostionName(String postionName) {
-		this.postionName = postionName;
-	}
-	
 	
 }

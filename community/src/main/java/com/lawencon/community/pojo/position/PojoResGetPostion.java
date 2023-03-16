@@ -4,6 +4,7 @@ public class PojoResGetPostion {
 	private String positionId;
 	private String positionCode;
 	private String positionName;
+	private Integer ver;
 	public String getPositionId() {
 		return positionId;
 	}
@@ -21,6 +22,12 @@ public class PojoResGetPostion {
 	}
 	public void setPositionCode(String positionCode) {
 		this.positionCode = positionCode;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 }
