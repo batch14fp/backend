@@ -10,6 +10,7 @@ public class PojoActivityInsertReq {
 	private String content;
 	private String providers;
 	private String typeId;
+	private String activityLocation;
 	private String imgActivityId;
 	private BigDecimal price;
 	private String categoryId;
@@ -18,7 +19,7 @@ public class PojoActivityInsertReq {
 	private LocalDate endAt;
 	private String vourcherName;
 	private Integer limitApplied;
-	private Integer usedCount;
+
 	private String voucherCode;
 	private Float discountPercent;
 
@@ -105,12 +106,7 @@ public class PojoActivityInsertReq {
 	public void setLimitApplied(Integer limitApplied) {
 		this.limitApplied = limitApplied;
 	}
-	public Integer getUsedCount() {
-		return usedCount;
-	}
-	public void setUsedCount(Integer usedCount) {
-		this.usedCount = usedCount;
-	}
+
 	public String getVoucherCode() {
 		return voucherCode;
 	}
@@ -128,6 +124,12 @@ public class PojoActivityInsertReq {
 	}
 	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
+	}
+	public String getActivityLocation() {
+		return activityLocation;
+	}
+	public void setActivityLocation(String activityLocation) {
+		this.activityLocation = activityLocation;
 	}
 	
 	

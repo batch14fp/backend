@@ -15,6 +15,7 @@ public class PojoResGetActivity {
 	private String providers;
 	private String typeCode;
 	private String typeName;
+	private String activityLocation;
 	private String imgActivityId;
 	private BigDecimal price;
 	private String categoryCode;
@@ -119,6 +120,12 @@ public class PojoResGetActivity {
 	}
 	public void setProviders(String providers) {
 		this.providers = providers;
+	}
+	public String getActivityLocation() {
+		return activityLocation;
+	}
+	public void setActivityLocation(String activityLocation) {
+		this.activityLocation = activityLocation;
 	}
 	
 	
