@@ -2,11 +2,13 @@ package com.lawencon.community.pojo.article;
 
 public class PojoResGetArticle {
 	private String articleId;
+	private String userId;
 	private String title;
 	private String content;
 	private String imageId;
 	private String nameUser;
 	private Integer ver;
+	private Integer viewers;
 	private Boolean isActive;
 	public String getArticleId() {
 		return articleId;
@@ -49,6 +51,18 @@ public class PojoResGetArticle {
 	}
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public Integer getViewers() {
+		return viewers;
+	}
+	public void setViewers(Integer viewers) {
+		this.viewers = viewers;
 	}
 	
 	

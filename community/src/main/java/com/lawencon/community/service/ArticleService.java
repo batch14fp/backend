@@ -3,30 +3,39 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ArticleDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Article;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.article.PojoArticleInsertReq;
 import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
 import com.lawencon.community.pojo.article.PojoResGetArticle;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class ArticleService {
 
 	private final ArticleDao articleDao;
 	private final FileDao fileDao;
+	private final UserDao userDao;
 
-	public ArticleService(final ArticleDao articleDao, final FileDao fileDao) {
+	
+	@Inject
+	private PrincipalService principalService;
+	public ArticleService(final UserDao userDao, final ArticleDao articleDao, final FileDao fileDao) {
 		this.articleDao = articleDao;
 		this.fileDao = fileDao;
-	}
+		this.userDao = userDao;	}
 
 	public List<PojoResGetArticle> getAll(int offset, int limit) {
 		final List<PojoResGetArticle> res = new ArrayList<>();
@@ -35,8 +44,10 @@ public class ArticleService {
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
+			article.setViewers(data.getViewers());
 			article.setIsActive(data.getIsActive());
-			article.setNameUser("perlu ditambah");
+			article.setUserId(data.getUser().getId());
+			article.setNameUser(data.getUser().getProfile().getFullname());
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
 			res.add(article);
@@ -53,7 +64,9 @@ public class ArticleService {
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
+			article.setViewers(data.getViewers());
 			article.setIsActive(data.getIsActive());
+			article.setUserId(data.getUser().getId());
 			article.setNameUser(data.getUser().getProfile().getFullname());
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
@@ -75,6 +88,8 @@ public class ArticleService {
 		article.setContent(data.getContentArticle());
 		article.setImageId(data.getFile().getId());
 		article.setIsActive(data.getIsActive());
+		article.setUserId(data.getUser().getId());
+		article.setViewers(data.getViewers());
 		article.setNameUser(data.getUser().getProfile().getFullname());
 		article.setTitle(data.getTitle());
 		article.setVer(data.getVersion());
@@ -117,6 +132,7 @@ public class ArticleService {
 			pojoUpdateRes.setVer(articleNew.getVersion());
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			pojoUpdateRes.setId(data.getArticleId());
 			pojoUpdateRes.setMessage("Something wrong,you cannot update the data");
 		}
@@ -129,7 +145,11 @@ public class ArticleService {
 		final Article article = new Article();
 		article.setContentArticle(data.getContent());
 		final File file = fileDao.getByIdRef(data.getImageArticle());
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		article.setUser(user);
 		article.setFile(file);
+		article.setIsActive(true);
+		article.setViewers(0);
 		article.setTitle(data.getTitle());
 		article.setIsActive(true);
 		final Article articleNew = articleDao.save(article);

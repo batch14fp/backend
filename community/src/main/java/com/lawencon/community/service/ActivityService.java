@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -13,9 +15,11 @@ import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.ActivityVoucherDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Activity;
 import com.lawencon.community.model.ActivityVoucher;
+import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
@@ -23,48 +27,55 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityInsertReq;
 import com.lawencon.community.pojo.activity.PojoActivityUpdateReq;
 import com.lawencon.community.pojo.activity.PojoResGetActivity;
+import com.lawencon.security.principal.PrincipalService;
 
 
 
 @Service
 public class ActivityService {
-
+	
+	@Inject
+	private PrincipalService principalService;
 
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
 	private final VoucherDao voucherDao;
 	private final ActivityVoucherDao activityVoucherDao;
+	private final UserDao userDao;
 
 	private final FileDao fileDao;
 
-	public ActivityService(final ActivityVoucherDao activityVoucherDao , final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final UserDao userDao, final ActivityVoucherDao activityVoucherDao , final VoucherDao voucherDao,  final ActivityDao activityDao, final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
 		this.voucherDao = voucherDao;
 		this.activityTypeDao = activityTypeDao;
 		this.fileDao = fileDao;
 		this.activityVoucherDao = activityVoucherDao;
+		this.userDao = userDao;
 	
 	}
 
 	
-	public List<PojoResGetActivity> getAll() {
+	public List<PojoResGetActivity> getAll(int offset, int limit) {
 		final List<PojoResGetActivity> activityList = new ArrayList<>();
-		activityDao.getAll().forEach(data -> {
+		activityDao.getAll(offset, limit).forEach(data -> {
 			PojoResGetActivity activity = new PojoResGetActivity();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
 			activity.setTitle(data.getTitle());
+			activity.setUserId(data.getUser().getId());
+			activity.setFullname(data.getUser().getProfile().getFullname());
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
+			activity.setActivityLocation(data.getActivityLocation());
 			activity.setContent(data.getDescription());
 			activity.setPrice(data.getPrice());
 			activity.setProviders(data.getProvider());
 			activity.setTypeCode(data.getTypeActivity().getTypeCode());
 			activity.setTypeName(data.getTypeActivity().getActivityName());
-			activity.setUserId(data.getCreatedBy());
 			activity.setImgActivityId(data.getFile().getId());
 			activity.setIsActive(data.getIsActive());
 			activityList.add(activity);
@@ -73,6 +84,12 @@ public class ActivityService {
 
 	}
 
+	public int getTotalCount() {
+
+		return activityDao.getTotalCount();
+	}
+	
+	
 	public PojoRes deleteById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
@@ -94,8 +111,8 @@ public class ActivityService {
 		Voucher voucherNew = null; 
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
-		if(data.getVoucherCode()!=null && data.getUsedCount()!=null) {
-		voucher.setUsedCount(data.getUsedCount());
+		if(data.getVoucherCode()!=null && data.getLimitApplied()!=null) {
+		voucher.setUsedCount(0);
 		voucher.setIsActive(true);
 		voucher.setVoucherCode(data.getVoucherCode());
 		voucher.setLimitApplied(data.getLimitApplied());
@@ -104,13 +121,15 @@ public class ActivityService {
 		voucherNew = voucherDao.save(voucher);
 		
 		}
-	
 		activity.setCategory(categoryDao.getByIdRef(data.getCategoryId()));
 		activity.setTitle(data.getTitle());
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
+		activity.setActivityLocation(data.getActivityLocation());
 		activity.setDescription(data.getContent());
 		activity.setPrice(data.getPrice());
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		activity.setUser(user);
 		activity.setProvider(data.getProviders());
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
@@ -143,6 +162,7 @@ public class ActivityService {
 			activity.setStartDate(data.getStartDate());
 			activity.setEndDate(data.getEndDate());
 			activity.setPrice(data.getPrice());
+			activity.setActivityLocation(data.getActivityLocation());
 			activity.setProvider(data.getProviders());
 			activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 			activity.setFile(fileDao.getByIdRef(data.getImgActivityId()));
