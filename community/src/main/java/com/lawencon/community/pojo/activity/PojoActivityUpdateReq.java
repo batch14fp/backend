@@ -10,6 +10,7 @@ public class PojoActivityUpdateReq {
 	private String content;
 	private String providers;
 	private String typeId;
+	private String activityLocation;
 	private String imgActivityId;
 	private BigDecimal price;
 	private String categoryId;
@@ -100,6 +101,12 @@ public class PojoActivityUpdateReq {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getActivityLocation() {
+		return activityLocation;
+	}
+	public void setActivityLocation(String activityLocation) {
+		this.activityLocation = activityLocation;
 	}
 	
 	
