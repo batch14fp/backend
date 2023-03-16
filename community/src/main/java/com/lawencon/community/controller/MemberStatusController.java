@@ -19,7 +19,6 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
 import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
-import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
 import com.lawencon.community.service.MemberStatusService;
 
 @RestController

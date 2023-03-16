@@ -1,6 +1,10 @@
 package com.lawencon.community.pojo.invoice;
 
 public class PojoResGetInvoice {
+	private String invoiceId;
+	private String activityId;
+	private String voucherId;
+	private String invoiceCode;
 	private String activityName;
 	private String typeName;
 	private String categoryName;
@@ -57,5 +61,32 @@ public class PojoResGetInvoice {
 	public void setPrice(String price) {
 		this.price = price;
 	}
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	public String getActivityId() {
+		return activityId;
+	}
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+	}
+	public String getVoucherId() {
+		return voucherId;
+	}
+	public void setVoucherId(String voucherId) {
+		this.voucherId = voucherId;
+	}
+	public String getInvoiceCode() {
+		return invoiceCode;
+	}
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
+	}
+	
+	
+	
 	
 }
