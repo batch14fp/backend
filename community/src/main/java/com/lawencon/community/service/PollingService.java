@@ -39,19 +39,13 @@ public class PollingService {
 		final Polling polling = new Polling();
 		polling.setTitle(data.getPollingTitle());
 		polling.setEndAt(data.getEndAt());
-		
+		polling.setIsOpen(true);
 		final Post post = postDao.getByIdRef(data.getPostId());
+		post.setPolling(polling);
 		postDao.getByIdAndDetach(Post.class, post.getId());
-		
-		
 		final PostType postType = postTypeDao.getByIdRef(post.getPostType().getId());
 		
-		
 		post.setPostType(postType);
-		
-	
-		
-		
 		final Polling pollingNew = pollingDao.save(polling);
 		data.getPollingOptions().forEach(option->{
 			final PollingOption pollingOptions = new PollingOption();

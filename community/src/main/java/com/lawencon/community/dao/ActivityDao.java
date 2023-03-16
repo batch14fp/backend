@@ -291,11 +291,11 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
-				"SELECT a.id, a.category_id, a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
-		sql.append("a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by ");
+				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
+		sql.append("a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
 		sql.append("FROM t_activity a ");
-		sql.append("JOIN m_activity_type at ON a.type_activity_id = at.id ");
-		sql.append("JOIN m_category c ON a.category_id = c.id ");
+		sql.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+		sql.append("JOIN t_category c ON a.category_id = c.id ");
 		sql.append("WHERE 1=1 ");
 
 		if (categoryCode != null && !categoryCode.isEmpty()) {
