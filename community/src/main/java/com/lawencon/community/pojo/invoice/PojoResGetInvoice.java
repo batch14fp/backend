@@ -7,11 +7,10 @@ public class PojoResGetInvoice {
 	private String invoiceId;
 	private String activityId;
 	private String voucherId;
+	private String voucherCode;
 	private String invoiceCode;
 	private String activityTitle;
-	private String typeName;
 	private BigDecimal price;
-	private String categoryName;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	
@@ -22,18 +21,6 @@ public class PojoResGetInvoice {
 	}
 	public void setActivityTitle(String activityTitle) {
 		this.activityTitle = activityTitle;
-	}
-	public String getTypeName() {
-		return typeName;
-	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	public String getCategoryName() {
-		return categoryName;
-	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
 	}
 
 	public LocalDateTime getStartDate() {
@@ -78,6 +65,12 @@ public class PojoResGetInvoice {
 	}
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
+	}
+	public String getVoucherCode() {
+		return voucherCode;
+	}
+	public void setVoucherCode(String voucherCode) {
+		this.voucherCode = voucherCode;
 	}
 	
 	

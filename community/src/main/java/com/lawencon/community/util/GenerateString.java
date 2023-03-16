@@ -20,14 +20,29 @@ public class GenerateString {
 		return generatedString.toUpperCase();
 	}
 	
-	    public static String generateInvoice() {
-	        String pattern = "yyMMdd";
-	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-	        String date = simpleDateFormat.format(new Date());
-	        DecimalFormat decimalFormat = new DecimalFormat("000000");
-	        String counterString = decimalFormat.format(++counter);
-	        return date + counterString;
-	  
+	public static String generateInvoice() {
+	    String pattern = "yyMM/dd/";
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	    String date = simpleDateFormat.format(new Date());
+	    String romanNumeral = convertToRomanNumeral(counter);
+	    counter++;
+	    return date + romanNumeral;
+	}
+
+	public static String convertToRomanNumeral(int num) {
+	    String[] romans = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
+	            "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+	            "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+	            "", "M", "MM", "MMM", "MMMM"};
+	    final StringBuilder roman = new StringBuilder();
+	    int digit, position = 0;
+	    while (num > 0) {
+	        digit = num % 10;
+	        num /= 10;
+	        roman.insert(0, romans[position + (digit != 0 ? (digit + (position == 0 ? 0 : 10)) : 0)]);
+	        position++;
+	    }
+	    return String.format("%04d", Integer.parseInt(roman.toString()));
 	}
 
 }
