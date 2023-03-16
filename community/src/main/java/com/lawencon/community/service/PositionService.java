@@ -33,6 +33,8 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			pojoResGetPostion.setPositionId(data.getId());
 			pojoResGetPostion.setPositionCode(data.getPositionCode());
 			pojoResGetPostion.setPositionName(data.getPositionName());
+			pojoResGetPostion.setIsActive(data.getIsActive());
+			pojoResGetPostion.setVer(data.getVersion());
 			positions.add(pojoResGetPostion);
 		});
 		return positions;
@@ -83,6 +85,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			positionDao.getByIdAndDetach(Position.class, position.getId());
 			position.setId(position.getId());
 			position.setPositionName(data.getPostionName());
+			position.setPositionCode(data.getPositionCode());
 			position.setIsActive(data.getIsActive());
 			position.setVersion(data.getVer());
 
