@@ -7,7 +7,7 @@ public class PojoPositionUpdateReq {
 	private Integer ver;
 	private Boolean isActive;
 	
-	
+
 	public Integer getVer() {
 		return ver;
 	}
