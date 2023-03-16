@@ -16,17 +16,18 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 	@Override
 	public List<SocialMedia> getAll() {
 		    StringBuilder sql = new StringBuilder();
-		    sql.append("SELECT platform_name, ver, is_active ");
+		    sql.append("SELECT id, platform_name, ver, is_active ");
 		    sql.append("FROM t_social_media");
 
 		    List<SocialMedia> socialMediaList = new ArrayList<>();
 		    List<Object[]> result = ConnHandler.getManager().createNativeQuery(sql.toString()).getResultList();
 
 		    for (Object[] obj : result) {
-		        SocialMedia socialMedia = new SocialMedia();
-		        socialMedia.setPlatformName(obj[0].toString());
-		        socialMedia.setVersion(Integer.valueOf(obj[1].toString()));
-		        socialMedia.setIsActive(Boolean.valueOf(obj[2].toString()));
+		        final SocialMedia socialMedia = new SocialMedia();
+		        socialMedia.setId(obj[0].toString());
+		        socialMedia.setPlatformName(obj[1].toString());
+		        socialMedia.setVersion(Integer.valueOf(obj[2].toString()));
+		        socialMedia.setIsActive(Boolean.valueOf(obj[3].toString()));
 		        socialMediaList.add(socialMedia);
 		    }
 
