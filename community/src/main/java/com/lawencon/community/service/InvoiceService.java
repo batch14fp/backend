@@ -14,7 +14,9 @@ import com.lawencon.community.model.Invoice;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.activity.PojoResGetActivity;
 import com.lawencon.community.pojo.invoice.PojoInvoiceInsertReq;
+import com.lawencon.community.pojo.invoice.PojoResGetInvoice;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -43,11 +45,12 @@ public class InvoiceService {
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		invoice.setUser(user);
 		
-		final Activity activity = activityDao.getByIdRef(data.getActivityId());
-		invoice.setActivity(activity);
 		
 		final Voucher voucher = voucherDao.getByIdRef(Voucher.class, data.getVoucherId());
 		invoice.setVoucher(voucher);
+		
+		final Activity activity = activityDao.getByIdRef(data.getActivityId());
+		invoice.setActivity(activity);
 		
 		invoice.setInvoiceCode(GenerateString.generateInvoice());
 		
@@ -60,5 +63,19 @@ public class InvoiceService {
 
 		return pojoInsertRes;
 	}
+	
+	
+	
+//	public PojoResGetInvoice getById (String id) {
+//		final PojoResGetInvoice res = new PojoResGetInvoice();
+//		res.setActivityId(id);
+//		res.
+//		
+//		
+//		
+//		return res;
+//		
+//	}
+	
 	
 }

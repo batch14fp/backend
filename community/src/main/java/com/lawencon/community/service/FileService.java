@@ -4,8 +4,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.MemberStatus;
+import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
 
 @Service
 public class FileService {
@@ -19,6 +23,22 @@ public class FileService {
 	public Optional<File> getById(String id) {
 		final Optional <File> file =Optional.ofNullable(fileDao.getByIdRef(id));
 		return file;
+	}
+	
+	
+
+	public PojoInsertRes save(PojoFileInsertReq data) {
+		ConnHandler.begin();
+		final File file = new File();
+		file.setFileContent(data.getFileContent());
+		file.setFileExtension(data.getExtension());
+		file.setIsActive(true);
+		final File fileNew = fileDao.save(file);
+		ConnHandler.commit();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
+		pojoRes.setId(fileNew.getId());
+		pojoRes.setMessage("Save Success!");
+		return pojoRes;
 	}
 }
 

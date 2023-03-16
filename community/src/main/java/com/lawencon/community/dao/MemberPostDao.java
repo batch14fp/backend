@@ -29,7 +29,7 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 		final List<Object[]> result = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
 		final List<MemberPost> memberPosts = new ArrayList<>();
 		for (Object[] obj : result) {
-		    MemberPost memberPost = new MemberPost();
+		    final MemberPost memberPost = new MemberPost();
 		    memberPost.setId(obj[0].toString());
 		    
 		    final User user = new User();
