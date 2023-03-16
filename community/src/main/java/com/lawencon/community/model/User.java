@@ -33,11 +33,6 @@ public class User extends BaseEntity {
 	private Profile profile;
 	
 	
-	@OneToOne
-	@JoinColumn(name = "profile_social_media_id")
-	private ProfileSocialMedia profileSocialMedia;
-
-	
 	@Column(length = 50, nullable = false)
 	private String email;
 
@@ -90,12 +85,5 @@ public class User extends BaseEntity {
 
 
 
-	public ProfileSocialMedia getProfileSocialMedia() {
-		return profileSocialMedia;
-	}
-
-	public void setProfileSocialMedia(ProfileSocialMedia profileSocialMedia) {
-		this.profileSocialMedia = profileSocialMedia;
-	}
 
 }
