@@ -5,6 +5,15 @@ public class PojoResGetActivityType {
 	private String typeName;
 	private String typeCode;
 	private Boolean isActive;
+	private Integer ver;
+	
+	
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
 	public String getActivityTypeId() {
 		return activityTypeId;
 	}
