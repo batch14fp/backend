@@ -191,9 +191,12 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("ORDER BY a.price DESC LIMIT :limit OFFSET :offset");
+		sqlQuery.append("ORDER BY a.price DESC ");
 
-		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("offset", offset).setParameter("limit", limit).getResultList();
+		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
+				.getResultList();
 		
 		try {
 			if (result != null) {

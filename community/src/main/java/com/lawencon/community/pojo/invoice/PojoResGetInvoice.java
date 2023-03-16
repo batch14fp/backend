@@ -1,23 +1,27 @@
 package com.lawencon.community.pojo.invoice;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public class PojoResGetInvoice {
 	private String invoiceId;
 	private String activityId;
 	private String voucherId;
 	private String invoiceCode;
-	private String activityName;
+	private String activityTitle;
 	private String typeName;
+	private BigDecimal price;
 	private String categoryName;
-	private String startDate;
-	private String endDate;
-	private String startTime;
-	private String endTime;
-	private String price;
-	public String getActivityName() {
-		return activityName;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+	
+
+	
+	public String getActivityTitle() {
+		return activityTitle;
 	}
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public void setActivityTitle(String activityTitle) {
+		this.activityTitle = activityTitle;
 	}
 	public String getTypeName() {
 		return typeName;
@@ -31,34 +35,24 @@ public class PojoResGetInvoice {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	public String getStartDate() {
+
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public String getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public String getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-	public String getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	public String getPrice() {
+	
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public String getInvoiceId() {

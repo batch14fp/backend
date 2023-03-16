@@ -20,6 +20,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.article.PojoArticleInsertReq;
 import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
 import com.lawencon.community.pojo.article.PojoResGetArticle;
+import com.lawencon.community.pojo.article.PojoResGetArticleData;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -37,10 +38,11 @@ public class ArticleService {
 		this.fileDao = fileDao;
 		this.userDao = userDao;	}
 
-	public List<PojoResGetArticle> getAll(int offset, int limit) {
-		final List<PojoResGetArticle> res = new ArrayList<>();
+	public PojoResGetArticle getAll(int offset, int limit) {
+		final PojoResGetArticle articles = new PojoResGetArticle();
+		final List<PojoResGetArticleData> articleList = new ArrayList<>();
 		articleDao.getAll(offset, limit).forEach(data -> {
-			PojoResGetArticle article = new PojoResGetArticle();
+			PojoResGetArticleData article = new PojoResGetArticleData();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
@@ -50,17 +52,19 @@ public class ArticleService {
 			article.setNameUser(data.getUser().getProfile().getFullname());
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
-			res.add(article);
+			articleList.add(article);
 
 		});
-		return res;
+		articles.setData(articleList);
+		articles.setTotal(getTotalCount());
+		return articles;
 	}
 	
 	
-	public List<PojoResGetArticle> getAllByMostViewer(int offset, int limit) {
-		final List<PojoResGetArticle> res = new ArrayList<>();
+	public List<PojoResGetArticleData> getAllByMostViewer(int offset, int limit) {
+		final List<PojoResGetArticleData> res = new ArrayList<>();
 		articleDao.getAllByMostViewer(offset, limit).forEach(data -> {
-			PojoResGetArticle article = new PojoResGetArticle();
+			PojoResGetArticleData article = new PojoResGetArticleData();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
@@ -76,8 +80,8 @@ public class ArticleService {
 		return res;
 	}
 
-	public PojoResGetArticle getById(String id){
-		final PojoResGetArticle article = new PojoResGetArticle();
+	public PojoResGetArticleData getById(String id){
+		final PojoResGetArticleData article = new PojoResGetArticleData();
 		ConnHandler.begin();
 		final Article data = articleDao.getByIdRef(id);
 		final Article dataUpdate = articleDao.getByIdAndDetach(data.getId()).get();

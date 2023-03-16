@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.File;
-import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.file.PojoFileInsertReq;
 
