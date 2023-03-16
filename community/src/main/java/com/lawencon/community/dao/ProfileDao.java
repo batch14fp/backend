@@ -27,6 +27,10 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 	}
 	
 	
+	
+	
+	
+	
 	@Override
 	public Profile getByIdRef(String id) {
 		return super.getByIdRef(Profile.class, id);
