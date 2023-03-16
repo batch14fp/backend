@@ -24,14 +24,14 @@ public class SocialMediaService {
 		this.socialMediaDao = socialMediaDao;
 	}
 	
-
-
 	public List<PojoResGetSocialMedia> getAll() {
 		final List<PojoResGetSocialMedia> socialMedias = new ArrayList<>();
 		socialMediaDao.getAll().forEach(data -> {
 			PojoResGetSocialMedia pojoResGetSocialMedia = new PojoResGetSocialMedia();
 			pojoResGetSocialMedia.setSocialMediaId(socialMediaDao.getByIdRef(data.getId()).getId());
 			pojoResGetSocialMedia.setPlatformName(data.getPlatformName());
+			pojoResGetSocialMedia.setIsActive(data.getIsActive());
+			pojoResGetSocialMedia.setVer(data.getVersion());
 			socialMedias.add(pojoResGetSocialMedia);
 		});
 		return socialMedias;
