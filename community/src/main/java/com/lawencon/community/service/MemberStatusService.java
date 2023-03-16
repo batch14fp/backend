@@ -11,10 +11,9 @@ import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.industry.PojoResGetIndustry;
-import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
+import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
 
 @Service
 public class MemberStatusService {
@@ -35,6 +34,7 @@ public class MemberStatusService {
 			memberStatus.setPeriodDay(data.getPeriodDay());
 			memberStatus.setStatusName(data.getStatusName());
 			memberStatus.setIsActive(data.getIsActive());
+			memberStatus.setVer(data.getVersion());
 			res.add(memberStatus);
 
 		});

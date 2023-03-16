@@ -30,8 +30,8 @@ public class MemberStatusDao extends AbstractJpaDao{
 			final MemberStatus memberStatus = new MemberStatus();
 			final Object[] obj = (Object[]) objs;
 			memberStatus.setId(obj[0].toString());
-			memberStatus.setCodeStatus(obj[1].toString());
-			memberStatus.setStatusName(obj[2].toString());
+			memberStatus.setStatusName(obj[1].toString());
+			memberStatus.setCodeStatus(obj[2].toString());
 			memberStatus.setPeriodDay(Integer.valueOf(obj[3].toString()));
 			memberStatus.setVersion(Integer.valueOf(obj[4].toString()));
 			memberStatus.setIsActive(Boolean.valueOf(obj[5].toString()));
