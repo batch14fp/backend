@@ -49,6 +49,32 @@ public class ActivityController {
 		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	}
 
+	@GetMapping("/lowest")
+	public ResponseEntity<List<PojoResGetActivity>> getDataByLowestPrice(@RequestParam("page") int page,
+			@RequestParam("size") int size) {
+		int offset = (page - 1) * size;
+		final List<PojoResGetActivity> dataList = activityService.getAllByLowestPrice(offset, size);
+		int totalCount = activityService.getTotalCount();
+		int pageCount = paginationService.getPageCount(totalCount, size);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Total-Count", String.valueOf(totalCount));
+		headers.add("X-Total-Pages", String.valueOf(pageCount));
+		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/highest")
+	public ResponseEntity<List<PojoResGetActivity>> getDataByHighestPrice(@RequestParam("page") int page,
+			@RequestParam("size") int size) {
+		int offset = (page - 1) * size;
+		final List<PojoResGetActivity> dataList = activityService.getAllByHighestPrice(offset, size);
+		int totalCount = activityService.getTotalCount();
+		int pageCount = paginationService.getPageCount(totalCount, size);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-Total-Count", String.valueOf(totalCount));
+		headers.add("X-Total-Pages", String.valueOf(pageCount));
+		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoResGetActivity> getActivity(@PathVariable("id") String id) {
 		PojoResGetActivity resGet = activityService.getById(id);
