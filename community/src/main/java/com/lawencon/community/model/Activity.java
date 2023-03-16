@@ -36,11 +36,6 @@ public class Activity extends BaseEntity{
 	private File file;
 	
 	
-	@ManyToOne
-	@JoinColumn(name="voucher_id", nullable=false)
-	private Voucher voucher;
-	
-	
 	@Column(length=120, nullable= false)
 	private String title;
 	
@@ -81,12 +76,6 @@ public class Activity extends BaseEntity{
 	}
 	public void setFile(File file) {
 		this.file = file;
-	}
-	public Voucher getVoucher() {
-		return voucher;
-	}
-	public void setVoucher(Voucher voucher) {
-		this.voucher = voucher;
 	}
 	public String getTitle() {
 		return title;
