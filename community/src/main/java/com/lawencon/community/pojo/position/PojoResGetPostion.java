@@ -5,6 +5,16 @@ public class PojoResGetPostion {
 	private String positionCode;
 	private String positionName;
 	private Integer ver;
+	private Boolean isActive;
+	
+	
+	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 	public String getPositionId() {
 		return positionId;
 	}

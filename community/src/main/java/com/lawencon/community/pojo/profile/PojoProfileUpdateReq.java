@@ -1,8 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
-import java.util.List;
-
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserUpdateReq;
+import java.time.LocalDate;
 
 public class PojoProfileUpdateReq {
 	private String profileId;
@@ -11,12 +9,13 @@ public class PojoProfileUpdateReq {
 	private String country;
 	private String province;
 	private String city;
+	private LocalDate dob;
+	private String phoneNumber;
 	private String memberStatusId;
 	private String postalCode;
 	private String industryId;
 	private String positionId;
-	private List<PojoSocialMediaUserUpdateReq> profileSocialMediaList;
-	
+
 	
 	private Integer ver;
 	private Boolean isActive;
@@ -97,11 +96,18 @@ public class PojoProfileUpdateReq {
 	public void setMemberStatusId(String memberStatusId) {
 		this.memberStatusId = memberStatusId;
 	}
-	public List<PojoSocialMediaUserUpdateReq> getProfileSocialMediaList() {
-		return profileSocialMediaList;
+	
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
-	public void setProfileSocialMediaList(List<PojoSocialMediaUserUpdateReq> profileSocialMediaList) {
-		this.profileSocialMediaList = profileSocialMediaList;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public LocalDate getDob() {
+		return dob;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
 	}
 	
 	

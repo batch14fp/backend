@@ -33,6 +33,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 			pojoResGetPostion.setPositionId(data.getId());
 			pojoResGetPostion.setPositionCode(data.getPositionCode());
 			pojoResGetPostion.setPositionName(data.getPositionName());
+			pojoResGetPostion.setIsActive(data.getIsActive());
 			pojoResGetPostion.setVer(data.getVersion());
 			positions.add(pojoResGetPostion);
 		});
