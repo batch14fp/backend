@@ -7,13 +7,7 @@ public class PojoPositionUpdateReq {
 	private Integer ver;
 	private Boolean isActive;
 	
-	
-	public String getPositionCode() {
-		return positionCode;
-	}
-	public void setPositionCode(String positionCode) {
-		this.positionCode = positionCode;
-	}
+
 	public Integer getVer() {
 		return ver;
 	}
