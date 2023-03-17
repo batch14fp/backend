@@ -7,10 +7,13 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.base.BaseEntity;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.security.principal.PrincipalService;
 
+@Repository
 public class BaseBatchDao {
 
 	@Inject
