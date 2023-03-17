@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.IndustryDao;
 import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
@@ -15,9 +16,11 @@ import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.ProfileSocialMediaDao;
 import com.lawencon.community.dao.SocialMediaDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
+import com.lawencon.community.model.PostType;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -35,15 +38,17 @@ public class ProfileService {
 
 	private IndustryDao industryDao;
 	private PositionDao positionDao;
+	private FileDao fileDao;
 	
 	@Inject
 	private PrincipalService principalService;
 
-	public ProfileService(final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
+	public ProfileService(final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
 			final ProfileDao profileDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
 		this.profileDao = profileDao;
 		this.memberStatusDao = memberStatusDao;
 		this.userDao = userDao;
+		this.fileDao = fileDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
 		
 		this.industryDao =  industryDao;
@@ -66,6 +71,7 @@ public class ProfileService {
 		resGetProfile.setPositionId(profile.getPosition().getId());
 		resGetProfile.setProvince(profile.getProvince());
 		resGetProfile.setCountry(profile.getCountry());
+		resGetProfile.setImageId(profile.getImageProfile().getId());
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(profile.getCity());
 		final List<PojoResGetSocialMedia> socialMediaList = new ArrayList<>();
@@ -86,36 +92,39 @@ public class ProfileService {
 		return resGetProfile;
 	}
 
-	public PojoUpdateRes update(PojoProfileUpdateReq data) throws Exception {
+	public PojoUpdateRes update(PojoProfileUpdateReq data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		ConnHandler.begin();
+	
 		final Profile profile = profileDao.getByIdRef(data.getProfileId());
 		profileDao.getByIdAndDetach(Profile.class, profile.getId());
+		profile.setId(profile.getId());
 		profile.setFullname(data.getFullname());
 		profile.setCompanyName(data.getCompany());
 		profile.setCountry(data.getCountry());
 		profile.setCity(data.getCity());
+		if(data.getImageId()!=null) {
+		final File file = fileDao.getByIdRef(data.getImageId());
+		profile.setImageProfile(file);
+		}
 		profile.setProvince(data.getProvince());
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
 		final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMemberStatusId());
-
 		profile.setMemberStatus(memberStatus);
 		final Position position = positionDao.getByIdRef(data.getPositionId());
 		profile.setPosition(position);
 		profile.setPostalCode(data.getPostalCode());
-		profile.setPhoneNumber(data.getPhoneNumber());
 		profile.setDob(data.getDob());
 		profile.setVersion(data.getVer());
 		profile.setIsActive(data.getIsActive());
 		profileDao.saveAndFlush(profile);
 	
-	
-		
 		ConnHandler.commit();
 		pojoUpdateRes.setId(profile.getId());
 		pojoUpdateRes.setMessage("Save Success!");
 		pojoUpdateRes.setVer(profile.getVersion());
+	
 
 		return pojoUpdateRes;
 
