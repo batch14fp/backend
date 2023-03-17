@@ -27,7 +27,7 @@ public class PaymentController {
 		PojoRes resGet = paymentService.updateByAdmin(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	@PutMapping("/admin")
+	@PutMapping("/user")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentUpdateReq data){
 		PojoRes resGet = paymentService.updateByUser(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);

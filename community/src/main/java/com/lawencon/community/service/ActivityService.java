@@ -196,8 +196,8 @@ public class ActivityService {
 		if(activityNew.getId()!=null && voucherNew.getId()!=null) {
 			final ActivityVoucher activityVoucher = new ActivityVoucher();
 			activityVoucher.setActivity(activityNew);
-			activityVoucher.setVoucher(voucher);
-			activityVoucherDao.save(voucher);
+			activityVoucher.setVoucher(voucherNew);
+			activityVoucherDao.save(activityVoucher);
 		}
 		
 		ConnHandler.commit();

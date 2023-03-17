@@ -21,7 +21,7 @@ public class Payment  extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name="file_id", nullable=false)
+	@JoinColumn(name="file_id")
 	private File file;
 	
 	

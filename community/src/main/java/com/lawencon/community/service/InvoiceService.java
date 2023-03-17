@@ -78,7 +78,6 @@ public class InvoiceService {
 		 payment.setInvoice(invoiceNew);
 		 payment.setIsActive(true);
 		 payment.setIsPaid(false);
-		 payment.setBankPayment(null);
 		 paymentDao.save(payment);
 		ConnHandler.commit();
 		
