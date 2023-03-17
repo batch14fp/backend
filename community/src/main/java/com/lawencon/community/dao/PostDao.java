@@ -43,11 +43,11 @@ public class PostDao extends AbstractJpaDao{
 			sqlQuery.append("INNER JOIN t_profile pr ");
 			sqlQuery.append("ON pr.id = u.profile_id  ");
 			sqlQuery.append("ORDER BY p.created_at DESC ");
-			sqlQuery.append("LIMIT :limit OFFSET :offset ");
+			
 		
 			final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setParameter("offset", offset)
-					.setParameter("limit",limit)
+					.setMaxResults(limit)
+					.setFirstResult((offset-1)*limit)
 					.getResultList();
 			try {
 				for(final Object objs : result) {
@@ -112,12 +112,12 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("ON pr.id = u.profile_id  ");
 		sqlQuery.append("WHERE p.user_id = :userId ");
 		sqlQuery.append("ORDER BY p.created_at DESC ");
-		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+		
 
 		final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("userId", userId)
-				.setParameter("offset", offset)
-				.setParameter("limit",limit)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		try {
 			for(final Object objs : result) {
@@ -196,15 +196,16 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("JOIN t_post_type pt ");
 		sqlQuery.append("ON p.post_type_id = pt.id ");
 		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
-		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+
 
 
 
 		final List<Object> results =
 				ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.setParameter("offset", offset)
-				.setParameter("limit",limit)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
+		
 
 		
 		for(final Object objs : results) {

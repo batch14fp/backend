@@ -1,13 +1,19 @@
 package com.lawencon.community.pojo.memberstatus;
 
-public class PojoMemberStatusUpdateReq {
+public class PojoResGetMemberStatus {
 	private String memberStatusId;
+	private String codeStatus;
 	private String statusName;
 	private Integer periodDay;
 	private Boolean isActive;
 	private Integer ver;
 	
-
+	public String getCodeStatus() {
+		return codeStatus;
+	}
+	public void setCodeStatus(String codeStatus) {
+		this.codeStatus = codeStatus;
+	}
 	public String getStatusName() {
 		return statusName;
 	}
@@ -38,6 +44,5 @@ public class PojoMemberStatusUpdateReq {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-	
 	
 }

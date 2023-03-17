@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.article.PojoArticleInsertReq;
 import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
 import com.lawencon.community.pojo.article.PojoResGetArticle;
+import com.lawencon.community.pojo.article.PojoResGetArticleData;
 import com.lawencon.community.service.ArticleService;
 import com.lawencon.community.service.PaginationService;
 
@@ -36,10 +37,10 @@ public class ArticleController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetArticle>> getData(@RequestParam("page") int page,
+	public ResponseEntity<PojoResGetArticle> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        final List<PojoResGetArticle> dataList = articleService.getAll(offset, size);
+	        final PojoResGetArticle dataList = articleService.getAll(offset, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -51,10 +52,10 @@ public class ArticleController {
 	
 	
 	@GetMapping("/most-viewer")
-	public ResponseEntity<List<PojoResGetArticle>> getAllByMostViewer(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoResGetArticleData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
 	        int offset = (page - 1) * size;
-	        final List<PojoResGetArticle> dataList = articleService.getAllByMostViewer(offset, size);
+	        final List<PojoResGetArticleData> dataList = articleService.getAllByMostViewer(offset, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -65,8 +66,8 @@ public class ArticleController {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetArticle> getArticle(@PathVariable ("id")String id){
-		PojoResGetArticle resGet = articleService.getById(id);
+	public ResponseEntity<PojoResGetArticleData> getArticle(@PathVariable ("id")String id){
+		PojoResGetArticleData resGet = articleService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	

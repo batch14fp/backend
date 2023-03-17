@@ -1,61 +1,79 @@
 package com.lawencon.community.pojo.invoice;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public class PojoResGetInvoice {
-	private String activityName;
-	private String typeName;
-	private String categoryName;
-	private String startDate;
-	private String endDate;
-	private String startTime;
-	private String endTime;
-	private String price;
-	public String getActivityName() {
-		return activityName;
+	private String invoiceId;
+	private String activityId;
+	private String voucherId;
+	private String voucherCode;
+	private String invoiceCode;
+	private String activityTitle;
+	private BigDecimal price;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+	
+
+	
+	public String getActivityTitle() {
+		return activityTitle;
 	}
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public void setActivityTitle(String activityTitle) {
+		this.activityTitle = activityTitle;
 	}
-	public String getTypeName() {
-		return typeName;
-	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	public String getCategoryName() {
-		return categoryName;
-	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-	public String getStartDate() {
+
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public String getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public String getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-	public String getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	public String getPrice() {
+	
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	public String getActivityId() {
+		return activityId;
+	}
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+	}
+	public String getVoucherId() {
+		return voucherId;
+	}
+	public void setVoucherId(String voucherId) {
+		this.voucherId = voucherId;
+	}
+	public String getInvoiceCode() {
+		return invoiceCode;
+	}
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
+	}
+	public String getVoucherCode() {
+		return voucherCode;
+	}
+	public void setVoucherCode(String voucherCode) {
+		this.voucherCode = voucherCode;
+	}
+	
+	
+	
 	
 }

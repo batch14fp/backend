@@ -1,5 +1,8 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
@@ -9,10 +12,41 @@ import com.lawencon.community.model.MemberStatus;
 @Repository
 public class MemberStatusDao extends AbstractJpaDao{
 	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<MemberStatus> getAll() {
+		final List<MemberStatus> listMemberStatus = new ArrayList<>();
+		
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT id, status_name, code_status, period_day, ver, is_active FROM t_member_status ");
+		sqlQuery.append("WHERE is_active = TRUE ");
+		
+		final List <Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.getResultList();
+		
+		for(Object objs : result) {
+		if(result!=null) {
+			final MemberStatus memberStatus = new MemberStatus();
+			final Object[] obj = (Object[]) objs;
+			memberStatus.setId(obj[0].toString());
+			memberStatus.setStatusName(obj[1].toString());
+			memberStatus.setCodeStatus(obj[2].toString());
+			memberStatus.setPeriodDay(Integer.valueOf(obj[3].toString()));
+			memberStatus.setVersion(Integer.valueOf(obj[4].toString()));
+			memberStatus.setIsActive(Boolean.valueOf(obj[5].toString()));
+			listMemberStatus.add(memberStatus);
+		}
+		}
+		
+		return listMemberStatus;
+		
+	}
+	
 	public MemberStatus getByCode(final String statusCode) {
 		final MemberStatus memberStatus = new MemberStatus();
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT id, status_name, code_status, period_day FROM t_member_status ");
+		sqlQuery.append("SELECT id, status_name, code_status, period_day, ver, is_active FROM t_member_status ");
 		sqlQuery.append("WHERE code_status = :statusCode ");
 		sqlQuery.append("AND is_active = TRUE ");
 		
@@ -24,6 +58,8 @@ public class MemberStatusDao extends AbstractJpaDao{
 			memberStatus.setCodeStatus(obj[1].toString());
 			memberStatus.setStatusName(obj[2].toString());
 			memberStatus.setPeriodDay(Integer.valueOf(obj[3].toString()));
+			memberStatus.setVersion(Integer.valueOf(obj[4].toString()));
+			memberStatus.setIsActive(Boolean.valueOf(obj[5].toString()));
 		}
 		
 		
