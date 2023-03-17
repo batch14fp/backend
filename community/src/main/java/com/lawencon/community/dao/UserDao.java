@@ -1,6 +1,6 @@
 package com.lawencon.community.dao;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,44 +86,41 @@ public class UserDao extends BaseMasterDao<User> {
 		final List<User> userList = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
 
-		sqlQuery.append("SELECT u.id, u.email, u.wallet_id, ");
-		sqlQuery.append("r.id, r.role_code, r.role_name, ");
-		sqlQuery.append("p.id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, ");
-		sqlQuery.append("p.city, p.province, p.postal_code, ");
-		sqlQuery.append("ps.id, ps.code_status, ps.status_name, ");
-		sqlQuery.append("i.id, i.industry_name, p.position_id ");
+		sqlQuery.append(
+				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, ps.id as member_status_id, ps.code_status, ps.status_name, i.id as industry_id, i.industry_name, p.position_id ");
 		sqlQuery.append("FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("INNER JOIN t_position po ON po.id = p.position_id ");
 		sqlQuery.append("INNER JOIN t_member_status ps ON ps.id = p.member_status_id ");
-		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id");
-		sqlQuery.append("WHERE r.role_code = :roleCode ");
-		sqlQuery.append("AND u.is_active = TRUE ");
+		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id ");
+		sqlQuery.append("WHERE r.role_code = :roleCode AND u.is_active = TRUE");
+
 		final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("roleCode", roleCode).getResultList();
 
-
 		for (Object[] obj : resultList) {
-			
+
 			final User user = new User();
 			user.setId(obj[0].toString());
 			user.setEmail(obj[1].toString());
-			
-			final Wallet wallet = new Wallet();
-			wallet.setId(obj[2].toString());
-			user.setWallet(wallet);
 
+			if (obj[2].toString()!= null) {
+				final Wallet wallet = new Wallet();
+				wallet.setId(obj[2].toString());
+				user.setWallet(wallet);
+			}
 			final Role role = new Role();
 			role.setId((obj[3]).toString());
-			role.setRoleCode((String) obj[4]);
-			role.setRoleName((String) obj[5]);
+			role.setRoleCode(obj[4].toString());
+			role.setRoleName(obj[5].toString());
 
+			
 			final Profile profile = new Profile();
 			profile.setId(obj[6].toString());
 			profile.setFullname(obj[7].toString());
 			profile.setCompanyName(obj[8].toString());
-			profile.setDob(Timestamp.valueOf(obj[9].toString()).toLocalDateTime().toLocalDate());
+			profile.setDob(Date.valueOf(obj[9].toString()).toLocalDate());
 			profile.setPhoneNumber(obj[10].toString());
 			profile.setCountry(obj[11].toString());
 			profile.setCity(obj[12].toString());
@@ -140,7 +137,7 @@ public class UserDao extends BaseMasterDao<User> {
 			industry.setIndustryName(obj[19].toString());
 
 			profile.setMemberStatus(memberStatus);
-			
+
 			final Position position = new Position();
 			position.setId(obj[20].toString());
 			profile.setPosition(position);
@@ -198,6 +195,5 @@ public class UserDao extends BaseMasterDao<User> {
 
 		return user;
 	}
-
 
 }
