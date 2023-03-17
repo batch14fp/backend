@@ -1,6 +1,5 @@
 package com.lawencon.community.dao;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.Wallet;
 
 @Repository
 public class UserDao extends BaseMasterDao<User> {
@@ -82,11 +82,11 @@ public class UserDao extends BaseMasterDao<User> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<User> getUserByRoleCode(String roleCode) {
+	public List<User> getUserByRoleCode(final String roleCode) {
 		final List<User> userList = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
 
-		sqlQuery.append("SELECT u.id, u.email, u.user_balance, ");
+		sqlQuery.append("SELECT u.id, u.email, u.wallet_id, ");
 		sqlQuery.append("r.id, r.role_code, r.role_name, ");
 		sqlQuery.append("p.id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, ");
 		sqlQuery.append("p.city, p.province, p.postal_code, ");
@@ -109,8 +109,10 @@ public class UserDao extends BaseMasterDao<User> {
 			final User user = new User();
 			user.setId(obj[0].toString());
 			user.setEmail(obj[1].toString());
-		
-			user.setUserBalance(BigInteger.valueOf(Long.valueOf(obj[2].toString())));
+			
+			final Wallet wallet = new Wallet();
+			wallet.setId(obj[2].toString());
+			user.setWallet(wallet);
 
 			final Role role = new Role();
 			role.setId((obj[3]).toString());

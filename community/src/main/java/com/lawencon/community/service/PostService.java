@@ -8,8 +8,10 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.BaseBatchDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.FilePostDao;
 import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostCommentDao;
 import com.lawencon.community.dao.PostDao;
@@ -18,6 +20,7 @@ import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.FilePost;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostBookmark;
 import com.lawencon.community.model.PostLike;
@@ -30,6 +33,7 @@ import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
+import com.lawencon.community.pojo.post.PojoResGetFileData;
 import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -43,12 +47,13 @@ public class PostService {
 	private PostBookmarkDao postBookmarkDao;
 	private UserDao userDao;
 	private CategoryDao categoryDao;
-
+	private FilePostDao filePostDao;
+	private BaseBatchDao baseBatchDao;
 
 	@Inject
 	private PrincipalService principalService;
 	
-	public PostService(final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao ,final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
+	public PostService(final BaseBatchDao baseBatchDao, final FilePostDao filePostDao, final PostDao postDao,final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao ,final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
 		this.fileDao = fileDao;
@@ -57,8 +62,12 @@ public class PostService {
 		this.postBookmarkDao = postBookmarkDao;
 		this.categoryDao = categoryDao;
 		this.postCommentDao = postCommentDao;
+		this.filePostDao = filePostDao;
+		this.baseBatchDao = baseBatchDao;
 	}
 
+	
+	
 
 	public PojoResGetPost getById(String id) {
 			final Post data = postDao.getByIdRef(id);
@@ -67,7 +76,14 @@ public class PostService {
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
-			res.setImgPostId(data.getFile().getId());
+			final List<PojoResGetFileData> files = new ArrayList<>();
+			filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost->{
+				final PojoResGetFileData filePostData = new PojoResGetFileData();
+				filePostData.setFilePostId(filesPost.getId());
+				filePostData.setFileId(filesPost.getFile().getId());
+				filePostData.setVer(filesPost.getVersion());
+				files.add(filePostData);
+			});
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
 	
@@ -120,10 +136,29 @@ public class PostService {
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
 			post.setCategory(category);
-			final File file = fileDao.getByIdRef(data.getImagePostId());
-			post.setFile(file);
+			
+			final List<File> files = new ArrayList<>();			
+			data.getAttachmentPost().forEach(file->{
+				final File filePost = new File();
+				filePost.setFileExtension(file.getExtensions());
+				filePost.setFileName(file.getFileName());
+				filePost.setFileContent(file.getFileContent());
+				files.add(filePost);
+				
+
+				
+			});
+			final List<File> fileList = baseBatchDao.saveAll(files);
 			post.setIsActive(true);
 		final Post postNew = postDao.save(post);
+		final List<FilePost> filePostInsert = new ArrayList<>();
+		fileList.forEach(filePostConten->{
+			final FilePost filePostData = new FilePost();
+			filePostData.setFile(filePostConten);
+			filePostData.setPost(post);
+			filePostInsert.add(filePostData);
+		});
+		baseBatchDao.saveAll(filePostInsert);
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
@@ -144,13 +179,31 @@ public class PostService {
 			post.setPostType(postType);
 			final Category category = categoryDao.getByIdRef(data.getCategoryId());
 			post.setCategory(category);
-		
-			final File file = fileDao.getByIdRef(data.getImagePostId());
-			post.setFile(file);
-			post.setIsActive(true);
+			final List<File> files = new ArrayList<>();			
+			data.getAttachmentPost().forEach(file->{
+				final File filePost = new File();
+				filePost.setId(data.getImagePostId());
+				filePost.setFileExtension(file.getExtensions());
+				filePost.setFileName(file.getFileName());
+				filePost.setFileContent(file.getFileContent());
+				filePost.setVersion(file.getVer());
+				files.add(filePost);
+				
 
-			final Post postNew = postDao.saveAndFlush(post);
-			ConnHandler.commit();
+				
+			});
+			final List<File> fileList = baseBatchDao.saveAll(files);
+			post.setIsActive(true);
+		final Post postNew = postDao.save(post);
+		final List<FilePost> filePostInsert = new ArrayList<>();
+		fileList.forEach(filePostContent->{
+			final FilePost filePostData = new FilePost();
+			filePostData.setId(filePostContent.getId());
+			filePostData.setFile(filePostContent);
+			filePostData.setPost(post);
+			filePostInsert.add(filePostData);
+		});
+		baseBatchDao.saveAll(filePostInsert);
 
 			pojoUpdateRes.setId(postNew.getId());
 			pojoUpdateRes.setMessage("Save Success!");
@@ -240,11 +293,17 @@ public class PostService {
 	    	 	res.setId(data.getId());
 				res.setTitle(data.getTitle());
 				res.setContent(data.getContentPost());
-				res.setImgPostId(data.getFile().getId());
+					final List<PojoResGetFileData> files = new ArrayList<>();
+					filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost->{
+						final PojoResGetFileData filePostData = new PojoResGetFileData();
+						filePostData.setFilePostId(filesPost.getId());
+						filePostData.setFileId(filesPost.getFile().getId());
+						filePostData.setVer(filesPost.getVersion());
+						files.add(filePostData);
+					});
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setUserId(data.getUser().getId());
-	
 				res.setFullname(data.getUser().getProfile().getFullname());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
 				res.setCategoryName(data.getCategory().getCategoryName());
@@ -253,7 +312,7 @@ public class PostService {
 				res.setBookmark(false);
 				res.setLike(false); 
 				listPost.add(res);
-	     });;
+	     });
 
 		return listPost;
 	      
@@ -278,7 +337,14 @@ public class PostService {
 	    	 	res.setId(data.getId());
 				res.setTitle(data.getTitle());
 				res.setContent(data.getContentPost());
-				res.setImgPostId(data.getFile().getId());
+				final List<PojoResGetFileData> files = new ArrayList<>();
+				filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost->{
+					final PojoResGetFileData filePostData = new PojoResGetFileData();
+					filePostData.setFilePostId(filesPost.getId());
+					filePostData.setFileId(filesPost.getFile().getId());
+					filePostData.setVer(filesPost.getVersion());
+					files.add(filePostData);
+				});
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setCategoryCode(data.getCategory().getCategoryCode());
@@ -304,7 +370,14 @@ public class PostService {
 	    	 	res.setId(data.getId());
 				res.setTitle(data.getTitle());
 				res.setContent(data.getContentPost());
-				res.setImgPostId(data.getFile().getId());
+				final List<PojoResGetFileData> files = new ArrayList<>();
+				filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost->{
+					final PojoResGetFileData filePostData = new PojoResGetFileData();
+					filePostData.setFilePostId(filesPost.getId());
+					filePostData.setFileId(filesPost.getFile().getId());
+					filePostData.setVer(filesPost.getVersion());
+					files.add(filePostData);
+				});
 				res.setTypeCode(data.getPostType().getTypeCode());
 				res.setTypeName(data.getPostType().getTypeName());
 				res.setUserId(data.getUser().getId());
