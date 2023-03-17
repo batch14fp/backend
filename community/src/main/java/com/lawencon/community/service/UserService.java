@@ -25,6 +25,7 @@ import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.CodeVerification;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
@@ -54,12 +55,13 @@ public class UserService implements UserDetailsService {
 	private PositionDao positionDao;
 	private IndustryDao industryDao;
 	private MemberStatusDao memberStatusDao;
+	private WalletDao walletDao;
 
 	@Autowired
 	private PasswordEncoder encoder;
 
 
-	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
+	public UserService(final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
 			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
 		this.userDao = userDao;
@@ -70,6 +72,7 @@ public class UserService implements UserDetailsService {
 		this.emailSenderService = emailSenderService;
 		this.memberStatusDao = memberStatusDao;
 		this.codeVerificationDao = codeVerificationDao;
+		this.walletDao = walletDao;
 	};
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -127,6 +130,8 @@ public class UserService implements UserDetailsService {
 		final Wallet wallet = new Wallet();
 	
 		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		
+		final Wallet walletNew = walletDao.save(wallet);
 
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);
@@ -134,6 +139,7 @@ public class UserService implements UserDetailsService {
 		user.setUserPassword(encoder.encode(data.getPassword()).toString());
 		user.setCreatedBy(system.getId());
 		user.setProfile(profileNew);
+		user.setWallet(walletNew);
 		final User userNew = userDao.saveNoLogin(user, () -> system.getId());
 		
 	
