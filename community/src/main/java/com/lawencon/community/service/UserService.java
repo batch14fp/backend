@@ -1,6 +1,6 @@
 package com.lawencon.community.service;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
@@ -122,7 +123,10 @@ public class UserService implements UserDetailsService {
 		res.setId(profileNew.getId());
 
 		final User user = new User();
-		user.setUserBalance(BigInteger.ZERO);
+		
+		final Wallet wallet = new Wallet();
+	
+		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
 
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);
