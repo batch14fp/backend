@@ -42,7 +42,7 @@ public class ArticleService {
 		final PojoResGetArticle articles = new PojoResGetArticle();
 		final List<PojoResGetArticleData> articleList = new ArrayList<>();
 		articleDao.getAll(offset, limit).forEach(data -> {
-			PojoResGetArticleData article = new PojoResGetArticleData();
+			final PojoResGetArticleData article = new PojoResGetArticleData();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setImageId(data.getFile().getId());
