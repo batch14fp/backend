@@ -115,12 +115,12 @@ public class UserService implements UserDetailsService {
 		profile.setIndustry(industry);
 		profile.setPhoneNumber(data.getPhoneNumber());
 		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
-		profile.setMemberStatus(memberStatus);
+		final MemberStatus memberStatusRef = memberStatusDao.getByIdRef(memberStatus.getId());
+		profile.setMemberStatus(memberStatusRef);
 		profile.setFullname(data.getFullName());
 
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
-
 		Profile profileNew = profileDao.saveNoLogin(profile, () -> system.getId());
 
 		res.setId(profileNew.getId());
@@ -138,8 +138,11 @@ public class UserService implements UserDetailsService {
 		user.setEmail(data.getEmail());
 		user.setUserPassword(encoder.encode(data.getPassword()).toString());
 		user.setCreatedBy(system.getId());
-		user.setProfile(profileNew);
-		user.setWallet(walletNew);
+		
+		final Profile profileRef = profileDao.getByIdRef(profileNew.getId());
+		final Wallet wallerRef = walletDao.getByIdRef(Wallet.class, walletNew.getId());
+		user.setProfile(profileRef);
+		user.setWallet(wallerRef);
 		final User userNew = userDao.saveNoLogin(user, () -> system.getId());
 		
 	

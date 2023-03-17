@@ -1,7 +1,6 @@
 package com.lawencon.community.pojo.profile;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,9 +23,16 @@ public class PojoResGetProfileDetail {
 	private String city;
 	private String postalCode;
 	private String company;
+	private String imageId;
 	private List<PojoResGetSocialMedia> socialMediaList;
 
 	
+	public String getImageId() {
+		return imageId;
+	}
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -107,6 +113,12 @@ public class PojoResGetProfileDetail {
 		this.statusMemberId = statusMemberId;
 	}
 	
+	public BigDecimal getUserBalance() {
+		return userBalance;
+	}
+	public void setUserBalance(BigDecimal userBalance) {
+		this.userBalance = userBalance;
+	}
 	public String getStatusMember() {
 		return statusMember;
 	}
