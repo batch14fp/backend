@@ -15,6 +15,7 @@ public class PojoProfileUpdateReq {
 	private String industryId;
 	private String positionId;
 	private String imageId;
+	private String phoneNumber;
 	
 	
 	
