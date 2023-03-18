@@ -1,6 +1,6 @@
 package com.lawencon.community.service;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,7 @@ import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.CodeVerification;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
@@ -32,6 +33,7 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
@@ -53,12 +55,13 @@ public class UserService implements UserDetailsService {
 	private PositionDao positionDao;
 	private IndustryDao industryDao;
 	private MemberStatusDao memberStatusDao;
+	private WalletDao walletDao;
 
 	@Autowired
 	private PasswordEncoder encoder;
 
 
-	public UserService(final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
+	public UserService(final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
 			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
 		this.userDao = userDao;
@@ -69,6 +72,7 @@ public class UserService implements UserDetailsService {
 		this.emailSenderService = emailSenderService;
 		this.memberStatusDao = memberStatusDao;
 		this.codeVerificationDao = codeVerificationDao;
+		this.walletDao = walletDao;
 	};
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -111,25 +115,34 @@ public class UserService implements UserDetailsService {
 		profile.setIndustry(industry);
 		profile.setPhoneNumber(data.getPhoneNumber());
 		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
-		profile.setMemberStatus(memberStatus);
+		final MemberStatus memberStatusRef = memberStatusDao.getByIdRef(memberStatus.getId());
+		profile.setMemberStatus(memberStatusRef);
 		profile.setFullname(data.getFullName());
 
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
-
 		Profile profileNew = profileDao.saveNoLogin(profile, () -> system.getId());
 
 		res.setId(profileNew.getId());
 
 		final User user = new User();
-		user.setUserBalance(BigInteger.ZERO);
+		
+		final Wallet wallet = new Wallet();
+	
+		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		
+		final Wallet walletNew = walletDao.save(wallet);
 
 		final Role role = roleDao.getRoleByCode(RoleEnum.MEMBER.getRoleCode()).get();
 		user.setRole(role);
 		user.setEmail(data.getEmail());
 		user.setUserPassword(encoder.encode(data.getPassword()).toString());
 		user.setCreatedBy(system.getId());
-		user.setProfile(profileNew);
+		
+		final Profile profileRef = profileDao.getByIdRef(profileNew.getId());
+		final Wallet wallerRef = walletDao.getByIdRef(Wallet.class, walletNew.getId());
+		user.setProfile(profileRef);
+		user.setWallet(wallerRef);
 		final User userNew = userDao.saveNoLogin(user, () -> system.getId());
 		
 	

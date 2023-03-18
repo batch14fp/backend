@@ -10,13 +10,23 @@ public class PojoProfileUpdateReq {
 	private String province;
 	private String city;
 	private LocalDate dob;
-	private String phoneNumber;
 	private String memberStatusId;
 	private String postalCode;
 	private String industryId;
 	private String positionId;
+	private String imageId;
+	private String phoneNumber;
+	
+	
+	
 
 	
+	public String getImageId() {
+		return imageId;
+	}
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
 	private Integer ver;
 	private Boolean isActive;
 	

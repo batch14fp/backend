@@ -28,6 +28,12 @@ public class SalesSettingDao extends AbstractJpaDao{
 	return salesSetting;
 	}
 	
+	public SalesSettings getByIdRef(String id) {
+		return super.getByIdRef(SalesSettings.class, id);
+	}
+	
+	
+	
 	
 	
 }

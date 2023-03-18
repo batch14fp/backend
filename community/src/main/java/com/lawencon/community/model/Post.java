@@ -16,11 +16,6 @@ public class Post  extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
-	
-	@OneToOne
-	@JoinColumn(name="file_id", nullable=false)
-	private File file;
-	
 
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
@@ -55,14 +50,6 @@ public class Post  extends BaseEntity{
 	}
 
 
-	public File getFile() {
-		return file;
-	}
-
-
-	public void setFile(File file) {
-		this.file = file;
-	}
 
 
 	public PostType getPostType() {
