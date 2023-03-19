@@ -99,7 +99,7 @@ public class PostController {
 	
 	@GetMapping
 	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
-	                                         @RequestParam("size") int size) {
+	                                         @RequestParam("size") int size) throws Exception {
 	        final List<PojoPostRes> dataList = postService.getData(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);

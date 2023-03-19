@@ -6,13 +6,13 @@ import java.util.List;
 public class PojoPostRes {
 	private String id;
 	private String userId;
+	private String pollingId;
 	private String fullname;
 	private LocalDateTime timeAgo;
 	private String title;
 	private String content;
 	private String typeCode;
 	private String typeName;
-	private String imgPostId;
 	private String categoryCode;
 	private String categoryName;
 	private Long countPostLike;
@@ -20,8 +20,7 @@ public class PojoPostRes {
 	private boolean isLike;
 	private boolean isBookmark;
 	private String titlePolling;
-	private String pollingOptionId;
-	private PojoPollingOptionRes pollingOption;
+	private List<PojoPollingOptionRes> pollingOption;
 	private List<PojoFileResData> data;
 	
 
@@ -80,12 +79,7 @@ public class PojoPostRes {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
-	public String getImgPostId() {
-		return imgPostId;
-	}
-	public void setImgPostId(String imgPostId) {
-		this.imgPostId = imgPostId;
-	}
+
 	public String getCategoryCode() {
 		return categoryCode;
 	}
@@ -131,16 +125,18 @@ public class PojoPostRes {
 	public void setTitlePolling(String titlePolling) {
 		this.titlePolling = titlePolling;
 	}
-	public String getPollingOptionId() {
-		return pollingOptionId;
+
+
+	public String getPollingId() {
+		return pollingId;
 	}
-	public void setPollingOptionId(String pollingOptionId) {
-		this.pollingOptionId = pollingOptionId;
+	public void setPollingId(String pollingId) {
+		this.pollingId = pollingId;
 	}
-	public PojoPollingOptionRes getPollingOption() {
+	public List<PojoPollingOptionRes> getPollingOption() {
 		return pollingOption;
 	}
-	public void setPollingOption(PojoPollingOptionRes pollingOption) {
+	public void setPollingOption(List<PojoPollingOptionRes> pollingOption) {
 		this.pollingOption = pollingOption;
 	}
 
