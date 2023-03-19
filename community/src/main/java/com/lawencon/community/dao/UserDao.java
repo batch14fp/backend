@@ -105,9 +105,9 @@ public class UserDao extends BaseMasterDao<User> {
 			user.setId(obj[0].toString());
 			user.setEmail(obj[1].toString());
 
-			if (obj[2].toString()!= null) {
+			if (String.valueOf(obj[2])!= null) {
 				final Wallet wallet = new Wallet();
-				wallet.setId(obj[2].toString());
+				wallet.setId(String.valueOf(obj[2]));
 				user.setWallet(wallet);
 			}
 			final Role role = new Role();
