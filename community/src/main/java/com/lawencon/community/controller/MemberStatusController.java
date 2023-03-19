@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
-import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
-import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqInsert;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqUpdate;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusRes;
 import com.lawencon.community.service.MemberStatusService;
 
 @RestController
@@ -31,20 +31,20 @@ public class MemberStatusController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetMemberStatus>>getAll(){
-		List<PojoResGetMemberStatus> resGet = memberStatusService.getAll();;
+	public ResponseEntity<List<PojoMemberStatusRes>>getAll(){
+		List<PojoMemberStatusRes> resGet = memberStatusService.getAll();;
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertMembershipStatus(@RequestBody PojoMemberStatusInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertMembershipStatus(@RequestBody PojoMemberStatusReqInsert data){
 		PojoInsertRes resGet = memberStatusService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateMembershipStatus(@RequestBody PojoMemberStatusUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateMembershipStatus(@RequestBody PojoMemberStatusReqUpdate data){
 		PojoUpdateRes resGet = memberStatusService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

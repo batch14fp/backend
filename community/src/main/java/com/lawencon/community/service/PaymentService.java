@@ -18,9 +18,9 @@ import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoRes;
-import com.lawencon.community.pojo.payment.PojoConfirmPaymentUpdateReq;
-import com.lawencon.community.pojo.payment.PojoPaymentInsertReq;
-import com.lawencon.community.pojo.payment.PojoUserPaymentUpdateReq;
+import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
+import com.lawencon.community.pojo.payment.PojoPaymentReqInsert;
+import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 
 @Service
 public class PaymentService {
@@ -42,7 +42,7 @@ public class PaymentService {
 	}
 	
 	
-	 public PojoRes save(PojoPaymentInsertReq data) {
+	 public PojoRes save(PojoPaymentReqInsert data) {
 		 ConnHandler.begin();
 		 final Payment payment = new Payment();
 		 
@@ -64,7 +64,7 @@ public class PaymentService {
 		 
 		 
 	 }
-	 public PojoRes updateByAdmin(PojoConfirmPaymentUpdateReq data) {
+	 public PojoRes updateByAdmin(PojoConfirmPaymentReqUpdate data) {
 		 ConnHandler.begin();
 		 final Payment payment = paymentDao.getByIdRef(data.getPaymentId());
 		 paymentDao.getByIdAndDetach(payment.getId());
@@ -102,7 +102,7 @@ public class PaymentService {
 	 
 	 
 	 
-	 public PojoRes updateByUser(PojoUserPaymentUpdateReq data) {
+	 public PojoRes updateByUser(PojoUserPaymentReqUpdate data) {
 		 ConnHandler.begin();
 		 final Payment payment = paymentDao.getByIdRef(data.getPaymentId());
 		 paymentDao.getByIdAndDetach(payment.getId());

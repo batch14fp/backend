@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.invoice.PojoInvoiceInsertReq;
-import com.lawencon.community.pojo.invoice.PojoResGetInvoice;
+import com.lawencon.community.pojo.invoice.PojoInvoiceReqInsert;
+import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
 import com.lawencon.community.service.InvoiceService;
 
 @RestController
@@ -25,21 +25,21 @@ public class InvoiceController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertInvoice(@RequestBody PojoInvoiceInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertInvoice(@RequestBody PojoInvoiceReqInsert data){
 		PojoInsertRes resInsert = invoiceService.save(data);
 		return new ResponseEntity<>(resInsert, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetInvoice> getInvoiceById(@PathVariable ("id")String id) {
-		final PojoResGetInvoice resGet = invoiceService.getById(id);
+	public ResponseEntity<PojoInvoiceRes> getInvoiceById(@PathVariable ("id")String id) {
+		final PojoInvoiceRes resGet = invoiceService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
 
 	@GetMapping
-	public ResponseEntity<PojoResGetInvoice> getInvoiceByCode(@RequestParam String codeInvoice) throws Exception {
-	final PojoResGetInvoice resGet = invoiceService.getByCode(codeInvoice);
+	public ResponseEntity<PojoInvoiceRes> getInvoiceByCode(@RequestParam String codeInvoice) throws Exception {
+	final PojoInvoiceRes resGet = invoiceService.getByCode(codeInvoice);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	

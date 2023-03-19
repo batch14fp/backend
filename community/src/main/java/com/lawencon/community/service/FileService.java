@@ -8,7 +8,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.File;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.file.PojoFileReqInsert;
 
 @Service
 public class FileService {
@@ -26,7 +26,7 @@ public class FileService {
 	
 	
 
-	public PojoInsertRes save(PojoFileInsertReq data) {
+	public PojoInsertRes save(PojoFileReqInsert data) {
 		ConnHandler.begin();
 		final File file = new File();
 		file.setFileContent(data.getFileContent());

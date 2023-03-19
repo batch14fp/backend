@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.posttype.PojoPostTypeInsertReq;
-import com.lawencon.community.pojo.posttype.PojoPostTypeUpdateReq;
-import com.lawencon.community.pojo.posttype.PojoResGetPostType;
+import com.lawencon.community.pojo.posttype.PojoPostTypeReqInsert;
+import com.lawencon.community.pojo.posttype.PojoPostTypeReqUpdate;
+import com.lawencon.community.pojo.posttype.PojoPostTypeRes;
 import com.lawencon.community.service.PostTypeService;
 
 
@@ -32,19 +32,19 @@ public class PostTypeController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPostType>> getAllPostType(){
-		List<PojoResGetPostType> resGet = postTypeService.getAll();
+	public ResponseEntity<List<PojoPostTypeRes>> getAllPostType(){
+		List<PojoPostTypeRes> resGet = postTypeService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> updatePostType(@RequestBody PojoPostTypeInsertReq data){
+	public ResponseEntity<PojoInsertRes> updatePostType(@RequestBody PojoPostTypeReqInsert data){
 		PojoInsertRes resGet = postTypeService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePostType(@RequestBody PojoPostTypeUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatePostType(@RequestBody PojoPostTypeReqUpdate data){
 		PojoUpdateRes resGet = postTypeService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

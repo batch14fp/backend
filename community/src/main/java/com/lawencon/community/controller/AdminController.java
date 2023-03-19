@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.bankpayment.PojoBankPaymentInsertReq;
-import com.lawencon.community.pojo.bankpayment.PojoBankPaymentUpdateReq;
-import com.lawencon.community.pojo.bankpayment.PojoResGetBankPayment;
-import com.lawencon.community.pojo.payment.PojoConfirmPaymentUpdateReq;
-import com.lawencon.community.pojo.salessetting.PojoResGetSalesSetting;
-import com.lawencon.community.pojo.salessetting.PojoSalesSettingUpdateReq;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqInsert;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
+import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 import com.lawencon.community.service.BankPaymentService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.community.service.SalesSettingService;
@@ -42,37 +42,37 @@ public class AdminController {
 	}
 	
 	@PutMapping("/payments")
-	public ResponseEntity<PojoRes> updatByAdmin(@RequestBody PojoConfirmPaymentUpdateReq data){
+	public ResponseEntity<PojoRes> updatByAdmin(@RequestBody PojoConfirmPaymentReqUpdate data){
 		PojoRes resGet = paymentService.updateByAdmin(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	@GetMapping("/sales-setting")
-	public ResponseEntity<PojoResGetSalesSetting> getSalesSetting(){
-		PojoResGetSalesSetting resGet = salesSettingService.getSalesSetting();
+	public ResponseEntity<PojoSalesSettingRes> getSalesSetting(){
+		PojoSalesSettingRes resGet = salesSettingService.getSalesSetting();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PutMapping("/sales-setting")
-	public ResponseEntity<PojoUpdateRes> updatSetting(@RequestBody PojoSalesSettingUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatSetting(@RequestBody PojoSalesSettingReqUpdate data){
 		PojoUpdateRes resGet = salesSettingService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/bank-payments")
-	public ResponseEntity<List<PojoResGetBankPayment>> getAllBankPayment() {
-		List<PojoResGetBankPayment> resGet = bankPaymentService.getAll();
+	public ResponseEntity<List<PojoBankPaymentRes>> getAllBankPayment() {
+		List<PojoBankPaymentRes> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 
 	@PostMapping ("/bank-payments")
-	public ResponseEntity<PojoInsertRes> insertBankPayment(@RequestBody PojoBankPaymentInsertReq data) {
+	public ResponseEntity<PojoInsertRes> insertBankPayment(@RequestBody PojoBankPaymentReqInsert data) {
 		PojoInsertRes resGet = bankPaymentService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
 	@PutMapping ("/bank-payments")
-	public ResponseEntity<PojoUpdateRes> updateBankPayment(@RequestBody PojoBankPaymentUpdateReq data) {
+	public ResponseEntity<PojoUpdateRes> updateBankPayment(@RequestBody PojoBankPaymentReqUpdate data) {
 		PojoUpdateRes resGet = bankPaymentService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
