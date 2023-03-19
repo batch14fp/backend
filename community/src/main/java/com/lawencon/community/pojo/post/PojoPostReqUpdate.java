@@ -10,17 +10,16 @@ public class PojoPostReqUpdate {
 	private String filePostId;
 	private String categoryId;
 	private List<PojoAttachmentPostReqUpdate> attachmentPost;
-	private PojoPollingReqInsert  pollingInsert;
+	private PojoPollingReqUpdate  pollingUpdate;
 	private String imagePostId;
 	private Boolean isActive;
+
 	
 	
 	public Boolean getIsActive() {
 		return isActive;
 	}
-	public void setPollingInsert(PojoPollingReqInsert pollingInsert) {
-		this.pollingInsert = pollingInsert;
-	}
+
 	private Integer ver;
 	
 	public String getPostId() {
@@ -54,9 +53,7 @@ public class PojoPostReqUpdate {
 	public void setAttachmentPost(List<PojoAttachmentPostReqUpdate> attachmentPost) {
 		this.attachmentPost = attachmentPost;
 	}
-	public PojoPollingReqInsert getPollingInsert() {
-		return pollingInsert;
-	}
+
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
@@ -84,6 +81,12 @@ public class PojoPostReqUpdate {
 	}
 	public void setFilePostId(String filePostId) {
 		this.filePostId = filePostId;
+	}
+	public PojoPollingReqUpdate getPollingUpdate() {
+		return pollingUpdate;
+	}
+	public void setPollingUpdate(PojoPollingReqUpdate pollingUpdate) {
+		this.pollingUpdate = pollingUpdate;
 	}
 
 	
