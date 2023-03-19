@@ -105,5 +105,27 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		
 	}
 		
+	@SuppressWarnings("unused")
+	public Boolean getIsLike(String userId , String postId) {
+		 Boolean data = false;
+		 final StringBuilder sqlQuery = new StringBuilder();
+		 sqlQuery.append("SELECT id, user_id, post_id ");
+		 sqlQuery.append("FROM t_post_like ");
+		 sqlQuery.append("WHERE user_id= :userId ");
+		 sqlQuery.append("AND post_id = :postId ");
+		 sqlQuery.append("AND is_active = TRUE" );
+	    
+		    final Object obj = 
+	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	  		  .setParameter("userId", userId)
+	  		  .setParameter("postId", postId)
+	  		  .getSingleResult();
+		    if(obj!=null) {
+		    	data = true;
+		    }
+		    return true;
+	}
+	
+	
 
 }

@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
-import com.lawencon.community.pojo.profile.PojoProfileUpdateReq;
-import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserInsertReq;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserUpdateReq;
+import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
+import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
+import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqInsert;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
 import com.lawencon.community.service.ProfileService;
 import com.lawencon.community.service.SocialMediaService;
 import com.lawencon.community.service.UserService;
@@ -35,29 +35,29 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetProfileDetail> getProfileDetail(@PathVariable("id") String id) throws Exception{
-		PojoResGetProfileDetail resGet = profileService.getById(id);
+	public ResponseEntity<PojoProfileDetailRes> getProfileDetail(@PathVariable("id") String id) throws Exception{
+		PojoProfileDetailRes resGet = profileService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PutMapping("/edit")
-	public ResponseEntity<PojoUpdateRes>updateProfile(@RequestBody PojoProfileUpdateReq data) throws Exception{
+	public ResponseEntity<PojoUpdateRes>updateProfile(@RequestBody PojoProfileReqUpdate data) throws Exception{
 		PojoUpdateRes resGet = profileService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	@PutMapping("edit/social-media")
-	public ResponseEntity<PojoUpdateRes>updateUserProfileSocialMedia(@RequestBody PojoSocialMediaUserUpdateReq data) throws Exception{
+	public ResponseEntity<PojoUpdateRes>updateUserProfileSocialMedia(@RequestBody PojoSocialMediaUserReqUpdate data) throws Exception{
 		PojoUpdateRes resGet = socialMediaService.updateProfileSocialMedia(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	@PostMapping("add/social-media")
-	public ResponseEntity<PojoInsertRes>insertUserProfileSocialMedia(@RequestBody PojoSocialMediaUserInsertReq data) throws Exception{
+	public ResponseEntity<PojoInsertRes>insertUserProfileSocialMedia(@RequestBody PojoSocialMediaUserReqInsert data) throws Exception{
 		PojoInsertRes resGet = socialMediaService.userSaveSocialMedia(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/password")
-	public ResponseEntity<PojoUpdateRes>updatePass(@RequestBody PojoPasswordUpdateReq data){
+	public ResponseEntity<PojoUpdateRes>updatePass(@RequestBody PojoPasswordReqUpdate data){
 		PojoUpdateRes resGet = userService.updatePassword(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

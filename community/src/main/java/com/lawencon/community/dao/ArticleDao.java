@@ -89,9 +89,7 @@ public class ArticleDao extends AbstractJpaDao {
 
 		try {
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setMaxResults(limit)
-					.setFirstResult(offset)
-					.getResultList();
+					.setMaxResults(limit).setFirstResult((offset - 1) * limit).getResultList();
 
 			for (final Object objs : result) {
 				final Object[] obj = (Object[]) objs;

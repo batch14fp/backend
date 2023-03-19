@@ -19,11 +19,11 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminInsertReq;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminUpdateReq;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserInsertReq;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserUpdateReq;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqInsert;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqUpdate;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqInsert;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
 import com.lawencon.security.principal.PrincipalService;
 
 
@@ -45,10 +45,10 @@ public class SocialMediaService {
 				
 	}
 	
-	public List<PojoResGetSocialMedia> getAll() {
-		final List<PojoResGetSocialMedia> socialMedias = new ArrayList<>();
+	public List<PojoSocialMediaRes> getAll() {
+		final List<PojoSocialMediaRes> socialMedias = new ArrayList<>();
 		socialMediaDao.getAll().forEach(data -> {
-			PojoResGetSocialMedia pojoResGetSocialMedia = new PojoResGetSocialMedia();
+			PojoSocialMediaRes pojoResGetSocialMedia = new PojoSocialMediaRes();
 			pojoResGetSocialMedia.setSocialMediaId(socialMediaDao.getByIdRef(data.getId()).getId());
 			pojoResGetSocialMedia.setPlatformName(data.getPlatformName());
 			pojoResGetSocialMedia.setIsActive(data.getIsActive());
@@ -76,7 +76,7 @@ public class SocialMediaService {
 
 	}
 
-	public PojoInsertRes save(PojoSocialMediaAdminInsertReq data) {
+	public PojoInsertRes save(PojoSocialMediaAdminReqInsert data) {
 		ConnHandler.begin();
 
 		SocialMedia socialMedia = new SocialMedia();
@@ -96,7 +96,7 @@ public class SocialMediaService {
 	
 	
 	
-	public PojoInsertRes userSaveSocialMedia(PojoSocialMediaUserInsertReq data) {
+	public PojoInsertRes userSaveSocialMedia(PojoSocialMediaUserReqInsert data) {
 		ConnHandler.begin();
 
 		final ProfileSocialMedia profileSocialMedia = new ProfileSocialMedia();
@@ -120,7 +120,7 @@ public class SocialMediaService {
 		return pojoRes;
 	}
 	
-	public PojoUpdateRes  updateProfileSocialMedia(PojoSocialMediaUserUpdateReq data){
+	public PojoUpdateRes  updateProfileSocialMedia(PojoSocialMediaUserReqUpdate data){
 			
 		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
@@ -149,7 +149,7 @@ public class SocialMediaService {
 	
 	}
 
-	public PojoUpdateRes update(PojoSocialMediaAdminUpdateReq data) {
+	public PojoUpdateRes update(PojoSocialMediaAdminReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
