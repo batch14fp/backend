@@ -41,6 +41,30 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 		    return result;
 	}
 
+	@SuppressWarnings("unused")
+	public Boolean getIsBookmarkPost(String userId , String postId) {
+		 Boolean data = false;
+		 final StringBuilder sqlQuery = new StringBuilder();
+		 sqlQuery.append("SELECT id, user_id, post_id ");
+		 sqlQuery.append("FROM t_post_bookmark ");
+		 sqlQuery.append("WHERE user_id= :userId ");
+		 sqlQuery.append("AND post_id = :postId ");
+		 sqlQuery.append("AND is_active = TRUE" );
+	    
+		    final Object obj = 
+	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	  		  .setParameter("userId", userId)
+	  		  .setParameter("postId", postId)
+	  		  .getSingleResult();
+		    if(obj!=null) {
+		    	data = true;
+		    }
+		    return true;
+	}
+	
+	
+	
+
 	@Override
 	public Optional<PostBookmark> getById(String id) {
 		return Optional.ofNullable(super.getById(PostBookmark.class, id));
