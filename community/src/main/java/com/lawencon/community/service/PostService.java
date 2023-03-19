@@ -37,6 +37,7 @@ import com.lawencon.community.pojo.post.PojoResGetFileData;
 import com.lawencon.community.pojo.post.PojoResGetPost;
 import com.lawencon.community.pojo.post.PojoResGetPostComment;
 import com.lawencon.community.pojo.post.PojoResGetPostCommentReplyData;
+import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -152,7 +153,7 @@ public class PostService {
 		data.getAttachmentPost().forEach(file -> {
 			final File filePost = new File();
 			filePost.setFileExtension(file.getExtensions());
-			filePost.setFileName(file.getFileName());
+			filePost.setFileName(GenerateString.generateFileName(file.getExtensions()));
 			filePost.setFileContent(file.getFileContent());
 			files.add(filePost);
 
@@ -412,8 +413,8 @@ public class PostService {
 			res.setLike(false);
 			listPost.add(res);
 		}
-
 		return listPost;
+
 	}
 
 	public PojoInsertRes savePostComment(PojoPostCommentInsertReq data) {

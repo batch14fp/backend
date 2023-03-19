@@ -5,7 +5,7 @@ public class PojoLoginRes {
 	private String roleCode;
 	private String fullname;
 	private String token;
-	private String imgProfileId;
+
 	public String getRoleCode() {
 		return roleCode;
 	}
@@ -24,12 +24,7 @@ public class PojoLoginRes {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	public String getImgProfileId() {
-		return imgProfileId;
-	}
-	public void setImgProfileId(String imgProfileId) {
-		this.imgProfileId = imgProfileId;
-	}
+	
 	public String getUserId() {
 		return userId;
 	}
