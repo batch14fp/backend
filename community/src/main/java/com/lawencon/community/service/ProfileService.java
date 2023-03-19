@@ -20,7 +20,6 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
-import com.lawencon.community.model.PostType;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;

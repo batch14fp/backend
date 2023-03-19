@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
+import com.lawencon.community.pojo.post.PojoPostCommentInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
@@ -63,11 +64,19 @@ public class PostController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/comment")
+	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentInsertReq data){
+		PojoInsertRes resGet = postService.savePostComment(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostUpdateReq data){
 		PojoUpdateRes resGet = postService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
