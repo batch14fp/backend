@@ -1,6 +1,7 @@
 package com.lawencon.community.util;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 
 public class GenerateString {
-	private static final String FILE_NAME_PATTERN = "%s_%s%s";
+	
     private static int counter = 0;
     
 	public static String generateCode(final int totalLength) {
@@ -36,9 +37,9 @@ public class GenerateString {
 	   
 
 	  public static String generateFileName(String fileExtension) {
-	        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSS"));
-	        String uuid = UUID.randomUUID().toString().replace("-", "");
-	        return String.format(FILE_NAME_PATTERN, dateTime, uuid, fileExtension);
+		   long timestamp = Instant.now().toEpochMilli();
+	        int randomNum = (int) (Math.random() * 1000);
+	        return String.format("%d_%03d%s", timestamp, randomNum, fileExtension);
 	    }
 
 }
