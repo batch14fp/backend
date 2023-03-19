@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
-import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
 import com.lawencon.community.model.Profile;
@@ -32,7 +31,7 @@ public class PostDao extends AbstractJpaDao{
 			final StringBuilder sqlQuery = new StringBuilder();
 			final List<Post> listPost = new ArrayList<>();
 			
-			sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+			sqlQuery.append("SELECT p.id,p.category_id,c.category_code,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 			sqlQuery.append("FROM t_post p ");
 			sqlQuery.append("INNER JOIN t_post_type pt ");
 			sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -43,11 +42,11 @@ public class PostDao extends AbstractJpaDao{
 			sqlQuery.append("INNER JOIN t_profile pr ");
 			sqlQuery.append("ON pr.id = u.profile_id  ");
 			sqlQuery.append("ORDER BY p.created_at DESC ");
-			sqlQuery.append("LIMIT :limit OFFSET :offset ");
+			
 		
 			final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setParameter("offset", offset)
-					.setParameter("limit",limit)
+					.setMaxResults(limit)
+					.setFirstResult((offset-1)*limit)
 					.getResultList();
 			try {
 				for(final Object objs : result) {
@@ -60,30 +59,25 @@ public class PostDao extends AbstractJpaDao{
 					category.setCategoryCode(obj[2].toString());
 					post.setCategory(category);
 					
-					if(obj[5].toString()!=null) {
-						final File file = new File();
-						file.setId(obj[3].toString());
-						post.setFile(file);
-						}
 					final PostType postType = new PostType();
-					postType.setId(obj[4].toString());
-					postType.setTypeCode(obj[5].toString());
+					postType.setId(obj[3].toString());
+					postType.setTypeCode(obj[4].toString());
 					post.setPostType(postType);
 					
 					
 					final User user = new User();
-					user.setId(obj[6].toString());
+					user.setId(obj[5].toString());
 					
 					final Profile profile = new Profile();
-					profile.setFullname(obj[9].toString());
+					profile.setFullname(obj[8].toString());
 					user.setProfile(profile);
 					post.setUser(user);
 					
-					post.setTitle(obj[7].toString());
-					post.setContentPost(obj[8].toString());
-					post.setVersion(Integer.valueOf(obj[10].toString()));
-					post.setIsActive(Boolean.valueOf(obj[11].toString()));
-					post.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
+					post.setTitle(obj[6].toString());
+					post.setContentPost(obj[7].toString());
+					post.setVersion(Integer.valueOf(obj[9].toString()));
+					post.setIsActive(Boolean.valueOf(obj[10].toString()));
+					post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
 					listPost.add(post);
 				}
 			}catch(final Exception e){
@@ -100,7 +94,7 @@ public class PostDao extends AbstractJpaDao{
 		final StringBuilder sqlQuery = new StringBuilder();
 		final List<Post> listPost = new ArrayList<>();
 		
-		sqlQuery.append("SELECT p.id,p.category_id,c.category_code, p.file_id,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+		sqlQuery.append("SELECT p.id,p.category_id,c.category_code,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -112,12 +106,12 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("ON pr.id = u.profile_id  ");
 		sqlQuery.append("WHERE p.user_id = :userId ");
 		sqlQuery.append("ORDER BY p.created_at DESC ");
-		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+		
 
 		final List<Object>result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("userId", userId)
-				.setParameter("offset", offset)
-				.setParameter("limit",limit)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		try {
 			for(final Object objs : result) {
@@ -130,30 +124,26 @@ public class PostDao extends AbstractJpaDao{
 				category.setCategoryCode(obj[2].toString());
 				post.setCategory(category);
 				
-				if(obj[5].toString()!=null) {
-					final File file = new File();
-					file.setId(obj[3].toString());
-					post.setFile(file);
-					}
+
 				final PostType postType = new PostType();
-				postType.setId(obj[4].toString());
-				postType.setTypeCode(obj[5].toString());
+				postType.setId(obj[3].toString());
+				postType.setTypeCode(obj[4].toString());
 				post.setPostType(postType);
 				
 				final User user = new User();
-				user.setId(obj[6].toString());
+				user.setId(obj[5].toString());
 				
 				final Profile profile = new Profile();
-				profile.setFullname(obj[9].toString());
+				profile.setFullname(obj[8].toString());
 				user.setProfile(profile);
 				post.setUser(user);
 				
-				post.setTitle(obj[7].toString());
-				post.setContentPost(obj[8].toString());
+				post.setTitle(obj[6].toString());
+				post.setContentPost(obj[7].toString());
 			
-				post.setVersion(Integer.valueOf(obj[10].toString()));
-				post.setIsActive(Boolean.valueOf(obj[11].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
+				post.setVersion(Integer.valueOf(obj[9].toString()));
+				post.setIsActive(Boolean.valueOf(obj[10].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
 				listPost.add(post);
 			}
 		}catch(final Exception e){
@@ -196,15 +186,16 @@ public class PostDao extends AbstractJpaDao{
 		sqlQuery.append("JOIN t_post_type pt ");
 		sqlQuery.append("ON p.post_type_id = pt.id ");
 		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
-		sqlQuery.append("LIMIT :limit OFFSET :offset ");
+
 
 
 
 		final List<Object> results =
 				ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.setParameter("offset", offset)
-				.setParameter("limit",limit)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
+		
 
 		
 		for(final Object objs : results) {

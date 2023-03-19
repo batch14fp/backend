@@ -1,12 +1,16 @@
 package com.lawencon.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import com.lawencon.security.principal.PrincipalService;
 
@@ -117,5 +121,41 @@ public class AbstractJpaDao {
 
 		return typedQuery;
 	}
+
+	
+	public <T> List<T> getAll(Class<T> entityClass) {
+		final CriteriaBuilder cb = em().getCriteriaBuilder();
+		final CriteriaQuery<T> cr = cb.createQuery(entityClass);
+		final Root<T> root = cr.from(entityClass);
+		cr.select(root);
+
+		return em().createQuery(cr).getResultList();
+	}
+
+	public <T extends BaseEntity> List<T> saveAll(List<T> entities) {
+	    List<T> savedEntities = new ArrayList<>();
+	    for (T entity : entities) {
+	        if (entity.getId() != null) {
+	            entity.setUpdatedBy(principalService.getAuthPrincipal());
+	            entity = em().merge(entity);
+	        } else {
+	            entity.setId(UUID.randomUUID().toString());
+	            entity.setCreatedBy(principalService.getAuthPrincipal());
+	            em().persist(entity);
+	        }
+	        savedEntities.add(entity);
+	    }
+	    em().flush();
+	    return savedEntities;
+	}
+	
+
+	
+
+
+
+
+	
+	
 
 }

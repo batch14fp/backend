@@ -1,13 +1,15 @@
 package com.lawencon.community.pojo.post;
 
+import java.util.List;
+
 public class PojoPostUpdateReq {
 	private String postId;
 	private String title;
 	private String content;
 	private String typeId;
-
+	private String filePostId;
 	private String categoryId;
-	private PojoAttachmentPostReqInsert attachmentPost;
+	private List<PojoAttachmentPostUpdateReq> attachmentPost;
 	private PojoPollingInsertReq  pollingInsert;
 	private String imagePostId;
 	private Boolean isActive;
@@ -45,13 +47,13 @@ public class PojoPostUpdateReq {
 	public void setTypeId(String typeId) {
 		this.typeId = typeId;
 	}
-	public PojoAttachmentPostReqInsert getAttachmentPost() {
+
+	public List<PojoAttachmentPostUpdateReq> getAttachmentPost() {
 		return attachmentPost;
 	}
-	public void setAttachmentPost(PojoAttachmentPostReqInsert attachmentPost) {
+	public void setAttachmentPost(List<PojoAttachmentPostUpdateReq> attachmentPost) {
 		this.attachmentPost = attachmentPost;
 	}
-
 	public PojoPollingInsertReq getPollingInsert() {
 		return pollingInsert;
 	}
@@ -76,6 +78,12 @@ public class PojoPostUpdateReq {
 	}
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
+	}
+	public String getFilePostId() {
+		return filePostId;
+	}
+	public void setFilePostId(String filePostId) {
+		this.filePostId = filePostId;
 	}
 
 	

@@ -28,11 +28,13 @@ public class ArticleDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("ORDER BY a.created_at DESC LIMIT :limit OFFSET :offset");
+		sqlQuery.append("ORDER BY a.created_at DESC");
 
 		try {
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setParameter("offset", offset).setParameter("limit", limit).getResultList();
+					.setMaxResults(limit)
+					.setFirstResult(offset)
+					.getResultList();
 
 			for (final Object objs : result) {
 				final Object[] obj = (Object[]) objs;
@@ -83,11 +85,13 @@ public class ArticleDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("ORDER BY a.viewers DESC LIMIT :limit OFFSET :offset");
+		sqlQuery.append("ORDER BY a.viewers DESC");
 
 		try {
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setParameter("offset", offset).setParameter("limit", limit).getResultList();
+					.setMaxResults(limit)
+					.setFirstResult(offset)
+					.getResultList();
 
 			for (final Object objs : result) {
 				final Object[] obj = (Object[]) objs;

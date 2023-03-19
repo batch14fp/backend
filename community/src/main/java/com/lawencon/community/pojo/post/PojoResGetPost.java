@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PojoResGetPost {
 	private String id;
@@ -22,7 +23,15 @@ public class PojoResGetPost {
 	private String titlePolling;
 	private String pollingOptionId;
 	private PojoResGetPollingOption pollingOption;
+	private List<PojoResGetFileData> data;
+	
 
+	public List<PojoResGetFileData> getData() {
+		return data;
+	}
+	public void setData(List<PojoResGetFileData> data) {
+		this.data = data;
+	}
 	public String getId() {
 		return id;
 	}
@@ -135,6 +144,7 @@ public class PojoResGetPost {
 	public void setPollingOption(PojoResGetPollingOption pollingOption) {
 		this.pollingOption = pollingOption;
 	}
+
 	
 	
 	

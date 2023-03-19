@@ -14,10 +14,9 @@ public class EmailSenderService {
 	@Autowired
 	private JavaMailSender mailSender;
 
-
 	public void sendEmail(final String to, final String codeVerification) throws MessagingException {
 		MimeMessage message = mailSender.createMimeMessage();
-		message.setFrom("zelkiaanisa@gmail.com");
+		message.setFrom("ariprayoga007@gmail.com");
 		message.setRecipients(MimeMessage.RecipientType.TO, to);
 		message.setSubject("Code Verification Request");
 		

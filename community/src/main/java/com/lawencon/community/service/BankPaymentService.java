@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.BankPaymentDao;
 import com.lawencon.community.model.BankPayment;
-import com.lawencon.community.model.Category;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -34,6 +33,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 			bankPayment.setAccountNumber(data.getAccountNumber());
 			bankPayment.setBankPaymentName(data.getBankName());
 			bankPayment.setIsActive(data.getIsActive());
+			bankPayment.setVer(data.getVersion());
 			res.add(bankPayment);
 		});
 
@@ -47,7 +47,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 
-		Boolean result = bankPaymentDao.deleteById(Category.class, id);
+		Boolean result = bankPaymentDao.deleteById(BankPayment.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;

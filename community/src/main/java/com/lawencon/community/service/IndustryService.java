@@ -35,6 +35,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 			pojoResGetIndustry.setIndustryId(data.getId());
 			pojoResGetIndustry.setIndustryName(data.getIndustryName());
 			pojoResGetIndustry.setIsActive(data.getIsActive());
+			pojoResGetIndustry.setVer(data.getVersion());
 			res.add(pojoResGetIndustry);
 
 		});

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PostTypeDao;
-import com.lawencon.community.model.Position;
 import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
@@ -33,6 +32,8 @@ public class PostTypeService {
 			postType.setPostTypeId(data.getId());
 			postType.setPostTypeCode(data.getTypeCode());
 			postType.setPostTypeName(data.getTypeName());
+			postType.setVer(data.getVersion());
+			postType.setIsActive(data.getIsActive());
 			
 			res.add(postType);
 
@@ -48,7 +49,7 @@ public class PostTypeService {
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 
-		Boolean result = postTypeDao.deleteById(Position.class, id);
+		Boolean result = postTypeDao.deleteById(PostType.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;

@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
+import com.lawencon.community.pojo.post.PojoPostCommentInsertReq;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
@@ -63,11 +64,19 @@ public class PostController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/comment")
+	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentInsertReq data){
+		PojoInsertRes resGet = postService.savePostComment(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostUpdateReq data){
 		PojoUpdateRes resGet = postService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
@@ -90,8 +99,7 @@ public class PostController {
 	@GetMapping
 	public ResponseEntity<List<PojoResGetPost>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        int offset = (page - 1) * size;
-	        final List<PojoResGetPost> dataList = postService.getData(offset, size);
+	        final List<PojoResGetPost> dataList = postService.getData(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -103,8 +111,7 @@ public class PostController {
 	@GetMapping("/most-like")
 	public ResponseEntity<List<PojoResGetPost>> getAllPostByMostLike(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
-	        int offset = (page - 1) * size;
-	        final List<PojoResGetPost> dataList = postService.getMostLike(offset, size);
+	        final List<PojoResGetPost> dataList = postService.getMostLike(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -116,8 +123,7 @@ public class PostController {
 	@GetMapping("/user")
 	public ResponseEntity<List<PojoResGetPost>> getAllPostByUser(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
-	        int offset = (page - 1) * size;
-	        final List<PojoResGetPost> dataList = postService.getAllPostByUserId(offset, size);
+	        final List<PojoResGetPost> dataList = postService.getAllPostByUserId(page, size);
 	        int totalCount = postService.getTotalCountByUserId();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();

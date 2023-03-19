@@ -5,6 +5,8 @@ public class PojoBankPaymentUpdateReq {
 	private String bankPaymentName;
 	private String accountNumber;
 	private String accountName;
+	private Boolean isActive;
+	private Integer ver;
 	
 	public String getAccountNumber() {
 		return accountNumber;
@@ -18,8 +20,7 @@ public class PojoBankPaymentUpdateReq {
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
 	}
-	private Boolean isActive;
-	private Integer ver;
+
 	public String getBankPaymentId() {
 		return bankPaymentId;
 	}

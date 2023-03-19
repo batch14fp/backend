@@ -14,9 +14,9 @@ public class SalesSettingDao extends AbstractJpaDao{
 		final SalesSettings salesSetting = new SalesSettings();
 		sqlQuery.append("SELECT tss.tax, tss.system_income, tss.member_income, tss.is_active, tss.ver ");
 		sqlQuery.append("FROM t_sales_settings tss ");
-		sqlQuery.append("LIMIT 1 ");
-		
 		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setMaxResults(1)
+				.setFirstResult(0)
 				.getSingleResult();
 		final Object[] obj = (Object[]) result;
 		salesSetting.setTax(Float.valueOf(obj[0].toString()));
@@ -27,6 +27,12 @@ public class SalesSettingDao extends AbstractJpaDao{
 		
 	return salesSetting;
 	}
+	
+	public SalesSettings getByIdRef(String id) {
+		return super.getByIdRef(SalesSettings.class, id);
+	}
+	
+	
 	
 	
 	

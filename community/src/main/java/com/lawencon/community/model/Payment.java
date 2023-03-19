@@ -1,7 +1,7 @@
 package com.lawencon.community.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -21,18 +21,18 @@ public class Payment  extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name="file_id", nullable=false)
+	@JoinColumn(name="file_id")
 	private File file;
 	
 	
 	@OneToOne
-	@JoinColumn(name="bank_payment_id", nullable=false)
+	@JoinColumn(name="bank_payment_id")
 	private BankPayment bankPayment;
 
 	private Boolean isPaid;
 	
 	
-	private LocalDate expired;
+	private LocalDateTime expired;
 	
 	
 	private BigDecimal discAmount;
@@ -118,14 +118,6 @@ public class Payment  extends BaseEntity{
 	}
 
 
-	public LocalDate getExpired() {
-		return expired;
-	}
-
-
-	public void setExpired(LocalDate expired) {
-		this.expired = expired;
-	}
 
 
 	public BankPayment getBankPayment() {
@@ -135,6 +127,16 @@ public class Payment  extends BaseEntity{
 
 	public void setBankPayment(BankPayment bankPayment) {
 		this.bankPayment = bankPayment;
+	}
+
+
+	public LocalDateTime getExpired() {
+		return expired;
+	}
+
+
+	public void setExpired(LocalDateTime expired) {
+		this.expired = expired;
 	}
 	
 

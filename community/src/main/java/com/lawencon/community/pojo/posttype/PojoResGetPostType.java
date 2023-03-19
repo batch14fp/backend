@@ -4,6 +4,21 @@ public class PojoResGetPostType {
 	private String postTypeId;
 	private String postTypeName;
 	private String postTypeCode;
+	private Integer ver;
+	private Boolean isActive;
+	
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 	public String getPostTypeName() {
 		return postTypeName;
 	}

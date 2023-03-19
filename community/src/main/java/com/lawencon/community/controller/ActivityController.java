@@ -21,19 +21,22 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityInsertReq;
 import com.lawencon.community.pojo.activity.PojoActivityUpdateReq;
 import com.lawencon.community.pojo.activity.PojoResGetActivity;
+import com.lawencon.community.pojo.payment.PojoUserPaymentUpdateReq;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaginationService;
+import com.lawencon.community.service.PaymentService;
 
 @RestController
 @RequestMapping("activities")
 public class ActivityController {
 	private ActivityService activityService;
 	private PaginationService paginationService;
-	
+	private PaymentService paymentService;
 
-	public ActivityController(final PaginationService paginationService,final ActivityService activityService) {
+	public ActivityController(final PaginationService paginationService, final PaymentService paymentService,final ActivityService activityService) {
 		this.activityService = activityService;
 		this.paginationService = paginationService;
+		this.paymentService = paymentService;
 	}
 
 	@GetMapping
@@ -110,5 +113,12 @@ public class ActivityController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+	
+	
+	@PutMapping("/payment")
+	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentUpdateReq data){
+		PojoRes resGet = paymentService.updateByUser(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 }
