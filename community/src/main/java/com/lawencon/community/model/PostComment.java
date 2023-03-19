@@ -13,7 +13,7 @@ import com.lawencon.base.BaseEntity;
 public class PostComment  extends BaseEntity{
 	
 	@OneToOne
-	@JoinColumn(name="comment_id", nullable=false)
+	@JoinColumn(name="comment_id")
 	private PostComment comment;
 	
 	@OneToOne
