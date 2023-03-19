@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
-import com.lawencon.community.pojo.post.PojoPostCommentInsertReq;
-import com.lawencon.community.pojo.post.PojoPostInsertReq;
-import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
-import com.lawencon.community.pojo.post.PojoPostUpdateReq;
-import com.lawencon.community.pojo.post.PojoResGetPost;
-import com.lawencon.community.pojo.post.PojoResGetPostComment;
+import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqInsert;
+import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqUpdate;
+import com.lawencon.community.pojo.post.PojoPostRes;
+import com.lawencon.community.pojo.post.PojoPostCommentRes;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
 
@@ -42,37 +42,37 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetPost> getActivity(@PathVariable ("id")String id){
-		PojoResGetPost resGet = postService.getById(id);
+	public ResponseEntity<PojoPostRes> getActivity(@PathVariable ("id")String id){
+		PojoPostRes resGet = postService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostReqInsert data){
 		PojoInsertRes resGet = postService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/like")
-	public ResponseEntity<PojoInsertRes> insertPostLike(@RequestBody PojoPostLikeInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPostLike(@RequestBody PojoPostLikeReqInsert data){
 		PojoInsertRes resGet = postService.savePostLike(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/bookmark")
-	public ResponseEntity<PojoInsertRes> insertPostBookmark(@RequestBody PojoPostBookmarkInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPostBookmark(@RequestBody PojoPostBookmarkReqInsert data){
 		PojoInsertRes resGet = postService.savePostBookmark(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/comment")
-	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentReqInsert data){
 		PojoInsertRes resGet = postService.savePostComment(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostReqUpdate data){
 		PojoUpdateRes resGet = postService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
@@ -98,9 +98,9 @@ public class PostController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPost>> getData(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        final List<PojoResGetPost> dataList = postService.getData(page, size);
+	        final List<PojoPostRes> dataList = postService.getData(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -110,9 +110,9 @@ public class PostController {
 	    }
 	
 	@GetMapping("/most-like")
-	public ResponseEntity<List<PojoResGetPost>> getAllPostByMostLike(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoPostRes>> getAllPostByMostLike(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
-	        final List<PojoResGetPost> dataList = postService.getMostLike(page, size);
+	        final List<PojoPostRes> dataList = postService.getMostLike(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -121,9 +121,9 @@ public class PostController {
 	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	    }
 	@GetMapping("/{id}/comment")
-	public ResponseEntity<List<PojoResGetPostComment>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
+	public ResponseEntity<List<PojoPostCommentRes>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
-	        final List<PojoResGetPostComment> dataList = postService.getAllCommentByPostId(id, page, size);
+	        final List<PojoPostCommentRes> dataList = postService.getAllCommentByPostId(id, page, size);
 	        Long totalCount = postService.getCountComment(id);
 	        int pageCount = paginationService.getPageCount(totalCount.intValue(), size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -133,9 +133,9 @@ public class PostController {
 	    }
 	
 	@GetMapping("/user")
-	public ResponseEntity<List<PojoResGetPost>> getAllPostByUser(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoPostRes>> getAllPostByUser(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
-	        final List<PojoResGetPost> dataList = postService.getAllPostByUserId(page, size);
+	        final List<PojoPostRes> dataList = postService.getAllPostByUserId(page, size);
 	        int totalCount = postService.getTotalCountByUserId();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();

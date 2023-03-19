@@ -37,12 +37,12 @@ import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
-import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
-import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
+import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
+import com.lawencon.community.pojo.user.PojoAllUserByRoleRes;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
-import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
-import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
 import com.lawencon.community.util.GenerateString;
 
 @Service
@@ -90,8 +90,8 @@ public class UserService implements UserDetailsService {
 		return userDao.login(email);
 	}
 
-	public PojoResGetVerification getVerified(PojoResGetVerificationCode data) {
-		PojoResGetVerification res = new PojoResGetVerification();
+	public PojoVerificationRes getVerified(PojoResGetVerificationCode data) {
+		PojoVerificationRes res = new PojoVerificationRes();
 		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCode());
 
 		codeVerification.ifPresent(result -> {
@@ -155,7 +155,7 @@ public class UserService implements UserDetailsService {
 		return res;
 	}
 
-	public PojoInsertRes verificationCode(final PojoVerificationCodeReq data) {
+	public PojoInsertRes verificationCode(final PojoVerificationCodeReqInsert data) {
 		final PojoInsertRes res = new PojoInsertRes();
 
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
@@ -188,10 +188,10 @@ public class UserService implements UserDetailsService {
 	}
 
 
-	public List<PojoResGetAllUserByRole> getAllUserByRole(String roleCode) {
-		final List<PojoResGetAllUserByRole> listRes = new ArrayList<>();
+	public List<PojoAllUserByRoleRes> getAllUserByRole(String roleCode) {
+		final List<PojoAllUserByRoleRes> listRes = new ArrayList<>();
 		userDao.getUserByRoleCode(roleCode).forEach(data -> {
-			PojoResGetAllUserByRole res = new PojoResGetAllUserByRole();
+			PojoAllUserByRoleRes res = new PojoAllUserByRoleRes();
 			res.setEmail(data.getEmail());
 			res.setRoleId(data.getRole().getRoleCode());
 			res.setFullname(data.getProfile().getFullname());
@@ -205,7 +205,7 @@ public class UserService implements UserDetailsService {
 	}
 	
 	
-	public PojoUpdateRes updatePassword(PojoPasswordUpdateReq data) {
+	public PojoUpdateRes updatePassword(PojoPasswordReqUpdate data) {
 		ConnHandler.begin();
 		final PojoUpdateRes res = new PojoUpdateRes();
 		final User user = userDao.getUserByProfileId(data.getProfileId());

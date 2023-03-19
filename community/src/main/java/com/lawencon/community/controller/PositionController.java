@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.position.PojoPositionInsertReq;
-import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
-import com.lawencon.community.pojo.position.PojoResGetPostion;
+import com.lawencon.community.pojo.position.PojoPositionReqInsert;
+import com.lawencon.community.pojo.position.PojoPositionReqUpdate;
+import com.lawencon.community.pojo.position.PojoPostionRes;
 import com.lawencon.community.service.PositionService;
 
 @RestController
@@ -31,19 +31,19 @@ public class PositionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetPostion>> getAllPosition(){
-		List<PojoResGetPostion> resGet = positionService.getAll();
+	public ResponseEntity<List<PojoPostionRes>> getAllPosition(){
+		List<PojoPostionRes> resGet = positionService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPosition(@RequestBody PojoPositionInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPosition(@RequestBody PojoPositionReqInsert data){
 		PojoInsertRes resGet = positionService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePosition(@RequestBody PojoPositionUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatePosition(@RequestBody PojoPositionReqUpdate data){
 		PojoUpdateRes resGet = positionService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

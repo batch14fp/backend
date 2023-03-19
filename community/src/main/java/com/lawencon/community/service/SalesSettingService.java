@@ -6,8 +6,8 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.SalesSettingDao;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.salessetting.PojoResGetSalesSetting;
-import com.lawencon.community.pojo.salessetting.PojoSalesSettingUpdateReq;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 
 @Service
 public class SalesSettingService {
@@ -17,9 +17,9 @@ public class SalesSettingService {
 		this.salesSettingDao = salesSettingDao;
 	}
 	
-	public PojoResGetSalesSetting getSalesSetting() {
+	public PojoSalesSettingRes getSalesSetting() {
 		final SalesSettings data = salesSettingDao.getSalesSetting();
-		final PojoResGetSalesSetting res = new PojoResGetSalesSetting();
+		final PojoSalesSettingRes res = new PojoSalesSettingRes();
 		
 		res.setTax(data.getTax());
 		res.setSystemIncome(data.getSystemIncome());
@@ -30,7 +30,7 @@ public class SalesSettingService {
 		return res;
 	}
 	
-	public PojoUpdateRes update(PojoSalesSettingUpdateReq data) {
+	public PojoUpdateRes update(PojoSalesSettingReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();

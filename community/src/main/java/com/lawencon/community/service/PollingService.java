@@ -17,10 +17,10 @@ import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPollingInsertReq;
-import com.lawencon.community.pojo.post.PojoPollingOptionInsertReq;
-import com.lawencon.community.pojo.post.PojoPollingOptionUpdateReq;
-import com.lawencon.community.pojo.post.PojoPollingUpdateReq;
+import com.lawencon.community.pojo.post.PojoPollingReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingReqUpdate;
 
 @Service
 public class PollingService {
@@ -37,7 +37,7 @@ public class PollingService {
 		
 	}
 	
-	public PojoInsertRes save(PojoPollingInsertReq data) {
+	public PojoInsertRes save(PojoPollingReqInsert data) {
 	    ConnHandler.begin();
 
 	    try {
@@ -56,7 +56,7 @@ public class PollingService {
 	        final Polling pollingNew = pollingDao.save(polling);
 
 	        final List<PollingOption> options = new ArrayList<>();
-	        for (PojoPollingOptionInsertReq option : data.getPollingOptions()) {
+	        for (PojoPollingOptionReqInsert option : data.getPollingOptions()) {
 	            final PollingOption pollingOption = new PollingOption();
 	            pollingOption.setPolling(pollingNew);
 	            pollingOption.setContentPolling(option.getPollingContent());
@@ -77,7 +77,7 @@ public class PollingService {
 	    }
 	}
 
-	public PojoUpdateRes update(PojoPollingUpdateReq data) {
+	public PojoUpdateRes update(PojoPollingReqUpdate data) {
 	    ConnHandler.begin();
 
 	    try {
@@ -87,7 +87,7 @@ public class PollingService {
 	        polling.setTitle(data.getPollingTitle());
 
 	        final List<PollingOption> options = new ArrayList<>();
-	        for (PojoPollingOptionUpdateReq option : data.getPollingOptions()) {
+	        for (PojoPollingOptionReqUpdate option : data.getPollingOptions()) {
 	            final PollingOption pollingOption = pollingOptionDao.getByIdRef(option.getPollingOptionId());
 	            pollingOptionDao.getByIdAndDetach(PollingOption.class, pollingOption.getId());
 	            pollingOption.setPolling(polling);

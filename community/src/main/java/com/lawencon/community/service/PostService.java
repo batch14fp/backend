@@ -28,15 +28,15 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPostBookmarkInsertReq;
-import com.lawencon.community.pojo.post.PojoPostCommentInsertReq;
-import com.lawencon.community.pojo.post.PojoPostInsertReq;
-import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
-import com.lawencon.community.pojo.post.PojoPostUpdateReq;
-import com.lawencon.community.pojo.post.PojoResGetFileData;
-import com.lawencon.community.pojo.post.PojoResGetPost;
-import com.lawencon.community.pojo.post.PojoResGetPostComment;
-import com.lawencon.community.pojo.post.PojoResGetPostCommentReplyData;
+import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqInsert;
+import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqUpdate;
+import com.lawencon.community.pojo.post.PojoFileResData;
+import com.lawencon.community.pojo.post.PojoPostRes;
+import com.lawencon.community.pojo.post.PojoPostCommentRes;
+import com.lawencon.community.pojo.post.PojoPostCommentReplyResData;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -70,16 +70,16 @@ public class PostService {
 
 	}
 
-	public PojoResGetPost getById(String id) {
+	public PojoPostRes getById(String id) {
 		final Post data = postDao.getByIdRef(id);
-		final PojoResGetPost res = new PojoResGetPost();
+		final PojoPostRes res = new PojoPostRes();
 
 		res.setId(data.getId());
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
-		final List<PojoResGetFileData> files = new ArrayList<>();
+		final List<PojoFileResData> files = new ArrayList<>();
 		filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost -> {
-			final PojoResGetFileData filePostData = new PojoResGetFileData();
+			final PojoFileResData filePostData = new PojoFileResData();
 			filePostData.setFilePostId(filesPost.getId());
 			filePostData.setFileId(filesPost.getFile().getId());
 			filePostData.setVer(filesPost.getVersion());
@@ -136,7 +136,7 @@ public class PostService {
 		}
 	}
 
-	public PojoInsertRes save(PojoPostInsertReq data) {
+	public PojoInsertRes save(PojoPostReqInsert data) {
 		ConnHandler.begin();
 		final Post post = new Post();
 		post.setTitle(data.getTitle());
@@ -177,7 +177,7 @@ public class PostService {
 		return pojoInsertRes;
 	}
 
-	public PojoUpdateRes update(PojoPostUpdateReq data) {
+	public PojoUpdateRes update(PojoPostReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
@@ -225,7 +225,7 @@ public class PostService {
 
 	}
 
-	public PojoInsertRes savePostLike(PojoPostLikeInsertReq data) {
+	public PojoInsertRes savePostLike(PojoPostLikeReqInsert data) {
 
 		final PojoInsertRes pojoRes = new PojoInsertRes();
 		final PostLike postLike = new PostLike();
@@ -264,7 +264,7 @@ public class PostService {
 		}
 	}
 
-	public PojoInsertRes savePostBookmark(PojoPostBookmarkInsertReq data) {
+	public PojoInsertRes savePostBookmark(PojoPostBookmarkReqInsert data) {
 		final PojoInsertRes pojoRes = new PojoInsertRes();
 		final PostBookmark postBookmark = new PostBookmark();
 		final Post post = postDao.getByIdRef(data.getPostId());
@@ -302,19 +302,19 @@ public class PostService {
 		}
 	}
 
-	public List<PojoResGetPost> getData(int offset, int limit) {
+	public List<PojoPostRes> getData(int offset, int limit) {
 		final List<Post> posts = postDao.getGetAllPost(offset, limit);
-		final List<PojoResGetPost> listPost = new ArrayList<>();
+		final List<PojoPostRes> listPost = new ArrayList<>();
 		for (Post data : posts) {
-			PojoResGetPost res = new PojoResGetPost();
+			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
-			List<PojoResGetFileData> files = new ArrayList<>();
+			List<PojoFileResData> files = new ArrayList<>();
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
 			for (FilePost filePost : filePosts) {
-				PojoResGetFileData filePostData = new PojoResGetFileData();
+				PojoFileResData filePostData = new PojoFileResData();
 				filePostData.setFilePostId(filePost.getId());
 				filePostData.setFileId(filePost.getFile().getId());
 				filePostData.setVer(filePost.getVersion());
@@ -347,19 +347,19 @@ public class PostService {
 		return postDao.getByUserIdTotalCount(principalService.getAuthPrincipal());
 	}
 
-	public List<PojoResGetPost> getMostLike(int offset, int limit) throws Exception {
+	public List<PojoPostRes> getMostLike(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getPostsByMostLikes(offset, limit);
-		final List<PojoResGetPost> listPost = new ArrayList<>();
+		final List<PojoPostRes> listPost = new ArrayList<>();
 		for (Post data : posts) {
-			PojoResGetPost res = new PojoResGetPost();
+			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
-			List<PojoResGetFileData> files = new ArrayList<>();
+			List<PojoFileResData> files = new ArrayList<>();
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
 			for (FilePost filePost : filePosts) {
-				PojoResGetFileData filePostData = new PojoResGetFileData();
+				PojoFileResData filePostData = new PojoFileResData();
 				filePostData.setFilePostId(filePost.getId());
 				filePostData.setFileId(filePost.getFile().getId());
 				filePostData.setVer(filePost.getVersion());
@@ -382,20 +382,20 @@ public class PostService {
 
 	}
 
-	public List<PojoResGetPost> getAllPostByUserId(int offset, int limit) throws Exception {
-		final List<PojoResGetPost> listPost = new ArrayList<>();
+	public List<PojoPostRes> getAllPostByUserId(int offset, int limit) throws Exception {
+		final List<PojoPostRes> listPost = new ArrayList<>();
 
 		final List<Post> posts = postDao.getByUserId(principalService.getAuthPrincipal(), offset, limit);
 		for (Post data : posts) {
-			PojoResGetPost res = new PojoResGetPost();
+			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
-			final List<PojoResGetFileData> files = new ArrayList<>();
+			final List<PojoFileResData> files = new ArrayList<>();
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
 			for (FilePost filePost : filePosts) {
-				PojoResGetFileData filePostData = new PojoResGetFileData();
+				PojoFileResData filePostData = new PojoFileResData();
 				filePostData.setFilePostId(filePost.getId());
 				filePostData.setFileId(filePost.getFile().getId());
 				filePostData.setVer(filePost.getVersion());
@@ -417,7 +417,7 @@ public class PostService {
 
 	}
 
-	public PojoInsertRes savePostComment(PojoPostCommentInsertReq data) {
+	public PojoInsertRes savePostComment(PojoPostCommentReqInsert data) {
 		ConnHandler.begin();
 		final PostComment postComment = new PostComment();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -444,12 +444,12 @@ public class PostService {
 
 	}
 
-	public List<PojoResGetPostComment> getAllCommentByPostId(final String postId, int offset, int limit)
+	public List<PojoPostCommentRes> getAllCommentByPostId(final String postId, int offset, int limit)
 			throws Exception {
-		final List<PojoResGetPostComment> listComment = new ArrayList<>();
-		final List<PojoResGetPostCommentReplyData> listCommentData = new ArrayList<>();
+		final List<PojoPostCommentRes> listComment = new ArrayList<>();
+		final List<PojoPostCommentReplyResData> listCommentData = new ArrayList<>();
 		postCommentDao.getAllByPostId(postId, limit, offset).forEach(data -> {
-			final PojoResGetPostComment postComment = new PojoResGetPostComment();
+			final PojoPostCommentRes postComment = new PojoPostCommentRes();
 			postComment.setContentComment(data.getBody());
 			postComment.setPostCommentId(data.getId());
 			postComment.setUserId(data.getUser().getId());
@@ -457,7 +457,7 @@ public class PostService {
 			postComment.setCreatedAt(data.getCreatedAt());
 			postComment.setVer(data.getVersion());
 			if (data.getComment() != null) {
-				final PojoResGetPostCommentReplyData postCommentData = new PojoResGetPostCommentReplyData();
+				final PojoPostCommentReplyResData postCommentData = new PojoPostCommentReplyResData();
 
 				postCommentData.setContentComment(data.getComment().getId());
 				postCommentData.setUserId(data.getUser().getId());
