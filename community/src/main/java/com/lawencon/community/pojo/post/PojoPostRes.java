@@ -20,6 +20,7 @@ public class PojoPostRes {
 	private boolean isLike;
 	private boolean isBookmark;
 	private String titlePolling;
+	private Integer ver;
 	private List<PojoPollingOptionRes> pollingOption;
 	private List<PojoFileResData> data;
 	
@@ -138,6 +139,12 @@ public class PojoPostRes {
 	}
 	public void setPollingOption(List<PojoPollingOptionRes> pollingOption) {
 		this.pollingOption = pollingOption;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 	

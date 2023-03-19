@@ -82,13 +82,31 @@ public class PostService {
 
 	}
 
-	public PojoPostRes getById(String id) {
+	public PojoPostRes getById(String id) throws Exception {
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
-
 		res.setId(data.getId());
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
+		res.setUserId(data.getUser().getId());
+		res.setFullname(data.getUser().getProfile().getFullname());
+		res.setTypeName(data.getPostType().getTypeName());
+		res.setCategoryName(data.getCategory().getCategoryName());
+		if (data.getPolling() != null) {
+			final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
+			res.setPollingId(polling.getId());
+			res.setTitlePolling(polling.getTitle());
+			final List<PojoPollingOptionRes> options = new ArrayList<>();
+			final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
+			for (PollingOption pollingOption : pollingOptions) {
+				final PojoPollingOptionRes option = new PojoPollingOptionRes();
+				option.setPollingOptionId(pollingOption.getId());
+				option.setVer(pollingOption.getVersion());
+				option.setPollingContent(pollingOption.getContentPolling());
+				options.add(option);
+			}
+			res.setPollingOption(options);
+		}
 		final List<PojoFileResData> files = new ArrayList<>();
 		filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost -> {
 			final PojoFileResData filePostData = new PojoFileResData();
@@ -97,6 +115,8 @@ public class PostService {
 			filePostData.setVer(filesPost.getVersion());
 			files.add(filePostData);
 		});
+		res.setData(files);
+		res.setVer(data.getVersion());
 		res.setTypeCode(data.getPostType().getTypeCode());
 		res.setTypeName(data.getPostType().getTypeName());
 
@@ -106,8 +126,8 @@ public class PostService {
 		res.setCategoryName(data.getCategory().getCategoryName());
 		res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 		res.setCountPostLike(getCountPostLike(data.getId()));
-		res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-		res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+		//res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+		//res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 
 		return res;
 	}
@@ -377,6 +397,7 @@ public class PostService {
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
+					option.setVer(pollingOption.getVersion());
 					option.setPollingContent(pollingOption.getContentPolling());
 					options.add(option);
 				}
@@ -391,6 +412,7 @@ public class PostService {
 				filePostData.setVer(filePost.getVersion());
 				files.add(filePostData);
 			}
+			res.setVer(data.getVersion());
 			res.setData(files);
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -442,6 +464,7 @@ public class PostService {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
 					option.setPollingContent(pollingOption.getContentPolling());
+					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
 				res.setPollingOption(options);
@@ -455,7 +478,7 @@ public class PostService {
 				filePostData.setVer(filePost.getVersion());
 				files.add(filePostData);
 			}
-
+			res.setVer(data.getVersion());
 			res.setData(files);
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -497,6 +520,7 @@ public class PostService {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
 					option.setPollingContent(pollingOption.getContentPolling());
+					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
 				res.setPollingOption(options);

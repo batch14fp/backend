@@ -42,7 +42,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoPostRes> getActivity(@PathVariable ("id")String id){
+	public ResponseEntity<PojoPostRes> getActivity(@PathVariable ("id")String id) throws Exception{
 		PojoPostRes resGet = postService.getById(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
