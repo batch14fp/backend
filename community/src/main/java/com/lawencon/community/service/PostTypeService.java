@@ -88,7 +88,6 @@ public class PostTypeService {
 			postType.setTypeCode(data.getPostTypeCode());
 			postType.setIsActive(data.getIsActive());
 			postType.setVersion(data.getVer());
-
 			final PostType postTypeNew = postTypeDao.saveAndFlush(postType);
 			ConnHandler.commit();
 	
