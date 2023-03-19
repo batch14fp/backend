@@ -10,6 +10,8 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.FilePostDao;
+import com.lawencon.community.dao.PollingDao;
+import com.lawencon.community.dao.PollingOptionDao;
 import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostCommentDao;
 import com.lawencon.community.dao.PostDao;
@@ -19,6 +21,8 @@ import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.FilePost;
+import com.lawencon.community.model.Polling;
+import com.lawencon.community.model.PollingOption;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostBookmark;
 import com.lawencon.community.model.PostComment;
@@ -28,15 +32,17 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
-import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
-import com.lawencon.community.pojo.post.PojoPostReqInsert;
-import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
-import com.lawencon.community.pojo.post.PojoPostReqUpdate;
 import com.lawencon.community.pojo.post.PojoFileResData;
-import com.lawencon.community.pojo.post.PojoPostRes;
-import com.lawencon.community.pojo.post.PojoPostCommentRes;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
+import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReplyResData;
+import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentRes;
+import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqUpdate;
+import com.lawencon.community.pojo.post.PojoPostRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -51,11 +57,13 @@ public class PostService {
 	private UserDao userDao;
 	private CategoryDao categoryDao;
 	private FilePostDao filePostDao;
+	private PollingDao pollingDao;
+	private PollingOptionDao pollingOptionDao;
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public PostService(final FilePostDao filePostDao, final PostDao postDao, final PostBookmarkDao postBookmarkDao,
+	public PostService(final PollingOptionDao pollingOptionDao, final PollingDao pollingDao, final FilePostDao filePostDao, final PostDao postDao, final PostBookmarkDao postBookmarkDao,
 			final PostCommentDao postCommentDao, final PostTypeDao postTypeDao, final FileDao fileDao,
 			final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
 		this.postDao = postDao;
@@ -67,6 +75,8 @@ public class PostService {
 		this.categoryDao = categoryDao;
 		this.postCommentDao = postCommentDao;
 		this.filePostDao = filePostDao;
+		this.pollingDao = pollingDao;
+		this.pollingOptionDao = pollingOptionDao;
 
 	}
 
@@ -158,9 +168,29 @@ public class PostService {
 			files.add(filePost);
 
 		});
+		final Polling polling = new Polling();
+		polling.setTitle(data.getPollingInsert().getPollingTitle());
+		polling.setIsOpen(true);
+		polling.setEndAt(data.getPollingInsert().getEndAt());
+		polling.setIsActive(true);
+		
+		 final Polling pollingNew = pollingDao.save(polling);
+
+	        final List<PollingOption> options = new ArrayList<>();
+	        for (PojoPollingOptionReqInsert option : data.getPollingInsert().getPollingOptions()) {
+	            final PollingOption pollingOption = new PollingOption();
+	            pollingOption.setPolling(pollingNew);
+	            pollingOption.setContentPolling(option.getPollingContent());
+	            options.add(pollingOption);
+	        }
+	        pollingOptionDao.saveAll(options);
+
+		
 		final List<File> fileList = fileDao.saveAll(files);
 		post.setIsActive(true);
+		post.setPolling(pollingNew);
 		final Post postNew = postDao.save(post);
+		
 		final List<FilePost> filePostInsert = new ArrayList<>();
 		fileList.forEach(filePostConten -> {
 			final FilePost filePostData = new FilePost();
@@ -169,6 +199,9 @@ public class PostService {
 			filePostInsert.add(filePostData);
 		});
 		filePostDao.saveAll(filePostInsert);
+		
+		
+		
 		ConnHandler.commit();
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
@@ -212,6 +245,29 @@ public class PostService {
 				filePostInsert.add(filePostData);
 			});
 			filePostDao.saveAll(filePostInsert);
+			  final Polling polling  = pollingDao.getByIdRef(data.getPollingUpdate().getPollingId());
+		        pollingDao.getByIdAndDetach(Polling.class, polling.getId());
+		    	polling.setTitle(data.getPollingUpdate().getPollingTitle());
+				polling.setIsOpen(data.getPollingUpdate().getIsOpen());
+				polling.setEndAt(data.getPollingUpdate().getEndAt());
+				polling.setVersion(data.getPollingUpdate().getVer());
+				polling.setIsActive(data.getPollingUpdate().getIsActive());
+				
+		        final List<PollingOption> options = new ArrayList<>();
+		        for (PojoPollingOptionReqUpdate option : data.getPollingUpdate().getPollingOptions()) {
+		            final PollingOption pollingOption = pollingOptionDao.getByIdRef(option.getPollingOptionId());
+		            pollingOptionDao.getByIdAndDetach(PollingOption.class, pollingOption.getId());
+		            pollingOption.setPolling(polling);
+		            pollingOption.setId(pollingOption.getId());
+		            pollingOption.setIsActive(pollingOption.getIsActive());
+		            pollingOption.setVersion(pollingOption.getVersion());
+		            pollingOption.setContentPolling(option.getPollingOptionContent());
+		            options.add(pollingOption);
+		        }
+
+		        pollingOptionDao.saveAll(options);
+
+		        
 
 			pojoUpdateRes.setId(postNew.getId());
 			pojoUpdateRes.setMessage("Save Success!");

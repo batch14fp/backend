@@ -7,7 +7,7 @@ public class PojoPollingReqUpdate {
 
 	private String pollingId;
 	private String pollingOptionId;
-
+	private Boolean isOpen;
 	private String pollingTitle;
 	private LocalDate endAt;
 	private List<PojoPollingOptionReqUpdate> pollingOptions;
@@ -68,6 +68,14 @@ public class PojoPollingReqUpdate {
 
 	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
+	}
+
+	public Boolean getIsOpen() {
+		return isOpen;
+	}
+
+	public void setIsOpen(Boolean isOpen) {
+		this.isOpen = isOpen;
 	}
 
 }
