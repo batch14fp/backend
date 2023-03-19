@@ -35,6 +35,9 @@ import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetFileData;
 import com.lawencon.community.pojo.post.PojoResGetPost;
+import com.lawencon.community.pojo.post.PojoResGetPostComment;
+import com.lawencon.community.pojo.post.PojoResGetPostCommentReplyData;
+import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -89,16 +92,31 @@ public class PostService {
 		res.setFullname(data.getUser().getProfile().getFullname());
 		res.setCategoryCode(data.getCategory().getCategoryCode());
 		res.setCategoryName(data.getCategory().getCategoryName());
-		res.setCountPostComment(postCommentDao.countPostComment(data.getId()));
+		res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 		res.setCountPostLike(getCountPostLike(data.getId()));
-		res.setBookmark(false);
-		res.setLike(false);
+		res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+		res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 
 		return res;
 	}
 
+	private Boolean getIsLike(String userId, String postId) {
+		final Boolean isLike = postLikeDao.getIsLike(userId, postId);
+		return isLike;
+	}
+
+	private Boolean getIsBookmarkPost(String userId, String postId) {
+		final Boolean isBookmark = postBookmarkDao.getIsBookmarkPost(userId, postId);
+		return isBookmark;
+	}
+
 	private Long getCountPostLike(String postId) {
 		Long countLike = postLikeDao.countPostLike(postId);
+		return countLike;
+	}
+
+	public Long getCountComment(String postId) {
+		Long countLike = postCommentDao.getCountPostComment(postId);
 		return countLike;
 	}
 
@@ -135,7 +153,7 @@ public class PostService {
 		data.getAttachmentPost().forEach(file -> {
 			final File filePost = new File();
 			filePost.setFileExtension(file.getExtensions());
-			filePost.setFileName(file.getFileName());
+			filePost.setFileName(GenerateString.generateFileName(file.getExtensions()));
 			filePost.setFileContent(file.getFileContent());
 			files.add(filePost);
 
@@ -208,21 +226,25 @@ public class PostService {
 	}
 
 	public PojoInsertRes savePostLike(PojoPostLikeInsertReq data) {
-		ConnHandler.begin();
 
+		final PojoInsertRes pojoRes = new PojoInsertRes();
 		final PostLike postLike = new PostLike();
 
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		postLike.setPost(post);
-		postLike.setUser(user);
-		postLike.setIsActive(true);
-		final PostLike postLikeNew = postLikeDao.save(postLike);
-		ConnHandler.commit();
+		if (getIsLike(user.getId(), post.getId())) {
+			pojoRes.setMessage("The post has already been liked!");
+		} else {
+			ConnHandler.begin();
+			postLike.setPost(post);
+			postLike.setUser(user);
+			postLike.setIsActive(true);
+			final PostLike postLikeNew = postLikeDao.save(postLike);
+			ConnHandler.commit();
+			pojoRes.setId(postLikeNew.getId());
+			pojoRes.setMessage("Save Success!");
+		}
 
-		final PojoInsertRes pojoRes = new PojoInsertRes();
-		pojoRes.setId(postLikeNew.getId());
-		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
 
@@ -243,18 +265,24 @@ public class PostService {
 	}
 
 	public PojoInsertRes savePostBookmark(PojoPostBookmarkInsertReq data) {
-		ConnHandler.begin();
+		final PojoInsertRes pojoRes = new PojoInsertRes();
 		final PostBookmark postBookmark = new PostBookmark();
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		postBookmark.setPost(post);
-		postBookmark.setUser(user);
-		postBookmark.setIsActive(true);
-		final PostBookmark postBookmarkNew = postBookmarkDao.save(postBookmark);
-		ConnHandler.commit();
-		final PojoInsertRes pojoRes = new PojoInsertRes();
-		pojoRes.setId(postBookmarkNew.getId());
-		pojoRes.setMessage("Save Success!");
+		if (getIsLike(user.getId(), post.getId())) {
+			pojoRes.setMessage("The post has already been bookmark!");
+		} else {
+			ConnHandler.begin();
+
+			postBookmark.setPost(post);
+			postBookmark.setUser(user);
+			postBookmark.setIsActive(true);
+			final PostBookmark postBookmarkNew = postBookmarkDao.save(postBookmark);
+			ConnHandler.commit();
+			pojoRes.setId(postBookmarkNew.getId());
+			pojoRes.setMessage("Save Success!");
+		
+		}
 		return pojoRes;
 	}
 
@@ -297,7 +325,7 @@ public class PostService {
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
-			res.setCountPostComment(postCommentDao.countPostComment(data.getId()));
+			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
 			res.setBookmark(false);
@@ -342,7 +370,7 @@ public class PostService {
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
-			res.setCountPostComment(postCommentDao.countPostComment(data.getId()));
+			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
 			res.setBookmark(false);
@@ -363,7 +391,7 @@ public class PostService {
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
-			List<PojoResGetFileData> files = new ArrayList<>();
+			final List<PojoResGetFileData> files = new ArrayList<>();
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
 			for (FilePost filePost : filePosts) {
@@ -378,36 +406,72 @@ public class PostService {
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryCode(data.getCategory().getCategoryCode());
 			res.setCategoryName(data.getCategory().getCategoryName());
-			res.setCountPostComment(postCommentDao.countPostComment(data.getId()));
+			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
 			res.setBookmark(false);
 			res.setLike(false);
 			listPost.add(res);
 		}
-
 		return listPost;
+
 	}
 
 	public PojoInsertRes savePostComment(PojoPostCommentInsertReq data) {
 		ConnHandler.begin();
 		final PostComment postComment = new PostComment();
-		final Post post = postDao.getByIdRef(data.getPostId());
-		postComment.setPost(post);
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		postComment.setUser(user);
 		postComment.setBody(data.getContentComment());
+		postComment.setIsActive(true);
 		if (data.getCommentId() != null) {
-			postComment.setComment(postComment);
-
+			final PostComment postCommentReply = postCommentDao.getByIdRef(data.getCommentId());
+			postComment.setComment(postCommentReply);
+			final Post post = postDao.getByIdRef(postCommentReply.getPost().getId());
+			postComment.setPost(post);
+		} else {
+			final Post post = postDao.getByIdRef(data.getPostId());
+			postComment.setPost(post);
 		}
 		final PostComment postCommentNew = postCommentDao.save(postComment);
+
 		ConnHandler.commit();
+
 		final PojoInsertRes res = new PojoInsertRes();
 		res.setId(postCommentNew.getId());
 		res.setMessage("Save Success");
 		return res;
 
+	}
+
+	public List<PojoResGetPostComment> getAllCommentByPostId(final String postId, int offset, int limit)
+			throws Exception {
+		final List<PojoResGetPostComment> listComment = new ArrayList<>();
+		final List<PojoResGetPostCommentReplyData> listCommentData = new ArrayList<>();
+		postCommentDao.getAllByPostId(postId, limit, offset).forEach(data -> {
+			final PojoResGetPostComment postComment = new PojoResGetPostComment();
+			postComment.setContentComment(data.getBody());
+			postComment.setPostCommentId(data.getId());
+			postComment.setUserId(data.getUser().getId());
+			postComment.setFullname(data.getUser().getProfile().getFullname());
+			postComment.setCreatedAt(data.getCreatedAt());
+			postComment.setVer(data.getVersion());
+			if (data.getComment() != null) {
+				final PojoResGetPostCommentReplyData postCommentData = new PojoResGetPostCommentReplyData();
+
+				postCommentData.setContentComment(data.getComment().getId());
+				postCommentData.setUserId(data.getUser().getId());
+				postCommentData.setContentComment(data.getComment().getBody());
+				postCommentData.setFullname(data.getComment().getUser().getProfile().getFullname());
+				postCommentData.setCreatedAt(data.getComment().getCreatedAt());
+				listCommentData.add(postCommentData);
+				postComment.setData(listCommentData);
+
+			}
+
+			listComment.add(postComment);
+		});
+		return listComment;
 	}
 
 }

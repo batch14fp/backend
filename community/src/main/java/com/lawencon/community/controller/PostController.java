@@ -26,6 +26,7 @@ import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostLikeInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.post.PojoResGetPost;
+import com.lawencon.community.pojo.post.PojoResGetPostComment;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
 
@@ -114,6 +115,17 @@ public class PostController {
 	        final List<PojoResGetPost> dataList = postService.getMostLike(page, size);
 	        int totalCount = postService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	    }
+	@GetMapping("/{id}/comment")
+	public ResponseEntity<List<PojoResGetPostComment>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) throws Exception{
+	        final List<PojoResGetPostComment> dataList = postService.getAllCommentByPostId(id, page, size);
+	        Long totalCount = postService.getCountComment(id);
+	        int pageCount = paginationService.getPageCount(totalCount.intValue(), size);
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("X-Total-Count", String.valueOf(totalCount));
 			headers.add("X-Total-Pages", String.valueOf(pageCount));

@@ -7,82 +7,96 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostComment;
+import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 
 
 @Repository
-public class PostCommentDao extends BaseMasterDao<PostComment>{
+public class PostCommentDao extends AbstractJpaDao{
+
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<PostComment> getAll() throws Exception {
-	    final StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT pc.comment_id, pc.user_id, pc.post_id, ");
-	    sb.append("c.comment_id, c.user_id, c.post_id, c.created_at, ");
-	    sb.append("p.fullname, ");
-	    sb.append("p.post_content, p.created_at ");
-	    sb.append("FROM t_post_comment pc ");
-	    sb.append("LEFT JOIN t_post_comment c ON pc.comment_id = c.id ");
-	    sb.append("INNER JOIN t_user u ON pc.user_id = u.user_id ");
-	    sb.append("INNER JOIN t_profile pr ON u.profile_id = pr.id ");
-	    sb.append("INNER JOIN t_post p ON pc.post_id = p.post_id ");
+	public List<PostComment> getAllByPostId(final String postId, final int limit, final int offset) throws Exception {
+	    final StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT pc.id AS pc_id, pc.user_id AS pc_user_id, ");
+	    sql.append("pc.post_id AS pc_post_id, c.comment_id AS c_comment_id, ");
+	    sql.append("c.user_id AS c_user_id, c.post_id AS c_post_id, pc.body, ");
+	    sql.append("c.created_at as c_created_at, pr.fullname, p.content_post, pc.created_at as pc_created_at, pc.ver ");
+	    sql.append("FROM t_post_comment pc ");
+	    sql.append("LEFT JOIN t_post_comment c ON pc.comment_id = c.id ");
+	    sql.append("INNER JOIN t_user u ON pc.user_id = u.id ");
+	    sql.append("INNER JOIN t_profile pr ON u.profile_id = pr.id ");
+	    sql.append("INNER JOIN t_post p ON pc.post_id = p.id ");
+	    sql.append("WHERE pc.post_id = :postId ");
+	    sql.append("ORDER BY pc.created_at DESC ");
 
-	    final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
-	    final List<PostComment> listResult = new ArrayList<>();
-	    for (Object[] obj : listObj) {
-	        final PostComment postComment = new PostComment();
-	        postComment.setId((obj[0].toString()));
-	        final User user = new User();
-	        user.setId( obj[1].toString());
-	        postComment.setUser(user);
-	        
-	        final Post post = new Post();
-	        post.setId(obj[2].toString());
-	        postComment.setPost(post );
+	    try {
+	        final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sql.toString())
+	                .setParameter("postId", postId)
+	                .setMaxResults(limit)
+	                .setFirstResult(offset)
+	                .getResultList();
+	        final List<PostComment> listResult = new ArrayList<>();
+	        for (Object[] obj : listObj) {
+	            final PostComment postComment = new PostComment();
+	            postComment.setId((obj[0].toString()));
+	            final User user = new User();
+	            final Profile profile = new Profile();
+	            user.setId(obj[1].toString());
+	            profile.setFullname(obj[8].toString());
+	            user.setProfile(profile);
+	            postComment.setUser(user);
 
-	        if (obj[3] != null) {
-	            final PostComment postCommentReply = new PostComment();
-	            postCommentReply.setId((String) obj[3]);
-	            final User userComment = new User();
-	            userComment.setId( obj[4].toString());
-		        
-	            postCommentReply.setUser(userComment);
-	            postCommentReply.setCreatedAt(Timestamp.valueOf( obj[5].toString()).toLocalDateTime());
-		          
-		   
-	            //postComment.setCommentContent((String) obj[6]);
-	             postComment.setComment(postCommentReply);
+	            final Post post = new Post();
+	            post.setId(obj[2].toString());
+	            postComment.setPost(post);
+
+	            if (obj[3] != null) {
+	                final PostComment postCommentReply = new PostComment();
+	                postCommentReply.setId((String) obj[3]);
+	                final User userComment = new User();
+	                userComment.setId(obj[4].toString());
+
+	                postCommentReply.setUser(userComment);
+
+	                final Post postReply = new Post();
+	                postReply.setId(obj[5].toString());
+	                postComment.setPost(postReply);
+	                postReply.setCreatedAt(Timestamp.valueOf(obj[7].toString()).toLocalDateTime());
+	                postComment.setComment(postCommentReply);
+
+
+	            }
+	            postComment.setBody(obj[6].toString());
+	            postComment.getPost().setContentPost(obj[9].toString());
+	            postComment.setCreatedAt((Timestamp.valueOf(obj[10].toString()).toLocalDateTime()));
+	            postComment.setVersion(Integer.valueOf(obj[11].toString()));
+	            listResult.add(postComment);
 	        }
-
-	        postComment.getUser().getProfile().setFullname((String) obj[6]);
-
-	        postComment.getPost().setContentPost(obj[7].toString());
-	        postComment.getPost().setCreatedAt((Timestamp.valueOf(obj[8].toString()).toLocalDateTime()));
-
-	        listResult.add(postComment);
+	        return listResult;
+	    } catch (Exception e) {
+	        throw new Exception("Error saat menjalankan query getAllByPostId: " + e.getMessage());
 	    }
-	    return listResult;
 	}
-	
 
-	@Override
+
+
 	public Optional<PostComment> getById(String id) {
 		return Optional.ofNullable(super.getById(PostComment.class, id));
 	}
 	
 
 
-	@Override
 	public PostComment getByIdRef(String id) {
 		return super.getByIdRef(PostComment.class, id);
 	}
 	
 	
 	
-	@Override
 	public Optional<PostComment> getByIdAndDetach(String id) {
 
 		return Optional.ofNullable(super.getByIdAndDetach(PostComment.class, id));
@@ -90,10 +104,9 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 	}
 	
 	
-	public Long countPostComment(final String postId) {
+	public Long getCountPostComment(final String postId) {
 		final StringBuilder sql = new StringBuilder();
 		Long count =null;
-	
 		sql.append("SELECT COUNT(id) FROM t_post_comment ");
 		sql.append("WHERE post_id = :postId ");
 	
@@ -107,6 +120,12 @@ public class PostCommentDao extends BaseMasterDao<PostComment>{
 	return count;	
 		
 	}
+	
+	
+	
+
+
+
 	
 
 }
