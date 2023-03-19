@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminInsertReq;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminUpdateReq;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqInsert;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqUpdate;
 import com.lawencon.community.service.SocialMediaService;
 
 @RestController
@@ -32,19 +32,19 @@ public class SocialMediaController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PojoResGetSocialMedia>> getAllSocialMedia() {
-		List<PojoResGetSocialMedia> resGet = socialMediaService.getAll();
+	public ResponseEntity<List<PojoSocialMediaRes>> getAllSocialMedia() {
+		List<PojoSocialMediaRes> resGet = socialMediaService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertSocialMedia(@RequestBody PojoSocialMediaAdminInsertReq data) {
+	public ResponseEntity<PojoInsertRes> insertSocialMedia(@RequestBody PojoSocialMediaAdminReqInsert data) {
 		PojoInsertRes resGet = socialMediaService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateSocialMedia(@RequestBody PojoSocialMediaAdminUpdateReq data) {
+	public ResponseEntity<PojoUpdateRes> updateSocialMedia(@RequestBody PojoSocialMediaAdminReqUpdate data) {
 		PojoUpdateRes resGet = socialMediaService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

@@ -23,9 +23,9 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.profile.PojoProfileUpdateReq;
-import com.lawencon.community.pojo.profile.PojoResGetProfileDetail;
-import com.lawencon.community.pojo.socialmedia.PojoResGetSocialMedia;
+import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
+import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -56,9 +56,9 @@ public class ProfileService {
 
 	}
 
-	public PojoResGetProfileDetail getById(String id) throws Exception {
+	public PojoProfileDetailRes getById(String id) throws Exception {
 		final Profile profile = profileDao.getByIdRef(id);
-		final PojoResGetProfileDetail resGetProfile = new PojoResGetProfileDetail();
+		final PojoProfileDetailRes resGetProfile = new PojoProfileDetailRes();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
 		resGetProfile.setFullname(profile.getFullname());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -73,8 +73,8 @@ public class ProfileService {
 		resGetProfile.setImageId(profile.getImageProfile().getId());
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(profile.getCity());
-		final List<PojoResGetSocialMedia> socialMediaList = new ArrayList<>();
-		final PojoResGetSocialMedia socialMedia = new PojoResGetSocialMedia();
+		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
+		final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
 		profileSocialMediaDao.getByProfileId(id).forEach(data -> {
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
@@ -91,7 +91,7 @@ public class ProfileService {
 		return resGetProfile;
 	}
 
-	public PojoUpdateRes update(PojoProfileUpdateReq data) {
+	public PojoUpdateRes update(PojoProfileReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		ConnHandler.begin();
 	

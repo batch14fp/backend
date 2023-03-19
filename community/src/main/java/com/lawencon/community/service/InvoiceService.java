@@ -20,8 +20,8 @@ import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.invoice.PojoInvoiceInsertReq;
-import com.lawencon.community.pojo.invoice.PojoResGetInvoice;
+import com.lawencon.community.pojo.invoice.PojoInvoiceReqInsert;
+import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -48,7 +48,7 @@ public class InvoiceService {
 		this.salesSettingDao = salesSettingDao;
 	}
 	
-	public PojoInsertRes save(PojoInvoiceInsertReq data) {
+	public PojoInsertRes save(PojoInvoiceReqInsert data) {
 		ConnHandler.begin();
 		final Invoice invoice = new Invoice();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -90,8 +90,8 @@ public class InvoiceService {
 	
 	
 	
-	public PojoResGetInvoice getById (String id) {
-		final PojoResGetInvoice res = new PojoResGetInvoice();
+	public PojoInvoiceRes getById (String id) {
+		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getById(id).get();
 		
 		res.setActivityId(invoice.getActivity().getId());
@@ -108,8 +108,8 @@ public class InvoiceService {
 	
 	
 	
-	public PojoResGetInvoice getByCode(String code) throws Exception {
-		final PojoResGetInvoice res = new PojoResGetInvoice();
+	public PojoInvoiceRes getByCode(String code) throws Exception {
+		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getByInvoiceCode(code);
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());

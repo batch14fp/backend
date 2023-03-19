@@ -9,13 +9,13 @@ import com.lawencon.community.model.Category;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
-import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
-import com.lawencon.community.pojo.category.PojoResGetCategory;
+import com.lawencon.community.pojo.category.PojoCategoryReqInsert;
+import com.lawencon.community.pojo.category.PojoCategoryReqUpdate;
+import com.lawencon.community.pojo.category.PojoCategoryRes;
 
 
 @Service
-public class CategoryService extends BaseService<PojoResGetCategory>{
+public class CategoryService extends BaseService<PojoCategoryRes>{
 	private final CategoryDao categoryDao;
 	public CategoryService(final CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
@@ -23,10 +23,10 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 	
 	
 	@Override
-	public List<PojoResGetCategory> getAll() throws Exception{
-		final List<PojoResGetCategory>  listPojoResGetCategory = new ArrayList<>();
+	public List<PojoCategoryRes> getAll() throws Exception{
+		final List<PojoCategoryRes>  listPojoResGetCategory = new ArrayList<>();
 		categoryDao.getAll().forEach(data ->{
-			PojoResGetCategory pojoResGetCategory = new PojoResGetCategory();
+			PojoCategoryRes pojoResGetCategory = new PojoCategoryRes();
 			pojoResGetCategory.setCategoryId(data.getId());
 			pojoResGetCategory.setCategoryCode(data.getCategoryCode());
 			pojoResGetCategory.setCategoryName(data.getCategoryName());
@@ -57,7 +57,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 
 	}
 	
-	public PojoUpdateRes update(PojoCategoryUpdateReq data) {
+	public PojoUpdateRes update(PojoCategoryReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
@@ -82,7 +82,7 @@ public class CategoryService extends BaseService<PojoResGetCategory>{
 		
 		
 	}
-	public PojoInsertRes save(PojoCategoryInsertReq data) {
+	public PojoInsertRes save(PojoCategoryReqInsert data) {
 		ConnHandler.begin();
 		Category category = new Category();
 			category.setCategoryCode(data.getCategoryCode());;

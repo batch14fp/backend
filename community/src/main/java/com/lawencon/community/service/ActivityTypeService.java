@@ -11,9 +11,9 @@ import com.lawencon.community.model.ActivityType;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.activitytype.PojoActivityTypeInsertReq;
-import com.lawencon.community.pojo.activitytype.PojoActivityTypeUpdateReq;
-import com.lawencon.community.pojo.activitytype.PojoResGetActivityType;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqInsert;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqUpdate;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
 
 
 @Service
@@ -28,10 +28,10 @@ public class ActivityTypeService {
 	}
 
 	
-	public List<PojoResGetActivityType> getAll() {
-		final List<PojoResGetActivityType> activityList = new ArrayList<>();
+	public List<PojoActivityTypeRes> getAll() {
+		final List<PojoActivityTypeRes> activityList = new ArrayList<>();
 		activityTypeDao.getAll().forEach(data -> {
-			PojoResGetActivityType activityType = new PojoResGetActivityType();
+			PojoActivityTypeRes activityType = new PojoActivityTypeRes();
 			activityType.setActivityTypeId(data.getId());
 			activityType.setTypeCode(data.getTypeCode());
 			activityType.setTypeName(data.getActivityName());
@@ -59,7 +59,7 @@ public class ActivityTypeService {
 		}
 	}
 
-	public PojoInsertRes save(PojoActivityTypeInsertReq data) {
+	public PojoInsertRes save(PojoActivityTypeReqInsert data) {
 		ConnHandler.begin();
 		final ActivityType activityType = new ActivityType();
 		activityType.setTypeCode(data.getTypeCode());
@@ -74,7 +74,7 @@ public class ActivityTypeService {
 		return pojoRes;
 	}
 
-	public PojoUpdateRes update(PojoActivityTypeUpdateReq data) {
+	public PojoUpdateRes update(PojoActivityTypeReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
