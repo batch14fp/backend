@@ -407,8 +407,7 @@ public class PostService {
 	    	final PostComment postComment = new PostComment();
 	    	final Post post = postDao.getByIdRef(data.getPostId());
 	    	postComment.setPost(post);
-	    	
-	    	final User user = userDao.getByIdRef(data.getUserId());
+	    	final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 	    	postComment.setUser(user);
 	    	postComment.setBody(data.getContentComment());
 	    	if(data.getCommentId()!=null) {

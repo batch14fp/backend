@@ -3,7 +3,6 @@ package com.lawencon.community.pojo.post;
 public class PojoPostCommentInsertReq {
 
 	private String postId;
-	private String userId;
 	private String commentId;
 	private String contentComment;
 	public String getCommentId() {
@@ -18,12 +17,7 @@ public class PojoPostCommentInsertReq {
 	public void setPostId(String postId) {
 		this.postId = postId;
 	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+
 	public String getContentComment() {
 		return contentComment;
 	}
