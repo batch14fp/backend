@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
+import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
 import com.lawencon.community.model.Profile;
@@ -28,8 +29,7 @@ public class PostDao extends AbstractJpaDao {
 		final List<Post> listPost = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
-		sqlQuery.append("FROM t_post p ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id,p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
 		sqlQuery.append("INNER JOIN t_category c ");
@@ -51,26 +51,33 @@ public class PostDao extends AbstractJpaDao {
 				final Category category = new Category();
 				category.setId(obj[1].toString());
 				category.setCategoryCode(obj[2].toString());
+				category.setCategoryName(obj[3].toString());
 				post.setCategory(category);
 
 				final PostType postType = new PostType();
-				postType.setId(obj[3].toString());
-				postType.setTypeCode(obj[4].toString());
+				postType.setId(obj[4].toString());
+				postType.setTypeCode(obj[5].toString());
+				postType.setTypeName(obj[6].toString());
 				post.setPostType(postType);
 
 				final User user = new User();
-				user.setId(obj[5].toString());
+				user.setId(obj[7].toString());
 
 				final Profile profile = new Profile();
-				profile.setFullname(obj[8].toString());
+				profile.setFullname(obj[10].toString());
 				user.setProfile(profile);
 				post.setUser(user);
 
-				post.setTitle(obj[6].toString());
-				post.setContentPost(obj[7].toString());
-				post.setVersion(Integer.valueOf(obj[9].toString()));
-				post.setIsActive(Boolean.valueOf(obj[10].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
+				post.setTitle(obj[8].toString());
+				post.setContentPost(obj[9].toString());
+				if (obj[11] != null) {
+					final Polling polling = new Polling();
+					polling.setId(obj[11].toString());
+					post.setPolling(polling);
+				}
+				post.setVersion(Integer.valueOf(obj[12].toString()));
+				post.setIsActive(Boolean.valueOf(obj[13].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[14].toString()).toLocalDateTime());
 				listPost.add(post);
 			}
 		} catch (final Exception e) {
@@ -87,7 +94,7 @@ public class PostDao extends AbstractJpaDao {
 		final List<Post> listPost = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id,p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -112,27 +119,34 @@ public class PostDao extends AbstractJpaDao {
 				final Category category = new Category();
 				category.setId(obj[1].toString());
 				category.setCategoryCode(obj[2].toString());
+				category.setCategoryName(obj[3].toString());
 				post.setCategory(category);
 
 				final PostType postType = new PostType();
-				postType.setId(obj[3].toString());
-				postType.setTypeCode(obj[4].toString());
+				postType.setId(obj[4].toString());
+				postType.setTypeCode(obj[5].toString());
+				postType.setTypeName(obj[6].toString());
 				post.setPostType(postType);
 
 				final User user = new User();
-				user.setId(obj[5].toString());
+				user.setId(obj[7].toString());
 
 				final Profile profile = new Profile();
-				profile.setFullname(obj[8].toString());
+				profile.setFullname(obj[10].toString());
 				user.setProfile(profile);
 				post.setUser(user);
 
-				post.setTitle(obj[6].toString());
-				post.setContentPost(obj[7].toString());
-
-				post.setVersion(Integer.valueOf(obj[9].toString()));
-				post.setIsActive(Boolean.valueOf(obj[10].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
+				post.setTitle(obj[8].toString());
+				post.setContentPost(obj[9].toString());
+				if (obj[11] != null) {
+					final Polling polling = new Polling();
+					polling.setId(obj[11].toString());
+					post.setPolling(polling);
+				}
+				post.setVersion(Integer.valueOf(obj[12].toString()));
+				post.setIsActive(Boolean.valueOf(obj[13].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[14].toString()).toLocalDateTime());
+				listPost.add(post);
 				listPost.add(post);
 			}
 		} catch (final Exception e) {
@@ -164,7 +178,7 @@ public class PostDao extends AbstractJpaDao {
 
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,p.post_type_id,pt.type_code, p.user_id,p.title,p.content_post,pr.fullname, p.ver, p.is_active, p.created_at ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id,p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -187,26 +201,33 @@ public class PostDao extends AbstractJpaDao {
 				final Category category = new Category();
 				category.setId(obj[1].toString());
 				category.setCategoryCode(obj[2].toString());
+				category.setCategoryName(obj[3].toString());
 				post.setCategory(category);
 
 				final PostType postType = new PostType();
-				postType.setId(obj[3].toString());
-				postType.setTypeCode(obj[4].toString());
+				postType.setId(obj[4].toString());
+				postType.setTypeCode(obj[5].toString());
+				postType.setTypeName(obj[6].toString());
 				post.setPostType(postType);
 
 				final User user = new User();
-				user.setId(obj[5].toString());
+				user.setId(obj[7].toString());
 
 				final Profile profile = new Profile();
-				profile.setFullname(obj[8].toString());
+				profile.setFullname(obj[10].toString());
 				user.setProfile(profile);
 				post.setUser(user);
 
-				post.setTitle(obj[6].toString());
-				post.setContentPost(obj[7].toString());
-				post.setVersion(Integer.valueOf(obj[9].toString()));
-				post.setIsActive(Boolean.valueOf(obj[10].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[11].toString()).toLocalDateTime());
+				post.setTitle(obj[8].toString());
+				post.setContentPost(obj[9].toString());
+				if (obj[11] != null) {
+					final Polling polling = new Polling();
+					polling.setId(obj[11].toString());
+					post.setPolling(polling);
+				}
+				post.setVersion(Integer.valueOf(obj[12].toString()));
+				post.setIsActive(Boolean.valueOf(obj[13].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[14].toString()).toLocalDateTime());
 				postList.add(post);
 			}
 		} catch (final Exception e) {
