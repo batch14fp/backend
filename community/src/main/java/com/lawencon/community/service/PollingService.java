@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.community.dao.BaseBatchDao;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
 import com.lawencon.community.dao.PostDao;
@@ -29,13 +28,13 @@ public class PollingService {
 	private PollingDao pollingDao;
 	private PostTypeDao postTypeDao;
 	private PollingOptionDao pollingOptionDao;
-	private BaseBatchDao baseBatchDao;
-	public PollingService(final BaseBatchDao baseBatchDao,final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
+	
+	public PollingService(final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingDao = pollingDao;
 		this.postDao  = postDao;
 		this.postTypeDao = postTypeDao;
-		this.baseBatchDao =baseBatchDao;
+		
 	}
 	
 	public PojoInsertRes save(PojoPollingInsertReq data) {
@@ -63,7 +62,7 @@ public class PollingService {
 	            pollingOption.setContentPolling(option.getPollingContent());
 	            options.add(pollingOption);
 	        }
-	        baseBatchDao.saveAll(options);
+	        pollingOptionDao.saveAll(options);
 
 	        ConnHandler.commit();
 
@@ -97,7 +96,7 @@ public class PollingService {
 	            options.add(pollingOption);
 	        }
 
-	        baseBatchDao.saveAll(options);
+	        pollingOptionDao.saveAll(options);
 
 	        
 	        
