@@ -38,11 +38,12 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
 import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
-import com.lawencon.community.pojo.user.PojoAllUserByRoleRes;
+import com.lawencon.community.pojo.user.PojoAllUsersRes;
+import com.lawencon.community.pojo.user.PojoAllUsersResData;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
-import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.util.GenerateString;
 
 @Service
@@ -188,10 +189,10 @@ public class UserService implements UserDetailsService {
 	}
 
 
-	public List<PojoAllUserByRoleRes> getAllUserByRole(String roleCode) {
-		final List<PojoAllUserByRoleRes> listRes = new ArrayList<>();
+	public List<PojoAllUsersResData> getAllUserByRole(String roleCode) {
+		final List<PojoAllUsersResData> listRes = new ArrayList<>();
 		userDao.getUserByRoleCode(roleCode).forEach(data -> {
-			PojoAllUserByRoleRes res = new PojoAllUserByRoleRes();
+			PojoAllUsersResData res = new PojoAllUsersResData();
 			res.setEmail(data.getEmail());
 			res.setRoleId(data.getRole().getRoleCode());
 			res.setFullname(data.getProfile().getFullname());
@@ -202,6 +203,33 @@ public class UserService implements UserDetailsService {
 
 		return listRes;
 
+	}
+	
+	
+	public PojoAllUsersRes getAllUser(int offset, int limit) {
+		final PojoAllUsersRes res = new PojoAllUsersRes();	
+		final List<PojoAllUsersResData> listRes = new ArrayList<>();
+		userDao.getllUser(offset, limit).forEach(data -> {
+			PojoAllUsersResData userData = new PojoAllUsersResData();
+			userData.setEmail(data.getEmail());
+			userData.setUserId(data.getId());
+			userData.setRoleId(data.getRole().getRoleCode());
+			userData.setFullname(data.getProfile().getFullname());
+			userData.setRoleName(data.getRole().getRoleName());
+			userData.setIsActive(data.getIsActive());
+			userData.setVer(data.getVersion());
+			listRes.add(userData);
+
+		});
+		res.setData(listRes);
+		res.setTotal(Long.valueOf(getTotalCount()));
+
+		return res;
+
+	}
+	public int getTotalCount() {
+
+		return userDao.getTotalCount();
 	}
 	
 	

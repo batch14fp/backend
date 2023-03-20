@@ -1,11 +1,14 @@
 package com.lawencon.community.pojo.user;
 
-public class PojoAllUserByRoleRes {
+public class PojoAllUsersResData {
 	private String roleId;
 	private String userId;
 	private String fullname;
 	private String roleName;
 	private String email;
+	private Boolean isActive;
+	private Integer ver;
+
 	public String getRoleId() {
 		return roleId;
 	}
@@ -36,5 +39,18 @@ public class PojoAllUserByRoleRes {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	
 	
 }

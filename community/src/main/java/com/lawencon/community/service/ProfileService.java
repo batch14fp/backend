@@ -3,8 +3,7 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -23,8 +22,8 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
+import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -39,7 +38,7 @@ public class ProfileService {
 	private PositionDao positionDao;
 	private FileDao fileDao;
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 
 	public ProfileService(final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
