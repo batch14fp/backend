@@ -25,12 +25,12 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.login.PojoLoginReq;
 import com.lawencon.community.pojo.login.PojoLoginRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
-import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
-import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
+import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
+import com.lawencon.community.pojo.user.PojoAllUserByRoleRes;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
-import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
-import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
 
@@ -50,7 +50,7 @@ public class UserController {
 
 	
 	@PostMapping("sign-up")
-	public ResponseEntity<PojoInsertRes>VerificationCode(@RequestBody  PojoVerificationCodeReq data){
+	public ResponseEntity<PojoInsertRes>VerificationCode(@RequestBody  PojoVerificationCodeReqInsert data){
 		PojoInsertRes res = userService.verificationCode(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
@@ -61,15 +61,15 @@ public class UserController {
 	}
 	
 	@PostMapping("sign-up/verify-code")
-	public ResponseEntity<PojoResGetVerification>checkVerified(@RequestBody PojoResGetVerificationCode data){
-		PojoResGetVerification res = userService.getVerified(data);
-		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
+	public ResponseEntity<PojoVerificationRes>checkVerified(@RequestBody PojoResGetVerificationCode data){
+		PojoVerificationRes res = userService.getVerified(data);
+		return new ResponseEntity<PojoVerificationRes>(res, HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/{roleCode}")
-	public ResponseEntity<List<PojoResGetAllUserByRole>>getAllUserCode(@PathVariable("roleCode")String roleCode){
-		List<PojoResGetAllUserByRole> resGet = userService.getAllUserByRole(roleCode);
+	public ResponseEntity<List<PojoAllUserByRoleRes>>getAllUserCode(@PathVariable("roleCode")String roleCode){
+		List<PojoAllUserByRoleRes> resGet = userService.getAllUserByRole(roleCode);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
@@ -93,8 +93,6 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
-		loginRes.setImgProfileId(userOptional.get().getProfile().getImageProfile().getId());
-
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
 	}
 	
@@ -105,12 +103,12 @@ public class UserController {
 	}
 	
 	@GetMapping("recover/verify")
-	public ResponseEntity<PojoResGetVerification>checkVerifiedCode(@RequestBody PojoResGetVerificationCode data){
-		PojoResGetVerification res = userService.getVerified(data);
-		return new ResponseEntity<PojoResGetVerification>(res, HttpStatus.OK);
+	public ResponseEntity<PojoVerificationRes>checkVerifiedCode(@RequestBody PojoResGetVerificationCode data){
+		PojoVerificationRes res = userService.getVerified(data);
+		return new ResponseEntity<PojoVerificationRes>(res, HttpStatus.OK);
 	}
 	@GetMapping("recover/change-password")
-	public ResponseEntity<PojoUpdateRes>updatePassword(@RequestBody PojoPasswordUpdateReq data){
+	public ResponseEntity<PojoUpdateRes>updatePassword(@RequestBody PojoPasswordReqUpdate data){
 		PojoUpdateRes res = userService.updatePassword(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

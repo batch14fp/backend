@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.activitytype.PojoActivityTypeInsertReq;
-import com.lawencon.community.pojo.activitytype.PojoActivityTypeUpdateReq;
-import com.lawencon.community.pojo.activitytype.PojoResGetActivityType;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqInsert;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqUpdate;
+import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
 import com.lawencon.community.service.ActivityTypeService;
 
 @RestController
@@ -31,19 +31,19 @@ public class ActivityTypeController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetActivityType>> getAllActivityType(){
-		List<PojoResGetActivityType> resGet = activityTypeService.getAll();
+	public ResponseEntity<List<PojoActivityTypeRes>> getAllActivityType(){
+		List<PojoActivityTypeRes> resGet = activityTypeService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertActivityType(@RequestBody PojoActivityTypeInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertActivityType(@RequestBody PojoActivityTypeReqInsert data){
 		PojoInsertRes resGet = activityTypeService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateActivityType(@RequestBody PojoActivityTypeUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateActivityType(@RequestBody PojoActivityTypeReqUpdate data){
 		PojoUpdateRes resGet = activityTypeService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

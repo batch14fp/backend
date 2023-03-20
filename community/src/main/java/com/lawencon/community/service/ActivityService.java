@@ -24,9 +24,9 @@ import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.activity.PojoActivityInsertReq;
-import com.lawencon.community.pojo.activity.PojoActivityUpdateReq;
-import com.lawencon.community.pojo.activity.PojoResGetActivity;
+import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
+import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
+import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.security.principal.PrincipalService;
 
 
@@ -58,14 +58,14 @@ public class ActivityService {
 	}
 
 	
-	public List<PojoResGetActivity> getAll(int offset, int limit) {
-		final List<PojoResGetActivity> activityList = new ArrayList<>();
+	public List<PojoActivityRes> getAll(int offset, int limit) {
+		final List<PojoActivityRes> activityList = new ArrayList<>();
 		
 		
 		
 		
 		activityDao.getAll(offset, limit).forEach(data -> {
-			PojoResGetActivity activity = new PojoResGetActivity();
+			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
@@ -88,10 +88,10 @@ public class ActivityService {
 
 	}
 	
-	public List<PojoResGetActivity> getAllByHighestPrice(int offset, int limit) {
-		final List<PojoResGetActivity> activityList = new ArrayList<>();
+	public List<PojoActivityRes> getAllByHighestPrice(int offset, int limit) {
+		final List<PojoActivityRes> activityList = new ArrayList<>();
 		activityDao.getAllByHighestPrice(offset, limit).forEach(data -> {
-			PojoResGetActivity activity = new PojoResGetActivity();
+			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
@@ -114,10 +114,10 @@ public class ActivityService {
 
 	}
 	
-	public List<PojoResGetActivity> getAllByLowestPrice(int offset, int limit) {
-		final List<PojoResGetActivity> activityList = new ArrayList<>();
+	public List<PojoActivityRes> getAllByLowestPrice(int offset, int limit) {
+		final List<PojoActivityRes> activityList = new ArrayList<>();
 		activityDao.getAllByLowestPrice(offset, limit).forEach(data -> {
-			PojoResGetActivity activity = new PojoResGetActivity();
+			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
@@ -163,7 +163,7 @@ public class ActivityService {
 		}
 	}
 
-	public PojoInsertRes save(PojoActivityInsertReq data) {
+	public PojoInsertRes save(PojoActivityReqInsert data) {
 		ConnHandler.begin();
 		Voucher voucherNew = null; 
 		final Activity activity = new Activity();
@@ -207,7 +207,7 @@ public class ActivityService {
 		return pojoRes;
 	}
 
-	public PojoUpdateRes update(PojoActivityUpdateReq data) {
+	public PojoUpdateRes update(PojoActivityReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
@@ -242,8 +242,8 @@ public class ActivityService {
 	
 	
 
-	public PojoResGetActivity getById(String id) {
-		final PojoResGetActivity activity = new PojoResGetActivity();
+	public PojoActivityRes getById(String id) {
+		final PojoActivityRes activity = new PojoActivityRes();
 		    final Activity data =   activityDao.getByIdRef(id);
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
@@ -264,15 +264,15 @@ public class ActivityService {
 
 	}
 	
-	public List<PojoResGetActivity> getListActivityByCategoryAndType(String categoryCode, String typeCode) throws Exception {
+	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode) throws Exception {
 	   final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
 	    if (listActivity == null || listActivity.isEmpty()) {
 	        return null;
 	    }
 
-	    final List<PojoResGetActivity> pojoList = new ArrayList<>();
+	    final List<PojoActivityRes> pojoList = new ArrayList<>();
 	    for (Activity activity : listActivity) {
-	    	final PojoResGetActivity pojo = new PojoResGetActivity();
+	    	final PojoActivityRes pojo = new PojoActivityRes();
 	        pojo.setActivityId(activity.getId());
 	        pojo.setTitle(activity.getTitle());
 	        pojo.setContent(activity.getDescription());

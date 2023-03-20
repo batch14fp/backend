@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
-import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
-import com.lawencon.community.pojo.category.PojoResGetCategory;
+import com.lawencon.community.pojo.category.PojoCategoryReqInsert;
+import com.lawencon.community.pojo.category.PojoCategoryReqUpdate;
+import com.lawencon.community.pojo.category.PojoCategoryRes;
 import com.lawencon.community.service.CategoryService;
 
 @RestController
@@ -31,19 +31,19 @@ public class CategoryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetCategory>> getAllCategory() throws Exception{
-		List<PojoResGetCategory> resGet = categoryService.getAll();
+	public ResponseEntity<List<PojoCategoryRes>> getAllCategory() throws Exception{
+		List<PojoCategoryRes> resGet = categoryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoCategoryInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoCategoryReqInsert data){
 		PojoInsertRes resGet = categoryService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateCategory(@RequestBody PojoCategoryUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateCategory(@RequestBody PojoCategoryReqUpdate data){
 		PojoUpdateRes resGet = categoryService.update(data);	
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}

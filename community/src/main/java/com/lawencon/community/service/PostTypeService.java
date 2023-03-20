@@ -11,9 +11,9 @@ import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.posttype.PojoPostTypeInsertReq;
-import com.lawencon.community.pojo.posttype.PojoPostTypeUpdateReq;
-import com.lawencon.community.pojo.posttype.PojoResGetPostType;
+import com.lawencon.community.pojo.posttype.PojoPostTypeReqInsert;
+import com.lawencon.community.pojo.posttype.PojoPostTypeReqUpdate;
+import com.lawencon.community.pojo.posttype.PojoPostTypeRes;
 
 @Service
 public class PostTypeService {
@@ -24,11 +24,11 @@ public class PostTypeService {
 		this.postTypeDao = postTypeDao;
 
 	}
-	public List<PojoResGetPostType> getAll() {
-		List<PojoResGetPostType> res = new ArrayList<>();
+	public List<PojoPostTypeRes> getAll() {
+		List<PojoPostTypeRes> res = new ArrayList<>();
 
 		postTypeDao.getAll().forEach(data -> {
-			PojoResGetPostType postType = new PojoResGetPostType();
+			PojoPostTypeRes postType = new PojoPostTypeRes();
 			postType.setPostTypeId(data.getId());
 			postType.setPostTypeCode(data.getTypeCode());
 			postType.setPostTypeName(data.getTypeName());
@@ -59,7 +59,7 @@ public class PostTypeService {
 
 	}
 
-	public PojoInsertRes save(PojoPostTypeInsertReq data) {
+	public PojoInsertRes save(PojoPostTypeReqInsert data) {
 		ConnHandler.begin();
 
 		final PostType postType = new PostType();
@@ -77,7 +77,7 @@ public class PostTypeService {
 	}
 	
 	
-	public PojoUpdateRes update(PojoPostTypeUpdateReq data) {
+	public PojoUpdateRes update(PojoPostTypeReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
@@ -88,7 +88,6 @@ public class PostTypeService {
 			postType.setTypeCode(data.getPostTypeCode());
 			postType.setIsActive(data.getIsActive());
 			postType.setVersion(data.getVer());
-
 			final PostType postTypeNew = postTypeDao.saveAndFlush(postType);
 			ConnHandler.commit();
 	

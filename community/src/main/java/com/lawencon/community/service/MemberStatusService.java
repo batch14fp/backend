@@ -11,9 +11,9 @@ import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.memberstatus.PojoMemberStatusInsertReq;
-import com.lawencon.community.pojo.memberstatus.PojoMemberStatusUpdateReq;
-import com.lawencon.community.pojo.memberstatus.PojoResGetMemberStatus;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqInsert;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqUpdate;
+import com.lawencon.community.pojo.memberstatus.PojoMemberStatusRes;
 
 @Service
 public class MemberStatusService {
@@ -23,12 +23,12 @@ public class MemberStatusService {
 		this.memberStatusDao = memberStatusDao;
 	}
 
-	public List<PojoResGetMemberStatus> getAll() {
+	public List<PojoMemberStatusRes> getAll() {
 
-		final List<PojoResGetMemberStatus> res = new ArrayList<>();
+		final List<PojoMemberStatusRes> res = new ArrayList<>();
 
 		memberStatusDao.getAll().forEach(data -> {
-			final PojoResGetMemberStatus memberStatus = new PojoResGetMemberStatus();
+			final PojoMemberStatusRes memberStatus = new PojoMemberStatusRes();
 			memberStatus.setMemberStatusId(data.getId());
 			memberStatus.setCodeStatus(data.getCodeStatus());
 			memberStatus.setPeriodDay(data.getPeriodDay());
@@ -44,7 +44,7 @@ public class MemberStatusService {
 
 	
 	
-	public PojoInsertRes save(PojoMemberStatusInsertReq data) {
+	public PojoInsertRes save(PojoMemberStatusReqInsert data) {
 		ConnHandler.begin();
 		final MemberStatus memberStatus = new MemberStatus();
 		memberStatus.setCodeStatus(data.getCodeStatus());
@@ -58,7 +58,7 @@ public class MemberStatusService {
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
-	public PojoUpdateRes update(PojoMemberStatusUpdateReq data) {
+	public PojoUpdateRes update(PojoMemberStatusReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();

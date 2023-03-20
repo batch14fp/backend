@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
@@ -40,6 +42,34 @@ public class PostBookmarkDao extends BaseMasterDao<PostBookmark>{
 		    }
 		    return result;
 	}
+
+
+	public Boolean getIsBookmarkPost(String userId , String postId) {
+		 final StringBuilder sqlQuery = new StringBuilder();
+		 sqlQuery.append("SELECT id, user_id, post_id ");
+		 sqlQuery.append("FROM t_post_bookmark ");
+		 sqlQuery.append("WHERE user_id= :userId ");
+		 sqlQuery.append("AND post_id = :postId ");
+		 sqlQuery.append("AND is_active = TRUE" );
+		 Object result = new Object();
+		     try {
+		    	 result = 
+		    	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+		    	  		  .setParameter("userId", userId)
+		    	  		  .setParameter("postId", postId)
+		    	  		  .getSingleResult();
+		
+	            if (result!= null) {
+	                return true;
+	            }
+	        } catch (NoResultException e) {
+	            return false;
+	        }
+		    return false;
+	}
+	
+	
+	
 
 	@Override
 	public Optional<PostBookmark> getById(String id) {
