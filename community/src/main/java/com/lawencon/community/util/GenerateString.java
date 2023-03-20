@@ -2,11 +2,8 @@ package com.lawencon.community.util;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 
 public class GenerateString {
@@ -38,8 +35,8 @@ public class GenerateString {
 
 	  public static String generateFileName(String fileExtension) {
 		   long timestamp = Instant.now().toEpochMilli();
-	        int randomNum = (int) (Math.random() * 1000);
-	        return String.format("%d_%03d%s", timestamp, randomNum, fileExtension);
+	       int randomNum = (int) (Math.random() * 1000);
+	        return String.format("%d_%03d%s", timestamp, randomNum, "."+fileExtension);
 	    }
 
 }
