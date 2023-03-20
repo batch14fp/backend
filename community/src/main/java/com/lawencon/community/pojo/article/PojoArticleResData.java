@@ -1,5 +1,7 @@
 package com.lawencon.community.pojo.article;
 
+import java.time.LocalDateTime;
+
 public class PojoArticleResData {
 	private String articleId;
 	private String userId;
@@ -10,6 +12,8 @@ public class PojoArticleResData {
 	private Integer ver;
 	private Integer viewers;
 	private Boolean isActive;
+	private LocalDateTime createdAt;
+	
 	public String getArticleId() {
 		return articleId;
 	}
@@ -64,5 +68,12 @@ public class PojoArticleResData {
 	public void setViewers(Integer viewers) {
 		this.viewers = viewers;
 	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+	
 	
 }
