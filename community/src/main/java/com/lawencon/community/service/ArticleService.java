@@ -126,8 +126,12 @@ public class ArticleService {
 			articleDao.getByIdAndDetach(Article.class, article.getId());
 			article.setId(article.getId());
 			article.setContentArticle(data.getContent());
-			final File file = fileDao.getByIdRef(data.getImageArticle());
-			article.setFile(file);
+			final File file = fileDao.getByIdRef(data.getFileId());
+			file.setFileContent(data.getFileContent());
+			file.setFileExtension(data.getFileExtension());
+			file.setVersion(data.getVer());
+			final File fileUpdated = fileDao.saveAndFlush(file);
+			article.setFile(fileUpdated);
 			article.setVersion(data.getVer());
 			article.setTitle(data.getTitle());
 			final Article articleNew = articleDao.saveAndFlush(article);
