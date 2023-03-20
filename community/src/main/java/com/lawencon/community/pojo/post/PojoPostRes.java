@@ -6,6 +6,7 @@ import java.util.List;
 public class PojoPostRes {
 	private String id;
 	private String userId;
+	private String imageProfileId;
 	private String pollingId;
 	private String fullname;
 	private LocalDateTime timeAgo;
@@ -17,6 +18,7 @@ public class PojoPostRes {
 	private String categoryName;
 	private Long countPostLike;
 	private Long countPostComment;
+
 	private boolean isLike;
 	private boolean isBookmark;
 	private String titlePolling;
@@ -145,6 +147,12 @@ public class PojoPostRes {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getImageProfileId() {
+		return imageProfileId;
+	}
+	public void setImageProfileId(String imageProfileId) {
+		this.imageProfileId = imageProfileId;
 	}
 
 	

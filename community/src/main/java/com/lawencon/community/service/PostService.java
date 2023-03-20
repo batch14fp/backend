@@ -90,6 +90,9 @@ public class PostService {
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
 		res.setUserId(data.getUser().getId());
+		if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+			}
 		res.setFullname(data.getUser().getProfile().getFullname());
 		res.setTypeName(data.getPostType().getTypeName());
 		res.setCategoryName(data.getCategory().getCategoryName());
@@ -388,6 +391,9 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
+			if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+				res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+				}
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryName(data.getCategory().getCategoryName());
@@ -453,7 +459,9 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
-
+			if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+			}
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryName(data.getCategory().getCategoryName());
@@ -552,6 +560,8 @@ public class PostService {
 		return listPost;
 
 	}
+	
+	
 
 	public PojoInsertRes savePostComment(PojoPostCommentReqInsert data) {
 		ConnHandler.begin();
@@ -588,6 +598,7 @@ public class PostService {
 			postComment.setContentComment(data.getBody());
 			postComment.setPostCommentId(data.getId());
 			postComment.setUserId(data.getUser().getId());
+			
 			postComment.setFullname(data.getUser().getProfile().getFullname());
 			postComment.setCreatedAt(data.getCreatedAt());
 			postComment.setVer(data.getVersion());
