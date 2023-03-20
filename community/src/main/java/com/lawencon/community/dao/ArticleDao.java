@@ -74,6 +74,7 @@ public class ArticleDao extends AbstractJpaDao {
 
 		return listArticle;
 	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Article> getAllByMostViewer(int offset, int limit) {
