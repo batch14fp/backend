@@ -150,6 +150,103 @@ public class UserDao extends BaseMasterDao<User> {
 		}
 		return userList;
 	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<User> getllUser(int offset, int limit) {
+		final List<User> userList = new ArrayList<>();
+		final StringBuilder sqlQuery = new StringBuilder();
+
+		sqlQuery.append(
+				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, ps.id as member_status_id, ps.code_status, ps.status_name, i.id as industry_id, i.industry_name, p.position_id, u.ver, u.is_active ");
+		sqlQuery.append("FROM t_user u ");
+		sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
+		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+		sqlQuery.append("INNER JOIN t_position po ON po.id = p.position_id ");
+		sqlQuery.append("INNER JOIN t_member_status ps ON ps.id = p.member_status_id ");
+		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id ");
+		sqlQuery.append("WHERE u.is_active = TRUE");
+
+		final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setMaxResults(limit)
+				.setFirstResult(offset)				
+				.getResultList();
+
+		for (Object[] obj : resultList) {
+
+			final User user = new User();
+			user.setId(obj[0].toString());
+			user.setEmail(obj[1].toString());
+
+			if (String.valueOf(obj[2])!= null) {
+				final Wallet wallet = new Wallet();
+				wallet.setId(String.valueOf(obj[2]));
+				user.setWallet(wallet);
+			}
+			final Role role = new Role();
+			role.setId((obj[3]).toString());
+			role.setRoleCode(obj[4].toString());
+			role.setRoleName(obj[5].toString());
+
+			
+			final Profile profile = new Profile();
+			profile.setId(obj[6].toString());
+			profile.setFullname(obj[7].toString());
+			profile.setCompanyName(obj[8].toString());
+			if(obj[9]!=null) {
+			profile.setDob(Date.valueOf(obj[9].toString()).toLocalDate());
+			}
+			profile.setPhoneNumber(obj[10].toString());
+			if(obj[11]!=null) {
+			profile.setCountry(obj[11].toString());
+			}
+			if(obj[12]!=null) {
+			profile.setCity(obj[12].toString());
+			}
+			if(obj[13]!=null) {
+			profile.setProvince(obj[13].toString());
+			}
+			if(obj[14]!=null) {
+			profile.setPostalCode(obj[14].toString());
+			}
+			final MemberStatus memberStatus = new MemberStatus();
+			memberStatus.setId(obj[15].toString());
+			memberStatus.setCodeStatus(obj[16].toString());
+			memberStatus.setStatusName(obj[17].toString());
+
+			final Industry industry = new Industry();
+			industry.setId(obj[18].toString());
+			industry.setIndustryName(obj[19].toString());
+
+			profile.setMemberStatus(memberStatus);
+
+			final Position position = new Position();
+			position.setId(obj[20].toString());
+			profile.setPosition(position);
+			profile.setIndustry(industry);
+
+			user.setRole(role);
+			user.setProfile(profile);
+			user.setVersion(Integer.valueOf(obj[21].toString()));
+			user.setIsActive(Boolean.valueOf(obj[22].toString()));
+
+			userList.add(user);
+		}
+		return userList;
+	}
+
+	
+	
+
+	public int getTotalCount() {
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT COUNT(id) as total FROM t_user ");
+		sqlQuery.append("WHERE is_active = TRUE ");
+		int totalCount = Integer
+				.valueOf(ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).getSingleResult().toString());
+		return totalCount;
+	}
 
 	public User getUserByProfileId(String id) {
 		final StringBuilder sqlQuery = new StringBuilder();

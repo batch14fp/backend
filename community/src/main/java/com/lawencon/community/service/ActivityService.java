@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -34,7 +33,7 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class ActivityService {
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 
 	private final ActivityDao activityDao;
