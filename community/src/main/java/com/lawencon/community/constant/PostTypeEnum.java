@@ -1,11 +1,13 @@
 package com.lawencon.community.constant;
 
-public enum ActivityTypeEnum {
-	MEMBERSHIP("MBR", "MEMBERSHIP");
+public enum PostTypeEnum {
+	
+	POLLING("PPOL", "POLLING");
+	
 	private String code;
 	private String name;
 	
-	ActivityTypeEnum(final String code, final String name){
+	PostTypeEnum(final String code, final String name){
 		this.code = code;
 		this.name = name;
 		
@@ -28,7 +30,4 @@ public enum ActivityTypeEnum {
 	}
 	
 	
-	
-	
-
 }
