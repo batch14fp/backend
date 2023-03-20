@@ -39,8 +39,8 @@ public class ArticleController {
 	@GetMapping
 	public ResponseEntity<PojoArticleRes> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        final PojoArticleRes dataList = articleService.getAll(page, size);	       
-	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
+	        final PojoArticleRes dataList = articleService.getAll(page, size);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
 	    }
 	
 	
@@ -48,6 +48,7 @@ public class ArticleController {
 	@GetMapping("/most-viewer")
 	public ResponseEntity<List<PojoArticleResData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
+		
 	        final List<PojoArticleResData> dataList = articleService.getAllByMostViewer(page, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
