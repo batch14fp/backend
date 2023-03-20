@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.PostTypeEnum;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.FilePostDao;
@@ -190,14 +191,14 @@ public class PostService {
 			files.add(filePost);
 
 		});
+		
+		if(postTypeDao.getByIdRef(postType.getId()).getTypeCode().equalsIgnoreCase(PostTypeEnum.POLLING.getCode())) {
 		final Polling polling = new Polling();
 		polling.setTitle(data.getPollingInsert().getPollingTitle());
 		polling.setIsOpen(true);
 		polling.setEndAt(data.getPollingInsert().getEndAt());
 		polling.setIsActive(true);
-
 		final Polling pollingNew = pollingDao.save(polling);
-
 		final List<PollingOption> options = new ArrayList<>();
 		for (PojoPollingOptionReqInsert option : data.getPollingInsert().getPollingOptions()) {
 			final PollingOption pollingOption = new PollingOption();
@@ -206,10 +207,13 @@ public class PostService {
 			options.add(pollingOption);
 		}
 		pollingOptionDao.saveAll(options);
-
+		post.setPolling(pollingNew);
+		
+		}
+	
+	
 		final List<File> fileList = fileDao.saveAll(files);
 		post.setIsActive(true);
-		post.setPolling(pollingNew);
 		final Post postNew = postDao.save(post);
 
 		final List<FilePost> filePostInsert = new ArrayList<>();
