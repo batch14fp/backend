@@ -2,8 +2,7 @@ package com.lawencon.community.service;
 
 import java.math.BigDecimal;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -35,7 +34,7 @@ public class InvoiceService {
 	private PaymentDao paymentDao;
 
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 	
 	public InvoiceService(final PaymentDao paymentDao,final SalesSettingDao salesSettingDao, final InvoiceDao invoiceDao, final UserDao userDao, 

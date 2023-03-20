@@ -3,8 +3,7 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -19,9 +18,9 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqInsert;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqUpdate;
+import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqInsert;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
 import com.lawencon.security.principal.PrincipalService;
@@ -34,7 +33,7 @@ public class SocialMediaService {
 	private UserDao  userDao;
 	private ProfileDao profileDao;
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 	
 	public SocialMediaService(final ProfileDao profileDao, final UserDao  userDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao) {
