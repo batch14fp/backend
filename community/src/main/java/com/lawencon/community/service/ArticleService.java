@@ -52,6 +52,7 @@ public class ArticleService {
 			article.setNameUser(data.getUser().getProfile().getFullname());
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
+			article.setCreatedAt(data.getCreatedAt());
 			articleList.add(article);
 
 		});
