@@ -3,8 +3,7 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -21,6 +20,7 @@ import com.lawencon.community.pojo.article.PojoArticleReqInsert;
 import com.lawencon.community.pojo.article.PojoArticleReqUpdate;
 import com.lawencon.community.pojo.article.PojoArticleRes;
 import com.lawencon.community.pojo.article.PojoArticleResData;
+import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -31,7 +31,7 @@ public class ArticleService {
 	private final UserDao userDao;
 
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 	public ArticleService(final UserDao userDao, final ArticleDao articleDao, final FileDao fileDao) {
 		this.articleDao = articleDao;
@@ -52,6 +52,7 @@ public class ArticleService {
 			article.setNameUser(data.getUser().getProfile().getFullname());
 			article.setTitle(data.getTitle());
 			article.setVer(data.getVersion());
+			article.setCreatedAt(data.getCreatedAt());
 			articleList.add(article);
 
 		});
@@ -148,10 +149,16 @@ public class ArticleService {
 		ConnHandler.begin();
 		final Article article = new Article();
 		article.setContentArticle(data.getContent());
-		final File file = fileDao.getByIdRef(data.getImageArticle());
+		final File file = new File();
+		file.setFileExtension(data.getExtensions());
+		file.setFileName(GenerateString.generateFileName(data.getExtensions()));
+		file.setFileContent(data.getFileContent());
+		file.setIsActive(true);
+		final File fileNew = fileDao.save(file);
+
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		article.setUser(user);
-		article.setFile(file);
+		article.setFile(fileNew);
 		article.setIsActive(true);
 		article.setViewers(0);
 		article.setTitle(data.getTitle());

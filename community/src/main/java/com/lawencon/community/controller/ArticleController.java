@@ -39,8 +39,7 @@ public class ArticleController {
 	@GetMapping
 	public ResponseEntity<PojoArticleRes> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-			final int offset = (page-1)*size;
-	        final PojoArticleRes dataList = articleService.getAll(offset, size);
+	        final PojoArticleRes dataList = articleService.getAll(page, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();

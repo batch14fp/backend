@@ -34,6 +34,29 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 		    }
 		    return result;
 	}
+	
+	
+	public PostType getByCode(final String code) {
+		   final StringBuilder sqlQuery = new StringBuilder();
+		   sqlQuery.append("SELECT id, type_code, type_name, ver , is_active ");
+		   sqlQuery.append("FROM t_post_type ");
+		   sqlQuery.append("WHERE type_code = :code");
+		   final PostType postType = new PostType();
+		   final Optional<Object> result = Optional.ofNullable(ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				   .setParameter("code", code)
+				   .getResultList());
+			   if(result.isPresent()){
+			   final Object[] obj = (Object[]) result.get();
+		   
+		        postType.setId((String) obj[0]);
+		        postType.setTypeCode((String) obj[1]);
+		        postType.setTypeName((String) obj[2]);
+		        postType.setVersion(Integer.valueOf(obj[3].toString()));
+		        postType.setIsActive(Boolean.valueOf(obj[4].toString()));
+			   }
+		    return postType;
+	}
+
 
 	@Override
 	public Optional<PostType> getById(String id) {

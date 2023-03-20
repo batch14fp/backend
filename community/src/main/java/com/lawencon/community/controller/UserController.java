@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.User;
@@ -26,12 +28,14 @@ import com.lawencon.community.pojo.login.PojoLoginReq;
 import com.lawencon.community.pojo.login.PojoLoginRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
 import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
-import com.lawencon.community.pojo.user.PojoAllUserByRoleRes;
+import com.lawencon.community.pojo.user.PojoAllUsersRes;
+import com.lawencon.community.pojo.user.PojoAllUsersResData;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
-import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.service.JwtService;
+import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.UserService;
 
 @RestController
@@ -40,11 +44,14 @@ public class UserController {
 	private UserService userService;
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
+	private PaginationService paginationService;
 
-	public UserController(final UserService userService, final JwtService jwtService, 
+
+	public UserController(final  PaginationService paginationService, final UserService userService, final JwtService jwtService, 
 			final AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.jwtService = jwtService;
+		this.paginationService = paginationService;
 		this.authenticationManager = authenticationManager;
 	}
 
@@ -68,9 +75,22 @@ public class UserController {
 	
 	
 	@GetMapping("/{roleCode}")
-	public ResponseEntity<List<PojoAllUserByRoleRes>>getAllUserCode(@PathVariable("roleCode")String roleCode){
-		List<PojoAllUserByRoleRes> resGet = userService.getAllUserByRole(roleCode);
+	public ResponseEntity<List<PojoAllUsersResData>>getAllUserCode(@PathVariable("roleCode")String roleCode){
+		List<PojoAllUsersResData> resGet = userService.getAllUserByRole(roleCode);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/all")
+	public ResponseEntity<PojoAllUsersRes>getAllUser(@RequestParam("page") int page,
+            @RequestParam("size") int size) {
+			PojoAllUsersRes dataList = userService.getAllUser(page, size);
+	        int totalCount = userService.getTotalCount();
+	        int pageCount = paginationService.getPageCount(totalCount, size);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("X-Total-Count", String.valueOf(totalCount));
+			headers.add("X-Total-Pages", String.valueOf(pageCount));
+	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	}
 	
 	@PostMapping("login")
