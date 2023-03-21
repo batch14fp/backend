@@ -1,6 +1,7 @@
 package com.lawencon.community.service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -82,6 +84,32 @@ public class ActivityService {
 		return activityList;
 
 	}
+	
+	
+	 
+	public List<PojoReportActivityMemberRes> getMemberReport(final LocalDate startDate,final LocalDate endDate, int offset, int limit){
+		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
+		
+		final List<Activity> activityList = new ArrayList<>();
+		activityDao.getAllByDateRange(startDate, endDate, offset, limit ).forEach(data->{
+			final Activity activity = new Activity();
+			
+		});
+			
+		
+		final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
+		reportMember.setNo(null);
+		reportMember.setStartDate(null);
+		reportMember.setTitle(null);
+		reportMember.setTotalParticipants(null);
+		return res;
+		
+	}
+	
+	
+	
+	
+	
 
 	public List<PojoActivityRes> getAllByHighestPrice(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();

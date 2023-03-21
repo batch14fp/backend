@@ -82,7 +82,7 @@ public class PostDao extends AbstractJpaDao {
 				post.setUser(user);
 
 				post.setTitle(obj[9].toString());
-				post.setContentPost(obj[11].toString());
+				post.setContentPost(obj[10].toString());
 				if (obj[12] != null) {
 					final Polling polling = new Polling();
 					polling.setId(obj[12].toString());
@@ -121,7 +121,7 @@ public class PostDao extends AbstractJpaDao {
 		sqlQuery.append("ON pr.id = u.profile_id  ");
 		sqlQuery.append("INNER JOIN t_position ps ");
 		sqlQuery.append("ON ps.id = pr.position_id ");
-		sqlQuery.append("WHERE p.user_id :userId ");
+		sqlQuery.append("WHERE p.user_id = :userId ");
 		sqlQuery.append("ORDER BY p.created_at DESC ");
 
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
