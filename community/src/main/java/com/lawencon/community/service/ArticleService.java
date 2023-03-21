@@ -109,19 +109,19 @@ public class ArticleService {
 		final PojoArticleResData article = new PojoArticleResData();
 		final Article data = articleDao.getByIdRef(id);
 		final Article dataUpdate = articleDao.getByIdAndDetach(data.getId()).get();
-		article.setArticleId(data.getId());
-		article.setContent(data.getContentArticle());
-		article.setFileId(data.getFile().getId());
-		article.setFileContent(data.getFile().getFileContent());
-		article.setFileExtension(data.getFile().getFileExtension());
-		article.setFileVer(data.getFile().getVersion());
-		article.setIsActive(data.getIsActive());
-		article.setUserId(data.getUser().getId());
-		article.setViewers(data.getViewers());
-		article.setNameUser(data.getUser().getProfile().getFullname());
-		article.setTitle(data.getTitle());
-		article.setVer(data.getVersion());
-		article.setCreatedAt(data.getCreatedAt());
+		article.setArticleId(dataUpdate.getId());
+		article.setContent(dataUpdate.getContentArticle());
+		article.setFileId(dataUpdate.getFile().getId());
+		article.setFileContent(dataUpdate.getFile().getFileContent());
+		article.setFileExtension(dataUpdate.getFile().getFileExtension());
+		article.setFileVer(dataUpdate.getFile().getVersion());
+		article.setIsActive(dataUpdate.getIsActive());
+		article.setUserId(dataUpdate.getUser().getId());
+		article.setViewers(dataUpdate.getViewers());
+		article.setNameUser(dataUpdate.getUser().getProfile().getFullname());
+		article.setTitle(dataUpdate.getTitle());
+		article.setVer(dataUpdate.getVersion());
+		article.setCreatedAt(dataUpdate.getCreatedAt());
 		return article;
 	}
 
