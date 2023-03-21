@@ -71,7 +71,7 @@ public class PostDao extends AbstractJpaDao {
 				position.setPositionName(obj[13].toString());		
 				
 				final Profile profile = new Profile();
-				profile.setFullname(obj[10].toString());
+				profile.setFullname(obj[11].toString());
 				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
@@ -82,7 +82,7 @@ public class PostDao extends AbstractJpaDao {
 				post.setUser(user);
 
 				post.setTitle(obj[9].toString());
-				post.setContentPost(obj[10].toString());
+				post.setContentPost(obj[11].toString());
 				if (obj[12] != null) {
 					final Polling polling = new Polling();
 					polling.setId(obj[12].toString());
@@ -119,7 +119,9 @@ public class PostDao extends AbstractJpaDao {
 		sqlQuery.append("ON u.id =  p.user_id ");
 		sqlQuery.append("INNER JOIN t_profile pr ");
 		sqlQuery.append("ON pr.id = u.profile_id  ");
-		sqlQuery.append("WHERE p.user_id = :userId ");
+		sqlQuery.append("INNER JOIN t_position ps ");
+		sqlQuery.append("ON ps.id = pr.position_id ");
+		sqlQuery.append("WHERE p.user_id :userId ");
 		sqlQuery.append("ORDER BY p.created_at DESC ");
 
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
@@ -150,7 +152,7 @@ public class PostDao extends AbstractJpaDao {
 				position.setPositionName(obj[13].toString());		
 				
 				final Profile profile = new Profile();
-				profile.setFullname(obj[10].toString());
+				profile.setFullname(obj[11].toString());
 				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
@@ -213,6 +215,8 @@ public class PostDao extends AbstractJpaDao {
 		sqlQuery.append("ON u.id =  p.user_id ");
 		sqlQuery.append("INNER JOIN t_profile pr ");
 		sqlQuery.append("ON pr.id = u.profile_id  ");
+		sqlQuery.append("INNER JOIN t_position ps ");
+		sqlQuery.append("ON ps.id = pr.position_id ");
 		sqlQuery.append("ORDER BY (SELECT COUNT(*) FROM t_post_like pl) DESC ");
 
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setMaxResults(limit)
@@ -242,7 +246,7 @@ public class PostDao extends AbstractJpaDao {
 				position.setPositionName(obj[13].toString());		
 				
 				final Profile profile = new Profile();
-				profile.setFullname(obj[10].toString());
+				profile.setFullname(obj[11].toString());
 				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
