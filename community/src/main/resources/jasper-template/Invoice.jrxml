@@ -62,64 +62,12 @@
 	</queryString>
 	<title>
 		<band height="196" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="90" width="84" height="25" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Bill to:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="115" width="120" height="15" uuid="33274f5d-5b7e-4be2-a2ff-65d452a618ed"/>
-				<text><![CDATA[ABC Company]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="80" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
-			<staticText>
-				<reportElement x="0" y="130" width="120" height="15" uuid="1d3045ed-03d6-4253-a959-aeeb491b73ca"/>
-				<text><![CDATA[Company Address]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="145" width="120" height="15" uuid="235bf8b6-1e1e-49c7-b59f-7a46c30b8209"/>
-				<text><![CDATA[Company state1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="160" width="120" height="15" uuid="665f25c2-8663-4951-b699-1ab863bdeb76"/>
-				<text><![CDATA[Company state 2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="145" width="120" height="15" uuid="b62092ec-9053-4f27-b387-9b25d2909a68"/>
-				<text><![CDATA[Ship state1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="115" width="120" height="15" uuid="edbd74ac-0cbd-44c9-8a8e-ccf745191172"/>
-				<text><![CDATA[Ship name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="90" width="84" height="25" uuid="139ebe8d-25b0-411e-986c-270015400874">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ship to:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="160" width="120" height="15" uuid="dd52166a-1135-4931-adef-51e7972118bc"/>
-				<text><![CDATA[Ship state 2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="130" width="120" height="15" uuid="2d2f365d-7b12-4a8f-990d-ff528a2660bc"/>
-				<text><![CDATA[Ship Address]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="415" y="10" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
 				<box rightPadding="4"/>
@@ -132,7 +80,8 @@
 			</textField>
 			<image hAlign="Center">
 				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["invoice_logo.png"]]></imageExpression>
+				<box padding="0"/>
+				<imageExpression><![CDATA["log (2).png"]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="465" y="30" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
@@ -152,19 +101,15 @@
 				<textElement>
 					<font size="19" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Your company name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="55" width="205" height="15" uuid="b8cc42fd-b569-497d-834d-7e854040ad18"/>
-				<text><![CDATA[Phone number, web address, ecc.]]></text>
+				<text><![CDATA[WECOMMUNITY]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="25" width="205" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
-				<text><![CDATA[Street address]]></text>
+				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="40" width="205" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
-				<text><![CDATA[City, street, ZIP code]]></text>
+				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
 			</staticText>
 		</band>
 	</title>

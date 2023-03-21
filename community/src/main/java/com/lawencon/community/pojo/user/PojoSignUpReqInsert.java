@@ -1,5 +1,7 @@
 package com.lawencon.community.pojo.user;
 
+import java.time.LocalDate;
+
 public class PojoSignUpReqInsert {
 
 	private String email;
@@ -9,6 +11,7 @@ public class PojoSignUpReqInsert {
 	private String company;
 	private String industryId;
 	private String positionId;
+	private LocalDate dob;
 	
 	public String getEmail() {
 		return email;
@@ -51,6 +54,12 @@ public class PojoSignUpReqInsert {
 	}
 	public void setPositionId(String positionId) {
 		this.positionId = positionId;
+	}
+	public LocalDate getDob() {
+		return dob;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
 	}
 	
 	

@@ -90,7 +90,8 @@ public class PostService {
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
 		res.setUserId(data.getUser().getId());
-		if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+		res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
+		if(data.getUser().getProfile().getImageProfile()!=null) {
 			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
 			}
 		res.setFullname(data.getUser().getProfile().getFullname());
@@ -391,7 +392,8 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
-			if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
+			if(data.getUser().getProfile().getImageProfile()!=null) {
 				res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
 				}
 			res.setFullname(data.getUser().getProfile().getFullname());
@@ -459,7 +461,8 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
-			if(data.getUser().getProfile().getImageProfile().getId()!=null) {
+			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
+			if(data.getUser().getProfile().getImageProfile()!=null) {
 			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
 			}
 			res.setFullname(data.getUser().getProfile().getFullname());
@@ -518,6 +521,7 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
+			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryName(data.getCategory().getCategoryName());
