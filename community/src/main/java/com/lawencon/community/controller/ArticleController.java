@@ -59,9 +59,15 @@ public class ArticleController {
 	    }
 	
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<PojoArticleResData> getArticle(@PathVariable ("id")String id){
-		PojoArticleResData resGet = articleService.getById(id);
+	@GetMapping("admin/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForAdmin(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForAdmin(id);
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
+	@GetMapping("member/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForMember(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForMember(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
