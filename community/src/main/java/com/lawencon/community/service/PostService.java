@@ -131,8 +131,8 @@ public class PostService {
 		res.setCategoryName(data.getCategory().getCategoryName());
 		res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 		res.setCountPostLike(getCountPostLike(data.getId()));
-		//res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-		//res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+		res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+		res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 
 		return res;
 	}
@@ -163,8 +163,35 @@ public class PostService {
 		pojoRes.setMessage("Delete Success!");
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
-
-		Boolean result = postDao.deleteById(Post.class, id);
+		if(postLikeDao.getByIdPost(id)!=null) {
+		final List<PostLike> postLike = postLikeDao.getByIdPost(id);
+		postLike.forEach(data->{
+			postLikeDao.deleteById(PostLike.class, data.getId());
+		});
+				}
+		if(filePostDao.getAllFileByPostId(id)!=null) {
+			final List<FilePost> filePostList = filePostDao.getAllFileByPostId(id);
+			filePostList.forEach(data->{
+				filePostDao.deleteById(FilePost.class, data.getId());
+			});
+		}
+		if(postBookmarkDao.getByPostId(id)!=null) {
+		final List<PostBookmark> postBookmark = postBookmarkDao.getByPostId(id);
+		postBookmark.forEach(data->{
+			postBookmarkDao.deleteById(PostBookmark.class, data.getId());
+			
+		});
+			}
+		if(postCommentDao.getByIdRef(id)!=null) {
+		final List<PostComment> postComment = postCommentDao.getByPostId(id);
+		postComment.forEach(data->{
+			postCommentDao.deleteById(PostComment.class,data.getId()
+					);
+		});
+		
+			
+		}
+		final Boolean result = postDao.deleteById(Post.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;
@@ -307,25 +334,33 @@ public class PostService {
 	}
 
 	public PojoInsertRes savePostLike(PojoPostLikeReqInsert data) {
-
+		ConnHandler.begin();
 		final PojoInsertRes pojoRes = new PojoInsertRes();
-		final PostLike postLike = new PostLike();
+		PostLike postLike = new PostLike();
 
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-//		if (getIsLike(user.getId(), post.getId())!=null) {
-//			pojoRes.setMessage("The post has already been liked!");
-//		} else {
-			ConnHandler.begin();
+
+		if (getIsLike(user.getId(), post.getId())) {
+			
+			postLike = postLikeDao.getByUserIdAndPostId(user.getId(), post.getId());
+			pojoRes.setId(postLike.getId());
+			postLikeDao.deleteById(PostLike.class, postLike.getId());
+			
+			pojoRes.setMessage("The post has already been disliked!");
+			
+			
+		} else {
+		
 			postLike.setPost(post);
 			postLike.setUser(user);
 			postLike.setIsActive(true);
 			final PostLike postLikeNew = postLikeDao.save(postLike);
-			ConnHandler.commit();
+		
 			pojoRes.setId(postLikeNew.getId());
-			pojoRes.setMessage("Save Success!");
-//		}
-
+			pojoRes.setMessage("The post has already been liked!");
+		}
+		ConnHandler.commit();
 		return pojoRes;
 	}
 
@@ -346,25 +381,32 @@ public class PostService {
 	}
 
 	public PojoInsertRes savePostBookmark(PojoPostBookmarkReqInsert data) {
+		ConnHandler.begin();
 		final PojoInsertRes pojoRes = new PojoInsertRes();
-		final PostBookmark postBookmark = new PostBookmark();
+		PostBookmark postBookmark = new PostBookmark();
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		if (getIsLike(user.getId(), post.getId())) {
-			pojoRes.setMessage("The post has already been bookmark!");
+		if (getIsBookmarkPost(user.getId(), post.getId())) {
+			 postBookmark = postBookmarkDao.getByUserIdAndPostId(user.getId(), post.getId());
+			 pojoRes.setId(postBookmark.getId());
+			 postBookmarkDao.deleteById(PostBookmark.class, postBookmark.getId());
+			
+			pojoRes.setMessage("The post has already been deleted from bookmark!");
 		} else {
-			ConnHandler.begin();
+	
 
 			postBookmark.setPost(post);
 			postBookmark.setUser(user);
 			postBookmark.setIsActive(true);
 			final PostBookmark postBookmarkNew = postBookmarkDao.save(postBookmark);
-			ConnHandler.commit();
+			
 			pojoRes.setId(postBookmarkNew.getId());
-			pojoRes.setMessage("Save Success!");
+			pojoRes.setMessage("The post has already been save to bookmark!");
 
 		}
+		ConnHandler.commit();
 		return pojoRes;
+		
 	}
 
 	public PojoRes deletePostBookmarkById(String id) {
@@ -433,8 +475,8 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-			res.setBookmark(false);
-			res.setLike(false);
+			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 			listPost.add(res);
 		}
 
@@ -502,8 +544,8 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-			res.setBookmark(false);
-			res.setLike(false);
+			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 			listPost.add(res);
 		}
 
@@ -557,8 +599,8 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-			res.setBookmark(false);
-			res.setLike(false);
+			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 			listPost.add(res);
 		}
 		return listPost;

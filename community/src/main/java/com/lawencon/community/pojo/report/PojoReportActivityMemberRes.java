@@ -1,11 +1,13 @@
 package com.lawencon.community.pojo.report;
 
+import java.time.LocalDate;
+
 public class PojoReportActivityMemberRes {
 	
 	private Integer no;
 	private String title;
-	private String startDate;
-	private String totalParticipants;
+	private LocalDate startDate;
+	private Long totalParticipants;
 
 	public Integer getNo() {
 		return no;
@@ -19,20 +21,20 @@ public class PojoReportActivityMemberRes {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getStartDate() {
+	
+	
+	public LocalDate getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
-	public String getTotalParticipants() {
+	public Long getTotalParticipants() {
 		return totalParticipants;
 	}
-	public void setTotalParticipants(String totalParticipants) {
+	public void setTotalParticipants(Long totalParticipants) {
 		this.totalParticipants = totalParticipants;
 	}
-	
-	
-	
+
 
 }
