@@ -65,6 +65,12 @@ public class UserController {
 	public ResponseEntity<PojoInsertRes>insert(@RequestBody PojoSignUpReqInsert data){
 		PojoInsertRes res = userService.userRegistration(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}	
+	
+	@PostMapping("admin/add")
+	public ResponseEntity<PojoInsertRes>insertUserAdmin(@RequestBody PojoSignUpReqInsert data){
+		PojoInsertRes res = userService.insertUser(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("sign-up/verify-code")
@@ -113,7 +119,9 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		if(userOptional.get().getProfile().getImageProfile()!=null) {
 		loginRes.setImageId(userOptional.get().getProfile().getImageProfile().getId());
+		}
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
 	}
 	
