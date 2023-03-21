@@ -313,9 +313,9 @@ public class PostService {
 
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		if (getIsLike(user.getId(), post.getId())) {
-			pojoRes.setMessage("The post has already been liked!");
-		} else {
+//		if (getIsLike(user.getId(), post.getId())!=null) {
+//			pojoRes.setMessage("The post has already been liked!");
+//		} else {
 			ConnHandler.begin();
 			postLike.setPost(post);
 			postLike.setUser(user);
@@ -324,7 +324,7 @@ public class PostService {
 			ConnHandler.commit();
 			pojoRes.setId(postLikeNew.getId());
 			pojoRes.setMessage("Save Success!");
-		}
+//		}
 
 		return pojoRes;
 	}
