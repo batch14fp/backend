@@ -9,6 +9,7 @@ public class PojoPostRes {
 	private String imageProfileId;
 	private String pollingId;
 	private String fullname;
+	private String position;
 	private LocalDateTime timeAgo;
 	private String title;
 	private String content;
@@ -153,6 +154,12 @@ public class PojoPostRes {
 	}
 	public void setImageProfileId(String imageProfileId) {
 		this.imageProfileId = imageProfileId;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 	

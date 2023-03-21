@@ -45,7 +45,7 @@ public class ArticleService {
 			PojoArticleResData article = new PojoArticleResData();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
-			article.setImageId(data.getFile().getId());
+			article.setFileId(data.getFile().getId());
 			article.setViewers(data.getViewers());
 			article.setIsActive(data.getIsActive());
 			article.setUserId(data.getUser().getId());
@@ -68,7 +68,7 @@ public class ArticleService {
 			PojoArticleResData article = new PojoArticleResData();
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
-			article.setImageId(data.getFile().getId());
+			article.setFileId(data.getFile().getId());
 			article.setViewers(data.getViewers());
 			article.setIsActive(data.getIsActive());
 			article.setUserId(data.getUser().getId());
@@ -81,7 +81,7 @@ public class ArticleService {
 		return res;
 	}
 
-	public PojoArticleResData getById(String id){
+	public PojoArticleResData getByIdForMember(String id){
 		final PojoArticleResData article = new PojoArticleResData();
 		ConnHandler.begin();
 		final Article data = articleDao.getByIdRef(id);
@@ -91,13 +91,37 @@ public class ArticleService {
 	    ConnHandler.commit();
 		article.setArticleId(data.getId());
 		article.setContent(data.getContentArticle());
-		article.setImageId(data.getFile().getId());
+		article.setFileId(data.getFile().getId());
+		article.setFileContent(data.getFile().getFileContent());
+		article.setFileExtension(data.getFile().getFileExtension());
+		article.setFileVer(data.getFile().getVersion());
 		article.setIsActive(data.getIsActive());
 		article.setUserId(data.getUser().getId());
 		article.setViewers(data.getViewers());
 		article.setNameUser(data.getUser().getProfile().getFullname());
 		article.setTitle(data.getTitle());
 		article.setVer(data.getVersion());
+		article.setCreatedAt(data.getCreatedAt());
+		return article;
+	}
+	
+	public PojoArticleResData getByIdForAdmin(String id){
+		final PojoArticleResData article = new PojoArticleResData();
+		final Article data = articleDao.getByIdRef(id);
+		final Article dataUpdate = articleDao.getByIdAndDetach(data.getId()).get();
+		article.setArticleId(data.getId());
+		article.setContent(data.getContentArticle());
+		article.setFileId(data.getFile().getId());
+		article.setFileContent(data.getFile().getFileContent());
+		article.setFileExtension(data.getFile().getFileExtension());
+		article.setFileVer(data.getFile().getVersion());
+		article.setIsActive(data.getIsActive());
+		article.setUserId(data.getUser().getId());
+		article.setViewers(data.getViewers());
+		article.setNameUser(data.getUser().getProfile().getFullname());
+		article.setTitle(data.getTitle());
+		article.setVer(data.getVersion());
+		article.setCreatedAt(data.getCreatedAt());
 		return article;
 	}
 
