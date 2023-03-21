@@ -65,6 +65,12 @@ public class UserController {
 	public ResponseEntity<PojoInsertRes>insert(@RequestBody PojoSignUpReqInsert data){
 		PojoInsertRes res = userService.userRegistration(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}	
+	
+	@PostMapping("admin/add")
+	public ResponseEntity<PojoInsertRes>insertUserAdmin(@RequestBody PojoSignUpReqInsert data){
+		PojoInsertRes res = userService.insertUser(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("sign-up/verify-code")

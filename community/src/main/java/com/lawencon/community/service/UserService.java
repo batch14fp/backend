@@ -155,6 +155,44 @@ public class UserService implements UserDetailsService {
 
 		return res;
 	}
+	public PojoInsertRes insertUser(PojoSignUpReqInsert data) {
+		final PojoInsertRes res = new PojoInsertRes();
+		ConnHandler.begin();
+
+		final Profile profile = new Profile();
+		final Position position = positionDao.getByIdRef(data.getPositionId());
+		profile.setPosition(position);
+		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
+		profile.setIndustry(industry);
+		profile.setPhoneNumber(data.getPhoneNumber());
+		profile.setDob(data.getDob());
+		profile.setFullname(data.getFullName());
+		profile.setCompanyName(data.getCompany());
+		Profile profileNew = profileDao.save(profile);
+		res.setId(profileNew.getId());
+		final User user = new User();
+		final Wallet wallet = new Wallet();
+		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		final Wallet walletNew = walletDao.save(wallet);
+		final Role role = roleDao.getRoleByCode(RoleEnum.ADMIN.getRoleCode()).get();
+		user.setRole(role);
+		user.setEmail(data.getEmail());
+		user.setUserPassword(encoder.encode(data.getPassword()).toString());
+		final Profile profileRef = profileDao.getByIdRef(profileNew.getId());
+		final Wallet wallerRef = walletDao.getByIdRef(Wallet.class, walletNew.getId());
+		user.setProfile(profileRef);
+		user.setWallet(wallerRef);
+		final User userNew = userDao.save(user);
+		
+	
+		
+		ConnHandler.commit();
+
+		res.setId(userNew.getId());
+		res.setMessage("Add User is Success");
+
+		return res;
+	}
 
 	public PojoInsertRes verificationCode(final PojoVerificationCodeReqInsert data) {
 		final PojoInsertRes res = new PojoInsertRes();
