@@ -45,7 +45,27 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 
 		  return listResult;
 	}
+	
+	
 
+
+	public Long getCountPollingOption(final String pollingOptionId) {
+		final StringBuilder sql = new StringBuilder();
+		Long count =null;
+		sql.append("SELECT COUNT(id) FROM t_polling_respon ");
+		sql.append("WHERE polling_option_id = :pollingOptionId ");
+
+		count= Long.valueOf(ConnHandler.getManager().createNativeQuery(sql.toString())
+	
+				.setParameter("pollingOptionId",pollingOptionId)
+				.getSingleResult().toString());
+	
+	return count;	
+		
+	}
+	
+	
+	
 	@Override
 	public Optional<PollingRespon> getById(String id) {
 		return Optional.ofNullable(super.getById(PollingRespon.class, id));

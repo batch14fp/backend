@@ -1,7 +1,9 @@
 package com.lawencon.community.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PaymentService;
@@ -114,11 +117,22 @@ public class ActivityController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+	 @GetMapping("/report")
+	    public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(
+	            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+	            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+	            @RequestParam(required = false) Integer offset,
+	            @RequestParam(required = false) Integer limit) {
+	        List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(startDate, endDate, offset, limit);
+	        return ResponseEntity.ok(activities);
+	    }
+
 	
 	@PutMapping("/payment")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data){
 		PojoRes resGet = paymentService.updateByUser(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
 }

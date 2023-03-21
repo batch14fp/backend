@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
 import com.lawencon.community.pojo.payment.PojoPaymentReqInsert;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
+import com.lawencon.community.util.GenerateString;
 
 @Service
 public class PaymentService {
@@ -112,8 +113,8 @@ public class PaymentService {
 		 payment.setBankPayment(bankPayment);
 		 
 		 final File file = new File();
-		 file.setFileName(data.getFileName());
 		 file.setFileExtension(data.getFileExtension());
+		 file.setFileName(GenerateString.generateFileName(data.getFileExtension()));
 		 file.setFileContent(data.getFileContent());
 		 final File fileNew = fileDao.save(file);
 		 

@@ -3,37 +3,56 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
+import com.lawencon.community.dao.PollingResponDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostTypeDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.model.PollingRespon;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPollingReqInsert;
+import com.lawencon.community.pojo.post.PojoOptionCountRes;
 import com.lawencon.community.pojo.post.PojoPollingOptionReqInsert;
 import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingReqInsert;
 import com.lawencon.community.pojo.post.PojoPollingReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingResponReq;
+import com.lawencon.community.pojo.post.PojoPollingResponRes;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class PollingService {
+	
+
+	@Autowired
+	private PrincipalService principalService;
+	
+	
 	private PostDao postDao;
 	private PollingDao pollingDao;
 	private PostTypeDao postTypeDao;
 	private PollingOptionDao pollingOptionDao;
+	private UserDao userDao;
+	private PollingResponDao pollingResponDao;
 	
-	public PollingService(final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
+	public PollingService(final  PollingResponDao pollingResponDao, final UserDao userDao, final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingDao = pollingDao;
 		this.postDao  = postDao;
 		this.postTypeDao = postTypeDao;
+		this.userDao =userDao;
+		this.pollingResponDao = pollingResponDao;
 		
 	}
 	
@@ -75,6 +94,34 @@ public class PollingService {
 	        ConnHandler.rollback();
 	        throw e;
 	    }
+	}
+	
+	
+	public PojoPollingResponRes insertOptionPolling(PojoPollingResponReq data) {
+		ConnHandler.begin();
+		
+		final PojoPollingResponRes res = new PojoPollingResponRes();
+		
+		final PollingRespon pollingRespon = new PollingRespon();
+		final PollingOption pollingOption= pollingOptionDao.getByIdRef(data.getPollingOptionId());
+		pollingRespon.setPollingOption(pollingOption);
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		pollingRespon.setUser(user);
+		pollingRespon.setIsActive(true);
+		pollingResponDao.save(pollingRespon);
+		ConnHandler.commit();
+		
+		
+		
+		final List<PojoOptionCountRes> pollingRes = new ArrayList<>();
+		final PojoOptionCountRes countOption = new PojoOptionCountRes();
+		countOption.setCount(null);
+		countOption.setPollingOptionId(null);
+		res.setData(null);
+		res.setTotal(null);
+		
+		
+		return res;
 	}
 
 	public PojoUpdateRes update(PojoPollingReqUpdate data) {
