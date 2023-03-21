@@ -12,6 +12,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Polling;
+import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
 import com.lawencon.community.model.Profile;
@@ -30,7 +31,7 @@ public class PostDao extends AbstractJpaDao {
 		final List<Post> listPost = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id, pr.image_profile_id,p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id, pr.image_profile_id,p.title,p.content_post,pr.fullname,p.polling_id,ps.position_name, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -40,6 +41,8 @@ public class PostDao extends AbstractJpaDao {
 		sqlQuery.append("ON u.id =  p.user_id ");
 		sqlQuery.append("INNER JOIN t_profile pr ");
 		sqlQuery.append("ON pr.id = u.profile_id  ");
+		sqlQuery.append("INNER JOIN t_position ps ");
+		sqlQuery.append("ON ps.id = pr.position_id ");
 		sqlQuery.append("ORDER BY p.created_at DESC ");
 
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setMaxResults(limit)
@@ -64,9 +67,12 @@ public class PostDao extends AbstractJpaDao {
 
 				final User user = new User();
 				user.setId(obj[7].toString());
-
+				final Position position = new Position();
+				position.setPositionName(obj[13].toString());		
+				
 				final Profile profile = new Profile();
 				profile.setFullname(obj[10].toString());
+				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
 				file.setId(obj[8].toString());
@@ -82,9 +88,10 @@ public class PostDao extends AbstractJpaDao {
 					polling.setId(obj[12].toString());
 					post.setPolling(polling);
 				}
-				post.setVersion(Integer.valueOf(obj[13].toString()));
-				post.setIsActive(Boolean.valueOf(obj[14].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[15].toString()).toLocalDateTime());
+				
+				post.setVersion(Integer.valueOf(obj[14].toString()));
+				post.setIsActive(Boolean.valueOf(obj[15].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[16].toString()).toLocalDateTime());
 				listPost.add(post);
 				
 			}
@@ -102,7 +109,7 @@ public class PostDao extends AbstractJpaDao {
 		final List<Post> listPost = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id, pr.image_profile_id,p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id, pr.image_profile_id,p.title,p.content_post,pr.fullname,p.polling_id,ps.position_name, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -136,11 +143,15 @@ public class PostDao extends AbstractJpaDao {
 				postType.setTypeName(obj[6].toString());
 				post.setPostType(postType);
 
+
 				final User user = new User();
 				user.setId(obj[7].toString());
-
+				final Position position = new Position();
+				position.setPositionName(obj[13].toString());		
+				
 				final Profile profile = new Profile();
 				profile.setFullname(obj[10].toString());
+				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
 				file.setId(obj[8].toString());
@@ -156,9 +167,10 @@ public class PostDao extends AbstractJpaDao {
 					polling.setId(obj[12].toString());
 					post.setPolling(polling);
 				}
-				post.setVersion(Integer.valueOf(obj[13].toString()));
-				post.setIsActive(Boolean.valueOf(obj[14].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[15].toString()).toLocalDateTime());
+				
+				post.setVersion(Integer.valueOf(obj[14].toString()));
+				post.setIsActive(Boolean.valueOf(obj[15].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[16].toString()).toLocalDateTime());
 				listPost.add(post);
 				
 			}
@@ -191,7 +203,7 @@ public class PostDao extends AbstractJpaDao {
 
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id,pr.image_profile_id, p.title,p.content_post,pr.fullname,p.polling_id, p.ver, p.is_active, p.created_at ");
+				"SELECT p.id,p.category_id,c.category_code,c.category_name, p.post_type_id,pt.type_code,pt.type_name, p.user_id, pr.image_profile_id,p.title,p.content_post,pr.fullname,p.polling_id,ps.position_name, p.ver, p.is_active, p.created_at ");
 		sqlQuery.append("FROM t_post p ");
 		sqlQuery.append("INNER JOIN t_post_type pt ");
 		sqlQuery.append("ON pt.id = p.post_type_id ");
@@ -223,11 +235,15 @@ public class PostDao extends AbstractJpaDao {
 				postType.setTypeName(obj[6].toString());
 				post.setPostType(postType);
 
+
 				final User user = new User();
 				user.setId(obj[7].toString());
-
+				final Position position = new Position();
+				position.setPositionName(obj[13].toString());		
+				
 				final Profile profile = new Profile();
 				profile.setFullname(obj[10].toString());
+				profile.setPosition(position);
 				if(obj[8]!=null) {
 				final File file = new File();
 				file.setId(obj[8].toString());
@@ -243,9 +259,10 @@ public class PostDao extends AbstractJpaDao {
 					polling.setId(obj[12].toString());
 					post.setPolling(polling);
 				}
-				post.setVersion(Integer.valueOf(obj[13].toString()));
-				post.setIsActive(Boolean.valueOf(obj[14].toString()));
-				post.setCreatedAt(Timestamp.valueOf(obj[15].toString()).toLocalDateTime());
+				
+				post.setVersion(Integer.valueOf(obj[14].toString()));
+				post.setIsActive(Boolean.valueOf(obj[15].toString()));
+				post.setCreatedAt(Timestamp.valueOf(obj[16].toString()).toLocalDateTime());
 				postList.add(post);
 				
 			}
