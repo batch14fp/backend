@@ -7,7 +7,10 @@ public class PojoArticleResData {
 	private String userId;
 	private String title;
 	private String content;
-	private String imageId;
+	private String fileId;
+	private String fileContent;
+	private String fileExtension;
+	private Integer fileVer;
 	private String nameUser;
 	private Integer ver;
 	private Integer viewers;
@@ -31,12 +34,6 @@ public class PojoArticleResData {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getImageId() {
-		return imageId;
-	}
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
 	}
 	public String getNameUser() {
 		return nameUser;
@@ -73,6 +70,30 @@ public class PojoArticleResData {
 	}
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getFileId() {
+		return fileId;
+	}
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+	public String getFileContent() {
+		return fileContent;
+	}
+	public void setFileContent(String fileContent) {
+		this.fileContent = fileContent;
+	}
+	public String getFileExtension() {
+		return fileExtension;
+	}
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
+	public Integer getFileVer() {
+		return fileVer;
+	}
+	public void setFileVer(Integer fileVer) {
+		this.fileVer = fileVer;
 	}
 	
 	

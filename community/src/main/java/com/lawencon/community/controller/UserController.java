@@ -119,6 +119,7 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		loginRes.setImageId(userOptional.get().getProfile().getImageProfile().getId());
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
 	}
 	
