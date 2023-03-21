@@ -180,11 +180,12 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		 sqlQuery.append("AND post_id = :postId ");
 		 sqlQuery.append("AND is_active = TRUE" );
 	    
-		    final Object obj = 
+		    final Object result = 
 	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	  		  .setParameter("userId", userId)
 	  		  .setParameter("postId", postId)
 	  		  .getSingleResult();
+
 			data = true;
 		 
 		 }catch(final Exception e)

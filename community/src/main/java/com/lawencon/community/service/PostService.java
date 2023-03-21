@@ -340,6 +340,7 @@ public class PostService {
 
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+
 		if (getIsLike(user.getId(), post.getId())) {
 			
 			postLike = postLikeDao.getByUserIdAndPostId(user.getId(), post.getId());
