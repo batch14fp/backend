@@ -42,6 +42,68 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		    }
 		    return result;
 	}
+	
+	
+	public PostLike getByUserIdAndPostId(String userId, String postId) {
+		 final StringBuilder sqlQuery = new StringBuilder();
+	     final PostLike postLike = new PostLike();
+		 try {
+		 sqlQuery.append("SELECT id, user_id, post_id ");
+		 sqlQuery.append("FROM t_post_like ");
+		 sqlQuery.append("WHERE user_id = :userId ");
+		 sqlQuery.append("AND post_id = :postId ");
+
+		    final Object result =  ConnHandler
+				    .getManager()
+				    .createNativeQuery(sqlQuery.toString())
+				    .setParameter("userId", userId)
+				    .setParameter("postId", postId)
+				    .getSingleResult();
+		  final Object[] obj =(Object[]) result;
+	
+		        postLike.setId((String) obj[0]);
+
+		        final User user = new User();
+		        user.setId((String) obj[1]);
+		        postLike.setUser(user);
+
+		        final Post post = new Post();
+		        post.setId((String) obj[2]);
+		        postLike.setPost(post);
+		 }catch(Exception e) {}
+		    return postLike;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PostLike> getByIdPost(String postId) {
+		 StringBuilder sb = new StringBuilder();
+		    sb.append("SELECT id, user_id, post_id ");
+		    sb.append("FROM t_post_like ");
+		    sb.append("WHERE post_id = :postId ");
+
+		    final List<Object[]> postLikeList =  ConnHandler
+				    .getManager()
+				    
+				    .createNativeQuery(sb.toString())
+				    .setParameter("postId", postId)
+				    .getResultList();
+		    final List<PostLike> result = new ArrayList<>();
+		    for (Object[] obj : postLikeList) {
+		        final PostLike postLike = new PostLike();
+		        postLike.setId((String) obj[0]);
+
+		        final User user = new User();
+		        user.setId((String) obj[1]);
+		        postLike.setUser(user);
+
+		        final Post post = new Post();
+		        post.setId((String) obj[2]);
+		        postLike.setPost(post);
+
+		        result.add(postLike);
+		    }
+		    return result;
+	}
 
 	@Override
 	public Optional<PostLike> getById(String id) {
@@ -62,7 +124,8 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 
 	@SuppressWarnings("unchecked")
 	public List<PostLike> getByOffsetLimit(Long offset, Long limit) {
-		
+	List<PostLike> res = new ArrayList<>();
+		try {
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT * FROM t_post_like pl ");
 		sqlQuery.append("INNER JOIN t_post p ");
@@ -71,9 +134,10 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		sqlQuery.append("ON pl.user_id = u.id ");
 		sqlQuery.append(" WHERE pl.is_active = TRUE LIMIT :limit OFFSET :offset");
 
-		final List<PostLike> res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), PostLike.class)
+		 res = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), PostLike.class)
 				.setParameter("offset", offset).setParameter("limit", limit).getResultList();
-
+		}
+		catch(Exception e) {}
 		return res;
 	}
 
@@ -108,6 +172,7 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 	@SuppressWarnings("unused")
 	public Boolean getIsLike(String userId , String postId) {
 		 Boolean data = false;
+		 try {
 		 final StringBuilder sqlQuery = new StringBuilder();
 		 sqlQuery.append("SELECT id, user_id, post_id ");
 		 sqlQuery.append("FROM t_post_like ");
@@ -120,10 +185,14 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 	  		  .setParameter("userId", userId)
 	  		  .setParameter("postId", postId)
 	  		  .getSingleResult();
-		    if(obj!=null) {
-		    	data = true;
-		    }
-		    return true;
+			data = true;
+		 
+		 }catch(final Exception e)
+		 {}
+			 
+		 
+		    
+		    return data;
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.lawencon.community.service;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -87,26 +88,35 @@ public class ActivityService {
 	
 	
 	 
-	public List<PojoReportActivityMemberRes> getMemberReport(final LocalDate startDate,final LocalDate endDate, int offset, int limit){
+	public List<PojoReportActivityMemberRes> getMemberReport(final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
 		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
-		
-		final List<Activity> activityList = new ArrayList<>();
-		activityDao.getAllByDateRange(startDate, endDate, offset, limit ).forEach(data->{
-			final Activity activity = new Activity();
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
+		for (int  i=1;i<activityList.size();i++) {
+
+			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
 			
-		});
+			reportMember.setNo(i);
+			reportMember.setStartDate(Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
+			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setTotalParticipants(getCountPollingOption(activityList.get(i).getId(),user.getId() ));
 			
-		
-		final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
-		reportMember.setNo(null);
-		reportMember.setStartDate(null);
-		reportMember.setTitle(null);
-		reportMember.setTotalParticipants(null);
+			res.add(reportMember);
+		}
+			
 		return res;
 		
 	}
 	
 	
+	
+	
+	
+	public Long getCountPollingOption(String activityId, String userId) {
+		
+	return	activityDao.getTotalParticipanByUserId(activityId, userId);
+		
+	}
 	
 	
 	
