@@ -39,8 +39,8 @@ public class ArticleController {
 	@GetMapping
 	public ResponseEntity<PojoArticleRes> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        final PojoArticleRes dataList = articleService.getAll(page, size);	       
-	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
+	        final PojoArticleRes dataList = articleService.getAll(page, size);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
 	    }
 	
 	
@@ -48,6 +48,7 @@ public class ArticleController {
 	@GetMapping("/most-viewer")
 	public ResponseEntity<List<PojoArticleResData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
+		
 	        final List<PojoArticleResData> dataList = articleService.getAllByMostViewer(page, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
@@ -58,9 +59,15 @@ public class ArticleController {
 	    }
 	
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<PojoArticleResData> getArticle(@PathVariable ("id")String id){
-		PojoArticleResData resGet = articleService.getById(id);
+	@GetMapping("admin/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForAdmin(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForAdmin(id);
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
+	@GetMapping("member/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForMember(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForMember(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
