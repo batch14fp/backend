@@ -1,9 +1,9 @@
 package com.lawencon.community.controller;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -119,11 +119,11 @@ public class ActivityController {
 	}
 	 @GetMapping("/report")
 	    public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(
-	            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-	            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+	            @RequestParam String startDate,
+	            @RequestParam String endDate,
 	            @RequestParam(required = false) Integer offset,
 	            @RequestParam(required = false) Integer limit) {
-	        List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(startDate, endDate, offset, limit);
+	        List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(),offset, limit);
 	        return ResponseEntity.ok(activities);
 	    }
 

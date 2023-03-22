@@ -195,11 +195,11 @@ public class ActivityDao extends AbstractJpaDao {
         if (limit != null) {
             query.setMaxResults(limit);
         }
-        if (limit != null) {
+        if (offset != null) {
             query.setFirstResult(offset);
         }
-
-        return query.getResultList();
+        List<Activity> lisActivity = query.getResultList();
+        return lisActivity;
     }
 
 	
@@ -212,8 +212,8 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_invoice i ");
 		sqlQuery.append("ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_payment p ");
-		sqlQuery.append("ON p.invoice_id = i.d ");
-		sqlQuery.append("WHERE a_id = :activityId ");
+		sqlQuery.append("ON p.invoice_id = i.id ");
+		sqlQuery.append("WHERE a.id = :activityId ");
 		sqlQuery.append("AND a.user_id = :userId ");
 		sqlQuery.append("AND is_paid = TRUE ");
 

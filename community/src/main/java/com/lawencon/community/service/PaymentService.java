@@ -20,7 +20,6 @@ import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
-import com.lawencon.community.pojo.payment.PojoPaymentReqInsert;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
@@ -49,24 +48,6 @@ public class PaymentService {
 
 	}
 
-	public PojoRes save(PojoPaymentReqInsert data) {
-		ConnHandler.begin();
-		final Payment payment = new Payment();
-
-		payment.setSubtotal(null);
-		payment.setTaxAmount(null);
-		payment.setExpired(null);
-		payment.setTotal(null);
-		payment.setDiscAmount(null);
-		payment.setIsPaid(false);
-		payment.setBankPayment(null);
-
-		final PojoRes res = new PojoRes();
-
-		res.setMessage("Transaction proof uploaded successfully!");
-		return res;
-
-	}
 
 	public PojoRes updateByAdmin(PojoConfirmPaymentReqUpdate data) {
 		ConnHandler.begin();
@@ -84,16 +65,17 @@ public class PaymentService {
 				final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId());
 				final Wallet walletRef = walletDao.getByIdRef(wallet.getId());
 				walletDao.getByIdAndDetach(Wallet.class, walletRef.getId());
-
-				walletRef.setBalance(payment.getTotal().multiply(BigDecimal.valueOf(setting.getMemberIncome())));
+				final BigDecimal newIncome = payment.getTotal().multiply(BigDecimal.valueOf(setting.getMemberIncome()));
+				walletRef.setBalance(walletRef.getBalance().add(newIncome));
 				walletRef.setVersion(walletRef.getVersion());
 				walletDao.save(walletRef);
 
 				final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal());
 				final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 				walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
-
-				walletRefSystem.setBalance(payment.getTotal().multiply(BigDecimal.valueOf(setting.getSystemIncome())));
+				final BigDecimal newIncomSystem = payment.getTotal().multiply(BigDecimal.valueOf(setting.getSystemIncome()));
+				
+				walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem));
 				walletRefSystem.setVersion(walletRefSystem.getVersion());
 				walletDao.save(walletRefSystem);
 				res.setMessage("Sava Success");
@@ -103,7 +85,7 @@ public class PaymentService {
 			ConnHandler.commit();
 
 		} else {
-			res.setMessage("I apologize, but the transaction cannot be performed because you are not an admin.");
+			res.setMessage("Transaction cannot be performed because you are not an admin.");
 		}
 
 		return res;
