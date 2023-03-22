@@ -476,7 +476,8 @@ public class PostService {
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
 			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+			res.setLike(getIsLike(principalService.getAuthPrincipal(), data.getId()));
+//			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
 			listPost.add(res);
 		}
 
