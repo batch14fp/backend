@@ -2,6 +2,7 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,11 +98,8 @@ public class PollingService {
 	}
 	
 	
-	public PojoPollingResponRes insertOptionPolling(PojoPollingResponReq data) {
+	public PojoPollingResponRes insertOptionPolling(PojoPollingResponReq data) throws Exception {
 		ConnHandler.begin();
-		
-		final PojoPollingResponRes res = new PojoPollingResponRes();
-		
 		final PollingRespon pollingRespon = new PollingRespon();
 		final PollingOption pollingOption= pollingOptionDao.getByIdRef(data.getPollingOptionId());
 		pollingRespon.setPollingOption(pollingOption);
@@ -113,15 +111,22 @@ public class PollingService {
 		
 		
 		
-		final List<PojoOptionCountRes> pollingRes = new ArrayList<>();
-		final PojoOptionCountRes countOption = new PojoOptionCountRes();
-		countOption.setCount(null);
-		countOption.setPollingOptionId(null);
-		res.setData(null);
-		res.setTotal(null);
+	    final PojoPollingResponRes res = new PojoPollingResponRes();
 		
+			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 		
-		return res;
+		        Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
+		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+		            pollingOptionUserCounts.add(pojoOptionCountRes);
+		        }
+		        res.setData(pollingOptionUserCounts);
+		        res.setTotal(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
+		    return res;
+		
+
 	}
 
 	public PojoUpdateRes update(PojoPollingReqUpdate data) {
@@ -160,6 +165,8 @@ public class PollingService {
 	        throw e;
 	    }
 	}
+	
+	
 	
 	public PojoRes delete(String id) throws Exception {
 		ConnHandler.begin();

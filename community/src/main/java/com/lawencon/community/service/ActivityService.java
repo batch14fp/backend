@@ -16,6 +16,7 @@ import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.ActivityVoucherDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.PollingOptionDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Activity;
@@ -30,6 +31,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.security.principal.PrincipalService;
+
 
 @Service
 public class ActivityService {
@@ -46,7 +48,8 @@ public class ActivityService {
 
 	private final FileDao fileDao;
 
-	public ActivityService(final UserDao userDao, final ActivityVoucherDao activityVoucherDao,
+
+	public ActivityService( final UserDao userDao, final ActivityVoucherDao activityVoucherDao,
 			final VoucherDao voucherDao, final ActivityDao activityDao, final CategoryDao categoryDao,
 			final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
@@ -56,6 +59,7 @@ public class ActivityService {
 		this.fileDao = fileDao;
 		this.activityVoucherDao = activityVoucherDao;
 		this.userDao = userDao;
+	
 
 	}
 
@@ -270,6 +274,8 @@ public class ActivityService {
 		return pojoUpdateRes;
 
 	}
+
+
 
 	public PojoActivityRes getById(String id) {
 		final PojoActivityRes activity = new PojoActivityRes();
