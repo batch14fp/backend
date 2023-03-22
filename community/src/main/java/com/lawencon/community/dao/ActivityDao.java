@@ -227,7 +227,7 @@ public class ActivityDao extends AbstractJpaDao {
 		
 	}
 
-	//limit
+
 	@SuppressWarnings("unchecked")
 	public List<Activity> getAllByLowestPrice(int offset, int limit) {
 		final StringBuilder sqlQuery = new StringBuilder();

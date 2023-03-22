@@ -1,7 +1,9 @@
 package com.lawencon.community.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -55,6 +57,54 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 		}
 
 		return listPollingOption;
+	}
+	@SuppressWarnings("unchecked")
+	public Map<String, Integer> countPollingOptionUsers(String pollingId) throws Exception {
+	    Map<String, Integer> pollingOptionUserCounts = new HashMap<>();
+	    try {
+	        final StringBuilder sqlQuery = new StringBuilder();
+	        sqlQuery.append("SELECT po.id, COUNT(*) as user_count ");
+	        sqlQuery.append("FROM t_polling_option po ");
+	        sqlQuery.append("INNER JOIN t_polling_respon ps ");
+	        sqlQuery.append("ON po.id = ps.polling_option_id ");
+	        sqlQuery.append("WHERE po.polling_id = :pollingId ");
+	        sqlQuery.append("GROUP BY po.id");
+	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setParameter("pollingId", pollingId).getResultList();
+
+	        if (result != null) {
+	            for (Object objs : result) {
+	                final Object[] obj = (Object[]) objs;
+	                final String pollingOptionId = obj[0].toString();
+	                final int userCount = Integer.parseInt(obj[1].toString());
+	                pollingOptionUserCounts.put(pollingOptionId, userCount);
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        throw new Exception("Failed to retrieve data from database", e);
+	    }
+	    return pollingOptionUserCounts;
+	}
+
+	public int countTotalPollingUsers(String pollingId) throws Exception {
+	    int totalPollingUsers = 0;
+	    try {
+	        final StringBuilder sqlQuery = new StringBuilder();
+	        sqlQuery.append("SELECT COUNT(id) ");
+	        sqlQuery.append("FROM t_polling_respon ");
+	        sqlQuery.append("WHERE polling_option_id IN ( ");
+	        sqlQuery.append("    SELECT id FROM t_polling_option WHERE polling_id = :pollingId ");
+	        sqlQuery.append(")");
+	        final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setParameter("pollingId", pollingId).getSingleResult();
+	        if (result != null) {
+	            totalPollingUsers = Integer.parseInt(result.toString());
+	        }
+	    } catch (Exception e) {
+	        throw new Exception("Failed to retrieve data from database", e);
+	    }
+	    return totalPollingUsers;
 	}
 
 	@Override

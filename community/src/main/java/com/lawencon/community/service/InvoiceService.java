@@ -68,12 +68,12 @@ public class InvoiceService {
 		final SalesSettings setting = salesSettingDao.getSalesSetting();
 		final BigDecimal taxAmount = price.multiply(BigDecimal.valueOf(setting.getTax()));
 		final BigDecimal discAmount =  price.multiply(BigDecimal.valueOf(invoice.getVoucher().getDiscountPercent()));
-		
+		final BigDecimal subTotal = price.subtract(discAmount);
 		 payment.setDiscAmount(discAmount);
-		 payment.setSubtotal(price.subtract(discAmount));
+		 payment.setSubtotal(subTotal);
 		 payment.setTaxAmount(taxAmount);
 		 payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
-		 payment.setTotal(price.add(taxAmount));
+		 payment.setTotal(subTotal.add(taxAmount));
 		 payment.setInvoice(invoiceNew);
 		 payment.setIsActive(true);
 		 payment.setIsPaid(false);
