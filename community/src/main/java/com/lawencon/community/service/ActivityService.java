@@ -96,11 +96,14 @@ public class ActivityService {
 		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
-		for (int  i=1;i<activityList.size();i++) {
+		
+		
+		
+		for (int  i=0;i<activityList.size();i++) {
 
 			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
 			
-			reportMember.setNo(i);
+			reportMember.setNo(i+1);
 			reportMember.setStartDate(Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setTotalParticipants(getCountPollingOption(activityList.get(i).getId(),user.getId() ));

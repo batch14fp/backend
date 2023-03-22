@@ -178,16 +178,15 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
     public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, String userId, Integer offset, Integer limit) {
-        StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT * ");
-        sqlQuery.append("FROM t_activity a ");
-        sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
-        sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
-        sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
-        sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
-        sqlQuery.append("WHERE a.is_active = TRUE AND a.user_id = :userId AND a.start_date >= :startDate AND a.start_date <= :endDate ");
-        sqlQuery.append("ORDER BY a.created_at DESC ");
-        
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT * ");
+		sqlQuery.append("FROM t_activity a ");
+		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
+		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
+		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
+		sqlQuery.append("WHERE a.is_active = TRUE AND a.user_id = :userId AND a.start_date BETWEEN :startDate AND :endDate ");
+		sqlQuery.append("ORDER BY a.created_at DESC ");
       final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
       query.setParameter("userId", userId);
       query.setParameter("startDate", startDate);
@@ -196,11 +195,11 @@ public class ActivityDao extends AbstractJpaDao {
         if (limit != null) {
             query.setMaxResults(limit);
         }
-        if (limit != null) {
+        if (offset != null) {
             query.setFirstResult(offset);
         }
-
-        return query.getResultList();
+        List<Activity> lisActivity = query.getResultList();
+        return lisActivity;
     }
 
 	
@@ -213,8 +212,8 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_invoice i ");
 		sqlQuery.append("ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_payment p ");
-		sqlQuery.append("ON p.invoice_id = i.d ");
-		sqlQuery.append("WHERE a_id = :activityId ");
+		sqlQuery.append("ON p.invoice_id = i.id ");
+		sqlQuery.append("WHERE a.id = :activityId ");
 		sqlQuery.append("AND a.user_id = :userId ");
 		sqlQuery.append("AND is_paid = TRUE ");
 
