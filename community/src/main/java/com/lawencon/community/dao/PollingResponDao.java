@@ -65,6 +65,34 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 	}
 	
 	
+	@SuppressWarnings("unused")
+	public Boolean getIsVote(String userId , String pollingId) {
+		 Boolean data = false;
+		 try {
+		 final StringBuilder sqlQuery = new StringBuilder();
+		 sqlQuery.append("SELECT DISTINCT pr.user_id ");
+		 sqlQuery.append("FROM t_polling_respon pr ");
+		 sqlQuery.append("INNER JOIN t_polling_option po ");
+		 sqlQuery.append("ON po.id = pr.polling_option_id ");
+		 sqlQuery.append("INNER JOIN t_polling p ");
+		 sqlQuery.append("ON p.id = po.polling_id ");
+		 sqlQuery.append("WHERE pr.user_id= :userId ");
+		 sqlQuery.append("AND po.polling_id = :pollingId ");
+		 sqlQuery.append("AND is_active = TRUE " );
+		    final Object result = 
+	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	  		  .setParameter("userId", userId)
+	  		  .setParameter("pollingId", pollingId)
+	  		  .getSingleResult();
+			data = true;
+		 
+		 }catch(final Exception e)
+		 { data = false;}
+		    return data;
+	}
+	
+	
+	
 	
 	@Override
 	public Optional<PollingRespon> getById(String id) {

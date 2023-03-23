@@ -9,6 +9,7 @@ import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 public class PojoProfileDetailRes {
 	
 	private String userId;
+	private String profileId;
 	private String industryId;
 	private String positionId;
 	private String statusMemberId;
@@ -130,6 +131,12 @@ public class PojoProfileDetailRes {
 	}
 	public void setSocialMediaList(List<PojoSocialMediaRes> socialMediaList) {
 		this.socialMediaList = socialMediaList;
+	}
+	public String getProfileId() {
+		return profileId;
+	}
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
 	}
 	
 }

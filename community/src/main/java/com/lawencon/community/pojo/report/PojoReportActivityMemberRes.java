@@ -1,12 +1,10 @@
 package com.lawencon.community.pojo.report;
 
-import java.time.LocalDate;
-
 public class PojoReportActivityMemberRes {
 	
 	private Integer no;
 	private String title;
-	private LocalDate startDate;
+	private String startDate;
 	private Long totalParticipants;
 
 	public Integer getNo() {
@@ -23,10 +21,10 @@ public class PojoReportActivityMemberRes {
 	}
 	
 	
-	public LocalDate getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 	public Long getTotalParticipants() {

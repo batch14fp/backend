@@ -287,5 +287,15 @@ public class PostDao extends AbstractJpaDao {
 		return Optional.ofNullable(super.getByIdAndDetach(Post.class, id));
 
 	}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
 
 }

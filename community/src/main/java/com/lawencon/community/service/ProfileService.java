@@ -59,6 +59,7 @@ public class ProfileService {
 		final Profile profile = profileDao.getByIdRef(id);
 		final PojoProfileDetailRes resGetProfile = new PojoProfileDetailRes();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
+		resGetProfile.setProfileId(profile.getId());
 		resGetProfile.setFullname(profile.getFullname());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		resGetProfile.setEmail(user.getEmail());

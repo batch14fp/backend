@@ -2,6 +2,7 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.FilePostDao;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
+import com.lawencon.community.dao.PollingResponDao;
 import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostCommentDao;
 import com.lawencon.community.dao.PostDao;
@@ -34,9 +36,11 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoFileResData;
+import com.lawencon.community.pojo.post.PojoOptionCountRes;
 import com.lawencon.community.pojo.post.PojoPollingOptionReqInsert;
 import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
 import com.lawencon.community.pojo.post.PojoPollingOptionRes;
+import com.lawencon.community.pojo.post.PojoPollingResponRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReplyResData;
 import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
@@ -61,11 +65,12 @@ public class PostService {
 	private FilePostDao filePostDao;
 	private PollingDao pollingDao;
 	private PollingOptionDao pollingOptionDao;
+	private PollingResponDao pollingResponDao;
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public PostService(final PollingOptionDao pollingOptionDao, final PollingDao pollingDao,
+	public PostService(final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao, final PollingDao pollingDao,
 			final FilePostDao filePostDao, final PostDao postDao, final PostBookmarkDao postBookmarkDao,
 			final PostCommentDao postCommentDao, final PostTypeDao postTypeDao, final FileDao fileDao,
 			final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
@@ -80,12 +85,14 @@ public class PostService {
 		this.filePostDao = filePostDao;
 		this.pollingDao = pollingDao;
 		this.pollingOptionDao = pollingOptionDao;
+		this.pollingResponDao = pollingResponDao;
 
 	}
 
 	public PojoPostRes getById(String id) throws Exception {
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
+		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		res.setId(data.getId());
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
@@ -100,17 +107,35 @@ public class PostService {
 		if (data.getPolling() != null) {
 			final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 			res.setPollingId(polling.getId());
+			res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+			final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
+				
+			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+			
 			res.setTitlePolling(polling.getTitle());
 			final List<PojoPollingOptionRes> options = new ArrayList<>();
 			final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 			for (PollingOption pollingOption : pollingOptions) {
 				final PojoPollingOptionRes option = new PojoPollingOptionRes();
 				option.setPollingOptionId(pollingOption.getId());
-				option.setVer(pollingOption.getVersion());
+			 
 				option.setPollingContent(pollingOption.getContentPolling());
+				option.setVer(pollingOption.getVersion());
 				options.add(option);
 			}
+		    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+		  	
+			Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
+	        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+	            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+	            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+	            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+	            pollingOptionUserCounts.add(pojoOptionCountRes);
+	        }
+	        pollingRes.setData(pollingOptionUserCounts);
+	  
 			res.setPollingOption(options);
+			res.setPollingRespon(pollingRes);
 		}
 		final List<PojoFileResData> files = new ArrayList<>();
 		filePostDao.getAllFileByPostId(data.getId()).forEach(filesPost -> {
@@ -131,8 +156,8 @@ public class PostService {
 		res.setCategoryName(data.getCategory().getCategoryName());
 		res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 		res.setCountPostLike(getCountPostLike(data.getId()));
-		res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-		res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+		res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
+		res.setIsLike(getIsLike(userRef.getId(), data.getId()));
 
 		return res;
 	}
@@ -427,6 +452,7 @@ public class PostService {
 
 	public List<PojoPostRes> getData(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getGetAllPost(offset, limit);
+		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		for (Post data : posts) {
 			PojoPostRes res = new PojoPostRes();
@@ -445,17 +471,35 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
+				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
+					
+				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
-					option.setVer(pollingOption.getVersion());
+				 
 					option.setPollingContent(pollingOption.getContentPolling());
+					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
+			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			  	
+				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+		            pollingOptionUserCounts.add(pojoOptionCountRes);
+		        }
+		        pollingRes.setData(pollingOptionUserCounts);
+		  
 				res.setPollingOption(options);
+				res.setPollingRespon(pollingRes);
 			}
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
@@ -475,9 +519,14 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
+<<<<<<< HEAD
+			res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
+			res.setIsLike(getIsLike(userRef.getId(), data.getId()));
+=======
 			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
 			res.setLike(getIsLike(principalService.getAuthPrincipal(), data.getId()));
 //			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+>>>>>>> 52898ffbf9ac866333851fd821a19ffda6ebd09b
 			listPost.add(res);
 		}
 
@@ -495,9 +544,16 @@ public class PostService {
 		return postDao.getByUserIdTotalCount(principalService.getAuthPrincipal());
 	}
 
+	public Boolean getIsVote(String userId, String pollingId) {
+		return pollingResponDao.getIsVote(userId, pollingId);
+	}
+	
+
 	public List<PojoPostRes> getMostLike(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getPostsByMostLikes(offset, limit);
+		
 		final List<PojoPostRes> listPost = new ArrayList<>();
+		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		for (Post data : posts) {
 			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
@@ -515,17 +571,35 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
+				res.setIsVote(getIsVote(userRef.getId(), polling.getId()));
+				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
+					
+				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
+				 
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
+			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			  	
+				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+		            pollingOptionUserCounts.add(pojoOptionCountRes);
+		        }
+		        pollingRes.setData(pollingOptionUserCounts);
+		  
 				res.setPollingOption(options);
+				res.setPollingRespon(pollingRes);
 			}
 
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
@@ -545,8 +619,8 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+			res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
+			res.setIsLike(getIsLike(userRef.getId(), data.getId()));
 			listPost.add(res);
 		}
 
@@ -556,10 +630,11 @@ public class PostService {
 
 	public List<PojoPostRes> getAllPostByUserId(int offset, int limit) throws Exception {
 		final List<PojoPostRes> listPost = new ArrayList<>();
+		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 
 		final List<Post> posts = postDao.getByUserId(principalService.getAuthPrincipal(), offset, limit);
 		for (Post data : posts) {
-			PojoPostRes res = new PojoPostRes();
+			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
 			res.setContent(data.getContentPost());
@@ -572,17 +647,35 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
+				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
+					
+				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
+				 
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
+			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			  	
+				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+		            pollingOptionUserCounts.add(pojoOptionCountRes);
+		        }
+		        pollingRes.setData(pollingOptionUserCounts);
+		  
 				res.setPollingOption(options);
+				res.setPollingRespon(pollingRes);
 			}
 			final List<FilePost> filePosts = filePostDao.getAllFileByPostId(data.getId());
 			for (FilePost filePost : filePosts) {
@@ -592,6 +685,7 @@ public class PostService {
 				filePostData.setVer(filePost.getVersion());
 				files.add(filePostData);
 			}
+			
 			res.setData(files);
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -600,8 +694,8 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+			res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
+			res.setIsLike(getIsLike(userRef.getId(), data.getId()));
 			listPost.add(res);
 		}
 		return listPost;
