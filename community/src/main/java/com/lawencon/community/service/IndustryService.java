@@ -11,12 +11,12 @@ import com.lawencon.community.model.Industry;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
-import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
-import com.lawencon.community.pojo.industry.PojoResGetIndustry;
+import com.lawencon.community.pojo.industry.PojoIndustryReqInsert;
+import com.lawencon.community.pojo.industry.PojoIndustryReqUpdate;
+import com.lawencon.community.pojo.industry.PojoIndustryRes;
 
 @Service
-public class IndustryService extends BaseService<PojoResGetIndustry> {
+public class IndustryService extends BaseService<PojoIndustryRes> {
 
 	private IndustryDao industryDao;
 
@@ -26,15 +26,16 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 	}
 
 	@Override
-	public List<PojoResGetIndustry> getAll() {
+	public List<PojoIndustryRes> getAll() {
 
-		final List<PojoResGetIndustry> res = new ArrayList<>();
+		final List<PojoIndustryRes> res = new ArrayList<>();
 
 		industryDao.getAll().forEach(data -> {
-			final PojoResGetIndustry pojoResGetIndustry = new PojoResGetIndustry();
+			final PojoIndustryRes pojoResGetIndustry = new PojoIndustryRes();
 			pojoResGetIndustry.setIndustryId(data.getId());
 			pojoResGetIndustry.setIndustryName(data.getIndustryName());
 			pojoResGetIndustry.setIsActive(data.getIsActive());
+			pojoResGetIndustry.setVer(data.getVersion());
 			res.add(pojoResGetIndustry);
 
 		});
@@ -59,7 +60,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 
 	}
 
-	public PojoInsertRes save(PojoIndustryInsertReq data) {
+	public PojoInsertRes save(PojoIndustryReqInsert data) {
 		ConnHandler.begin();
 		final Industry industry = new Industry();
 
@@ -75,7 +76,7 @@ public class IndustryService extends BaseService<PojoResGetIndustry> {
 		return pojoRes;
 	}
 
-	public PojoUpdateRes update(PojoIndustryUpdateReq data) {
+	public PojoUpdateRes update(PojoIndustryReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();

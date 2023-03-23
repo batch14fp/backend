@@ -10,7 +10,7 @@ import com.lawencon.community.model.Activity;
 import com.lawencon.community.model.ActivityVoucher;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
+import com.lawencon.community.pojo.voucher.PojoVoucherReqInsert;
 
 @Service
 public class VoucherService {
@@ -24,7 +24,7 @@ public class VoucherService {
 		this.activityDao = activityDao;
 	}
 
-	public PojoInsertRes save(PojoVoucherInsertReq data) {
+	public PojoInsertRes save(PojoVoucherReqInsert data) {
 		final PojoInsertRes res = new PojoInsertRes();
 		ConnHandler.begin();
 		if(data.getActivityId()!=null) {

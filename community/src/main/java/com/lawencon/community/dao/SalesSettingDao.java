@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.SalesSettings;
-import com.lawencon.community.model.SocialMedia;
 
 @Repository
 public class SalesSettingDao extends AbstractJpaDao{

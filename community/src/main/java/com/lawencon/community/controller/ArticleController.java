@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.article.PojoArticleInsertReq;
-import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
-import com.lawencon.community.pojo.article.PojoResGetArticle;
-import com.lawencon.community.pojo.article.PojoResGetArticleData;
+import com.lawencon.community.pojo.article.PojoArticleReqInsert;
+import com.lawencon.community.pojo.article.PojoArticleReqUpdate;
+import com.lawencon.community.pojo.article.PojoArticleRes;
+import com.lawencon.community.pojo.article.PojoArticleResData;
 import com.lawencon.community.service.ArticleService;
 import com.lawencon.community.service.PaginationService;
 
@@ -37,25 +37,19 @@ public class ArticleController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<PojoResGetArticle> getData(@RequestParam("page") int page,
+	public ResponseEntity<PojoArticleRes> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        int offset = (page - 1) * size;
-	        final PojoResGetArticle dataList = articleService.getAll(offset, size);
-	        int totalCount = articleService.getTotalCount();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        final PojoArticleRes dataList = articleService.getAll(page, size);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
 	    }
 	
 	
 	
 	@GetMapping("/most-viewer")
-	public ResponseEntity<List<PojoResGetArticleData>> getAllByMostViewer(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoArticleResData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-	        int offset = (page - 1) * size;
-	        final List<PojoResGetArticleData> dataList = articleService.getAllByMostViewer(offset, size);
+		
+	        final List<PojoArticleResData> dataList = articleService.getAllByMostViewer(page, size);
 	        int totalCount = articleService.getTotalCount();
 	        int pageCount = paginationService.getPageCount(totalCount, size);
 	        HttpHeaders headers = new HttpHeaders();
@@ -65,20 +59,26 @@ public class ArticleController {
 	    }
 	
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<PojoResGetArticleData> getArticle(@PathVariable ("id")String id){
-		PojoResGetArticleData resGet = articleService.getById(id);
+	@GetMapping("admin/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForAdmin(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForAdmin(id);
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
+	@GetMapping("member/{id}")
+	public ResponseEntity<PojoArticleResData> getArticleIdForMember(@PathVariable ("id")String id){
+		PojoArticleResData resGet = articleService.getByIdForMember(id);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertArticle(@RequestBody PojoArticleInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertArticle(@RequestBody PojoArticleReqInsert data){
 		PojoInsertRes resGet = articleService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateArticle(@RequestBody PojoArticleUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateArticle(@RequestBody PojoArticleReqUpdate data){
 		PojoUpdateRes resGet = articleService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

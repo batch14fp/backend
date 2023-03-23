@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPollingInsertReq;
-import com.lawencon.community.pojo.post.PojoPollingUpdateReq;
+import com.lawencon.community.pojo.post.PojoPollingReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingResponReq;
+import com.lawencon.community.pojo.post.PojoPollingResponRes;
 import com.lawencon.community.service.PollingService;
 
 @RestController
@@ -27,20 +29,30 @@ public class PollingController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPolling(@RequestBody PojoPollingInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPolling(@RequestBody PojoPollingReqInsert data){
 		PojoInsertRes resGet = pollingService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePolling(@RequestBody PojoPollingUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updatePolling(@RequestBody PojoPollingReqUpdate data){
 		PojoUpdateRes resGet = pollingService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deletePolling(@PathVariable ("id")String id) throws Exception{
 		PojoRes resDelete = pollingService.delete(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
+	
+	@PostMapping("/vote")
+	public ResponseEntity<PojoPollingResponRes> getAllCountOption(@RequestBody PojoPollingResponReq data) throws Exception{
+		PojoPollingResponRes resGet = pollingService.insertOptionPolling(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	
 }

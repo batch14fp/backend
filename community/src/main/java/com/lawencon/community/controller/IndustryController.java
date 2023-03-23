@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
-import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
-import com.lawencon.community.pojo.industry.PojoResGetIndustry;
+import com.lawencon.community.pojo.industry.PojoIndustryReqInsert;
+import com.lawencon.community.pojo.industry.PojoIndustryReqUpdate;
+import com.lawencon.community.pojo.industry.PojoIndustryRes;
 import com.lawencon.community.service.IndustryService;
 
 @RestController
@@ -31,18 +31,18 @@ public class IndustryController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoResGetIndustry>> getAllIndustry(){
-		List<PojoResGetIndustry> resGet = industryService.getAll();
+	public ResponseEntity<List<PojoIndustryRes>> getAllIndustry(){
+		List<PojoIndustryRes> resGet = industryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryReqInsert data){
 		PojoInsertRes resGet = industryService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoIndustryUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoIndustryReqUpdate data){
 		PojoUpdateRes resGet = industryService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

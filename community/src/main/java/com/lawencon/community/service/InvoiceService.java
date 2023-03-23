@@ -2,8 +2,7 @@ package com.lawencon.community.service;
 
 import java.math.BigDecimal;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -20,8 +19,8 @@ import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.invoice.PojoInvoiceInsertReq;
-import com.lawencon.community.pojo.invoice.PojoResGetInvoice;
+import com.lawencon.community.pojo.invoice.PojoInvoiceReqInsert;
+import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -35,7 +34,7 @@ public class InvoiceService {
 	private PaymentDao paymentDao;
 
 	
-	@Inject
+	@Autowired
 	private PrincipalService principalService;
 	
 	public InvoiceService(final PaymentDao paymentDao,final SalesSettingDao salesSettingDao, final InvoiceDao invoiceDao, final UserDao userDao, 
@@ -48,7 +47,7 @@ public class InvoiceService {
 		this.salesSettingDao = salesSettingDao;
 	}
 	
-	public PojoInsertRes save(PojoInvoiceInsertReq data) {
+	public PojoInsertRes save(PojoInvoiceReqInsert data) {
 		ConnHandler.begin();
 		final Invoice invoice = new Invoice();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -69,12 +68,12 @@ public class InvoiceService {
 		final SalesSettings setting = salesSettingDao.getSalesSetting();
 		final BigDecimal taxAmount = price.multiply(BigDecimal.valueOf(setting.getTax()));
 		final BigDecimal discAmount =  price.multiply(BigDecimal.valueOf(invoice.getVoucher().getDiscountPercent()));
-		
+		final BigDecimal subTotal = price.subtract(discAmount);
 		 payment.setDiscAmount(discAmount);
-		 payment.setSubtotal(price.subtract(discAmount));
+		 payment.setSubtotal(subTotal);
 		 payment.setTaxAmount(taxAmount);
 		 payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
-		 payment.setTotal(price.add(taxAmount));
+		 payment.setTotal(subTotal.add(taxAmount));
 		 payment.setInvoice(invoiceNew);
 		 payment.setIsActive(true);
 		 payment.setIsPaid(false);
@@ -90,8 +89,8 @@ public class InvoiceService {
 	
 	
 	
-	public PojoResGetInvoice getById (String id) {
-		final PojoResGetInvoice res = new PojoResGetInvoice();
+	public PojoInvoiceRes getById (String id) {
+		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getById(id).get();
 		
 		res.setActivityId(invoice.getActivity().getId());
@@ -108,8 +107,8 @@ public class InvoiceService {
 	
 	
 	
-	public PojoResGetInvoice getByCode(String code) throws Exception {
-		final PojoResGetInvoice res = new PojoResGetInvoice();
+	public PojoInvoiceRes getByCode(String code) throws Exception {
+		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getByInvoiceCode(code);
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());

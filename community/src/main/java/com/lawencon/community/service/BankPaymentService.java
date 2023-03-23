@@ -11,12 +11,12 @@ import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.bankpayment.PojoBankPaymentInsertReq;
-import com.lawencon.community.pojo.bankpayment.PojoBankPaymentUpdateReq;
-import com.lawencon.community.pojo.bankpayment.PojoResGetBankPayment;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqInsert;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
 
 @Service
-public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
+public class BankPaymentService extends BaseService<PojoBankPaymentRes> {
 	private final BankPaymentDao bankPaymentDao;
 
 	public BankPaymentService(final BankPaymentDao bankPaymentDao) {
@@ -24,10 +24,10 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 	}
 
 	@Override
-	public List<PojoResGetBankPayment> getAll() {
-		final List<PojoResGetBankPayment> res = new ArrayList<>();
+	public List<PojoBankPaymentRes> getAll() {
+		final List<PojoBankPaymentRes> res = new ArrayList<>();
 		bankPaymentDao.getAll().forEach(data -> {
-			PojoResGetBankPayment bankPayment = new PojoResGetBankPayment();
+			PojoBankPaymentRes bankPayment = new PojoBankPaymentRes();
 			bankPayment.setBankPaymentId(data.getId());
 			bankPayment.setAccountName(data.getAccountName());
 			bankPayment.setAccountNumber(data.getAccountNumber());
@@ -57,7 +57,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 
 	}
 
-	public PojoInsertRes save(PojoBankPaymentInsertReq data) {
+	public PojoInsertRes save(PojoBankPaymentReqInsert data) {
 		ConnHandler.begin();
 		final BankPayment bankPayment = new BankPayment();
 		bankPayment.setBankName(data.getBankPaymentName());
@@ -72,7 +72,7 @@ public class BankPaymentService extends BaseService<PojoResGetBankPayment> {
 		return pojoInsertRes;
 	}
 
-	public PojoUpdateRes update(PojoBankPaymentUpdateReq data) {
+	public PojoUpdateRes update(PojoBankPaymentReqUpdate data) {
 
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {

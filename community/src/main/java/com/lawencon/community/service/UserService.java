@@ -37,12 +37,13 @@ import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
-import com.lawencon.community.pojo.profile.PojoPasswordUpdateReq;
-import com.lawencon.community.pojo.user.PojoResGetAllUserByRole;
+import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
+import com.lawencon.community.pojo.user.PojoAllUsersRes;
+import com.lawencon.community.pojo.user.PojoAllUsersResData;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
-import com.lawencon.community.pojo.verificationcode.PojoResGetVerification;
 import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
-import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReq;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
+import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.util.GenerateString;
 
 @Service
@@ -90,8 +91,8 @@ public class UserService implements UserDetailsService {
 		return userDao.login(email);
 	}
 
-	public PojoResGetVerification getVerified(PojoResGetVerificationCode data) {
-		PojoResGetVerification res = new PojoResGetVerification();
+	public PojoVerificationRes getVerified(PojoResGetVerificationCode data) {
+		PojoVerificationRes res = new PojoVerificationRes();
 		Optional<CodeVerification> codeVerification = codeVerificationDao.getByCode(data.getCode());
 
 		codeVerification.ifPresent(result -> {
@@ -154,8 +155,46 @@ public class UserService implements UserDetailsService {
 
 		return res;
 	}
+	public PojoInsertRes insertUser(PojoSignUpReqInsert data) {
+		final PojoInsertRes res = new PojoInsertRes();
+		ConnHandler.begin();
 
-	public PojoInsertRes verificationCode(final PojoVerificationCodeReq data) {
+		final Profile profile = new Profile();
+		final Position position = positionDao.getByIdRef(data.getPositionId());
+		profile.setPosition(position);
+		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
+		profile.setIndustry(industry);
+		profile.setPhoneNumber(data.getPhoneNumber());
+		profile.setDob(data.getDob());
+		profile.setFullname(data.getFullName());
+		profile.setCompanyName(data.getCompany());
+		Profile profileNew = profileDao.save(profile);
+		res.setId(profileNew.getId());
+		final User user = new User();
+		final Wallet wallet = new Wallet();
+		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		final Wallet walletNew = walletDao.save(wallet);
+		final Role role = roleDao.getRoleByCode(RoleEnum.ADMIN.getRoleCode()).get();
+		user.setRole(role);
+		user.setEmail(data.getEmail());
+		user.setUserPassword(encoder.encode(data.getPassword()).toString());
+		final Profile profileRef = profileDao.getByIdRef(profileNew.getId());
+		final Wallet wallerRef = walletDao.getByIdRef(Wallet.class, walletNew.getId());
+		user.setProfile(profileRef);
+		user.setWallet(wallerRef);
+		final User userNew = userDao.save(user);
+		
+	
+		
+		ConnHandler.commit();
+
+		res.setId(userNew.getId());
+		res.setMessage("Add User is Success");
+
+		return res;
+	}
+
+	public PojoInsertRes verificationCode(final PojoVerificationCodeReqInsert data) {
 		final PojoInsertRes res = new PojoInsertRes();
 
 		final User system = userDao.getUserByRoleCode(RoleEnum.SYSTEM.getRoleCode()).get(0);
@@ -188,10 +227,10 @@ public class UserService implements UserDetailsService {
 	}
 
 
-	public List<PojoResGetAllUserByRole> getAllUserByRole(String roleCode) {
-		final List<PojoResGetAllUserByRole> listRes = new ArrayList<>();
+	public List<PojoAllUsersResData> getAllUserByRole(String roleCode) {
+		final List<PojoAllUsersResData> listRes = new ArrayList<>();
 		userDao.getUserByRoleCode(roleCode).forEach(data -> {
-			PojoResGetAllUserByRole res = new PojoResGetAllUserByRole();
+			PojoAllUsersResData res = new PojoAllUsersResData();
 			res.setEmail(data.getEmail());
 			res.setRoleId(data.getRole().getRoleCode());
 			res.setFullname(data.getProfile().getFullname());
@@ -205,14 +244,42 @@ public class UserService implements UserDetailsService {
 	}
 	
 	
-	public PojoUpdateRes updatePassword(PojoPasswordUpdateReq data) {
+	public PojoAllUsersRes getAllUser(int offset, int limit) {
+		final PojoAllUsersRes res = new PojoAllUsersRes();	
+		final List<PojoAllUsersResData> listRes = new ArrayList<>();
+		userDao.getllUser(offset, limit).forEach(data -> {
+			PojoAllUsersResData userData = new PojoAllUsersResData();
+			userData.setEmail(data.getEmail());
+			userData.setUserId(data.getId());
+			userData.setRoleId(data.getRole().getRoleCode());
+			userData.setFullname(data.getProfile().getFullname());
+			userData.setRoleName(data.getRole().getRoleName());
+			userData.setIsActive(data.getIsActive());
+			userData.setVer(data.getVersion());
+			listRes.add(userData);
+
+		});
+		res.setData(listRes);
+		res.setTotal(Long.valueOf(getTotalCount()));
+
+		return res;
+
+	}
+	public int getTotalCount() {
+
+		return userDao.getTotalCount();
+	}
+	
+	
+	public PojoUpdateRes updatePassword(PojoPasswordReqUpdate data) {
 		ConnHandler.begin();
 		final PojoUpdateRes res = new PojoUpdateRes();
 		final User user = userDao.getUserByProfileId(data.getProfileId());
 		final User userRef = userDao.getByIdRef(user.getId());
 		userDao.getByIdAndDetach(User.class, userRef.getId());
+		if(encoder.matches(data.getOldPassword(), userRef.getUserPassword())) {
 		if (data.getConfirmNewPassword().equals(data.getNewPassword())) {
-		userRef.setUserPassword(data.getConfirmNewPassword());
+		userRef.setUserPassword(encoder.encode(data.getConfirmNewPassword()));
 		userRef.setVersion(data.getVer());
 		final User userNew = userDao.saveAndFlush(userRef);
 		ConnHandler.commit();
@@ -225,6 +292,11 @@ public class UserService implements UserDetailsService {
 			res.setId(userRef.getId());
 			res.setMessage("Passwords did not match");
 			res.setVer(userRef.getVersion());
+		}
+		
+		}
+		else {
+			throw new RuntimeException ("Your Password Doesn't Match");
 		}
 		return res;
 	}

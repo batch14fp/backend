@@ -2,43 +2,62 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.community.dao.BaseBatchDao;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
+import com.lawencon.community.dao.PollingResponDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostTypeDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.model.PollingRespon;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.post.PojoPollingInsertReq;
-import com.lawencon.community.pojo.post.PojoPollingOptionInsertReq;
-import com.lawencon.community.pojo.post.PojoPollingOptionUpdateReq;
-import com.lawencon.community.pojo.post.PojoPollingUpdateReq;
+import com.lawencon.community.pojo.post.PojoOptionCountRes;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingReqInsert;
+import com.lawencon.community.pojo.post.PojoPollingReqUpdate;
+import com.lawencon.community.pojo.post.PojoPollingResponReq;
+import com.lawencon.community.pojo.post.PojoPollingResponRes;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class PollingService {
+	
+
+	@Autowired
+	private PrincipalService principalService;
+	
+	
 	private PostDao postDao;
 	private PollingDao pollingDao;
 	private PostTypeDao postTypeDao;
 	private PollingOptionDao pollingOptionDao;
-	private BaseBatchDao baseBatchDao;
-	public PollingService(final BaseBatchDao baseBatchDao,final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
+	private UserDao userDao;
+	private PollingResponDao pollingResponDao;
+	
+	public PollingService(final  PollingResponDao pollingResponDao, final UserDao userDao, final PostTypeDao postTypeDao, final PostDao postDao, final PollingDao pollingDao, final PollingOptionDao pollingOptionDao) {
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingDao = pollingDao;
 		this.postDao  = postDao;
 		this.postTypeDao = postTypeDao;
-		this.baseBatchDao =baseBatchDao;
+		this.userDao =userDao;
+		this.pollingResponDao = pollingResponDao;
+		
 	}
 	
-	public PojoInsertRes save(PojoPollingInsertReq data) {
+	public PojoInsertRes save(PojoPollingReqInsert data) {
 	    ConnHandler.begin();
 
 	    try {
@@ -57,13 +76,13 @@ public class PollingService {
 	        final Polling pollingNew = pollingDao.save(polling);
 
 	        final List<PollingOption> options = new ArrayList<>();
-	        for (PojoPollingOptionInsertReq option : data.getPollingOptions()) {
+	        for (PojoPollingOptionReqInsert option : data.getPollingOptions()) {
 	            final PollingOption pollingOption = new PollingOption();
 	            pollingOption.setPolling(pollingNew);
 	            pollingOption.setContentPolling(option.getPollingContent());
 	            options.add(pollingOption);
 	        }
-	        baseBatchDao.saveAll(options);
+	        pollingOptionDao.saveAll(options);
 
 	        ConnHandler.commit();
 
@@ -77,8 +96,40 @@ public class PollingService {
 	        throw e;
 	    }
 	}
+	
+	
+	public PojoPollingResponRes insertOptionPolling(PojoPollingResponReq data) throws Exception {
+		ConnHandler.begin();
+		final PollingRespon pollingRespon = new PollingRespon();
+		final PollingOption pollingOption= pollingOptionDao.getByIdRef(data.getPollingOptionId());
+		pollingRespon.setPollingOption(pollingOption);
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		pollingRespon.setUser(user);
+		pollingRespon.setIsActive(true);
+		pollingResponDao.save(pollingRespon);
+		ConnHandler.commit();
+		
+		
+		
+	    final PojoPollingResponRes res = new PojoPollingResponRes();
+		
+			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+		
+		        Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
+		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
+		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
+		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
+		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
+		            pollingOptionUserCounts.add(pojoOptionCountRes);
+		        }
+		        res.setData(pollingOptionUserCounts);
+		        res.setTotal(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
+		    return res;
+		
 
-	public PojoUpdateRes update(PojoPollingUpdateReq data) {
+	}
+
+	public PojoUpdateRes update(PojoPollingReqUpdate data) {
 	    ConnHandler.begin();
 
 	    try {
@@ -88,7 +139,7 @@ public class PollingService {
 	        polling.setTitle(data.getPollingTitle());
 
 	        final List<PollingOption> options = new ArrayList<>();
-	        for (PojoPollingOptionUpdateReq option : data.getPollingOptions()) {
+	        for (PojoPollingOptionReqUpdate option : data.getPollingOptions()) {
 	            final PollingOption pollingOption = pollingOptionDao.getByIdRef(option.getPollingOptionId());
 	            pollingOptionDao.getByIdAndDetach(PollingOption.class, pollingOption.getId());
 	            pollingOption.setPolling(polling);
@@ -97,7 +148,7 @@ public class PollingService {
 	            options.add(pollingOption);
 	        }
 
-	        baseBatchDao.saveAll(options);
+	        pollingOptionDao.saveAll(options);
 
 	        
 	        
@@ -114,6 +165,8 @@ public class PollingService {
 	        throw e;
 	    }
 	}
+	
+	
 	
 	public PojoRes delete(String id) throws Exception {
 		ConnHandler.begin();

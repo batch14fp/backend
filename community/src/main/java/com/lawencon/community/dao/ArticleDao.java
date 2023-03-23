@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ public class ArticleDao extends AbstractJpaDao {
 		final StringBuilder sqlQuery = new StringBuilder();
 
 		sqlQuery.append(
-				"SELECT a.id, a.file_id, a.title, a.content_article, a.viewers, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
+				"SELECT a.id, a.file_id, a.title, a.content_article, a.viewers, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
 		sqlQuery.append("FROM t_article a ");
 		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -63,6 +64,7 @@ public class ArticleDao extends AbstractJpaDao {
 
 				article.setVersion(Integer.valueOf(obj[8].toString()));
 				article.setIsActive(Boolean.valueOf(obj[9].toString()));
+				article.setCreatedAt(Timestamp.valueOf(obj[10].toString()).toLocalDateTime());
 				listArticle.add(article);
 			}
 
@@ -72,6 +74,7 @@ public class ArticleDao extends AbstractJpaDao {
 
 		return listArticle;
 	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Article> getAllByMostViewer(int offset, int limit) {
@@ -89,9 +92,7 @@ public class ArticleDao extends AbstractJpaDao {
 
 		try {
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setMaxResults(limit)
-					.setFirstResult(offset)
-					.getResultList();
+					.setMaxResults(limit).setFirstResult((offset - 1) * limit).getResultList();
 
 			for (final Object objs : result) {
 				final Object[] obj = (Object[]) objs;

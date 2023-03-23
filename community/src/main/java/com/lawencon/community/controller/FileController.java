@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.File;
 import com.lawencon.community.pojo.PojoInsertRes;
-import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.file.PojoFileReqInsert;
 import com.lawencon.community.service.FileService;
 @RestController
 @RequestMapping("files")
@@ -37,7 +37,7 @@ public class FileController {
                 .body(fileBytes);
     }
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoFileInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoFileReqInsert data){
 		PojoInsertRes resGet = fileService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

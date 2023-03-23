@@ -11,12 +11,12 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.position.PojoPositionInsertReq;
-import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
-import com.lawencon.community.pojo.position.PojoResGetPostion;
+import com.lawencon.community.pojo.position.PojoPositionReqInsert;
+import com.lawencon.community.pojo.position.PojoPositionReqUpdate;
+import com.lawencon.community.pojo.position.PojoPostionRes;
 
 @Service
-public class PositionService extends BaseService<PojoResGetPostion> {
+public class PositionService extends BaseService<PojoPostionRes> {
 
 	private final PositionDao positionDao;
 
@@ -26,10 +26,10 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 	}
 
 	@Override
-	public List<PojoResGetPostion> getAll() {
-		final List<PojoResGetPostion> positions = new ArrayList<>();
+	public List<PojoPostionRes> getAll() {
+		final List<PojoPostionRes> positions = new ArrayList<>();
 		positionDao.getAll().forEach(data -> {
-			PojoResGetPostion pojoResGetPostion = new PojoResGetPostion();
+			PojoPostionRes pojoResGetPostion = new PojoPostionRes();
 			pojoResGetPostion.setPositionId(data.getId());
 			pojoResGetPostion.setPositionCode(data.getPositionCode());
 			pojoResGetPostion.setPositionName(data.getPositionName());
@@ -58,7 +58,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 
 	}
 
-	public PojoInsertRes save(PojoPositionInsertReq data) {
+	public PojoInsertRes save(PojoPositionReqInsert data) {
 		ConnHandler.begin();
 
 		final Position position = new Position();
@@ -77,7 +77,7 @@ public class PositionService extends BaseService<PojoResGetPostion> {
 		return pojoRes;
 	}
 
-	public PojoUpdateRes update(PojoPositionUpdateReq data) {
+	public PojoUpdateRes update(PojoPositionReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
