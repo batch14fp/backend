@@ -277,8 +277,9 @@ public class UserService implements UserDetailsService {
 		final User user = userDao.getUserByProfileId(data.getProfileId());
 		final User userRef = userDao.getByIdRef(user.getId());
 		userDao.getByIdAndDetach(User.class, userRef.getId());
+		if(encoder.matches(data.getOldPassword(), userRef.getUserPassword())) {
 		if (data.getConfirmNewPassword().equals(data.getNewPassword())) {
-		userRef.setUserPassword(data.getConfirmNewPassword());
+		userRef.setUserPassword(encoder.encode(data.getConfirmNewPassword()));
 		userRef.setVersion(data.getVer());
 		final User userNew = userDao.saveAndFlush(userRef);
 		ConnHandler.commit();
@@ -291,6 +292,11 @@ public class UserService implements UserDetailsService {
 			res.setId(userRef.getId());
 			res.setMessage("Passwords did not match");
 			res.setVer(userRef.getVersion());
+		}
+		
+		}
+		else {
+			throw new RuntimeException ("Your Password Doesn't Match");
 		}
 		return res;
 	}
