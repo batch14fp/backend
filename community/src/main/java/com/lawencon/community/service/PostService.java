@@ -365,6 +365,7 @@ public class PostService {
 
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+
 		if (getIsLike(user.getId(), post.getId())) {
 			
 			postLike = postLikeDao.getByUserIdAndPostId(user.getId(), post.getId());
@@ -518,8 +519,14 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
+<<<<<<< HEAD
 			res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
 			res.setIsLike(getIsLike(userRef.getId(), data.getId()));
+=======
+			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
+			res.setLike(getIsLike(principalService.getAuthPrincipal(), data.getId()));
+//			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
+>>>>>>> 52898ffbf9ac866333851fd821a19ffda6ebd09b
 			listPost.add(res);
 		}
 
