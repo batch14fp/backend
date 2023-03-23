@@ -55,27 +55,30 @@ public class ProfileService {
 
 	}
 
-	public PojoProfileDetailRes getById(String id) throws Exception {
-		final Profile profile = profileDao.getByIdRef(id);
+	public PojoProfileDetailRes getProfileDetail() throws Exception {
 		final PojoProfileDetailRes resGetProfile = new PojoProfileDetailRes();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
-		resGetProfile.setProfileId(profile.getId());
-		resGetProfile.setFullname(profile.getFullname());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		resGetProfile.setUserId(user.getId());
 		resGetProfile.setEmail(user.getEmail());
-		resGetProfile.setCompany(profile.getCompanyName());
-		resGetProfile.setStatusMemberId(profile.getMemberStatus().getId());
-		resGetProfile.setStatusMember(profile.getMemberStatus().getStatusName());
-		resGetProfile.setIndustryId(profile.getIndustry().getId());
-		resGetProfile.setPositionId(profile.getPosition().getId());
-		resGetProfile.setProvince(profile.getProvince());
-		resGetProfile.setCountry(profile.getCountry());
-		resGetProfile.setImageId(profile.getImageProfile().getId());
+		resGetProfile.setProfileId(user.getProfile().getId());
+		resGetProfile.setFullname(user.getProfile().getFullname());
+	
+		resGetProfile.setCompany(user.getProfile().getCompanyName());
+		resGetProfile.setStatusMemberId(user.getProfile().getMemberStatus().getId());
+		resGetProfile.setStatusMember(user.getProfile().getMemberStatus().getStatusName());
+		resGetProfile.setIndustryId(user.getProfile().getIndustry().getId());
+		resGetProfile.setPositionId(user.getProfile().getPosition().getId());
+		resGetProfile.setProvince(user.getProfile().getProvince());
+		resGetProfile.setCountry(user.getProfile().getCountry());
+		if(user.getProfile().getImageProfile()!=null) {
+		resGetProfile.setImageId(user.getProfile().getImageProfile().getId());
+		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
-		resGetProfile.setCity(profile.getCity());
+		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
 		final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
-		profileSocialMediaDao.getByProfileId(id).forEach(data -> {
+		profileSocialMediaDao.getByProfileId(user.getProfile().getId()).forEach(data -> {
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
 			socialMedia.setUrl(data.getUrl());
@@ -85,9 +88,9 @@ public class ProfileService {
 		});
 
 		resGetProfile.setSocialMediaList(socialMediaList);
-		resGetProfile.setPostalCode(profile.getPostalCode());
-		resGetProfile.setPhoneNumber(profile.getPhoneNumber());
-		resGetProfile.setDob(profile.getDob());
+		resGetProfile.setPostalCode(user.getProfile().getPostalCode());
+		resGetProfile.setPhoneNumber(user.getProfile().getPhoneNumber());
+		resGetProfile.setDob(user.getProfile().getDob());
 		return resGetProfile;
 	}
 
