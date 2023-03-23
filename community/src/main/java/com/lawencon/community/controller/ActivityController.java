@@ -1,11 +1,15 @@
 package com.lawencon.community.controller;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.List;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,15 +32,20 @@ import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PaymentService;
+import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("activities")
 public class ActivityController {
+	@Autowired
+	private JasperUtil jasperUtil;
+
 	private ActivityService activityService;
 	private PaginationService paginationService;
 	private PaymentService paymentService;
 
-	public ActivityController(final PaginationService paginationService, final PaymentService paymentService,final ActivityService activityService) {
+	public ActivityController(final PaginationService paginationService, final PaymentService paymentService,
+			final ActivityService activityService) {
 		this.activityService = activityService;
 		this.paginationService = paginationService;
 		this.paymentService = paymentService;
@@ -67,7 +76,7 @@ public class ActivityController {
 		headers.add("X-Total-Pages", String.valueOf(pageCount));
 		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/highest")
 	public ResponseEntity<List<PojoActivityRes>> getDataByHighestPrice(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
@@ -109,30 +118,48 @@ public class ActivityController {
 	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
 			@RequestParam(required = false) String categoryCode, @RequestParam(required = false) String typeCode) {
 		try {
-			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode,
-					typeCode);
+			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode, typeCode);
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	 @GetMapping("/report")
-	    public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(
-	            @RequestParam String startDate,
-	            @RequestParam String endDate,
-	            @RequestParam(required = false) Integer offset,
-	            @RequestParam(required = false) Integer limit) {
-	        List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(),offset, limit);
-	        return ResponseEntity.ok(activities);
-	    }
 
-	
+//	@GetMapping("/report")
+//	public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(@RequestParam String startDate,
+//			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
+//			@RequestParam(required = false) Integer limit) {
+//		List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(
+//				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+//		return ResponseEntity.ok(activities);
+//	}
+
+	@GetMapping("/report/test")
+	public ResponseEntity<byte[]> generateReport( @RequestParam String id, @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+		List<PojoReportActivityMemberRes> data = activityService.getMemberReport(id, Date.valueOf(startDate).toLocalDate(),
+				Date.valueOf(endDate).toLocalDate(), offset, limit);
+		Map<String, Object> params = new HashMap<>();
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		byte[] pdfBytes;
+		try {
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("attachment", "report.pdf");
+		headers.setContentLength(pdfBytes.length);
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+
 	@PutMapping("/payment")
-	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data){
+	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data) {
 		PojoRes resGet = paymentService.updateByUser(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
-	
+
 }

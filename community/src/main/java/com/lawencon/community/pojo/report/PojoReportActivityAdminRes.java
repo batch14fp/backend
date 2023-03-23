@@ -1,12 +1,14 @@
 package com.lawencon.community.pojo.report;
 
+import java.time.LocalDate;
+
 public class PojoReportActivityAdminRes {
 	private Integer no;
 	private String memberName;
 	private String providerName;
 	private String type;
 	private String title;
-	private String startDate;
+	private LocalDate startDate;
 	
 
 	public Integer getNo() {
@@ -39,14 +41,13 @@ public class PojoReportActivityAdminRes {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
-	
-	
+
 	
 	
 	

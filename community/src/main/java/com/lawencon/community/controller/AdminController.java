@@ -1,5 +1,6 @@
 package com.lawencon.community.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -20,8 +22,10 @@ import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqInsert;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
-import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
+import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.BankPaymentService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.community.service.SalesSettingService;
@@ -32,12 +36,14 @@ public class AdminController {
 	private PaymentService paymentService;
 	private SalesSettingService salesSettingService;
 	private BankPaymentService bankPaymentService;
+	private ActivityService activityService;
 	
 	
-	public AdminController(final BankPaymentService bankPaymentService, final  PaymentService paymentService, final SalesSettingService salesSettingService) {
+	public AdminController(final ActivityService activityService, final BankPaymentService bankPaymentService, final  PaymentService paymentService, final SalesSettingService salesSettingService) {
 		this.paymentService = paymentService;
 		this.salesSettingService = salesSettingService;
 		this.bankPaymentService = bankPaymentService;
+		this.activityService = activityService ;
 		
 	}
 	
@@ -83,6 +89,15 @@ public class AdminController {
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 
+	
+	@GetMapping("/report")
+	public ResponseEntity<List<PojoReportActivityAdminRes>> getAllByDateRange(@RequestParam String startDate,
+			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit) {
+		List<PojoReportActivityAdminRes> activities = activityService.getAdminReport(
+				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+		return ResponseEntity.ok(activities);
+	}
 
 	
 	

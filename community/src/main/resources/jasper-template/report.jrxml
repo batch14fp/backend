@@ -57,9 +57,17 @@
 			<![CDATA[]]>
 		</queryString>
 	</subDataset>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="no" class="java.lang.Integer">
+		<fieldDescription><![CDATA[no]]></fieldDescription>
+	</field>
+	<field name="title" class="java.lang.String"/>
+	<field name="startDate" class="java.lang.String"/>
+	<field name="totalParticipants" class="java.lang.Long"/>
 	<title>
 		<band height="196" splitType="Stretch">
 			<line>
@@ -78,11 +86,6 @@
 				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<box padding="0"/>
-				<imageExpression><![CDATA["log (2).png"]]></imageExpression>
-			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="465" y="30" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
 				<textFieldExpression><![CDATA["INV0001"]]></textFieldExpression>
@@ -111,33 +114,78 @@
 				<reportElement x="95" y="40" width="205" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
 				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="0" y="166" width="65" height="30" uuid="742016f3-01d4-4a2d-a6da-aab59e3eb8e4"/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="166" width="100" height="30" uuid="44dbc5f6-440c-4b3b-939e-77e40873ebcb"/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
-		<band height="20"/>
+		<band height="46">
+			<staticText>
+				<reportElement x="0" y="0" width="28" height="30" uuid="b6ecbf30-2ab4-4f4d-b033-083cb6ee05aa"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="0" width="70" height="30" uuid="7b6b7511-ad85-4702-ab94-e55c285ff5f1"/>
+				<text><![CDATA[Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="0" width="100" height="30" uuid="a60d5d1b-3875-4602-962b-6fabe7efaa42"/>
+				<text><![CDATA[Total Participants]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="0" width="100" height="30" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
+				</reportElement>
+				<text><![CDATA[startDate]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="20"/>
+		<band height="44">
+			<textField>
+				<reportElement x="0" y="0" width="28" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="0" width="62" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec14ba10-b451-41ab-b9d2-3125f330647d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="0" width="100" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="0" width="100" height="30" uuid="5d4f73a5-28f7-4bb0-9bd1-d1c5e2dca3bc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71248de5-2d2b-4341-89aa-3f2077e7d601"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{totalParticipants}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<lastPageFooter>
 		<band height="177">
-			<staticText>
-				<reportElement positionType="Float" x="-1" y="30" width="261" height="101" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36"/>
-				<box>
-					<topPen lineWidth="1.1" lineStyle="Dashed"/>
-					<leftPen lineWidth="1.1" lineStyle="Dashed"/>
-					<bottomPen lineWidth="1.1" lineStyle="Dashed"/>
-					<rightPen lineWidth="1.1" lineStyle="Dashed"/>
-				</box>
-				<text><![CDATA[Your notes here]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="147" width="556" height="30" backcolor="#E6E8E9" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif" size="9" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="380" y="140" width="100" height="30" uuid="323aff92-bc04-4f98-8202-33b2b77f4aea"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="480" y="140" width="100" height="30" uuid="7bdfd972-b6dd-479c-9481-fd8026a9c730"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 </jasperReport>
