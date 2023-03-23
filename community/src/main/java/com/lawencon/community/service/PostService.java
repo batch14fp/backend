@@ -519,14 +519,9 @@ public class PostService {
 			res.setCountPostComment(postCommentDao.getCountPostComment(data.getId()));
 			res.setCountPostLike(getCountPostLike(data.getId()));
 			res.setTimeAgo(data.getCreatedAt());
-<<<<<<< HEAD
 			res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
 			res.setIsLike(getIsLike(userRef.getId(), data.getId()));
-=======
-			res.setBookmark(getIsBookmarkPost(data.getUser().getId(), data.getId()));
-			res.setLike(getIsLike(principalService.getAuthPrincipal(), data.getId()));
-//			res.setLike(getIsLike(data.getUser().getId(), data.getId()));
->>>>>>> 52898ffbf9ac866333851fd821a19ffda6ebd09b
+
 			listPost.add(res);
 		}
 
@@ -732,9 +727,25 @@ public class PostService {
 	}
 
 	public List<PojoPostCommentRes> getAllCommentByPostId(final String postId, int offset, int limit) throws Exception {
+
 		final List<PojoPostCommentRes> listComment = new ArrayList<>();
 		final List<PojoPostCommentReplyResData> listCommentData = new ArrayList<>();
 		postCommentDao.getAllByPostId(postId, limit, offset).forEach(data -> {
+			if (data.getComment() != null) {
+				final PojoPostCommentReplyResData postCommentData = new PojoPostCommentReplyResData();
+
+				postCommentData.setCommentId(data.getComment().getComment().getId());
+				postCommentData.setUserId(data.getUser().getId());
+				postCommentData.setContentComment(data.getComment().getBody());
+				postCommentData.setFullname(data.getComment().getUser().getProfile().getFullname());
+				postCommentData.setCreatedAt(data.getComment().getCreatedAt());
+				listCommentData.add(postCommentData);
+				
+			
+			}
+			
+			else {
+			
 			final PojoPostCommentRes postComment = new PojoPostCommentRes();
 			postComment.setContentComment(data.getBody());
 			postComment.setPostCommentId(data.getId());
@@ -743,22 +754,29 @@ public class PostService {
 			postComment.setFullname(data.getUser().getProfile().getFullname());
 			postComment.setCreatedAt(data.getCreatedAt());
 			postComment.setVer(data.getVersion());
-			if (data.getComment() != null) {
-				final PojoPostCommentReplyResData postCommentData = new PojoPostCommentReplyResData();
-
-				postCommentData.setContentComment(data.getComment().getId());
-				postCommentData.setUserId(data.getUser().getId());
-				postCommentData.setContentComment(data.getComment().getBody());
-				postCommentData.setFullname(data.getComment().getUser().getProfile().getFullname());
-				postCommentData.setCreatedAt(data.getComment().getCreatedAt());
-				listCommentData.add(postCommentData);
-				postComment.setData(listCommentData);
-
-			}
-
+			postComment.setData(listCommentData);
 			listComment.add(postComment);
+			
+			}
 		});
+	
 		return listComment;
+	}
+	
+	public PojoRes deletePostCommentById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+		Boolean result = postCommentDao.deleteById(PostComment.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
+
 	}
 
 }
