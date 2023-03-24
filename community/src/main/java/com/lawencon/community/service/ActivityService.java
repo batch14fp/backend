@@ -384,6 +384,7 @@ public class ActivityService {
 		activity.setCategoryCode(data.getCategory().getCategoryCode());
 		activity.setCategoryName(data.getCategory().getCategoryName());
 		activity.setTitle(data.getTitle());
+		activity.setContent(data.getDescription());
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
 		activity.setPrice(data.getPrice());
@@ -399,9 +400,9 @@ public class ActivityService {
 
 	}
 
-	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode)
+	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode,int offset,int limit)
 			throws Exception {
-		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode);
+		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset, limit);
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
