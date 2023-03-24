@@ -20,6 +20,7 @@ import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
+import com.lawencon.community.model.SocialMedia;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
@@ -37,17 +38,19 @@ public class ProfileService {
 	private IndustryDao industryDao;
 	private PositionDao positionDao;
 	private FileDao fileDao;
+	private SocialMediaDao socialMediaDao;
 	
 	@Autowired
 	private PrincipalService principalService;
 
-	public ProfileService(final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
+	public ProfileService(final SocialMediaDao socialMediaDao,final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final ProfileSocialMediaDao profileSocialMediaDao,
 			final ProfileDao profileDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
 		this.profileDao = profileDao;
 		this.memberStatusDao = memberStatusDao;
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
+		this.socialMediaDao = socialMediaDao;
 		
 		this.industryDao =  industryDao;
 		this.positionDao = positionDao;
@@ -77,8 +80,10 @@ public class ProfileService {
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
-		final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
+	
+
 		profileSocialMediaDao.getByProfileId(user.getProfile().getId()).forEach(data -> {
+			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
 			socialMedia.setUrl(data.getUrl());

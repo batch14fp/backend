@@ -77,7 +77,7 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 				profileSocialMedia.setSocialMedia(socialMedia);
 				profileSocialMedia.setVersion(Integer.valueOf(obj[6].toString()));
 				list.add(profileSocialMedia);
-				list.add(profileSocialMedia);
+			
 			}
 		}
 		return list;
