@@ -355,7 +355,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	}
 
-	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode)
+	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode,final int offset, final int limit)
 			throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
@@ -384,6 +384,8 @@ public class ActivityDao extends AbstractJpaDao {
 		if (typeCode != null && !typeCode.isEmpty()) {
 			q.setParameter("typeCode", typeCode);
 		}
+		q.setMaxResults(limit);
+		q.setFirstResult((offset-1)*limit);
 
 		@SuppressWarnings("unchecked")
 		List<Activity> listActivity = q.getResultList();
