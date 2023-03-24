@@ -58,11 +58,13 @@ public class ProfileService {
 
 	}
 
-	public PojoProfileDetailRes getProfileDetail() throws Exception {
+	public PojoProfileDetailRes getDetailProfile() throws Exception {
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		final Profile profile = profileDao.getByIdRef(user.getProfile().getId());
 		final PojoProfileDetailRes resGetProfile = new PojoProfileDetailRes();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
-		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		resGetProfile.setUserId(user.getId());
+		resGetProfile.setProfileId(profile.getId());
+		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setProfileId(user.getProfile().getId());
 		resGetProfile.setFullname(user.getProfile().getFullname());
@@ -80,9 +82,18 @@ public class ProfileService {
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
-	
 
-		profileSocialMediaDao.getByProfileId(user.getProfile().getId()).forEach(data -> {
+		
+		
+		profileSocialMediaDao.getEmptyByProfileId(profile.getId()).forEach(data->{
+			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
+			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
+			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
+			socialMedia.setVer(0);
+			socialMediaList.add(socialMedia);
+		});
+	
+		profileSocialMediaDao.getByProfileId(profile.getId()).forEach(data -> {
 			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
