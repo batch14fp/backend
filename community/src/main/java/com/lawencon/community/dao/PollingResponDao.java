@@ -45,7 +45,55 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 
 		  return listResult;
 	}
+	
+	
 
+
+	public Long getCountPollingOption(final String pollingOptionId) {
+		final StringBuilder sql = new StringBuilder();
+		Long count =null;
+		sql.append("SELECT COUNT(id) FROM t_polling_respon ");
+		sql.append("WHERE polling_option_id = :pollingOptionId ");
+
+		count= Long.valueOf(ConnHandler.getManager().createNativeQuery(sql.toString())
+	
+				.setParameter("pollingOptionId",pollingOptionId)
+				.getSingleResult().toString());
+	
+	return count;	
+		
+	}
+	
+	
+	@SuppressWarnings("unused")
+	public Boolean getIsVote(String userId , String pollingId) {
+		Boolean data = false;
+		 try {
+		 final StringBuilder sqlQuery = new StringBuilder();
+		 sqlQuery.append("SELECT DISTINCT pr.user_id ");
+		 sqlQuery.append("FROM t_polling_respon pr ");
+		 sqlQuery.append("INNER JOIN t_polling_option po ");
+		 sqlQuery.append("ON po.id = pr.polling_option_id ");
+		 sqlQuery.append("INNER JOIN t_polling p ");
+		 sqlQuery.append("ON p.id = po.polling_id ");
+		 sqlQuery.append("WHERE pr.user_id= :userId ");
+		 sqlQuery.append("AND po.polling_id = :pollingId ");
+		    final Object result = 
+	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	  		  .setParameter("userId", userId)
+	  		  .setParameter("pollingId", pollingId)
+	  		  .getSingleResult();
+			data =  true;
+		 
+		 }catch(final Exception e)
+		 {}
+		 return data;
+		    
+	}
+	
+	
+	
+	
 	@Override
 	public Optional<PollingRespon> getById(String id) {
 		return Optional.ofNullable(super.getById(PollingRespon.class, id));

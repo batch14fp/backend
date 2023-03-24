@@ -97,6 +97,13 @@ public class PostController {
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/comment/{id}")
+	public ResponseEntity<PojoRes> deletePostComment(@PathVariable ("id")String id){
+		PojoRes resDelete = postService.deletePostCommentById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
+	}
+	
+	
 	@GetMapping
 	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception {

@@ -55,12 +55,13 @@ public class ProfileService {
 
 	}
 
-	public PojoProfileDetailRes getById(String id) throws Exception {
-		final Profile profile = profileDao.getByIdRef(id);
+	public PojoProfileDetailRes getDetailProfile() throws Exception {
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		final Profile profile = profileDao.getByIdRef(user.getProfile().getId());
 		final PojoProfileDetailRes resGetProfile = new PojoProfileDetailRes();
 		resGetProfile.setUserId(principalService.getAuthPrincipal());
+		resGetProfile.setProfileId(profile.getId());
 		resGetProfile.setFullname(profile.getFullname());
-		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setCompany(profile.getCompanyName());
 		resGetProfile.setStatusMemberId(profile.getMemberStatus().getId());
@@ -69,12 +70,25 @@ public class ProfileService {
 		resGetProfile.setPositionId(profile.getPosition().getId());
 		resGetProfile.setProvince(profile.getProvince());
 		resGetProfile.setCountry(profile.getCountry());
+		if(profile.getImageProfile()!=null) {
 		resGetProfile.setImageId(profile.getImageProfile().getId());
+		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(profile.getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
-		final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
-		profileSocialMediaDao.getByProfileId(id).forEach(data -> {
+		
+		
+		profileSocialMediaDao.getEmptyByProfileId(profile.getId()).forEach(data->{
+			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
+			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
+			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
+			socialMedia.setIsActive(data.getIsActive());
+			socialMedia.setVer(0);
+			socialMediaList.add(socialMedia);
+		});
+	
+		profileSocialMediaDao.getByProfileId(profile.getId()).forEach(data -> {
+			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
 			socialMedia.setUrl(data.getUrl());
