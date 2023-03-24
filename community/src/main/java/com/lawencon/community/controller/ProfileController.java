@@ -34,9 +34,9 @@ public class ProfileController {
 		this.socialMediaService = socialMediaService;
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping
 	public ResponseEntity<PojoProfileDetailRes> getProfileDetail(@PathVariable("id") String id) throws Exception{
-		PojoProfileDetailRes resGet = profileService.getById(id);
+		PojoProfileDetailRes resGet = profileService.getDetailProfile();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
