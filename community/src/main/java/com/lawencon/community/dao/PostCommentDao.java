@@ -96,8 +96,7 @@ public class PostCommentDao extends AbstractJpaDao{
 	    sql.append("INNER JOIN t_post p ON pc.post_id = p.id ");
 	    sql.append("WHERE pc.post_id = :postId ");
 	    sql.append("ORDER BY pc.created_at DESC ");
-
-	        final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sql.toString())
+	    final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sql.toString())
 	                .setParameter("postId", postId)
 	                .getResultList();
 	        final List<PostComment> listResult = new ArrayList<>();
@@ -125,10 +124,10 @@ public class PostCommentDao extends AbstractJpaDao{
 
 	                final Post postReply = new Post();
 	                postReply.setId(obj[5].toString());
-	                postComment.setPost(postReply);
+	          
 	                postReply.setCreatedAt(Timestamp.valueOf(obj[7].toString()).toLocalDateTime());
+	                postComment.setPost(postReply);
 	                postComment.setComment(postCommentReply);
-
 
 	            }
 	            postComment.setBody(obj[6].toString());

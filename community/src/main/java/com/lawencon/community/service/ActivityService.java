@@ -34,6 +34,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.security.principal.PrincipalService;
 import com.lawencon.util.JasperUtil;
 
@@ -115,6 +116,29 @@ public class ActivityService {
 			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(),user.getId() ));
 			
 			res.add(reportMember);
+		}
+			
+		return res;
+		
+	}
+	
+	public List<PojoReportIncomesMemberRes> getMemberIncomesReport(final String id, final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
+		final  List<PojoReportIncomesMemberRes> res = new ArrayList<>();
+		final User user = userDao.getByIdRef(id);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
+		
+		
+		
+		for (int  i=0;i<activityList.size();i++) {
+
+			final PojoReportIncomesMemberRes reportData = new PojoReportIncomesMemberRes();
+			
+			reportData.setNo(i+1);
+			reportData.setTitle(id);
+			reportData.setTitle(activityList.get(i).getTitle());
+			reportData.setType(activityList.get(i).getTypeActivity().getActivityName());
+			reportData.setTotalIncomes(id);
+			res.add(reportData);
 		}
 			
 		return res;

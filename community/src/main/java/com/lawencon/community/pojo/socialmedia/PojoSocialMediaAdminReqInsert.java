@@ -1,10 +1,12 @@
 package com.lawencon.community.pojo.socialmedia;
 
+import com.lawencon.community.pojo.file.PojoFileReqInsert;
+
 public class PojoSocialMediaAdminReqInsert {
 	
 	
-	private String fileId;
 	private String platformName;
+	private PojoFileReqInsert file;
 
 	public String getPlatformName() {
 		return platformName;
@@ -14,13 +16,16 @@ public class PojoSocialMediaAdminReqInsert {
 		this.platformName = platformName;
 	}
 
-	public String getFileId() {
-		return fileId;
+	public PojoFileReqInsert getFile() {
+		return file;
 	}
 
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
+	public void setFile(PojoFileReqInsert file) {
+		this.file = file;
 	}
+	
+
+	
 	
 	
 }
