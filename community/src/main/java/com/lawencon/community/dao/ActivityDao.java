@@ -19,6 +19,8 @@ import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
+import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
 
 @Repository
 public class ActivityDao extends AbstractJpaDao {
@@ -398,6 +400,97 @@ public class ActivityDao extends AbstractJpaDao {
 
 	}
 	
+
+	@SuppressWarnings("unchecked")
+	public List<PojoReportIncomesMemberRes> getActivityIncomeByUser(String userId, Float percentIncome, LocalDate startDate, LocalDate endDate, String typeCode) {
+	    final List<PojoReportIncomesMemberRes> resultList = new ArrayList<>();
+	    BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
+	    final StringBuilder queryBuilder = new StringBuilder();
+	    queryBuilder.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+	    queryBuilder.append("FROM t_payment p ");
+	    queryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+	    queryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+	    queryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+	    queryBuilder.append("WHERE i.user_id = :userId ");
+	    queryBuilder.append("AND p.is_paid = TRUE ");
+	    queryBuilder.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+
+	    if(typeCode != null && !typeCode.isEmpty()){
+	        queryBuilder.append("AND tat.type_code = :typeCode ");
+	    }
+
+	    queryBuilder.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+
+	    Query query = ConnHandler.getManager().createNativeQuery(queryBuilder.toString());
+	    query.setParameter("userId", userId);
+	    query.setParameter("percentValue", percentValue);
+	    query.setParameter("startDate", startDate);
+	    query.setParameter("endDate", endDate);
+	    if(typeCode != null && !typeCode.isEmpty()){
+	        query.setParameter("typeCode", typeCode);
+	    }
+
+	    final List<Object> result = query.getResultList();
+	    for (Object objs : result) {
+	        final Object[] obj = (Object[]) objs;
+	        final PojoReportIncomesMemberRes data = new PojoReportIncomesMemberRes();
+	        data.setTitle(obj[0].toString());
+	        data.setType(obj[1].toString());
+	        if (obj[2]!=null) {
+	            data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+	        } else {
+	            data.setTotalIncomes(BigDecimal.ZERO);
+	        }
+	        resultList.add(data);
+	    }
+
+	    return resultList;
+	}
 	
+	@SuppressWarnings("unchecked")
+	public List<PojoResportIncomesAdminRes> getActivityIncome(String userId, Float percentIncome, LocalDate startDate, LocalDate endDate, String typeCode) {
+	    final List<PojoResportIncomesAdminRes> resultList = new ArrayList<>();
+	    BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
+	    final StringBuilder queryBuilder = new StringBuilder();
+	    queryBuilder.append("SELECT p.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+	    queryBuilder.append("FROM t_payment p ");
+	    queryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+	    queryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+	    queryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+	    queryBuilder.append("INNER JOIN t_user u ON u.id = i.user_id ");
+	    queryBuilder.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+	    queryBuilder.append("WHERE p.is_paid = TRUE ");
+	    queryBuilder.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+
+	    if(typeCode != null && !typeCode.isEmpty()){
+	        queryBuilder.append("AND tat.type_code = :typeCode ");
+	    }
+	    queryBuilder.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+	    Query query = ConnHandler.getManager().createNativeQuery(queryBuilder.toString());
+	    query.setParameter("percentValue", percentValue);
+	    query.setParameter("startDate", startDate);
+	    query.setParameter("endDate", endDate);
+	    if(typeCode != null && !typeCode.isEmpty()){
+	        query.setParameter("typeCode", typeCode);
+	    }
+
+	    final List<Object> result = query.getResultList();
+	    for (Object objs : result) {
+	        final Object[] obj = (Object[]) objs;
+	        final PojoResportIncomesAdminRes data = new PojoResportIncomesAdminRes();
+	        data.setMemberName(obj[0].toString());
+	        data.setType(obj[1].toString());
+	        if (obj[2]!=null) {
+	            data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+	        } else {
+	            data.setTotalIncomes(BigDecimal.ZERO);
+	        }
+	        resultList.add(data);
+	    }
+
+	    return resultList;
+	}
+
+
 
 }

@@ -29,6 +29,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PaymentService;
@@ -156,7 +157,23 @@ public class ActivityController {
 		headers.setContentLength(pdfBytes.length);
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
+	
+	
 
+	@GetMapping("/member/report/incomes")
+	public ResponseEntity<List<PojoReportIncomesMemberRes>> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) String typeCode) {
+		try {
+			List<PojoReportIncomesMemberRes> activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode);
+			return ResponseEntity.ok(activities);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	
+	
 
 	@PutMapping("/payment")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data) {
