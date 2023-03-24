@@ -55,8 +55,7 @@ public class ActivityController {
 	@GetMapping("/lowest")
 	public ResponseEntity<List<PojoActivityRes>> getDataByLowestPrice(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
-		int offset = (page - 1) * size;
-		final List<PojoActivityRes> dataList = activityService.getAllByLowestPrice(offset, size);
+		final List<PojoActivityRes> dataList = activityService.getAllByLowestPrice(page, size);
 		int totalCount = activityService.getTotalCount();
 		int pageCount = paginationService.getPageCount(totalCount, size);
 		HttpHeaders headers = new HttpHeaders();
@@ -68,8 +67,7 @@ public class ActivityController {
 	@GetMapping("/highest")
 	public ResponseEntity<List<PojoActivityRes>> getDataByHighestPrice(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
-		int offset = (page - 1) * size;
-		final List<PojoActivityRes> dataList = activityService.getAllByHighestPrice(offset, size);
+		final List<PojoActivityRes> dataList = activityService.getAllByHighestPrice(page, size);
 		int totalCount = activityService.getTotalCount();
 		int pageCount = paginationService.getPageCount(totalCount, size);
 		HttpHeaders headers = new HttpHeaders();
@@ -103,17 +101,19 @@ public class ActivityController {
 	}
 
 	@GetMapping("/filter")
-	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
+	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(@RequestParam("page") int page,
+			@RequestParam("size") int size,
 			@RequestParam(required = false) String categoryCode, @RequestParam(required = false) String typeCode) {
 		try {
 			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode,
-					typeCode);
+					typeCode,page,size);
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
 	
 	
 	@PutMapping("/payment")
