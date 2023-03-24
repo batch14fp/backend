@@ -395,5 +395,7 @@ public class ActivityDao extends AbstractJpaDao {
 		return listActivity;
 
 	}
+	
+	
 
 }

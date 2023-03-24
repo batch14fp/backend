@@ -25,6 +25,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
 import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
+import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -72,6 +73,7 @@ public class ProfileService {
 		resGetProfile.setCountry(profile.getCountry());
 		if(profile.getImageProfile()!=null) {
 		resGetProfile.setImageId(profile.getImageProfile().getId());
+		resGetProfile.setImageVer(profile.getImageProfile().getVersion());
 		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(profile.getCity());
@@ -115,8 +117,19 @@ public class ProfileService {
 		profile.setCompanyName(data.getCompany());
 		profile.setCountry(data.getCountry());
 		profile.setCity(data.getCity());
-		if(data.getImageId()!=null) {
-		final File file = fileDao.getByIdRef(data.getImageId());
+		if(data.getFile()!=null) {
+		File file = new File();
+		if(data.getFile().getFileId()!=null) {
+		file = fileDao.getByIdRef(data.getFile().getFileId());
+		file.setFileExtension(data.getFile().getExtension());
+		file.setFileContent(data.getFile().getFileContent());
+		file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
+		file.setVersion(data.getFile().getVer());
+		}else {
+			file.setFileExtension(data.getFile().getExtension());
+			file.setFileContent(data.getFile().getFileContent());
+			file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
+		}
 		profile.setImageProfile(file);
 		}
 		profile.setProvince(data.getProvince());

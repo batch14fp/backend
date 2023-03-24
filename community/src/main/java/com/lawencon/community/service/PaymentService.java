@@ -65,7 +65,7 @@ public class PaymentService {
 				final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId());
 				final Wallet walletRef = walletDao.getByIdRef(wallet.getId());
 				walletDao.getByIdAndDetach(Wallet.class, walletRef.getId());
-				final BigDecimal newIncome = payment.getTotal().multiply(BigDecimal.valueOf(setting.getMemberIncome()));
+				final BigDecimal newIncome = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getMemberIncome()));
 				walletRef.setBalance(walletRef.getBalance().add(newIncome));
 				walletRef.setVersion(walletRef.getVersion());
 				walletDao.save(walletRef);
@@ -73,9 +73,9 @@ public class PaymentService {
 				final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal());
 				final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 				walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
-				final BigDecimal newIncomSystem = payment.getTotal().multiply(BigDecimal.valueOf(setting.getSystemIncome()));
+				final BigDecimal newIncomSystem = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getSystemIncome()));
 				
-				walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem));
+				walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
 				walletRefSystem.setVersion(walletRefSystem.getVersion());
 				walletDao.save(walletRefSystem);
 				res.setMessage("Sava Success");
