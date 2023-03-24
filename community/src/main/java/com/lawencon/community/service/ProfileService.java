@@ -70,7 +70,9 @@ public class ProfileService {
 		resGetProfile.setPositionId(profile.getPosition().getId());
 		resGetProfile.setProvince(profile.getProvince());
 		resGetProfile.setCountry(profile.getCountry());
+		if(profile.getImageProfile()!=null) {
 		resGetProfile.setImageId(profile.getImageProfile().getId());
+		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(profile.getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
@@ -80,6 +82,7 @@ public class ProfileService {
 			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
+			socialMedia.setIsActive(data.getIsActive());
 			socialMedia.setVer(0);
 			socialMediaList.add(socialMedia);
 		});

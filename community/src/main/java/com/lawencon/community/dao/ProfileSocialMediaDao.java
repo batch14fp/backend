@@ -86,14 +86,14 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 	@SuppressWarnings("unchecked")
 	public List<ProfileSocialMedia> getEmptyByProfileId(String id) throws Exception {
 		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT sm.id,file_id, platform_namet,p.url ");
+		sqlQuery.append("SELECT sm.id,file_id, platform_name,tp.url, tp.is_active ");
 		sqlQuery.append("FROM t_profile_social_media tp ");
 		sqlQuery.append("INNER JOIN t_social_media sm ON tp.social_media_id = sm.id ");
-		sqlQuery.append("WHERE tp.profile_id = '2239738d-e47d-49db-b58c-056511729464' ");
+		sqlQuery.append("WHERE tp.profile_id = :id ");
 		sqlQuery.append("UNION ALL ");
-		sqlQuery.append("SELECT sm.id,file_id,platform_name, null ");
+		sqlQuery.append("SELECT sm.id,file_id,platform_name, null, is_active ");
 		sqlQuery.append("FROM t_social_media sm ");
-		sqlQuery.append("WHERE sm.id NOT IN (SELECT tp.social_media_id FROM t_profile_social_media tp WHERE tp.profile_id = '2239738d-e47d-49db-b58c-056511729464')");
+		sqlQuery.append("WHERE sm.id NOT IN (SELECT tp.social_media_id FROM t_profile_social_media tp WHERE tp.profile_id = :id)");
 
 		final List<Object[]> objs = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("id", id).getResultList();
 				
@@ -110,7 +110,10 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 				socialMedia.setFile(file);
 				}
 				socialMedia.setPlatformName(obj[2].toString());
+				if(obj[3]!=null) {
 				profileSocialMedia.setUrl(obj[3].toString());
+				}
+				profileSocialMedia.setIsActive(Boolean.valueOf(obj[4].toString()));
 				profileSocialMedia.setSocialMedia(socialMedia);
 				list.add(profileSocialMedia);
 			}
