@@ -2,6 +2,8 @@ package com.lawencon.community.pojo.profile;
 
 import java.time.LocalDate;
 
+import com.lawencon.community.pojo.file.PojoFileReqUpdate;
+
 public class PojoProfileReqUpdate {
 	private String profileId;
 	private String fullname;
@@ -14,18 +16,18 @@ public class PojoProfileReqUpdate {
 	private String postalCode;
 	private String industryId;
 	private String positionId;
-	private String imageId;
 	private String phoneNumber;
 	
-	
+	private PojoFileReqUpdate file;
 	
 
 	
-	public String getImageId() {
-		return imageId;
+
+	public PojoFileReqUpdate getFile() {
+		return file;
 	}
-	public void setImageId(String imageId) {
-		this.imageId = imageId;
+	public void setFile(PojoFileReqUpdate file) {
+		this.file = file;
 	}
 	private Integer ver;
 	private Boolean isActive;

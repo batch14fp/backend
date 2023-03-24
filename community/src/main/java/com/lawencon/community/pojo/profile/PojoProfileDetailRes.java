@@ -25,6 +25,7 @@ public class PojoProfileDetailRes {
 	private String postalCode;
 	private String company;
 	private String imageId;
+	private Integer imageVer;
 	private List<PojoSocialMediaRes> socialMediaList;
 
 	
@@ -138,5 +139,12 @@ public class PojoProfileDetailRes {
 	public void setProfileId(String profileId) {
 		this.profileId = profileId;
 	}
+	public Integer getImageVer() {
+		return imageVer;
+	}
+	public void setImageVer(Integer imageVer) {
+		this.imageVer = imageVer;
+	}
+	
 	
 }

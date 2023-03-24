@@ -134,7 +134,6 @@ public class ActivityService {
 			final PojoReportIncomesMemberRes reportData = new PojoReportIncomesMemberRes();
 			
 			reportData.setNo(i+1);
-			reportData.setTitle(id);
 			reportData.setTitle(activityList.get(i).getTitle());
 			reportData.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportData.setTotalIncomes(id);
