@@ -42,6 +42,20 @@ public class ActivityTypeService {
 		return activityList;
 
 	}
+	public PojoActivityTypeRes getByCode(String typeCode) {
+		final PojoActivityTypeRes activityType = new PojoActivityTypeRes();
+			final ActivityType data = activityTypeDao.getByCode(typeCode);
+			activityType.setActivityTypeId(data.getId());
+			activityType.setTypeCode(data.getTypeCode());
+			activityType.setTypeName(data.getActivityName());
+			activityType.setIsActive(data.getIsActive());
+			activityType.setVer(data.getVersion());
+		
+		return activityType;
+
+	}
+
+
 
 	public PojoRes deleteById(String id) {
 		ConnHandler.begin();
