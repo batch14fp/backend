@@ -20,7 +20,6 @@ import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
-import com.lawencon.community.model.SocialMedia;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
@@ -66,35 +65,28 @@ public class ProfileService {
 		resGetProfile.setProfileId(profile.getId());
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
-		resGetProfile.setProfileId(user.getProfile().getId());
-		resGetProfile.setFullname(user.getProfile().getFullname());
-	
-		resGetProfile.setCompany(user.getProfile().getCompanyName());
-		resGetProfile.setStatusMemberId(user.getProfile().getMemberStatus().getId());
-		resGetProfile.setStatusMember(user.getProfile().getMemberStatus().getStatusName());
-		resGetProfile.setIndustryId(user.getProfile().getIndustry().getId());
-		resGetProfile.setPositionId(user.getProfile().getPosition().getId());
-		resGetProfile.setProvince(user.getProfile().getProvince());
-		resGetProfile.setCountry(user.getProfile().getCountry());
-		if(user.getProfile().getImageProfile()!=null) {
-		resGetProfile.setImageId(user.getProfile().getImageProfile().getId());
+
+		resGetProfile.setCompany(profile.getCompanyName());
+		resGetProfile.setStatusMemberId(profile.getMemberStatus().getId());
+		resGetProfile.setStatusMember(profile.getMemberStatus().getStatusName());
+		resGetProfile.setIndustryId(profile.getIndustry().getId());
+		resGetProfile.setPositionId(profile.getPosition().getId());
+		resGetProfile.setProvince(profile.getProvince());
+		resGetProfile.setCountry(profile.getCountry());
+		if(profile.getImageProfile()!=null) {
+		resGetProfile.setImageId(profile.getImageProfile().getId());
+
 		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
 		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
 
 		
-		
-		profileSocialMediaDao.getEmptyByProfileId(profile.getId()).forEach(data->{
-			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
-			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
-			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
-			socialMedia.setVer(0);
-			socialMediaList.add(socialMedia);
-		});
+
 	
-		profileSocialMediaDao.getByProfileId(profile.getId()).forEach(data -> {
+		profileSocialMediaDao.getSocialMediaByProfileId(profile.getId()).forEach(data -> {
 			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
+			socialMedia.setProfileSocialMediaId(data.getId());
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
 			socialMedia.setUrl(data.getUrl());

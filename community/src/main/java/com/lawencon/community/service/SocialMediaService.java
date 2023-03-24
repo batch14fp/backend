@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.ProfileSocialMediaDao;
 import com.lawencon.community.dao.SocialMediaDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.model.File;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.ProfileSocialMedia;
 import com.lawencon.community.model.SocialMedia;
@@ -23,6 +25,7 @@ import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqUpdate;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqInsert;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
+import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
 
@@ -32,15 +35,17 @@ public class SocialMediaService {
 	private ProfileSocialMediaDao profileSocialMediaDao;
 	private UserDao  userDao;
 	private ProfileDao profileDao;
+	private FileDao fileDao;
 	
 	@Autowired
 	private PrincipalService principalService;
 	
-	public SocialMediaService(final ProfileDao profileDao, final UserDao  userDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao) {
+	public SocialMediaService(final FileDao fileDao,final ProfileDao profileDao, final UserDao  userDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao) {
 		this.socialMediaDao = socialMediaDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
 		this.userDao = userDao;
 		this.profileDao = profileDao;
+		this.fileDao = fileDao;
 				
 	}
 	
@@ -79,7 +84,13 @@ public class SocialMediaService {
 		ConnHandler.begin();
 
 		SocialMedia socialMedia = new SocialMedia();
-
+		final File file = new File();
+		file.setFileExtension(data.getFile().getExtension());
+		file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
+		file.setFileContent(data.getFile().getFileContent());
+		file.setIsActive(true);
+		final File fileNew = fileDao.save(file);
+		socialMedia.setFile(fileNew);
 		socialMedia.setPlatformName(data.getPlatformName());
 
 		socialMedia.setIsActive(true);
