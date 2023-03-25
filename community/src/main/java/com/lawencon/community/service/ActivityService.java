@@ -30,6 +30,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
+import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
@@ -425,9 +426,9 @@ public class ActivityService {
 		return pojoList;
 	}
 
-	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String>typeCodes ,
-			final String categoryCode, final int offset, final int limit) {
-		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(typeCodes,categoryCode ,
+	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String> categoryCodes ,
+			final String typeCode, final int offset, final int limit) {
+		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(categoryCodes,typeCode,
 				offset, limit);
 
 		if (listActivity == null || listActivity.isEmpty()) {
@@ -476,5 +477,11 @@ public class ActivityService {
 
 		return pojoList;
 
+	}
+	
+	
+	public List<PojoUpcomingActivityByTypeRes> getUpcomingEvent(final int offset, final int limit, final String typeCode){
+		final  List<PojoUpcomingActivityByTypeRes>res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
+		return res;
 	}
 }

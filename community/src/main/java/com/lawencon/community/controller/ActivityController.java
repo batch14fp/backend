@@ -27,6 +27,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
+import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
@@ -105,13 +106,13 @@ public class ActivityController {
 
 	  @GetMapping("/listByCategoryAndType")
 	    public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
-	            @RequestParam(value = "typeCodes", required = false) List<String> typeCodes,
-	            @RequestParam(value = "categoryCode", required = false) String categoryCode,
+	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
+	    		@RequestParam(value = "typeCode", required = false) String typeCode,
 	            @RequestParam(value = "page", defaultValue = "0") int page,
 	            @RequestParam(value = "size", defaultValue = "10") int size
 	    ) {
 	        try {
-	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(typeCodes, categoryCode, page, size);
+	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size);
 	            if (activities == null) {
 	            
 	                return ResponseEntity.noContent().build();
@@ -122,6 +123,27 @@ public class ActivityController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	        }
 	    }
+	  
+	  
+	  @GetMapping("/upcoming")
+	    public ResponseEntity<List<PojoUpcomingActivityByTypeRes>> getUpcomingActivity(
+	            @RequestParam(value = "typeCode", required = false) String typeCode,
+	            @RequestParam(value = "page", defaultValue = "0") int page,
+	            @RequestParam(value = "size", defaultValue = "3") int size
+	    ) {
+	        try {
+	            List<PojoUpcomingActivityByTypeRes> activities = activityService.getUpcomingEvent(page, size, typeCode);
+	            if (activities == null) {
+	            
+	                return ResponseEntity.noContent().build();
+	            }
+	            return ResponseEntity.ok(activities);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	  
 	  
 	  
 	  
