@@ -4,6 +4,7 @@ public class PojoReportActivityMemberRes {
 	
 	private Integer no;
 	private String title;
+	private String type;
 	private String startDate;
 	private Long totalParticipants;
 
@@ -33,6 +34,13 @@ public class PojoReportActivityMemberRes {
 	public void setTotalParticipants(Long totalParticipants) {
 		this.totalParticipants = totalParticipants;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 
 
 }

@@ -1,5 +1,6 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class PojoPostRes {
 	private Boolean isVote;
 	private Integer ver;
 	private PojoPollingResponRes pollingRespon;
+	private LocalDate endAt;
 	private List<PojoPollingOptionRes> pollingOption;
 	private List<PojoFileResData> data;
 	
@@ -188,6 +190,12 @@ public class PojoPostRes {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-
+	public LocalDate getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDate endAt) {
+		this.endAt = endAt;
+	}
+	
 	
 }

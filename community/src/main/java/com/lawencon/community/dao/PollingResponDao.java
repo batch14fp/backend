@@ -67,7 +67,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 	
 	@SuppressWarnings("unused")
 	public Boolean getIsVote(String userId , String pollingId) {
-		 Boolean data = false;
+		Boolean data = false;
 		 try {
 		 final StringBuilder sqlQuery = new StringBuilder();
 		 sqlQuery.append("SELECT DISTINCT pr.user_id ");
@@ -78,17 +78,17 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon>{
 		 sqlQuery.append("ON p.id = po.polling_id ");
 		 sqlQuery.append("WHERE pr.user_id= :userId ");
 		 sqlQuery.append("AND po.polling_id = :pollingId ");
-		 sqlQuery.append("AND is_active = TRUE " );
 		    final Object result = 
 	  		  ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	  		  .setParameter("userId", userId)
 	  		  .setParameter("pollingId", pollingId)
 	  		  .getSingleResult();
-			data = true;
+			data =  true;
 		 
 		 }catch(final Exception e)
-		 { data = false;}
-		    return data;
+		 {}
+		 return data;
+		    
 	}
 	
 	
