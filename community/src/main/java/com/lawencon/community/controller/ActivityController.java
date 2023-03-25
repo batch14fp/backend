@@ -126,15 +126,14 @@ public class ActivityController {
 	  
 	  
 	  @GetMapping("/upcoming")
-	    public ResponseEntity<List<PojoUpcomingActivityByTypeRes>> getUpcomingActivity(
+	    public ResponseEntity<PojoUpcomingActivityByTypeRes> getUpcomingActivity(
 	            @RequestParam(value = "typeCode", required = false) String typeCode,
-	            @RequestParam(value = "page", defaultValue = "0") int page,
-	            @RequestParam(value = "size", defaultValue = "3") int size
+	            @RequestParam(value = "page", required = false) int page,
+	            @RequestParam(value = "size",required = false) int size
 	    ) {
 	        try {
-	            List<PojoUpcomingActivityByTypeRes> activities = activityService.getUpcomingEvent(page, size, typeCode);
+	        	PojoUpcomingActivityByTypeRes activities = activityService.getUpcomingEvent(page, size, typeCode);
 	            if (activities == null) {
-	            
 	                return ResponseEntity.noContent().build();
 	            }
 	            return ResponseEntity.ok(activities);

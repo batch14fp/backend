@@ -480,8 +480,8 @@ public class ActivityService {
 	}
 	
 	
-	public List<PojoUpcomingActivityByTypeRes> getUpcomingEvent(final int offset, final int limit, final String typeCode){
-		final  List<PojoUpcomingActivityByTypeRes>res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
+	public PojoUpcomingActivityByTypeRes getUpcomingEvent(final int offset, final int limit, final String typeCode){
+		final  PojoUpcomingActivityByTypeRes res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
 		return res;
 	}
 }

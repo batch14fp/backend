@@ -20,6 +20,7 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
+import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
 
@@ -115,10 +116,10 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
-		
-	    if (title != null) {
-            sqlQuery.append("AND a.title LIKE :title ");
-        }
+
+		if (title != null) {
+			sqlQuery.append("AND a.title LIKE :title ");
+		}
 		if (sortType != null) {
 			switch (sortType.toLowerCase()) {
 			case "highest":
@@ -134,16 +135,13 @@ public class ActivityDao extends AbstractJpaDao {
 				throw new IllegalArgumentException("Invalid sort type: " + sortType);
 			}
 		}
-		
-		
-		
-	      Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.setFirstResult((offset - 1) * limit)
-				.setMaxResults(limit);
-		   if (title != null) {
-			   query.setParameter("title", "%" + title + "%");
-	        }
-		  List<Object[]> result= query .getResultList();
+
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setFirstResult((offset - 1) * limit).setMaxResults(limit);
+		if (title != null) {
+			query.setParameter("title", "%" + title + "%");
+		}
+		List<Object[]> result = query.getResultList();
 
 		List<Activity> activities = new ArrayList<>();
 		for (Object objs : result) {
@@ -193,7 +191,6 @@ public class ActivityDao extends AbstractJpaDao {
 		}
 		return activities;
 
-	
 	}
 
 	@SuppressWarnings("unchecked")
@@ -428,97 +425,124 @@ public class ActivityDao extends AbstractJpaDao {
 
 		return resultList;
 	}
-	
-	
+
 	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
-	        final int offset, final int limit){
-	    StringBuilder sqlQuery = new StringBuilder();
-	    sqlQuery.append(
-	            "SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
-	    sqlQuery.append(
-	            "a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
-	    sqlQuery.append("FROM t_activity a ");
-	    sqlQuery.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
-	    sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
-	    sqlQuery.append("WHERE 1=1 ");
-	    if (categoryCodes != null && !categoryCodes.isEmpty()) {
-	        sqlQuery.append("AND (");
-	        for (int i = 0; i < categoryCodes.size(); i++) {
-	            sqlQuery.append("c.category_code = :categoryCodes" + i);
-	            if (i < categoryCodes.size() - 1) {
-	                sqlQuery.append(" OR ");
-	            }
-	        }
-	        sqlQuery.append(") ");
-	    }
+			final int offset, final int limit) {
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append(
+				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
+		sqlQuery.append(
+				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+		sqlQuery.append("FROM t_activity a ");
+		sqlQuery.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+		sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
+		sqlQuery.append("WHERE 1=1 ");
+		if (categoryCodes != null && !categoryCodes.isEmpty()) {
+			sqlQuery.append("AND (");
+			for (int i = 0; i < categoryCodes.size(); i++) {
+				sqlQuery.append("c.category_code = :categoryCodes" + i);
+				if (i < categoryCodes.size() - 1) {
+					sqlQuery.append(" OR ");
+				}
+			}
+			sqlQuery.append(") ");
+		}
 
+		if (typeCode != null && !typeCode.isEmpty()) {
+			sqlQuery.append("AND at.type_code = :typeCode ");
+		}
 
-	    if (typeCode != null && !typeCode.isEmpty()) {
-	    	sqlQuery.append("AND at.type_code = :typeCode ");
-	    }
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
 
-	    Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
+		if (categoryCodes != null && !categoryCodes.isEmpty()) {
+			for (int i = 0; i < categoryCodes.size(); i++) {
+				query.setParameter("categoryCodes" + i, categoryCodes.get(i));
+			}
+		}
 
-	    if (categoryCodes != null && !categoryCodes.isEmpty()) {
-	        for (int i = 0; i < categoryCodes.size(); i++) {
-	        	query.setParameter("categoryCodes" + i, categoryCodes.get(i));
-	        }
-	    }
+		if (typeCode != null && !typeCode.isEmpty()) {
+			query.setParameter("typeCode", typeCode);
+		}
 
-	    if (typeCode != null && !typeCode.isEmpty()) {
-	    	query.setParameter("typeCode", typeCode);
-	    }
+		query.setMaxResults(limit);
+		query.setFirstResult((offset - 1) * limit);
 
-	    query.setMaxResults(limit);
-	    query.setFirstResult((offset - 1) * limit);
+		@SuppressWarnings("unchecked")
+		List<Activity> listActivity = query.getResultList();
 
-	    @SuppressWarnings("unchecked")
-	    List<Activity> listActivity = query.getResultList();
+		if (listActivity.isEmpty()) {
+			return null;
+		}
 
-	    if (listActivity.isEmpty()) {
-	        return null;
-	    }
-
-	    return listActivity;
+		return listActivity;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<PojoUpcomingActivityByTypeRes> getAllUpcomingActivity(final int offset, final int limit, final String typeCode){
-		final List<PojoUpcomingActivityByTypeRes> listUpcoming = new ArrayList<>();
+	public PojoUpcomingActivityByTypeRes getAllUpcomingActivity(final int offset, final int limit,
+			final String typeCode) {
+		final PojoUpcomingActivityByTypeRes dataUpcoming = new PojoUpcomingActivityByTypeRes();
+
+		final List<PojoUpcomingActivityByTypeResData> listUpcoming = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT i.id, a.start_date , tat.activity_name,a.title, COUNT(i.user_id) as total_participant ");
+		sqlQuery.append(
+				"SELECT i.id, a.start_date , tat.activity_name,a.title, COUNT(i.user_id) as total_participant ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND a.start_date <=NOW() ");
-		 if (typeCode != null && !typeCode.isEmpty()) {
-				sqlQuery.append("AND tat.type_code = :typeCode ");
-		    }
+		sqlQuery.append("AND a.start_date <= (CURRENT_DATE + INTERVAL '1 DAY' ) ");
+		sqlQuery.append("AND a.start_date >= CURRENT_DATE ");
+		if (typeCode != null && !typeCode.isEmpty()) {
+			sqlQuery.append("AND tat.type_code = :typeCode ");
+		}
 		sqlQuery.append("GROUP BY i.id, tat.activity_name,a.title, a.start_date ");
 		sqlQuery.append("ORDER BY  a.start_date ");
-		final Query query =  ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setFirstResult(offset).setMaxResults(limit);
-		   if (typeCode != null && !typeCode.isEmpty()) {
-		    	query.setParameter("typeCode", typeCode);
-		    }
-		
+		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
+
+		if (offset >= 0) {
+			query.setFirstResult(offset);
+		}
+		if (limit >= 0) {
+			query.setMaxResults(limit);
+		}
+
+		if (typeCode != null && !typeCode.isEmpty()) {
+			query.setParameter("typeCode", typeCode);
+		}
+
+		StringBuilder countQueryBuilder = new StringBuilder();
+		countQueryBuilder.append("SELECT COUNT(DISTINCT i.id) ");
+		countQueryBuilder.append("FROM t_payment p ");
+		countQueryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+		countQueryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+		countQueryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		countQueryBuilder.append("WHERE p.is_paid = TRUE ");
+		countQueryBuilder.append("AND a.start_date <= (CURRENT_DATE + INTERVAL '1 DAY' ) ");
+		countQueryBuilder.append("AND a.start_date >= CURRENT_DATE ");
+		if (typeCode != null && !typeCode.isEmpty()) {
+			countQueryBuilder.append("AND tat.type_code = :typeCode ");
+		}
+		final Query countQuery = ConnHandler.getManager().createNativeQuery(countQueryBuilder.toString());
+		if (typeCode != null && !typeCode.isEmpty()) {
+			countQuery.setParameter("typeCode", typeCode);
+		}
+		final Integer totalData = Integer.valueOf(countQuery.getSingleResult().toString());
+
 		final List<Object[]> result = query.getResultList();
-		for(Object[] obj : result) {
-			final PojoUpcomingActivityByTypeRes data = new PojoUpcomingActivityByTypeRes();
+		for (Object[] obj : result) {
+			final PojoUpcomingActivityByTypeResData data = new PojoUpcomingActivityByTypeResData();
 			data.setActivityId(obj[0].toString());
 			data.setStartDate(Timestamp.valueOf(obj[1].toString()).toLocalDateTime());
 			data.setActivityType(obj[2].toString());
 			data.setTitle(obj[3].toString());
 			data.setTotalParticipant(Integer.valueOf(obj[4].toString()));
 			listUpcoming.add(data);
-			
-		}
-		return listUpcoming;
-	}
-	
-	
-	
 
+		}
+		dataUpcoming.setData(listUpcoming);
+		dataUpcoming.setTotal(totalData);
+		return dataUpcoming;
+	}
 
 }
