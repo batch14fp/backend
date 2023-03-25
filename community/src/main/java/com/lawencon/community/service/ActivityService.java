@@ -33,6 +33,7 @@ import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
+import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -131,6 +132,15 @@ public class ActivityService {
 		return res;
 		
 	}
+	
+	public List<PojoResportIncomesAdminRes> getIncomesReportAdmin( final LocalDate startDate,final LocalDate endDate,  String typeCode){
+		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
+		final List<PojoResportIncomesAdminRes> res = activityDao.getActivityIncome( percentMember, startDate, endDate, typeCode);
+		return res;
+	}
+	
+	
+	
 	public List<PojoReportIncomesMemberRes> getMemberIncomesReportFile(final String userId,  final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit, String categoryCode){
 		final Float percentMember = salesSettingDao.getSalesSetting().getSystemIncome();
 		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(userId, percentMember, startDate, endDate, categoryCode);
@@ -143,10 +153,7 @@ public class ActivityService {
 	
 	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
 		final  List<PojoReportActivityAdminRes> res = new ArrayList<>();
-		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
-		
-		
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, offset, limit );
 		
 		for (int  i=0;i<activityList.size();i++) {
 
@@ -206,22 +213,12 @@ public class ActivityService {
 //	}
 //	
 //	
-	
-	
-	
-	
 	public Long getCountParticipant(String activityId, String userId) {
-		
 	return	activityDao.getTotalParticipanByUserId(activityId, userId);
-		
 	}
-	
-	
-	
-
-	public List<PojoActivityRes> getAllByHighestPrice(int offset, int limit) {
+	public List<PojoActivityRes> getAllBySort(int offset, int limit, String sortType, String title) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
-		activityDao.getAllByHighestPrice(offset, limit).forEach(data -> {
+		activityDao.searchActivities(offset, limit, sortType,title ).forEach(data -> {
 			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
@@ -245,31 +242,7 @@ public class ActivityService {
 
 	}
 
-	public List<PojoActivityRes> getAllByLowestPrice(int offset, int limit) {
-		final List<PojoActivityRes> activityList = new ArrayList<>();
-		activityDao.getAllByLowestPrice(offset, limit).forEach(data -> {
-			PojoActivityRes activity = new PojoActivityRes();
-			activity.setActivityId(data.getId());
-			activity.setCategoryCode(data.getCategory().getCategoryCode());
-			activity.setCategoryName(data.getCategory().getCategoryName());
-			activity.setTitle(data.getTitle());
-			activity.setUserId(data.getUser().getId());
-			activity.setFullname(data.getUser().getProfile().getFullname());
-			activity.setStartDate(data.getStartDate());
-			activity.setEndDate(data.getEndDate());
-			activity.setActivityLocation(data.getActivityLocation());
-			activity.setContent(data.getDescription());
-			activity.setPrice(data.getPrice());
-			activity.setProviders(data.getProvider());
-			activity.setTypeCode(data.getTypeActivity().getTypeCode());
-			activity.setTypeName(data.getTypeActivity().getActivityName());
-			activity.setImgActivityId(data.getFile().getId());
-			activity.setIsActive(data.getIsActive());
-			activityList.add(activity);
-		});
-		return activityList;
 
-	}
 
 	public int getTotalCount() {
 
