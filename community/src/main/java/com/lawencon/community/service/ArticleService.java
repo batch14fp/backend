@@ -62,6 +62,31 @@ public class ArticleService {
 	}
 	
 	
+	
+	public PojoArticleRes getAllArticle(int offset, int limit) {
+		final PojoArticleRes articles = new PojoArticleRes();
+		final List<PojoArticleResData> articleList = new ArrayList<>();
+		articleDao.getAllArticle(offset, limit).forEach(data -> {
+			PojoArticleResData article = new PojoArticleResData();
+			article.setArticleId(data.getId());
+			article.setContent(data.getContentArticle());
+			article.setFileId(data.getFile().getId());
+			article.setViewers(data.getViewers());
+			article.setIsActive(data.getIsActive());
+			article.setUserId(data.getUser().getId());
+			article.setNameUser(data.getUser().getProfile().getFullname());
+			article.setTitle(data.getTitle());
+			article.setVer(data.getVersion());
+			article.setCreatedAt(data.getCreatedAt());
+			articleList.add(article);
+
+		});
+		articles.setData(articleList);
+		articles.setTotal(getTotalCount());
+		return articles;
+	}
+	
+	
 	public List<PojoArticleResData> getAllByMostViewer(int offset, int limit) {
 		final List<PojoArticleResData> res = new ArrayList<>();
 		articleDao.getAllByMostViewer(offset, limit).forEach(data -> {
