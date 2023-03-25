@@ -427,5 +427,62 @@ public class ActivityDao extends AbstractJpaDao {
 
 		return resultList;
 	}
+	
+	
+	public List<Activity> getListActivityByCategoriesAndType(final List<String> typeCodes, final String categoryCode,
+	        final int offset, final int limit){
+	    StringBuilder sql = new StringBuilder();
+	    sql.append(
+	            "SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
+	    sql.append(
+	            "a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+	    sql.append("FROM t_activity a ");
+	    sql.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+	    sql.append("JOIN t_category c ON a.category_id = c.id ");
+	    sql.append("WHERE 1=1 ");
+
+	   
+	    
+	    if (typeCodes != null && !typeCodes.isEmpty()) {
+	        sql.append("AND (");
+	        for (int i = 0; i < typeCodes.size(); i++) {
+	            sql.append("at.type_code = :typeCodes" + i);
+	            if (i < typeCodes.size() - 1) {
+	                sql.append(" OR ");
+	            }
+	        }
+	        sql.append(") ");
+	    }
+
+
+	    if (categoryCode != null && !categoryCode.isEmpty()) {
+	        sql.append("AND c.category_code = :categoryCode ");
+	    }
+
+	    Query query = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
+
+	    if (typeCodes != null && !typeCodes.isEmpty()) {
+	        for (int i = 0; i < typeCodes.size(); i++) {
+	        	query.setParameter("typeCodes" + i, typeCodes.get(i));
+	        }
+	    }
+
+	    if (categoryCode != null && !categoryCode.isEmpty()) {
+	    	query.setParameter("categoryCode", categoryCode);
+	    }
+
+	    query.setMaxResults(limit);
+	    query.setFirstResult((offset - 1) * limit);
+
+	    @SuppressWarnings("unchecked")
+	    List<Activity> listActivity = query.getResultList();
+
+	    if (listActivity.isEmpty()) {
+	        return null;
+	    }
+
+	    return listActivity;
+	}
+
 
 }

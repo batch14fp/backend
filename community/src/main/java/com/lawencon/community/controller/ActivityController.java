@@ -92,7 +92,7 @@ public class ActivityController {
 	@GetMapping("/filter")
 	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(@RequestParam("page") int page,
 			@RequestParam("size") int size,
-			@RequestParam(required = false) String categoryCode, @RequestParam(required = false) String typeCode) {
+			@RequestParam(value="categoryCode", required = false) String categoryCode, @RequestParam(value="typeCode", required = false) String typeCode) {
 		try {
 			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode,
 					typeCode,page,size);
@@ -103,7 +103,28 @@ public class ActivityController {
 		}
 	}
 
-
+	  @GetMapping("/listByCategoryAndType")
+	    public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
+	            @RequestParam(value = "typeCodes", required = false) List<String> typeCodes,
+	            @RequestParam(value = "categoryCode", required = false) String categoryCode,
+	            @RequestParam(value = "page", defaultValue = "0") int page,
+	            @RequestParam(value = "size", defaultValue = "10") int size
+	    ) {
+	        try {
+	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(typeCodes, categoryCode, page, size);
+	            if (activities == null) {
+	            
+	                return ResponseEntity.noContent().build();
+	            }
+	            return ResponseEntity.ok(activities);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	  
+	  
+	  
 //	@GetMapping("/report")
 //	public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(@RequestParam String startDate,
 //			@RequestParam String endDate, @RequestParam(required = false) Integer offset,

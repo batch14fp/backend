@@ -37,8 +37,6 @@ import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
-
-
 @Service
 public class ActivityService {
 
@@ -55,10 +53,9 @@ public class ActivityService {
 
 	private final FileDao fileDao;
 
-
-	public ActivityService(final SalesSettingDao salesSettingDao,final UserDao userDao, final ActivityVoucherDao activityVoucherDao,
-			final VoucherDao voucherDao, final ActivityDao activityDao, final CategoryDao categoryDao,
-			final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
+	public ActivityService(final SalesSettingDao salesSettingDao, final UserDao userDao,
+			final ActivityVoucherDao activityVoucherDao, final VoucherDao voucherDao, final ActivityDao activityDao,
+			final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
 		this.categoryDao = categoryDao;
 		this.voucherDao = voucherDao;
@@ -67,7 +64,6 @@ public class ActivityService {
 		this.activityVoucherDao = activityVoucherDao;
 		this.userDao = userDao;
 		this.salesSettingDao = salesSettingDao;
-	
 
 	}
 
@@ -97,80 +93,82 @@ public class ActivityService {
 		return activityList;
 
 	}
-	
-	
-	 
-	public List<PojoReportActivityMemberRes> getMemberReport(final String id, final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
-		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
+
+	public List<PojoReportActivityMemberRes> getMemberReport(final String id, final LocalDate startDate,
+			final LocalDate endDate, Integer offset, Integer limit) {
+		final List<PojoReportActivityMemberRes> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(id);
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
-		
-		
-		
-		for (int  i=0;i<activityList.size();i++) {
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
+				limit);
+
+		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
-			
-			reportMember.setNo(i+1);
-			
+
+			reportMember.setNo(i + 1);
+
 			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
-			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(),user.getId() ));
-			
+			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
+
 			res.add(reportMember);
 		}
-			
+
 		return res;
-		
+
 	}
-	
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReport( final LocalDate startDate,final LocalDate endDate,  String typeCode){
+
+	public List<PojoReportIncomesMemberRes> getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
+			String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(user.getId(), percentMember, startDate, endDate, typeCode);
+		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(user.getId(), percentMember,
+				startDate, endDate, typeCode);
 		return res;
-		
+
 	}
-	
-	public List<PojoResportIncomesAdminRes> getIncomesReportAdmin( final LocalDate startDate,final LocalDate endDate,  String typeCode){
+
+	public List<PojoResportIncomesAdminRes> getIncomesReportAdmin(final LocalDate startDate, final LocalDate endDate,
+			String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final List<PojoResportIncomesAdminRes> res = activityDao.getActivityIncome( percentMember, startDate, endDate, typeCode);
+		final List<PojoResportIncomesAdminRes> res = activityDao.getActivityIncome(percentMember, startDate, endDate,
+				typeCode);
 		return res;
 	}
-	
-	
-	
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReportFile(final String userId,  final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit, String categoryCode){
+
+	public List<PojoReportIncomesMemberRes> getMemberIncomesReportFile(final String userId, final LocalDate startDate,
+			final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getSystemIncome();
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(userId, percentMember, startDate, endDate, categoryCode);
+		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(userId, percentMember,
+				startDate, endDate, categoryCode);
 		return res;
-		
+
 	}
-	
-	
-	
-	
-	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
-		final  List<PojoReportActivityAdminRes> res = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, offset, limit );
-		
-		for (int  i=0;i<activityList.size();i++) {
+
+	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate, final LocalDate endDate,
+			Integer offset, Integer limit) {
+		final List<PojoReportActivityAdminRes> res = new ArrayList<>();
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, offset, limit);
+
+		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminRes reportMember = new PojoReportActivityAdminRes();
-			
-			reportMember.setNo(i+1);
-			reportMember.setStartDate(Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
+
+			reportMember.setNo(i + 1);
+			reportMember.setStartDate(
+					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setProviderName(activityList.get(i).getProvider());
 			res.add(reportMember);
 		}
-			
+
 		return res;
-		
+
 	}
+
 //	public List<PojoReportActivityMemberRes> getMemberReportFile(final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
 //		final JasperUtil jasperUtil = new JasperUtil();
 //		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
@@ -214,11 +212,12 @@ public class ActivityService {
 //	
 //	
 	public Long getCountParticipant(String activityId, String userId) {
-	return	activityDao.getTotalParticipanByUserId(activityId, userId);
+		return activityDao.getTotalParticipanByUserId(activityId, userId);
 	}
+
 	public List<PojoActivityRes> getAllBySort(int offset, int limit, String sortType, String title) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
-		activityDao.searchActivities(offset, limit, sortType,title ).forEach(data -> {
+		activityDao.searchActivities(offset, limit, sortType, title).forEach(data -> {
 			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
@@ -241,8 +240,6 @@ public class ActivityService {
 		return activityList;
 
 	}
-
-
 
 	public int getTotalCount() {
 
@@ -352,8 +349,6 @@ public class ActivityService {
 
 	}
 
-
-
 	public PojoActivityRes getById(String id) {
 		final PojoActivityRes activity = new PojoActivityRes();
 		final Activity data = activityDao.getByIdRef(id);
@@ -377,9 +372,10 @@ public class ActivityService {
 
 	}
 
-	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode,int offset,int limit)
-			throws Exception {
-		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset, limit);
+	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
+			int limit) throws Exception {
+		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
+				limit);
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
@@ -429,4 +425,56 @@ public class ActivityService {
 		return pojoList;
 	}
 
+	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String>typeCodes ,
+			final String categoryCode, final int offset, final int limit) {
+		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(typeCodes,categoryCode ,
+				offset, limit);
+
+		if (listActivity == null || listActivity.isEmpty()) {
+			return null;
+		}
+		final List<PojoActivityRes> pojoList = new ArrayList<>();
+		for (Activity activity : listActivity) {
+			final PojoActivityRes pojo = new PojoActivityRes();
+			pojo.setActivityId(activity.getId());
+			pojo.setTitle(activity.getTitle());
+			pojo.setContent(activity.getDescription());
+			pojo.setCategoryCode(activity.getCategory().getCategoryCode());
+			pojo.setCategoryName(activity.getCategory().getCategoryName());
+			pojo.setTypeCode(activity.getTypeActivity().getTypeCode());
+			pojo.setTypeName(activity.getTypeActivity().getActivityName());
+			pojo.setProviders(activity.getProvider());
+			pojo.setPrice(activity.getPrice());
+			pojo.setStartDate(activity.getStartDate());
+			pojo.setEndDate(activity.getEndDate());
+			pojo.setIsActive(activity.getIsActive());
+			final LocalDateTime now = LocalDateTime.now();
+			final Duration duration = Duration.between(activity.getCreatedAt(), now);
+			String timeAgo = "";
+			if (duration.toDays() > 0) {
+				timeAgo = duration.toDays() + "d";
+			} else if (duration.toHours() > 0) {
+				timeAgo = duration.toHours() + "h";
+			} else if (duration.toMinutes() > 0) {
+				timeAgo = duration.toMinutes() + "m";
+			} else {
+				timeAgo = duration.getSeconds() + "s";
+			}
+			pojo.setTimeAgo(timeAgo);
+
+			if (activity.getUser() != null) {
+				String fullname = activity.getUser().getProfile().getFullname();
+				pojo.setUserId(activity.getUser().getId());
+				pojo.setFullname(fullname);
+			}
+
+			String imgActivityId = activity.getFile() != null ? activity.getFile().getId() : null;
+			pojo.setImgActivityId(imgActivityId);
+
+			pojoList.add(pojo);
+		}
+
+		return pojoList;
+
+	}
 }
