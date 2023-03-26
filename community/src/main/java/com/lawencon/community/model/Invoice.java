@@ -17,7 +17,14 @@ import com.lawencon.base.BaseEntity;
 uniqueConstraints = {
         @UniqueConstraint(name = "invoice_code_bk", 
                 columnNames = {"invoiceCode" }
-        )})
+        ),
+        @UniqueConstraint(name = "user_activity_ck", 
+        columnNames = {"user_id", "activity_id" }
+        ),
+        @UniqueConstraint(name = "user_membership_ck", 
+        columnNames = {"user_id", "membership_id" }
+        )
+        })
 public class Invoice  extends BaseEntity{
 	
 	@OneToOne
@@ -31,6 +38,12 @@ public class Invoice  extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name="activity_id", nullable=false)
 	private Activity activity;
+	
+	
+	@OneToOne
+	@JoinColumn(name="membership_id", nullable=false)
+	private MemberStatus memberStatus;
+	
 	
 	public Activity getActivity() {
 		return activity;
@@ -66,6 +79,15 @@ public class Invoice  extends BaseEntity{
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
 	}
+
+	public MemberStatus getMemberStatus() {
+		return memberStatus;
+	}
+
+	public void setMemberStatus(MemberStatus memberStatus) {
+		this.memberStatus = memberStatus;
+	}
+	
 	
 	
 }

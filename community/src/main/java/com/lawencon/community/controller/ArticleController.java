@@ -50,9 +50,18 @@ public class ArticleController {
 	@GetMapping("/most-viewer")
 	public ResponseEntity<List<PojoArticleResData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
+
 	        final List<PojoArticleResData> dataList = articleService.getAllByMostViewer(page, size);
 	        return new ResponseEntity<>(dataList,HttpStatus.OK);
 	    }
+
+	@GetMapping("member/all")
+	public ResponseEntity<List<PojoArticleResData>> getAll(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) {
+	        final List<PojoArticleResData> dataList = articleService.getAllForMember(page, size);
+	        return new ResponseEntity<>(dataList,HttpStatus.OK);
+	    }
+	
 	
 	
 	@GetMapping("admin/{id}")

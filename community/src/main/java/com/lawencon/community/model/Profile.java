@@ -33,11 +33,6 @@ public class Profile extends BaseEntity{
 	private File imageProfile;
 	
 	
-	
-	@OneToOne
-	@JoinColumn(name = "member_status_id")
-	private MemberStatus memberStatus;
-	
 	@OneToOne
 	@JoinColumn(name = "industry_id", nullable=false)
 	private Industry industry;
@@ -158,14 +153,6 @@ public class Profile extends BaseEntity{
 
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
-	}
-
-	public MemberStatus getMemberStatus() {
-		return memberStatus;
-	}
-
-	public void setMemberStatus(MemberStatus memberStatus) {
-		this.memberStatus = memberStatus;
 	}
 
 

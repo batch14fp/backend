@@ -58,7 +58,7 @@ public class ActivityController {
 	}
 
 	@GetMapping("/sort")
-	public ResponseEntity<List<PojoActivityRes>> getDataByLowestPrice(@RequestParam("page") int page,
+	public ResponseEntity<List<PojoActivityRes>> getDataActivity(@RequestParam("page") int page,
 			@RequestParam("size") int size,
 		    @RequestParam(required = false) String sortType,  
 		    @RequestParam(defaultValue = "") String title)  {

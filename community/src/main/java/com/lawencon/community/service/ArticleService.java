@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ArticleDao;
+import com.lawencon.community.dao.ArticleViewerDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Article;
+import com.lawencon.community.model.ArticleViewer;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -29,14 +31,16 @@ public class ArticleService {
 	private final ArticleDao articleDao;
 	private final FileDao fileDao;
 	private final UserDao userDao;
+	private final ArticleViewerDao articleViewerDao;
 
 	
 	@Autowired
 	private PrincipalService principalService;
-	public ArticleService(final UserDao userDao, final ArticleDao articleDao, final FileDao fileDao) {
+	public ArticleService(final ArticleViewerDao articleViewerDao, final UserDao userDao, final ArticleDao articleDao, final FileDao fileDao) {
 		this.articleDao = articleDao;
 		this.fileDao = fileDao;
-		this.userDao = userDao;	}
+		this.userDao = userDao;
+		this.articleViewerDao = articleViewerDao;}
 
 	public PojoArticleRes getAll(int offset, int limit) {
 		final PojoArticleRes articles = new PojoArticleRes();
@@ -46,7 +50,7 @@ public class ArticleService {
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setFileId(data.getFile().getId());
-			article.setViewers(data.getViewers());
+			article.setViewers(getCountViewer(data.getId()));
 			article.setIsActive(data.getIsActive());
 			article.setUserId(data.getUser().getId());
 			article.setNameUser(data.getUser().getProfile().getFullname());
@@ -71,7 +75,7 @@ public class ArticleService {
 			article.setArticleId(data.getId());
 			article.setContent(data.getContentArticle());
 			article.setFileId(data.getFile().getId());
-			article.setViewers(data.getViewers());
+			article.setViewers(getCountViewer(data.getId()));
 			article.setIsActive(data.getIsActive());
 			article.setUserId(data.getUser().getId());
 			article.setNameUser(data.getUser().getProfile().getFullname());
@@ -88,32 +92,92 @@ public class ArticleService {
 	
 	
 	public List<PojoArticleResData> getAllByMostViewer(int offset, int limit) {
-		final List<PojoArticleResData> res = new ArrayList<>();
-		articleDao.getAllByMostViewer(offset, limit).forEach(data -> {
-			PojoArticleResData article = new PojoArticleResData();
-			article.setArticleId(data.getId());
-			article.setContent(data.getContentArticle());
-			article.setFileId(data.getFile().getId());
-			article.setViewers(data.getViewers());
-			article.setIsActive(data.getIsActive());
-			article.setUserId(data.getUser().getId());
-			article.setNameUser(data.getUser().getProfile().getFullname());
-			article.setTitle(data.getTitle());
-			article.setVer(data.getVersion());
-			res.add(article);
+		List<Article> listArticle = articleDao.getAllByMostViewer(offset, limit);
+		List<Long> listViewer = articleDao.getNumViewersAllByMostViewer(offset, limit);
 
-		});
-		return res;
+		final List<PojoArticleResData> listResData = new ArrayList<>();
+		for (int i = 0; i <listArticle.size(); i++) {
+			final Article article = listArticle.get(i);
+			final Long viewers = listViewer.get(i);
+
+			PojoArticleResData resData = new PojoArticleResData();
+			resData.setArticleId(article.getId());
+			resData.setUserId(article.getUser().getId());
+			resData.setTitle(article.getTitle());
+			resData.setContent(article.getContentArticle());
+			if(article.getFile() != null ) {
+			resData.setFileId( article.getFile().getId());
+			resData.setFileContent( article.getFile().getFileContent() );
+			resData.setFileExtension(article.getFile().getFileContent());
+			resData.setFileVer(article.getFile().getVersion());
+		
+			}
+			
+			resData.setIsActive(article.getIsActive());
+			resData.setNameUser(article.getUser().getProfile().getFullname());
+			resData.setVer(article.getVersion());
+			resData.setIsActive(article.getIsActive());
+			resData.setCreatedAt(article.getCreatedAt());
+			resData.setViewers(viewers);
+
+			listResData.add(resData);
+		}
+
+		return listResData;
 	}
+	
+	
+	
+	
 
+	public List<PojoArticleResData> getAllForMember(int offset, int limit) {
+		List<Article> listArticle = articleDao.getAllByCreatedAt(offset, limit);
+		List<Long> listViewer = articleDao.getNumViewersAll(offset, limit);
+
+		final List<PojoArticleResData> listResData = new ArrayList<>();
+		for (int i = 0; i <listArticle.size(); i++) {
+			final Article article = listArticle.get(i);
+			final Long viewers = listViewer.get(i);
+
+			PojoArticleResData resData = new PojoArticleResData();
+			resData.setArticleId(article.getId());
+			resData.setUserId(article.getUser().getId());
+			resData.setTitle(article.getTitle());
+			resData.setContent(article.getContentArticle());
+			if(article.getFile() != null ) {
+			resData.setFileId( article.getFile().getId());
+			resData.setFileContent( article.getFile().getFileContent() );
+			resData.setFileExtension(article.getFile().getFileContent());
+			resData.setFileVer(article.getFile().getVersion());
+		
+			}
+			
+			resData.setIsActive(article.getIsActive());
+			resData.setNameUser(article.getUser().getProfile().getFullname());
+			resData.setVer(article.getVersion());
+			resData.setIsActive(article.getIsActive());
+			resData.setCreatedAt(article.getCreatedAt());
+			resData.setViewers(viewers);
+
+			listResData.add(resData);
+		}
+
+		return listResData;
+	}
+	
 	public PojoArticleResData getByIdForMember(String id){
 		final PojoArticleResData article = new PojoArticleResData();
-		ConnHandler.begin();
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final Article data = articleDao.getByIdRef(id);
-		final Article dataUpdate = articleDao.getByIdAndDetach(data.getId()).get();
-		dataUpdate.setViewers(dataUpdate.getViewers()+ 1);
-	    articleDao.saveAndFlush(dataUpdate);
-	    ConnHandler.commit();
+		if(!articleViewerDao.getIsView(user.getId(), data.getId())) {
+			ConnHandler.begin();
+			ArticleViewer articleViewer = new ArticleViewer();
+			articleViewer.setArticle(data);
+			articleViewer.setUser(user);
+			articleViewer.setIsActive(true);
+		    articleDao.save(articleViewer);
+		    ConnHandler.commit();
+		}
 		article.setArticleId(data.getId());
 		article.setContent(data.getContentArticle());
 		article.setFileId(data.getFile().getId());
@@ -122,7 +186,7 @@ public class ArticleService {
 		article.setFileVer(data.getFile().getVersion());
 		article.setIsActive(data.getIsActive());
 		article.setUserId(data.getUser().getId());
-		article.setViewers(data.getViewers());
+		article.setViewers(getCountViewer(data.getId()));
 		article.setNameUser(data.getUser().getProfile().getFullname());
 		article.setTitle(data.getTitle());
 		article.setVer(data.getVersion());
@@ -130,6 +194,12 @@ public class ArticleService {
 		return article;
 	}
 	
+	
+
+	private Long getCountViewer(String articleId) {
+		Long countLike = articleViewerDao.countViewer(articleId);
+		return countLike;
+	}
 	public PojoArticleResData getByIdForAdmin(String id){
 		final PojoArticleResData article = new PojoArticleResData();
 		final Article data = articleDao.getByIdRef(id);
@@ -142,7 +212,7 @@ public class ArticleService {
 		article.setFileVer(dataUpdate.getFile().getVersion());
 		article.setIsActive(dataUpdate.getIsActive());
 		article.setUserId(dataUpdate.getUser().getId());
-		article.setViewers(dataUpdate.getViewers());
+		article.setViewers(getCountViewer(data.getId()));
 		article.setNameUser(dataUpdate.getUser().getProfile().getFullname());
 		article.setTitle(dataUpdate.getTitle());
 		article.setVer(dataUpdate.getVersion());
@@ -213,7 +283,6 @@ public class ArticleService {
 		article.setUser(user);
 		article.setFile(fileNew);
 		article.setIsActive(true);
-		article.setViewers(0);
 		article.setTitle(data.getTitle());
 		article.setIsActive(true);
 		final Article articleNew = articleDao.save(article);
@@ -223,8 +292,7 @@ public class ArticleService {
 		pojoRes.setMessage("Update Success!");
 		return pojoRes;
 	}
-
-	public int getTotalCount() {
+	public Long getTotalCount() {
 
 		return articleDao.getTotalCount();
 	}

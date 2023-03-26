@@ -2,6 +2,7 @@ package com.lawencon.community.pojo.profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
@@ -26,6 +27,8 @@ public class PojoProfileDetailRes {
 	private String company;
 	private String imageId;
 	private Integer imageVer;
+	private LocalDateTime startDateMember;
+	private LocalDateTime endDateMember;	
 	private List<PojoSocialMediaRes> socialMediaList;
 
 	
@@ -145,6 +148,19 @@ public class PojoProfileDetailRes {
 	public void setImageVer(Integer imageVer) {
 		this.imageVer = imageVer;
 	}
+	public LocalDateTime getStartDateMember() {
+		return startDateMember;
+	}
+	public void setStartDateMember(LocalDateTime startDateMember) {
+		this.startDateMember = startDateMember;
+	}
+	public LocalDateTime getEndDateMember() {
+		return endDateMember;
+	}
+	public void setEndDateMember(LocalDateTime endDateMember) {
+		this.endDateMember = endDateMember;
+	}
+	
 	
 	
 }

@@ -203,8 +203,10 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
-		sqlQuery.append(
-				"WHERE a.is_active = TRUE AND a.user_id = :userId AND a.start_date BETWEEN :startDate AND :endDate ");
+		sqlQuery.append("WHERE a.is_active = TRUE ");
+		sqlQuery.append("AND a.user_id = :userId ");
+		sqlQuery.append("AND a.start_date ");
+		sqlQuery.append("BETWEEN :startDate AND :endDate ");
 		sqlQuery.append("ORDER BY a.created_at DESC ");
 		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
 		query.setParameter("userId", userId);
@@ -230,7 +232,9 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
-		sqlQuery.append("WHERE a.is_active = TRUE AND a.start_date BETWEEN :startDate AND :endDate ");
+		sqlQuery.append("WHERE a.is_active = TRUE ");
+		sqlQuery.append("AND a.start_date BETWEEN :startDate ");
+		sqlQuery.append("AND :endDate ");
 		sqlQuery.append("ORDER BY a.created_at DESC ");
 		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
 
@@ -339,23 +343,23 @@ public class ActivityDao extends AbstractJpaDao {
 			LocalDate startDate, LocalDate endDate, String typeCode) {
 		final List<PojoReportIncomesMemberRes> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
-		final StringBuilder queryBuilder = new StringBuilder();
-		queryBuilder.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
-		queryBuilder.append("FROM t_payment p ");
-		queryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
-		queryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
-		queryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		queryBuilder.append("WHERE i.user_id = :userId ");
-		queryBuilder.append("AND p.is_paid = TRUE ");
-		queryBuilder.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		sqlQuery.append("WHERE i.user_id = :userId ");
+		sqlQuery.append("AND p.is_paid = TRUE ");
+		sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
 
 		if (typeCode != null && !typeCode.isEmpty()) {
-			queryBuilder.append("AND tat.type_code = :typeCode ");
+			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
 
-		queryBuilder.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
 
-		Query query = ConnHandler.getManager().createNativeQuery(queryBuilder.toString());
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("userId", userId);
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
@@ -386,22 +390,22 @@ public class ActivityDao extends AbstractJpaDao {
 			LocalDate endDate, String typeCode) {
 		final List<PojoResportIncomesAdminRes> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
-		final StringBuilder queryBuilder = new StringBuilder();
-		queryBuilder.append("SELECT p.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
-		queryBuilder.append("FROM t_payment p ");
-		queryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
-		queryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
-		queryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		queryBuilder.append("INNER JOIN t_user u ON u.id = i.user_id ");
-		queryBuilder.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
-		queryBuilder.append("WHERE p.is_paid = TRUE ");
-		queryBuilder.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT p.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_user u ON u.id = i.user_id ");
+		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+		sqlQuery.append("WHERE p.is_paid = TRUE ");
+		sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
 
 		if (typeCode != null && !typeCode.isEmpty()) {
-			queryBuilder.append("AND tat.type_code = :typeCode ");
+			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
-		queryBuilder.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
-		Query query = ConnHandler.getManager().createNativeQuery(queryBuilder.toString());
+		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
@@ -426,56 +430,6 @@ public class ActivityDao extends AbstractJpaDao {
 		return resultList;
 	}
 
-	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
-			final int offset, final int limit) {
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append(
-				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
-		sqlQuery.append(
-				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
-		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
-		sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
-		sqlQuery.append("WHERE 1=1 ");
-		if (categoryCodes != null && !categoryCodes.isEmpty()) {
-			sqlQuery.append("AND (");
-			for (int i = 0; i < categoryCodes.size(); i++) {
-				sqlQuery.append("c.category_code = :categoryCodes" + i);
-				if (i < categoryCodes.size() - 1) {
-					sqlQuery.append(" OR ");
-				}
-			}
-			sqlQuery.append(") ");
-		}
-
-		if (typeCode != null && !typeCode.isEmpty()) {
-			sqlQuery.append("AND at.type_code = :typeCode ");
-		}
-
-		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
-
-		if (categoryCodes != null && !categoryCodes.isEmpty()) {
-			for (int i = 0; i < categoryCodes.size(); i++) {
-				query.setParameter("categoryCodes" + i, categoryCodes.get(i));
-			}
-		}
-
-		if (typeCode != null && !typeCode.isEmpty()) {
-			query.setParameter("typeCode", typeCode);
-		}
-
-		query.setMaxResults(limit);
-		query.setFirstResult((offset - 1) * limit);
-
-		@SuppressWarnings("unchecked")
-		List<Activity> listActivity = query.getResultList();
-
-		if (listActivity.isEmpty()) {
-			return null;
-		}
-
-		return listActivity;
-	}
 
 	@SuppressWarnings("unchecked")
 	public PojoUpcomingActivityByTypeRes getAllUpcomingActivity(final int offset, final int limit,
@@ -544,5 +498,56 @@ public class ActivityDao extends AbstractJpaDao {
 		dataUpcoming.setTotal(totalData);
 		return dataUpcoming;
 	}
+	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
+			final int offset, final int limit) {
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append(
+				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
+		sqlQuery.append(
+				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+		sqlQuery.append("FROM t_activity a ");
+		sqlQuery.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+		sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
+		sqlQuery.append("WHERE 1=1 ");
+		if (categoryCodes != null && !categoryCodes.isEmpty()) {
+			sqlQuery.append("AND (");
+			for (int i = 0; i < categoryCodes.size(); i++) {
+				sqlQuery.append("c.category_code = :categoryCodes" + i);
+				if (i < categoryCodes.size() - 1) {
+					sqlQuery.append(" OR ");
+				}
+			}
+			sqlQuery.append(") ");
+		}
+
+		if (typeCode != null && !typeCode.isEmpty()) {
+			sqlQuery.append("AND at.type_code = :typeCode ");
+		}
+
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
+
+		if (categoryCodes != null && !categoryCodes.isEmpty()) {
+			for (int i = 0; i < categoryCodes.size(); i++) {
+				query.setParameter("categoryCodes" + i, categoryCodes.get(i));
+			}
+		}
+
+		if (typeCode != null && !typeCode.isEmpty()) {
+			query.setParameter("typeCode", typeCode);
+		}
+
+		query.setMaxResults(limit);
+		query.setFirstResult((offset - 1) * limit);
+
+		@SuppressWarnings("unchecked")
+		List<Activity> listActivity = query.getResultList();
+
+		if (listActivity.isEmpty()) {
+			return null;
+		}
+
+		return listActivity;
+	}
+
 
 }

@@ -13,7 +13,8 @@ public class PojoInvoiceRes {
 	private BigDecimal price;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	
+	private Boolean isActive;
+	private Integer ver;
 
 	
 	public String getActivityTitle() {
@@ -71,6 +72,18 @@ public class PojoInvoiceRes {
 	}
 	public void setVoucherCode(String voucherCode) {
 		this.voucherCode = voucherCode;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	
