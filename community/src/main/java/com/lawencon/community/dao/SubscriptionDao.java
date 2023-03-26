@@ -16,7 +16,7 @@ import com.lawencon.community.model.Subscription;
 public class SubscriptionDao extends AbstractJpaDao{
 	
 
-	public Optional<Subscription> findByProfileId(String profileId)  {
+	public Optional<Subscription> getByProfileId(String profileId)  {
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT s.id, s.start_date, s.end_date, s.created_at, s.created_by, s.is_active, s.ver, ");
 		sqlQuery.append("m.id, m.status_name, m.period_day, m.code_status ");

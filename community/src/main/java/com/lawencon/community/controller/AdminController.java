@@ -52,6 +52,11 @@ public class AdminController {
 		PojoRes resGet = paymentService.updateByAdmin(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
+	
+	
+	
 	@GetMapping("/sales-setting")
 	public ResponseEntity<PojoSalesSettingRes> getSalesSetting(){
 		PojoSalesSettingRes resGet = salesSettingService.getSalesSetting();
@@ -98,6 +103,19 @@ public class AdminController {
 				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
 		return ResponseEntity.ok(activities);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
 	

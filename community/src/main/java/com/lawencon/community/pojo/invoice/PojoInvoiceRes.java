@@ -7,6 +7,7 @@ public class PojoInvoiceRes {
 	private String invoiceId;
 	private String activityId;
 	private String voucherId;
+	private String membershipId;
 	private String voucherCode;
 	private String invoiceCode;
 	private String activityTitle;
@@ -17,6 +18,14 @@ public class PojoInvoiceRes {
 	private Integer ver;
 
 	
+	
+	
+	public String getMembershipId() {
+		return membershipId;
+	}
+	public void setMembershipId(String membershipId) {
+		this.membershipId = membershipId;
+	}
 	public String getActivityTitle() {
 		return activityTitle;
 	}

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.invoice.PojoInvoiceMembershipRes;
 import com.lawencon.community.pojo.invoice.PojoInvoiceReqInsert;
 import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
 import com.lawencon.community.service.InvoiceService;
@@ -42,6 +43,13 @@ public class InvoiceController {
 	final PojoInvoiceRes resGet = invoiceService.getByCode(codeInvoice);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	
+	@GetMapping("/membership")
+	public ResponseEntity<PojoInvoiceMembershipRes> getInvoiceMemberByCode(@RequestParam String codeInvoice) throws Exception {
+	final PojoInvoiceMembershipRes resGet = invoiceService.getMembershipInvoiceByCode(codeInvoice);
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
 	
 	
 	
