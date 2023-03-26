@@ -62,11 +62,18 @@ public class MemberStatusController {
 	}
 	
 	
-	@PostMapping("/subscribtion")
+	@PostMapping("/subscription")
 	public ResponseEntity<PojoInvoiceRes> subscribtionMembership(@RequestBody PojoMembershipPaymentReqInsert data){
 		PojoInvoiceRes resGet = invoiceService.membershipSave(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

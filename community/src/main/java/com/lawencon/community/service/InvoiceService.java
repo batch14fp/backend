@@ -123,9 +123,15 @@ public class InvoiceService {
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(invoiceNew.getId());
 		pojoInsertRes.setMessage("Save Success!");
+		res.setInvoiceId(invoiceNew.getId());
+		res.setInvoiceCode(invoiceNew.getInvoiceCode());
+		res.setMembershipId(invoiceNew.getMemberStatus().getId());
+		res.setVer(invoiceNew.getMemberStatus().getVersion());
+		res.setIsActive(invoiceNew.getMemberStatus().getIsActive());
+		res.setPrice(price);
+		
 		return res;
 	}
-	
 	
 	public PojoInvoiceRes getById (String id) {
 		final PojoInvoiceRes res = new PojoInvoiceRes();
@@ -162,9 +168,7 @@ public class InvoiceService {
 		res.setVer(invoice.getVersion());
 		res.setIsActive(invoice.getIsActive());
 		return res;
-		
 	}
-	
 	
 	public PojoInvoiceMembershipRes getMembershipInvoiceByCode(String code) {
 		final PojoInvoiceMembershipRes res = new PojoInvoiceMembershipRes();
@@ -178,7 +182,6 @@ public class InvoiceService {
 		res.setVer(invoice.getVersion());
 		res.setIsActive(invoice.getIsActive());
 		return res;
-		
 	}
 	
 	

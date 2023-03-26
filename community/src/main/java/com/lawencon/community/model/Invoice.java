@@ -28,7 +28,7 @@ uniqueConstraints = {
 public class Invoice  extends BaseEntity{
 	
 	@OneToOne
-	@JoinColumn(name="voucher_id", nullable=false)
+	@JoinColumn(name="voucher_id")
 	private Voucher voucher;
 	
 	@OneToOne
@@ -36,12 +36,12 @@ public class Invoice  extends BaseEntity{
 	private User user;
 	
 	@OneToOne
-	@JoinColumn(name="activity_id", nullable=false)
+	@JoinColumn(name="activity_id")
 	private Activity activity;
 	
-	
+
 	@OneToOne
-	@JoinColumn(name="membership_id", nullable=false)
+	@JoinColumn(name="membership_id")
 	private MemberStatus memberStatus;
 	
 	
