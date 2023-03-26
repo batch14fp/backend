@@ -1,9 +1,7 @@
 package com.lawencon.community.service;
 
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +87,8 @@ public class ActivityService {
 			activity.setTypeName(data.getTypeActivity().getActivityName());
 			activity.setImgActivityId(data.getFile().getId());
 			activity.setIsActive(data.getIsActive());
+			activity.setCreatedAt(data.getCreatedAt());
+			activity.setVer(data.getVersion());
 			activityList.add(activity);
 		});
 		return activityList;
@@ -236,6 +236,8 @@ public class ActivityService {
 			activity.setTypeName(data.getTypeActivity().getActivityName());
 			activity.setImgActivityId(data.getFile().getId());
 			activity.setIsActive(data.getIsActive());
+			activity.setCreatedAt(data.getCreatedAt());
+			activity.setVer(data.getVersion());
 			activityList.add(activity);
 		});
 		return activityList;
@@ -396,20 +398,9 @@ public class ActivityService {
 			pojo.setStartDate(activity.getStartDate());
 			pojo.setEndDate(activity.getEndDate());
 			pojo.setIsActive(activity.getIsActive());
-
-			final LocalDateTime now = LocalDateTime.now();
-			final Duration duration = Duration.between(activity.getCreatedAt(), now);
-			String timeAgo = "";
-			if (duration.toDays() > 0) {
-				timeAgo = duration.toDays() + "d";
-			} else if (duration.toHours() > 0) {
-				timeAgo = duration.toHours() + "h";
-			} else if (duration.toMinutes() > 0) {
-				timeAgo = duration.toMinutes() + "m";
-			} else {
-				timeAgo = duration.getSeconds() + "s";
-			}
-			pojo.setTimeAgo(timeAgo);
+			pojo.setCreatedAt(activity.getCreatedAt());
+			pojo.setVer(activity.getVersion());
+		
 
 			if (activity.getUser() != null) {
 				String fullname = activity.getUser().getProfile().getFullname();
@@ -449,20 +440,8 @@ public class ActivityService {
 			pojo.setStartDate(activity.getStartDate());
 			pojo.setEndDate(activity.getEndDate());
 			pojo.setIsActive(activity.getIsActive());
-			final LocalDateTime now = LocalDateTime.now();
-			final Duration duration = Duration.between(activity.getCreatedAt(), now);
-			String timeAgo = "";
-			if (duration.toDays() > 0) {
-				timeAgo = duration.toDays() + "d";
-			} else if (duration.toHours() > 0) {
-				timeAgo = duration.toHours() + "h";
-			} else if (duration.toMinutes() > 0) {
-				timeAgo = duration.toMinutes() + "m";
-			} else {
-				timeAgo = duration.getSeconds() + "s";
-			}
-			pojo.setTimeAgo(timeAgo);
-
+			pojo.setCreatedAt(activity.getCreatedAt());
+			pojo.setVer(activity.getVersion());
 			if (activity.getUser() != null) {
 				String fullname = activity.getUser().getProfile().getFullname();
 				pojo.setUserId(activity.getUser().getId());
@@ -484,4 +463,12 @@ public class ActivityService {
 		final  PojoUpcomingActivityByTypeRes res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
 		return res;
 	}
+	
+	
+	
+
+	
+	
+	
+	
 }

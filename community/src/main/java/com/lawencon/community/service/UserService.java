@@ -24,6 +24,7 @@ import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RoleDao;
+import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.CodeVerification;
@@ -32,6 +33,7 @@ import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
+import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -57,12 +59,13 @@ public class UserService implements UserDetailsService {
 	private IndustryDao industryDao;
 	private MemberStatusDao memberStatusDao;
 	private WalletDao walletDao;
+	private SubscriptionDao subscriptionDao;
 
 	@Autowired
 	private PasswordEncoder encoder;
 
 
-	public UserService(final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
+	public UserService(final SubscriptionDao subscriptionDao, final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
 			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
 		this.userDao = userDao;
@@ -74,6 +77,7 @@ public class UserService implements UserDetailsService {
 		this.memberStatusDao = memberStatusDao;
 		this.codeVerificationDao = codeVerificationDao;
 		this.walletDao = walletDao;
+		this.subscriptionDao = subscriptionDao;
 	};
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -117,13 +121,24 @@ public class UserService implements UserDetailsService {
 		profile.setPhoneNumber(data.getPhoneNumber());
 		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
 		final MemberStatus memberStatusRef = memberStatusDao.getByIdRef(memberStatus.getId());
-		profile.setMemberStatus(memberStatusRef);
+	
+		
 		profile.setFullname(data.getFullName());
 
 		profile.setCompanyName(data.getCompany());
 		profile.setCreatedBy(system.getId());
 		Profile profileNew = profileDao.saveNoLogin(profile, () -> system.getId());
 
+		
+		final Subscription subs = new Subscription();
+		subs.setProfile(profileNew);
+		subs.setMemberStatus(memberStatusRef);
+		subs.setStartDate(LocalDateTime.now());
+		subs.setEndDate(LocalDateTime.now().plusYears(3));
+		subs.setIsActive(true);
+		subscriptionDao.save(subs);
+		
+		
 		res.setId(profileNew.getId());
 
 		final User user = new User();

@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.IndustryDao;
-import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.ProfileSocialMediaDao;
 import com.lawencon.community.dao.SocialMediaDao;
+import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
-import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
+import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
@@ -31,8 +31,8 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class ProfileService {
 	private ProfileDao profileDao;
-	private MemberStatusDao memberStatusDao;
 	private UserDao userDao;
+	private SubscriptionDao subscriptionDao;
 	private ProfileSocialMediaDao profileSocialMediaDao;
 
 	private IndustryDao industryDao;
@@ -42,14 +42,13 @@ public class ProfileService {
 	@Autowired
 	private PrincipalService principalService;
 
-	public ProfileService(final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
-			final ProfileDao profileDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
+	public ProfileService(final SubscriptionDao subscriptionDao,  FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
+			final ProfileDao profileDao, final UserDao userDao) {
 		this.profileDao = profileDao;
-		this.memberStatusDao = memberStatusDao;
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
-		
+		this.subscriptionDao = subscriptionDao;
 		this.industryDao =  industryDao;
 		this.positionDao = positionDao;
 		
@@ -65,8 +64,11 @@ public class ProfileService {
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setCompany(profile.getCompanyName());
-		resGetProfile.setStatusMemberId(profile.getMemberStatus().getId());
-		resGetProfile.setStatusMember(profile.getMemberStatus().getStatusName());
+		final Subscription subs = subscriptionDao.getById(profile.getId()).get();
+		resGetProfile.setStatusMemberId(subs.getMemberStatus().getId());
+		resGetProfile.setStatusMember(subs.getMemberStatus().getStatusName());
+		resGetProfile.setStartDateMember(subs.getStartDate());
+		resGetProfile.setEndDateMember(subs.getEndDate());
 		resGetProfile.setIndustryId(profile.getIndustry().getId());
 		resGetProfile.setPositionId(profile.getPosition().getId());
 		resGetProfile.setProvince(profile.getProvince());
@@ -135,8 +137,6 @@ public class ProfileService {
 		profile.setProvince(data.getProvince());
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
-		final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMemberStatusId());
-		profile.setMemberStatus(memberStatus);
 		final Position position = positionDao.getByIdRef(data.getPositionId());
 		profile.setPosition(position);
 		profile.setPostalCode(data.getPostalCode());

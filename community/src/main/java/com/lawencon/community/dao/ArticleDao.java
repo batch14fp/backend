@@ -24,7 +24,7 @@ public class ArticleDao extends AbstractJpaDao {
 		final StringBuilder sqlQuery = new StringBuilder();
 
 		sqlQuery.append(
-				"SELECT a.id, a.file_id, a.title, a.content_article, a.viewers, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
+				"SELECT a.id, a.file_id, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
 		sqlQuery.append("FROM t_article a ");
 		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -50,21 +50,20 @@ public class ArticleDao extends AbstractJpaDao {
 				}
 				article.setTitle(obj[2].toString());
 				article.setContentArticle(obj[3].toString());
-				article.setViewers(Integer.valueOf(obj[4].toString()));
 
 				final User user = new User();
-				user.setId(obj[5].toString());
+				user.setId(obj[4].toString());
 
 				final Profile profile = new Profile();
-				profile.setId(obj[6].toString());
-				profile.setFullname(obj[7].toString());
+				profile.setId(obj[5].toString());
+				profile.setFullname(obj[6].toString());
 				user.setProfile(profile);
 
 				article.setUser(user);
 
-				article.setVersion(Integer.valueOf(obj[8].toString()));
-				article.setIsActive(Boolean.valueOf(obj[9].toString()));
-				article.setCreatedAt(Timestamp.valueOf(obj[10].toString()).toLocalDateTime());
+				article.setVersion(Integer.valueOf(obj[7].toString()));
+				article.setIsActive(Boolean.valueOf(obj[8].toString()));
+				article.setCreatedAt(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
 				listArticle.add(article);
 			}
 
@@ -80,7 +79,7 @@ public class ArticleDao extends AbstractJpaDao {
 		final StringBuilder sqlQuery = new StringBuilder();
 
 		sqlQuery.append(
-				"SELECT a.id, a.file_id, a.title, a.content_article, a.viewers, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
+				"SELECT a.id, a.file_id, a.title, a.content_article,  a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
 		sqlQuery.append("FROM t_article a ");
 		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -106,21 +105,20 @@ public class ArticleDao extends AbstractJpaDao {
 				}
 				article.setTitle(obj[2].toString());
 				article.setContentArticle(obj[3].toString());
-				article.setViewers(Integer.valueOf(obj[4].toString()));
 
 				final User user = new User();
-				user.setId(obj[5].toString());
+				user.setId(obj[4].toString());
 
 				final Profile profile = new Profile();
-				profile.setId(obj[6].toString());
-				profile.setFullname(obj[7].toString());
+				profile.setId(obj[5].toString());
+				profile.setFullname(obj[6].toString());
 				user.setProfile(profile);
 
 				article.setUser(user);
 
-				article.setVersion(Integer.valueOf(obj[8].toString()));
-				article.setIsActive(Boolean.valueOf(obj[9].toString()));
-				article.setCreatedAt(Timestamp.valueOf(obj[10].toString()).toLocalDateTime());
+				article.setVersion(Integer.valueOf(obj[7].toString()));
+				article.setIsActive(Boolean.valueOf(obj[8].toString()));
+				article.setCreatedAt(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
 				listArticle.add(article);
 			}
 
@@ -135,63 +133,180 @@ public class ArticleDao extends AbstractJpaDao {
 	@SuppressWarnings("unchecked")
 	public List<Article> getAllByMostViewer(int offset, int limit) {
 
-		final List<Article> listArticle = new ArrayList<>();
-		final StringBuilder sqlQuery = new StringBuilder();
+	    final List<Article> listArticle = new ArrayList<>();
+	    final StringBuilder sqlQuery = new StringBuilder();
 
-		sqlQuery.append(
-				"SELECT a.id, a.file_id, a.title, a.content_article, a.viewers, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
-		sqlQuery.append("FROM t_article a ");
-		sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
-		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
-		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("ORDER BY a.viewers DESC");
+	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
+	    sqlQuery.append("FROM t_article a ");
+	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
+	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+	    sqlQuery.append("LEFT JOIN t_article_viewer av ON a.id = av.article_id ");
+	    sqlQuery.append("INNER JOIN t_file f ON f.id  = a.file_id ");
+	    sqlQuery.append("WHERE a.is_active = TRUE ");
+	    sqlQuery.append("GROUP BY a.id, a.file_id, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, f.file_name, f.file_content, f.file_extension ");
+	    sqlQuery.append("ORDER BY COUNT(av.article_id) DESC ");
+	    try {
+	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setMaxResults(limit).setFirstResult((offset-1)*limit).getResultList();
 
-		try {
-			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-					.setMaxResults(limit).setFirstResult((offset - 1) * limit).getResultList();
+	        for (final Object objs : result) {
+	            final Object[] obj = (Object[]) objs;
 
-			for (final Object objs : result) {
-				final Object[] obj = (Object[]) objs;
+	            final Article article = new Article();
+	            article.setId(obj[0].toString());
 
-				final Article article = new Article();
-				article.setId(obj[0].toString());
+	            final File file = new File();
+	            if (obj[1] != null) {
+	                file.setId(obj[1].toString());
+	                file.setFileName(obj[2].toString());
+	                file.setFileContent(obj[3].toString());
+	                file.setFileExtension(obj[4].toString());
+	                
+	                article.setFile(file);
+	            }
+	            article.setTitle(obj[5].toString());
+	            article.setContentArticle(obj[6].toString());
 
-				final File file = new File();
-				if (obj[1].toString() != null) {
-					file.setId(obj[1].toString());
-					article.setFile(file);
-				}
-				article.setTitle(obj[2].toString());
-				article.setContentArticle(obj[3].toString());
-				article.setViewers(Integer.valueOf(obj[4].toString()));
+	            final User user = new User();
+	            user.setId(obj[7].toString());
 
-				final User user = new User();
-				user.setId(obj[5].toString());
+	            final Profile profile = new Profile();
+	            profile.setId(obj[8].toString());
+	            profile.setFullname(obj[9].toString());
+	            user.setProfile(profile);
+	            article.setUser(user);
+	            article.setVersion(Integer.valueOf(obj[10].toString()));
+	            article.setIsActive(Boolean.valueOf(obj[11].toString()));
+	            listArticle.add(article);
+	        }
 
-				final Profile profile = new Profile();
-				profile.setId(obj[6].toString());
-				profile.setFullname(obj[7].toString());
-				user.setProfile(profile);
+	    } catch (final Exception e) {
+	        e.printStackTrace();
+	    }
 
-				article.setUser(user);
+	    return listArticle;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Article> getAllByCreatedAt(int offset, int limit) {
+	    final List<Article> listArticle = new ArrayList<>();
+	    final StringBuilder sqlQuery = new StringBuilder();
 
-				article.setVersion(Integer.valueOf(obj[8].toString()));
-				article.setIsActive(Boolean.valueOf(obj[9].toString()));
-				listArticle.add(article);
-			}
+	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
+	    sqlQuery.append("FROM t_article a ");
+	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
+	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+	    sqlQuery.append("LEFT JOIN t_article_viewer av ON a.id = av.article_id ");
+	    sqlQuery.append("INNER JOIN t_file f ON f.id  = a.file_id ");
+	    sqlQuery.append("WHERE a.is_active = TRUE ");
+	    sqlQuery.append("ORDER BY a.created_at DESC ");
+	    try {
+	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setMaxResults(limit).setFirstResult((offset-1)*limit).getResultList();
 
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+	        for (final Object objs : result) {
+	            final Object[] obj = (Object[]) objs;
 
-		return listArticle;
+	            final Article article = new Article();
+	            article.setId(obj[0].toString());
+
+	            final File file = new File();
+	            if (obj[1] != null) {
+	                file.setId(obj[1].toString());
+	                file.setFileName(obj[2].toString());
+	                file.setFileContent(obj[3].toString());
+	                file.setFileExtension(obj[4].toString());
+	                
+	                article.setFile(file);
+	            }
+	            article.setTitle(obj[5].toString());
+	            article.setContentArticle(obj[6].toString());
+
+	            final User user = new User();
+	            user.setId(obj[7].toString());
+
+	            final Profile profile = new Profile();
+	            profile.setId(obj[8].toString());
+	            profile.setFullname(obj[9].toString());
+	            user.setProfile(profile);
+	            article.setUser(user);
+	            article.setVersion(Integer.valueOf(obj[10].toString()));
+	            article.setIsActive(Boolean.valueOf(obj[11].toString()));
+	            listArticle.add(article);
+	        }
+
+	    } catch (final Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return listArticle;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Long> getNumViewersAll(int offset, int limit){
+	    final List<Long> listNumViews = new ArrayList<>();
+	    final StringBuilder sqlQuery = new StringBuilder();
+	    sqlQuery.append("SELECT a.id, COALESCE(COUNT(av.article_id), 0) AS num_views ");
+	    sqlQuery.append("FROM t_article a ");
+	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
+	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+	    sqlQuery.append("LEFT JOIN t_article_viewer av ON a.id = av.article_id ");
+	    sqlQuery.append("WHERE a.is_active = TRUE ");
+	    sqlQuery.append("GROUP BY a.id ");
+	    sqlQuery.append("ORDER BY a.created_at DESC ");
+	    try {
+	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setMaxResults(limit).setFirstResult((offset-1)*limit).getResultList();
+
+	        for (final Object objs : result) {
+	            final Object[] obj = (Object[]) objs;
+	            listNumViews.add(Long.valueOf(obj[1].toString()));
+	        }
+
+	    } catch (final Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return listNumViews;
 	}
 
-	public int getTotalCount() {
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Long> getNumViewersAllByMostViewer(int offset, int limit){
+	    final List<Long> listNumViews = new ArrayList<>();
+	    final StringBuilder sqlQuery = new StringBuilder();
+	    sqlQuery.append("SELECT a.id, COALESCE(COUNT(av.article_id), 0) AS num_views ");
+	    sqlQuery.append("FROM t_article a ");
+	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
+	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+	    sqlQuery.append("LEFT JOIN t_article_viewer av ON a.id = av.article_id ");
+	    sqlQuery.append("WHERE a.is_active = TRUE ");
+	    sqlQuery.append("GROUP BY a.id ");
+	    sqlQuery.append("ORDER BY COUNT(av.article_id) DESC ");
+	    try {
+	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setMaxResults(limit).setFirstResult((offset-1)*limit).getResultList();
+
+	        for (final Object objs : result) {
+	            final Object[] obj = (Object[]) objs;
+	            listNumViews.add(Long.valueOf(obj[1].toString()));
+	        }
+
+	    } catch (final Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return listNumViews;
+	}
+
+	public Long getTotalCount() {
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT COUNT(id) as total FROM t_article ");
 		sqlQuery.append("WHERE is_active = TRUE ");
-		int totalCount = Integer
+		Long totalCount = Long
 				.valueOf(ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).getSingleResult().toString());
 		return totalCount;
 	}

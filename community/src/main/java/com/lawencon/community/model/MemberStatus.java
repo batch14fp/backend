@@ -1,5 +1,7 @@
 package com.lawencon.community.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -15,13 +17,16 @@ uniqueConstraints = {
         )})
 public class MemberStatus extends BaseEntity{
 
-	@Column(length=30)
+	@Column(length=30, nullable = false)
 	private String statusName;
 	
 	private Integer periodDay;
 	
-	@Column(length=30)
+	@Column(length=30, nullable = false)
 	private String codeStatus;
+	
+	@Column(nullable = false)
+	private BigDecimal price;
 	public String getStatusName() {
 		return statusName;
 	}
@@ -39,6 +44,12 @@ public class MemberStatus extends BaseEntity{
 	}
 	public void setCodeStatus(String codeStatus) {
 		this.codeStatus = codeStatus;
+	}
+	public BigDecimal getPrice() {
+		return price;
+	}
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 	
 	
