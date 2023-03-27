@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.IndustryDao;
-import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.ProfileSocialMediaDao;

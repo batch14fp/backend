@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.community.dao.SubscriptionDao;
+import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -42,12 +44,14 @@ public class UserController {
 	private UserService userService;
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
+	private SubscriptionDao subscriptionDao;
 
 
-	public UserController( final UserService userService, final JwtService jwtService, 
+	public UserController(final SubscriptionDao subscriptionDao,  final UserService userService, final JwtService jwtService, 
 			final AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.jwtService = jwtService;
+		this.subscriptionDao = subscriptionDao;
 		this.authenticationManager = authenticationManager;
 	}
 
@@ -110,6 +114,9 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		final Subscription subs = subscriptionDao.getByProfileId(userOptional.get().getProfile().getId()).get();
+		final Subscription subsRef = subscriptionDao.getByIdRef(Subscription.class, subs.getId());
+		loginRes.setMemberCode(subsRef.getMemberStatus().getCodeStatus());
 		if(userOptional.get().getProfile().getImageProfile()!=null) {
 		loginRes.setImageId(userOptional.get().getProfile().getImageProfile().getId());
 		}
