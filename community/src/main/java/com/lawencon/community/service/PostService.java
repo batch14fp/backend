@@ -15,17 +15,20 @@ import com.lawencon.community.dao.FilePostDao;
 import com.lawencon.community.dao.PollingDao;
 import com.lawencon.community.dao.PollingOptionDao;
 import com.lawencon.community.dao.PollingResponDao;
+import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.PostBookmarkDao;
 import com.lawencon.community.dao.PostCommentDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostLikeDao;
 import com.lawencon.community.dao.PostTypeDao;
+import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.FilePost;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostBookmark;
 import com.lawencon.community.model.PostComment;
@@ -66,11 +69,13 @@ public class PostService {
 	private PollingDao pollingDao;
 	private PollingOptionDao pollingOptionDao;
 	private PollingResponDao pollingResponDao;
+	private ProfileDao profileDao;	
+	private PositionDao positionDao;
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public PostService(final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao, final PollingDao pollingDao,
+	public PostService(final PositionDao positionDao, final ProfileDao profileDao, final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao, final PollingDao pollingDao,
 			final FilePostDao filePostDao, final PostDao postDao, final PostBookmarkDao postBookmarkDao,
 			final PostCommentDao postCommentDao, final PostTypeDao postTypeDao, final FileDao fileDao,
 			final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
@@ -86,6 +91,8 @@ public class PostService {
 		this.pollingDao = pollingDao;
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingResponDao = pollingResponDao;
+		this.profileDao = profileDao;
+		this.positionDao = positionDao;
 
 	}
 
@@ -124,17 +131,21 @@ public class PostService {
 				option.setVer(pollingOption.getVersion());
 				options.add(option);
 			}
-		    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-		  	
-			Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
-	        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
-	            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
-	            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
-	            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
-	            pollingOptionUserCounts.add(pojoOptionCountRes);
+		    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+		    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+	        Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+	        for (String optionId : optionCounts.keySet()) {
+	            Map<String, Integer> optionCount = optionCounts.get(optionId);
+	            for (String optionContent : optionCount.keySet()) {
+	                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
+	                optionCountRes.setPollingOptionId(optionId);
+	                optionCountRes.setPollingContent(optionContent);
+	                optionCountRes.setCount(optionCount.get(optionContent));
+	                pollingOptionUserCounts.add(optionCountRes);
+	            }
 	        }
 	        pollingRes.setData(pollingOptionUserCounts);
-	  
+	
 			res.setPollingOption(options);
 			res.setPollingRespon(pollingRes);
 		}
@@ -489,15 +500,23 @@ public class PostService {
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			  	
-				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
-		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
-		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
-		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
-		            pollingOptionUserCounts.add(pojoOptionCountRes);
+			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String optionId : optionCounts.keySet()) {
+		            Map<String, Integer> optionCount = optionCounts.get(optionId);
+		            for (String optionContent : optionCount.keySet()) {
+		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
+		                optionCountRes.setPollingOptionId(optionId);
+		                optionCountRes.setPollingContent(optionContent);
+		                optionCountRes.setCount(optionCount.get(optionContent));
+		                pollingOptionUserCounts.add(optionCountRes);
+		            }
 		        }
+		      
+		        
+		        
+		        
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
 				res.setPollingOption(options);
@@ -585,14 +604,18 @@ public class PostService {
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			  	
-				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
-		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
-		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
-		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
-		            pollingOptionUserCounts.add(pojoOptionCountRes);
+			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String optionId : optionCounts.keySet()) {
+		            Map<String, Integer> optionCount = optionCounts.get(optionId);
+		            for (String optionContent : optionCount.keySet()) {
+		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
+		                optionCountRes.setPollingOptionId(optionId);
+		                optionCountRes.setPollingContent(optionContent);
+		                optionCountRes.setCount(optionCount.get(optionContent));
+		                pollingOptionUserCounts.add(optionCountRes);
+		            }
 		        }
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
@@ -662,14 +685,18 @@ public class PostService {
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotal(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			  	
-				Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
-		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
-		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
-		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
-		            pollingOptionUserCounts.add(pojoOptionCountRes);
+			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        for (String optionId : optionCounts.keySet()) {
+		            Map<String, Integer> optionCount = optionCounts.get(optionId);
+		            for (String optionContent : optionCount.keySet()) {
+		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
+		                optionCountRes.setPollingOptionId(optionId);
+		                optionCountRes.setPollingContent(optionContent);
+		                optionCountRes.setCount(optionCount.get(optionContent));
+		                pollingOptionUserCounts.add(optionCountRes);
+		            }
 		        }
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
@@ -735,17 +762,20 @@ public class PostService {
 		final List<PojoPostCommentRes> listComment = new ArrayList<>();
 		final List<PojoPostCommentReplyResData> listCommentData = new ArrayList<>();
 		postCommentDao.getAllByPostId(postId, limit, offset).forEach(data -> {
-			if (data.getComment() != null) {
+			if (data.getComment()!= null) {
 				final PojoPostCommentReplyResData postCommentData = new PojoPostCommentReplyResData();
-
-				postCommentData.setCommentId(data.getComment().getComment().getId());
+				postCommentData.setCommentId(data.getComment().getId());
 				postCommentData.setUserId(data.getUser().getId());
-				postCommentData.setContentComment(data.getComment().getBody());
-				postCommentData.setFullname(data.getComment().getUser().getProfile().getFullname());
-				postCommentData.setCreatedAt(data.getComment().getCreatedAt());
-				listCommentData.add(postCommentData);
+				postCommentData.setContentComment(data.getBody());
 				
-			
+				if(data.getUser().getProfile().getImageProfile()!=null) {
+					postCommentData.setImageProfileId(data.getUser().getProfile().getId());
+					}
+				final Position position = positionDao.getByIdRef(data.getUser().getProfile().getPosition().getId());
+				postCommentData.setPosition(position.getPositionName());
+				postCommentData.setFullname(data.getUser().getProfile().getFullname());
+				postCommentData.setCreatedAt(data.getCreatedAt());
+				listCommentData.add(postCommentData);
 			}
 			
 			else {
@@ -754,7 +784,12 @@ public class PostService {
 			postComment.setContentComment(data.getBody());
 			postComment.setPostCommentId(data.getId());
 			postComment.setUserId(data.getUser().getId());
-			
+		
+			if(data.getUser().getProfile().getImageProfile()!=null) {
+			postComment.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+			}
+			final Position position = positionDao.getByIdRef(data.getUser().getProfile().getPosition().getId());
+			postComment.setPosition(position.getPositionName());
 			postComment.setFullname(data.getUser().getProfile().getFullname());
 			postComment.setCreatedAt(data.getCreatedAt());
 			postComment.setVer(data.getVersion());

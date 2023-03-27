@@ -13,6 +13,7 @@ public class PojoProfileReqUpdate {
 	private String city;
 	private LocalDate dob;
 	private String memberStatusId;
+	private String walletId;
 	private String postalCode;
 	private String industryId;
 	private String positionId;
@@ -120,6 +121,12 @@ public class PojoProfileReqUpdate {
 	}
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
+	}
+	public String getWalletId() {
+		return walletId;
+	}
+	public void setWalletId(String walletId) {
+		this.walletId = walletId;
 	}
 	
 	

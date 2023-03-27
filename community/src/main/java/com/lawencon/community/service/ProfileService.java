@@ -34,24 +34,22 @@ public class ProfileService {
 	private UserDao userDao;
 	private SubscriptionDao subscriptionDao;
 	private ProfileSocialMediaDao profileSocialMediaDao;
-
 	private IndustryDao industryDao;
 	private PositionDao positionDao;
 	private FileDao fileDao;
-	private SocialMediaDao socialMediaDao;
+
 	
 	@Autowired
 	private PrincipalService principalService;
 
 
-	public ProfileService(final SocialMediaDao socialMediaDao,final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final ProfileSocialMediaDao profileSocialMediaDao,
-			final ProfileDao profileDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
+	public ProfileService(final SubscriptionDao subscriptionDao, final SocialMediaDao socialMediaDao,final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final ProfileSocialMediaDao profileSocialMediaDao,
+			final ProfileDao profileDao, final UserDao userDao) {
 		this.profileDao = profileDao;
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
 		this.subscriptionDao = subscriptionDao;
-		this.socialMediaDao = socialMediaDao;
 		this.industryDao =  industryDao;
 		this.positionDao = positionDao;
 		
@@ -84,6 +82,13 @@ public class ProfileService {
 
 		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
+		resGetProfile.setWalletId(user.getWallet().getId());
+		resGetProfile.setWalletVer(user.getWallet().getVersion());
+		if(user.getWallet().getBankPayment()!=null) {
+		resGetProfile.setAccountName(user.getWallet().getBankPayment().getAccountName());
+		resGetProfile.setBankPanymentId(user.getWallet().getBankPayment().getId());
+		resGetProfile.setAccountNumber(user.getWallet().getBankPayment().getAccountNumber());
+		}
 		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
 
@@ -118,21 +123,24 @@ public class ProfileService {
 		profile.setCompanyName(data.getCompany());
 		profile.setCountry(data.getCountry());
 		profile.setCity(data.getCity());
+		
+		
 		if(data.getFile()!=null) {
 		File file = new File();
 		if(data.getFile().getFileId()!=null) {
 		file = fileDao.getByIdRef(data.getFile().getFileId());
-		file.setFileExtension(data.getFile().getExtension());
+		file.setVersion(data.getFile().getVer());
+		}file.setFileExtension(data.getFile().getExtension());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
-		file.setVersion(data.getFile().getVer());
-		}else {
-			file.setFileExtension(data.getFile().getExtension());
-			file.setFileContent(data.getFile().getFileContent());
-			file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
-		}
 		profile.setImageProfile(file);
 		}
+		
+		if(data.getWalletId()!=null) {
+			
+		}
+		
+		
 		profile.setProvince(data.getProvince());
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
