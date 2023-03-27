@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.File;
+import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostComment;
 import com.lawencon.community.model.Profile;
@@ -25,7 +27,7 @@ public class PostCommentDao extends AbstractJpaDao{
 	    sql.append("SELECT pc.id AS pc_id, pc.user_id AS pc_user_id, ");
 	    sql.append("pc.post_id AS pc_post_id, c.comment_id AS c_comment_id, ");
 	    sql.append("c.user_id AS c_user_id, c.post_id AS c_post_id, pc.body, ");
-	    sql.append("c.created_at as c_created_at, pr.fullname, p.content_post, pc.created_at as pc_created_at, pc.ver ");
+	    sql.append("c.created_at as c_created_at, pr.fullname, p.content_post, pc.created_at as pc_created_at, pc.ver, pr.image_profile_id, pr.position_id ");
 	    sql.append("FROM t_post_comment pc ");
 	    sql.append("LEFT JOIN t_post_comment c ON pc.comment_id = c.id ");
 	    sql.append("INNER JOIN t_user u ON pc.user_id = u.id ");
@@ -47,7 +49,18 @@ public class PostCommentDao extends AbstractJpaDao{
 	            final User user = new User();
 	            final Profile profile = new Profile();
 	            user.setId(obj[1].toString());
+	            
 	            profile.setFullname(obj[8].toString());
+	            if(obj[12]!=null) {
+	            final File file = new File();
+	            file.setId(obj[12].toString());
+	            profile.setImageProfile(file);
+	            }
+	            final Position position = new Position();
+	            position.setId(obj[13].toString());
+	            
+	            profile.setPosition(position);
+	          
 	            user.setProfile(profile);
 	            postComment.setUser(user);
 
@@ -88,7 +101,7 @@ public class PostCommentDao extends AbstractJpaDao{
 	    sql.append("SELECT pc.id AS pc_id, pc.user_id AS pc_user_id, ");
 	    sql.append("pc.post_id AS pc_post_id, c.comment_id AS c_comment_id, ");
 	    sql.append("c.user_id AS c_user_id, c.post_id AS c_post_id, pc.body, ");
-	    sql.append("c.created_at as c_created_at, pr.fullname, p.content_post, pc.created_at as pc_created_at, pc.ver ");
+	    sql.append("c.created_at as c_created_at, pr.fullname, p.content_post, pc.created_at as pc_created_at, pc.ver, pr.image_profile_id, pr.position_id ");
 	    sql.append("FROM t_post_comment pc ");
 	    sql.append("LEFT JOIN t_post_comment c ON pc.comment_id = c.id ");
 	    sql.append("INNER JOIN t_user u ON pc.user_id = u.id ");
@@ -106,6 +119,16 @@ public class PostCommentDao extends AbstractJpaDao{
 	            final User user = new User();
 	            final Profile profile = new Profile();
 	            user.setId(obj[1].toString());
+	           
+	            if(obj[12]!=null) {
+	            final File file = new File();
+	            file.setId(obj[12].toString());
+	            profile.setImageProfile(file);
+	            }
+	            final Position position = new Position();
+	            position.setId(obj[13].toString());
+	            
+	            profile.setPosition(position);
 	            profile.setFullname(obj[8].toString());
 	            user.setProfile(profile);
 	            postComment.setUser(user);

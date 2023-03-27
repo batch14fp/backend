@@ -115,16 +115,23 @@ public class PollingService {
 		
 			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 		
-		        Map<String, Integer> pollingOptionUserCountsMap = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
-		        for (String pollingOptionId : pollingOptionUserCountsMap.keySet()) {
-		            PojoOptionCountRes pojoOptionCountRes = new PojoOptionCountRes();
-		            pojoOptionCountRes.setPollingOptionId(pollingOptionId);
-		            pojoOptionCountRes.setCount(pollingOptionUserCountsMap.get(pollingOptionId));
-		            pollingOptionUserCounts.add(pojoOptionCountRes);
+
+		        Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
+		        for (String optionId : optionCounts.keySet()) {
+		            Map<String, Integer> optionCount = optionCounts.get(optionId);
+		            for (String optionContent : optionCount.keySet()) {
+		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
+		                optionCountRes.setPollingOptionId(optionId);
+		                optionCountRes.setPollingContent(optionContent);
+		                optionCountRes.setCount(optionCount.get(optionContent));
+		                pollingOptionUserCounts.add(optionCountRes);
+		            }
 		        }
 		        res.setData(pollingOptionUserCounts);
-		        res.setTotal(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
-		    return res;
+		        res.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
+		        res.setTotalOption(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
+		     
+		        return res;
 		
 
 	}

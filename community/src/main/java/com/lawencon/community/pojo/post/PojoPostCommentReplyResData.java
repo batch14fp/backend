@@ -3,7 +3,8 @@ package com.lawencon.community.pojo.post;
 import java.time.LocalDateTime;
 
 public class PojoPostCommentReplyResData {
-
+	private String imageProfileId;
+	private String position;
 	private String userId;
 	private String commentId;
 	private String fullname;
@@ -40,6 +41,18 @@ public class PojoPostCommentReplyResData {
 	}
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getImageProfileId() {
+		return imageProfileId;
+	}
+	public void setImageProfileId(String imageProfileId) {
+		this.imageProfileId = imageProfileId;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 

@@ -16,7 +16,12 @@ public class PojoProfileDetailRes {
 	private String statusMemberId;
 	private String fullname;
 	private String email;
+	private String walletId;
+	private Integer walletVer;
 	private BigDecimal userBalance;
+	private String bankPanymentId;
+	private String accountNumber;
+	private String accountName;
 	private String statusMember;
 	private String phoneNumber;
 	private LocalDate dob;
@@ -32,6 +37,39 @@ public class PojoProfileDetailRes {
 	private List<PojoSocialMediaRes> socialMediaList;
 
 	
+	
+	
+	
+	public String getWalletId() {
+		return walletId;
+	}
+	public void setWalletId(String walletId) {
+		this.walletId = walletId;
+	}
+	public Integer getWalletVer() {
+		return walletVer;
+	}
+	public void setWalletVer(Integer walletVer) {
+		this.walletVer = walletVer;
+	}
+	public String getBankPanymentId() {
+		return bankPanymentId;
+	}
+	public void setBankPanymentId(String bankPanymentId) {
+		this.bankPanymentId = bankPanymentId;
+	}
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	public String getAccountName() {
+		return accountName;
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 	public String getImageId() {
 		return imageId;
 	}

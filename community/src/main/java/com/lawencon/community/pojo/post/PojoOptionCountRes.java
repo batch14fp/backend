@@ -1,7 +1,9 @@
 package com.lawencon.community.pojo.post;
 
 public class PojoOptionCountRes {
+	
 	private String pollingOptionId;
+	private String pollingContent;
 	private Integer count;
 
 	public String getPollingOptionId() {
@@ -15,6 +17,12 @@ public class PojoOptionCountRes {
 	}
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+	public String getPollingContent() {
+		return pollingContent;
+	}
+	public void setPollingContent(String pollingContent) {
+		this.pollingContent = pollingContent;
 	}
 	
 	

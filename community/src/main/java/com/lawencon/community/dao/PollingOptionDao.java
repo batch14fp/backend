@@ -59,27 +59,31 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 		return listPollingOption;
 	}
 	@SuppressWarnings("unchecked")
-	public Map<String, Integer> countPollingOptionUsers(String pollingId) throws Exception {
-	    Map<String, Integer> pollingOptionUserCounts = new HashMap<>();
+	public Map<String, Map<String, Integer>> countPollingOptionUsers(String pollingId) throws Exception {
+	    Map<String, Map<String, Integer>> pollingOptionUserCounts = new HashMap<>();
 	    try {
 	        final StringBuilder sqlQuery = new StringBuilder();
-	        sqlQuery.append("SELECT po.id, COUNT(ps.id) as user_count ");
+	        sqlQuery.append("SELECT po.id, po.content_polling, COUNT(ps.id) as user_count ");
 	        sqlQuery.append("FROM t_polling_option po ");
 	        sqlQuery.append("LEFT JOIN t_polling_respon ps ");
 	        sqlQuery.append("ON po.id = ps.polling_option_id ");
 	        sqlQuery.append("WHERE po.polling_id = :pollingId ");
-	        sqlQuery.append("GROUP BY po.id");
+	        sqlQuery.append("GROUP BY po.id, po.content_polling");
 	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	                .setParameter("pollingId", pollingId).getResultList();
 	        if (result != null) {
 	            for (Object objs : result) {
 	                final Object[] obj = (Object[]) objs;
 	                final String pollingOptionId = obj[0].toString();
-	                final int userCount = Integer.parseInt(obj[1].toString());
-	                pollingOptionUserCounts.put(pollingOptionId, userCount);
+	                final String pollingContent = obj[1].toString();
+	                final int userCount = Integer.parseInt(obj[2].toString());
+	                
+	                if (!pollingOptionUserCounts.containsKey(pollingOptionId)) {
+	                    pollingOptionUserCounts.put(pollingOptionId, new HashMap<>());
+	                }
+	                pollingOptionUserCounts.get(pollingOptionId).put(pollingContent, userCount);
 	            }
 	        }
-
 	    } catch (Exception e) {
 	        throw new Exception("Failed to retrieve data from database", e);
 	    }
@@ -105,6 +109,23 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	        throw new Exception("Failed to retrieve data from database", e);
 	    }
 	    return totalPollingUsers;
+	}
+	
+	
+	public Integer countOptionByPollingId(String id) throws Exception {
+	    try {
+	        final StringBuilder sqlQuery = new StringBuilder();
+	        sqlQuery.append("SELECT COUNT(*) FROM t_polling_option po ");
+	        sqlQuery.append("INNER JOIN t_polling p ");
+	        sqlQuery.append("ON p.id= po.polling_id ");
+	        sqlQuery.append("WHERE p.id = :id");
+
+	        final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+	                .setParameter("id", id).getSingleResult();	        
+	        return Integer.valueOf(result.toString());
+	    } catch (Exception e) {
+	        throw new Exception("Failed to retrieve data from database", e);
+	    }
 	}
 
 	@Override
