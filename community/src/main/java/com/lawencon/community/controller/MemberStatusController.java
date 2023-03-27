@@ -17,6 +17,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
+import com.lawencon.community.pojo.memberstatus.PojoMemberPremiumRes;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqInsert;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqUpdate;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusRes;
@@ -68,6 +69,11 @@ public class MemberStatusController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
+	@GetMapping("/is-premium")
+	public ResponseEntity<PojoMemberPremiumRes>getIsPremiumMemberStatus(){
+	PojoMemberPremiumRes resGet = memberStatusService.getIsPremiumMember();;
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
 	
 	
 	

@@ -154,11 +154,9 @@ public class InvoiceService {
 	public PojoInvoiceRes getByCode(String code) {
 		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getByInvoiceCode(code);
-		
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());
 			res.setEndDate(invoice.getActivity().getEndDate());
-
 		res.setInvoiceCode(invoice.getInvoiceCode());
 		res.setInvoiceId(invoice.getId());
 		res.setPrice(invoice.getActivity().getPrice());
