@@ -34,8 +34,10 @@ public class ProfileController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<PojoProfileDetailRes> getProfileDetail() throws Exception{
+	public ResponseEntity<PojoProfileDetailRes> getDetailProfile() throws Exception{
+
 		PojoProfileDetailRes resGet = profileService.getDetailProfile();
+
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
