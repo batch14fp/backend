@@ -11,10 +11,8 @@ import com.lawencon.community.model.MemberPost;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.User;
 
-
-
 @Repository
-public class MemberPostDao extends BaseMasterDao<MemberPost>{
+public class MemberPostDao extends BaseMasterDao<MemberPost> {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -25,21 +23,27 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 		sb.append("INNER JOIN m_user u ON u.id = mp.member_id ");
 		sb.append("INNER JOIN t_post p ON p.id = mp.post_id ");
 
-
-		final List<Object[]> result = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
 		final List<MemberPost> memberPosts = new ArrayList<>();
-		for (Object[] obj : result) {
-		    final MemberPost memberPost = new MemberPost();
-		    memberPost.setId(obj[0].toString());
-		    
-		    final User user = new User();
-		    user.setId(obj[1].toString());
-		    memberPost.setMember(user);
-		    
-		    final Post post = new Post();
-		    post.setId(obj[2].toString());
-		    memberPost.setPost(post);
-		    memberPosts.add(memberPost);
+		try {
+
+			final List<Object[]> result = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
+
+			for (Object[] obj : result) {
+				final MemberPost memberPost = new MemberPost();
+				memberPost.setId(obj[0].toString());
+
+				final User user = new User();
+				user.setId(obj[1].toString());
+				memberPost.setMember(user);
+
+				final Post post = new Post();
+				post.setId(obj[2].toString());
+				memberPost.setPost(post);
+				memberPosts.add(memberPost);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return memberPosts;
 
@@ -50,20 +54,16 @@ public class MemberPostDao extends BaseMasterDao<MemberPost>{
 		return Optional.ofNullable(super.getById(MemberPost.class, id));
 	}
 
-
-
-
 	@Override
 	public MemberPost getByIdRef(String id) {
 		return super.getByIdRef(MemberPost.class, id);
 	}
-	
+
 	@Override
 	public Optional<MemberPost> getByIdAndDetach(String id) {
 
 		return Optional.ofNullable(super.getByIdAndDetach(MemberPost.class, id));
 
 	}
-	
-	
+
 }

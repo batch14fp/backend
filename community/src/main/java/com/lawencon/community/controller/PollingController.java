@@ -18,7 +18,6 @@ import com.lawencon.community.pojo.post.PojoPollingReqUpdate;
 import com.lawencon.community.pojo.post.PojoPollingResponReq;
 import com.lawencon.community.pojo.post.PojoPollingResponRes;
 import com.lawencon.community.service.PollingService;
-import com.lawencon.community.service.PostService;
 
 @RestController
 @RequestMapping("pollings")
@@ -42,18 +41,11 @@ public class PollingController {
 	}
 	
 	
-	
-	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deletePolling(@PathVariable ("id")String id) throws Exception{
 		PojoRes resDelete = pollingService.delete(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
-	
-	
-	
-
-
 	
 	@PostMapping("/vote")
 	public ResponseEntity<PojoPollingResponRes> getAllCountOption(@RequestBody PojoPollingResponReq data) throws Exception{

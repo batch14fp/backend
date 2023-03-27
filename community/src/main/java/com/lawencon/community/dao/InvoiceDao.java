@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
@@ -21,58 +23,62 @@ public class InvoiceDao extends BaseMasterDao<Invoice> {
 	@SuppressWarnings("unchecked")
 	@Override
 	List<Invoice> getAll() {
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append(
-				"SELECT i.id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price, i.ver, i.is_active ");
-		sqlQuery.append("FROM t_invoice i ");
-		sqlQuery.append("INNER JOIN t_voucher v ON v.id = i.voucher_id ");
-		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
-		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
-		final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.getResultList();
-
-		if (resultList.size() == 0) {
-			return null;
-		}
-		
 		final List<Invoice> invoiceList = new ArrayList<>();
+		try {
+			StringBuilder sqlQuery = new StringBuilder();
+			sqlQuery.append(
+					"SELECT i.id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price, i.ver, i.is_active ");
+			sqlQuery.append("FROM t_invoice i ");
+			sqlQuery.append("INNER JOIN t_voucher v ON v.id = i.voucher_id ");
+			sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
+			sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
+			final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+					.getResultList();
 
-		for(Object[] objs : resultList) {
-		Object[] obj = objs;
-		Invoice invoice = new Invoice();
-		invoice.setId(obj[0].toString());
-		invoice.setInvoiceCode(obj[1].toString());
+			if (resultList.size() == 0) {
+				return null;
+			}
 
-		final User user = new User();
-		user.setId(obj[2].toString());
-		invoice.setUser(user);
+			for (Object[] objs : resultList) {
+				Object[] obj = objs;
+				Invoice invoice = new Invoice();
+				invoice.setId(obj[0].toString());
+				invoice.setInvoiceCode(obj[1].toString());
 
-		final Voucher voucher = new Voucher();
-		voucher.setId(obj[3].toString());
-		voucher.setUsedCount(Integer.valueOf(obj[4].toString()));
-		invoice.setVoucher(voucher);
-		if (obj[5] != null) {
-			final Activity activity = new Activity();
-			activity.setId(obj[5].toString());
-			activity.setTitle(obj[6].toString());
-			activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
-			activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
-			activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
-			invoice.setActivity(activity);
-		}
-		if (obj[10] != null) {
-			final MemberStatus memberStatus = new MemberStatus();
-			memberStatus.setId(obj[10].toString());
-			memberStatus.setStatusName(obj[11].toString());
-			memberStatus.setCodeStatus(obj[12].toString());
-			memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
-			memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
+				final User user = new User();
+				user.setId(obj[2].toString());
+				invoice.setUser(user);
 
-		}
-		invoice.setVersion(Integer.valueOf(obj[15].toString()));
-		invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
-		invoiceList.add(invoice);
-		
+				final Voucher voucher = new Voucher();
+				voucher.setId(obj[3].toString());
+				voucher.setUsedCount(Integer.valueOf(obj[4].toString()));
+				invoice.setVoucher(voucher);
+				if (obj[5] != null) {
+					final Activity activity = new Activity();
+					activity.setId(obj[5].toString());
+					activity.setTitle(obj[6].toString());
+					activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
+					activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
+					activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
+					invoice.setActivity(activity);
+				}
+				if (obj[10] != null) {
+					final MemberStatus memberStatus = new MemberStatus();
+					memberStatus.setId(obj[10].toString());
+					memberStatus.setStatusName(obj[11].toString());
+					memberStatus.setCodeStatus(obj[12].toString());
+					memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
+					memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
+
+				}
+				invoice.setVersion(Integer.valueOf(obj[15].toString()));
+				invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
+				invoiceList.add(invoice);
+
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to retrieve invoice ", e);
+
 		}
 
 		return invoiceList;
@@ -89,61 +95,57 @@ public class InvoiceDao extends BaseMasterDao<Invoice> {
 		return super.getByIdRef(Invoice.class, id);
 	}
 
-
-	@SuppressWarnings("unchecked")
-	public Invoice getByInvoiceCode(String invoiceCode) {
+	public Optional<Invoice> getByInvoiceCode(String invoiceCode) {
 		StringBuilder sqlQuery = new StringBuilder();
+
 		sqlQuery.append(
 				"SELECT i.id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price, i.ver, i.is_active ");
 		sqlQuery.append("FROM t_invoice i ");
 		sqlQuery.append("INNER JOIN t_voucher v ON v.id = i.voucher_id ");
 		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
-		sqlQuery.append("WHERE i.invoiceCode = :invoiceCode ");
-		final List<Object[]> resultList = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+		sqlQuery.append("WHERE i.invoice_code = :invoiceCode ");
+		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("invoiceCode", invoiceCode).getResultList();
-
-		if (resultList.size() == 0) {
-			return null;
-		}
-
-		Object[] obj = resultList.get(0);
 		Invoice invoice = new Invoice();
-		invoice.setId(obj[0].toString());
-		invoice.setInvoiceCode(obj[1].toString());
+		try {
+			Object[] obj = (Object[]) result;
 
-		final User user = new User();
-		user.setId(obj[2].toString());
-		invoice.setUser(user);
+			invoice.setId(obj[0].toString());
+			invoice.setInvoiceCode(obj[1].toString());
 
-		final Voucher voucher = new Voucher();
-		voucher.setId(obj[3].toString());
-		voucher.setUsedCount(Integer.valueOf(obj[4].toString()));
-		invoice.setVoucher(voucher);
-		if (obj[5] != null) {
-			final Activity activity = new Activity();
-			activity.setId(obj[5].toString());
-			activity.setTitle(obj[6].toString());
-			activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
-			activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
-			activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
-			invoice.setActivity(activity);
+			final User user = new User();
+			user.setId(obj[2].toString());
+			invoice.setUser(user);
+
+			final Voucher voucher = new Voucher();
+			voucher.setId(obj[3].toString());
+			voucher.setUsedCount(Integer.valueOf(obj[4].toString()));
+			invoice.setVoucher(voucher);
+			if (obj[5] != null) {
+				final Activity activity = new Activity();
+				activity.setId(obj[5].toString());
+				activity.setTitle(obj[6].toString());
+				activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
+				activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
+				activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
+				invoice.setActivity(activity);
+			}
+			if (obj[10] != null) {
+				final MemberStatus memberStatus = new MemberStatus();
+				memberStatus.setId(obj[10].toString());
+				memberStatus.setStatusName(obj[11].toString());
+				memberStatus.setCodeStatus(obj[12].toString());
+				memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
+				memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
+
+			}
+			invoice.setVersion(Integer.valueOf(obj[15].toString()));
+			invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
+			return Optional.ofNullable(invoice);
+		} catch (NoResultException e) {
+			return Optional.empty();
 		}
-		if (obj[10] != null) {
-			final MemberStatus memberStatus = new MemberStatus();
-			memberStatus.setId(obj[10].toString());
-			memberStatus.setStatusName(obj[11].toString());
-			memberStatus.setCodeStatus(obj[12].toString());
-			memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
-			memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
-
-		}
-		invoice.setVersion(Integer.valueOf(obj[15].toString()));
-		invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
-		
-
-		return invoice;
-
 	}
 
 	@Override

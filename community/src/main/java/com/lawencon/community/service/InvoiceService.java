@@ -38,11 +38,11 @@ public class InvoiceService {
 	private PaymentDao paymentDao;
 	private MemberStatusDao memberStatusDao;
 
-	
 	@Autowired
 	private PrincipalService principalService;
-	
-	public InvoiceService(final  MemberStatusDao memberStatusDao, final PaymentDao paymentDao,final SalesSettingDao salesSettingDao, final InvoiceDao invoiceDao, final UserDao userDao, 
+
+	public InvoiceService(final MemberStatusDao memberStatusDao, final PaymentDao paymentDao,
+			final SalesSettingDao salesSettingDao, final InvoiceDao invoiceDao, final UserDao userDao,
 			final ActivityDao activityDao, final VoucherDao voucherDao) {
 		this.invoiceDao = invoiceDao;
 		this.userDao = userDao;
@@ -52,56 +52,62 @@ public class InvoiceService {
 		this.salesSettingDao = salesSettingDao;
 		this.memberStatusDao = memberStatusDao;
 	}
-	
+
 	public PojoInsertRes save(PojoInvoiceReqInsert data) {
 		ConnHandler.begin();
+
+		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		final Invoice invoice = new Invoice();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		invoice.setUser(user);
-		
-		final Voucher voucher = voucherDao.getByIdRef(Voucher.class, data.getVoucherId());
-		invoice.setVoucher(voucher);
+
+		if (data.getVoucherId() != null) {
+			final Voucher voucher = voucherDao.getByIdRef(Voucher.class, data.getVoucherId());
+			invoice.setVoucher(voucher);
+		}
 		final Activity activity = activityDao.getByIdRef(data.getActivityId());
 		invoice.setActivity(activity);
 		invoice.setInvoiceCode(GenerateString.generateInvoice());
-		
+
 		final Invoice invoiceNew = invoiceDao.save(invoice);
-		
-		
-		
+
 		final Payment payment = new Payment();
 		final BigDecimal price = invoiceNew.getActivity().getPrice();
 		final SalesSettings setting = salesSettingDao.getSalesSetting();
 		final BigDecimal taxAmount = price.multiply(BigDecimal.valueOf(setting.getTax()));
-		final BigDecimal discAmount =  price.multiply(BigDecimal.valueOf(invoice.getVoucher().getDiscountPercent()));
-		final BigDecimal subTotal = price.subtract(discAmount);
-		 payment.setDiscAmount(discAmount);
-		 payment.setSubtotal(subTotal);
-		 payment.setTaxAmount(taxAmount);
-		 payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
-		 payment.setTotal(subTotal.add(taxAmount));
-		 payment.setInvoice(invoiceNew);
-		 payment.setIsActive(true);
-		 payment.setIsPaid(false);
-		 paymentDao.save(payment);
-		ConnHandler.commit();
+		BigDecimal discAmount = null;
+		if (invoice.getVoucher() != null) {
+			if (invoice.getVoucher().getUsedCount() <= invoice.getVoucher().getLimitApplied()) {
+				discAmount = price.multiply(BigDecimal.valueOf(invoice.getVoucher().getDiscountPercent()));
+			}
+			final BigDecimal subTotal = price.subtract(discAmount);
+			payment.setDiscAmount(discAmount);
+			payment.setSubtotal(subTotal);
+			payment.setTaxAmount(taxAmount);
+			payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
+			payment.setTotal(subTotal.add(taxAmount));
+			payment.setInvoice(invoiceNew);
+			payment.setIsActive(true);
+			payment.setIsPaid(false);
+			paymentDao.save(payment);
 		
-		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(invoiceNew.getId());
-		pojoInsertRes.setMessage("Save Success!");
 
+			pojoInsertRes.setId(invoiceNew.getId());
+			pojoInsertRes.setMessage("Save Success!");
+		}
+		
+		ConnHandler.commit();
 		return pojoInsertRes;
 	}
-	
-	
+
 	public PojoInvoiceRes membershipSave(PojoMembershipPaymentReqInsert data) {
 		ConnHandler.begin();
 		final PojoInvoiceRes res = new PojoInvoiceRes();
-		
+
 		final Invoice invoice = new Invoice();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		invoice.setUser(user);
-		
+
 		final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMembershipId());
 		invoice.setMemberStatus(memberStatus);
 		invoice.setInvoiceCode(GenerateString.generateInvoice());
@@ -111,14 +117,14 @@ public class InvoiceService {
 		final BigDecimal price = invoiceNew.getMemberStatus().getPrice();
 		final SalesSettings setting = salesSettingDao.getSalesSetting();
 		final BigDecimal taxAmount = price.multiply(BigDecimal.valueOf(setting.getTax()));
-		 payment.setSubtotal(price);
-		 payment.setTaxAmount(taxAmount);
-		 payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
-		 payment.setTotal(price.add(taxAmount));
-		 payment.setInvoice(invoiceNew);
-		 payment.setIsActive(true);
-		 payment.setIsPaid(false);
-		 paymentDao.save(payment);
+		payment.setSubtotal(price);
+		payment.setTaxAmount(taxAmount);
+		payment.setExpired(invoiceNew.getCreatedAt().plusHours(24));
+		payment.setTotal(price.add(taxAmount));
+		payment.setInvoice(invoiceNew);
+		payment.setIsActive(true);
+		payment.setIsPaid(false);
+		paymentDao.save(payment);
 		ConnHandler.commit();
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(invoiceNew.getId());
@@ -129,14 +135,14 @@ public class InvoiceService {
 		res.setVer(invoiceNew.getMemberStatus().getVersion());
 		res.setIsActive(invoiceNew.getMemberStatus().getIsActive());
 		res.setPrice(price);
-		
+
 		return res;
 	}
-	
-	public PojoInvoiceRes getById (String id) {
+
+	public PojoInvoiceRes getById(String id) {
 		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getById(id).get();
-		
+
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());
 		res.setEndDate(invoice.getActivity().getEndDate());
@@ -146,17 +152,15 @@ public class InvoiceService {
 		res.setStartDate(invoice.getActivity().getStartDate());
 		res.setVoucherId(invoice.getVoucher().getId());
 		return res;
-		
+
 	}
-	
-	
-	
+
 	public PojoInvoiceRes getByCode(String code) {
 		final PojoInvoiceRes res = new PojoInvoiceRes();
-		final Invoice invoice = invoiceDao.getByInvoiceCode(code);
+		final Invoice invoice = invoiceDao.getByInvoiceCode(code).get();
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());
-			res.setEndDate(invoice.getActivity().getEndDate());
+		res.setEndDate(invoice.getActivity().getEndDate());
 		res.setInvoiceCode(invoice.getInvoiceCode());
 		res.setInvoiceId(invoice.getId());
 		res.setPrice(invoice.getActivity().getPrice());
@@ -167,10 +171,10 @@ public class InvoiceService {
 		res.setIsActive(invoice.getIsActive());
 		return res;
 	}
-	
+
 	public PojoInvoiceMembershipRes getMembershipInvoiceByCode(String code) {
 		final PojoInvoiceMembershipRes res = new PojoInvoiceMembershipRes();
-		final Invoice invoice = invoiceDao.getByInvoiceCode(code);
+		final Invoice invoice = invoiceDao.getByInvoiceCode(code).get();
 		res.setInvoiceId(invoice.getId());
 		res.setMembershipCode(invoice.getMemberStatus().getCodeStatus());
 		res.setMembershipId(invoice.getMemberStatus().getId());
@@ -181,8 +185,5 @@ public class InvoiceService {
 		res.setIsActive(invoice.getIsActive());
 		return res;
 	}
-	
-	
-	
-	
+
 }

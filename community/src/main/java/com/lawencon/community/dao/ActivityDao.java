@@ -31,7 +31,7 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<Activity> getAll(int offset, int limit) {
 		final StringBuilder sqlQuery = new StringBuilder();
 		final List<Activity> listActivities = new ArrayList<>();
-
+		
 		sqlQuery.append(
 				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, at.id AS at_id, at.type_code, at.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
 		sqlQuery.append("FROM t_activity a ");
@@ -41,13 +41,13 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
 		sqlQuery.append("ORDER BY a.created_at DESC");
-
+		try {
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setFirstResult(offset).setMaxResults(limit)
 
 				.getResultList();
 
-		try {
+		
 			if (result != null) {
 				for (final Object objs : result) {
 
@@ -97,9 +97,8 @@ public class ActivityDao extends AbstractJpaDao {
 
 			}
 
-		} catch (final Exception e) {
-			e.printStackTrace();
-
+		} catch (Exception e) {
+			   throw new RuntimeException("Error occurred while getting all activities: " + e.getMessage());
 		}
 
 		return listActivities;
@@ -196,6 +195,7 @@ public class ActivityDao extends AbstractJpaDao {
 	@SuppressWarnings("unchecked")
 	public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, String userId, Integer offset,
 			Integer limit) {
+		
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT * ");
 		sqlQuery.append("FROM t_activity a ");
@@ -204,52 +204,35 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
+		
+		if(!userId.isEmpty()&&userId!=null) {
 		sqlQuery.append("AND a.user_id = :userId ");
+		}
 		sqlQuery.append("AND a.start_date ");
 		sqlQuery.append("BETWEEN :startDate AND :endDate ");
 		sqlQuery.append("ORDER BY a.created_at DESC ");
+		List<Activity> lisActivity = new ArrayList<>();
+	try {
 		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+		if(userId!=null&&!userId.isEmpty()) {
 		query.setParameter("userId", userId);
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-
+		}
 		if (limit != null) {
 			query.setMaxResults(limit);
 		}
 		if (offset != null) {
 			query.setFirstResult(offset);
 		}
-		List<Activity> lisActivity = query.getResultList();
+	lisActivity = query.getResultList();
+	}catch(Exception e){
+        throw new RuntimeException("Error retrieving activities by date range"+ e.getMessage());
+	}
+	
 		return lisActivity;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, Integer offset, Integer limit) {
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT * ");
-		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
-		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
-		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
-		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
-		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("AND a.start_date BETWEEN :startDate ");
-		sqlQuery.append("AND :endDate ");
-		sqlQuery.append("ORDER BY a.created_at DESC ");
-		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
-
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-
-		if (limit != null) {
-			query.setMaxResults(limit);
-		}
-		if (offset != null) {
-			query.setFirstResult(offset);
-		}
-		List<Activity> lisActivity = query.getResultList();
-		return lisActivity;
-	}
 
 	public Long getTotalParticipanByUserId(final String activityId, final String userId) {
 		final StringBuilder sqlQuery = new StringBuilder();
@@ -463,7 +446,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	public BigDecimal getTotalIncomeByUserId(String userId, Float percentIncome) {
 		BigDecimal total = BigDecimal.ZERO;
-
+		try {
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT SUM(p.subtotal * :percentValue) as total_income ");
@@ -480,6 +463,11 @@ public class ActivityDao extends AbstractJpaDao {
 			final Object[] obj = (Object[]) result;
 			total = BigDecimal.valueOf(Double.valueOf(obj[0].toString()));
 		} 
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		
 		return total;
 	}
 
@@ -490,6 +478,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 		final List<PojoUpcomingActivityByTypeResData> listUpcoming = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
+		try {
 		sqlQuery.append(
 				"SELECT i.id, a.start_date , tat.activity_name,a.title, COUNT(i.user_id) as total_participant ");
 		sqlQuery.append("FROM t_payment p ");
@@ -544,14 +533,22 @@ public class ActivityDao extends AbstractJpaDao {
 			listUpcoming.add(data);
 
 		}
+		
 		dataUpcoming.setData(listUpcoming);
 		dataUpcoming.setTotal(totalData);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return dataUpcoming;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
 			final int offset, final int limit) {
+		
 		StringBuilder sqlQuery = new StringBuilder();
+		List<Activity> listActivity = new ArrayList<>();
+		try {
 		sqlQuery.append(
 				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
 		sqlQuery.append(
@@ -590,11 +587,14 @@ public class ActivityDao extends AbstractJpaDao {
 		query.setMaxResults(limit);
 		query.setFirstResult((offset - 1) * limit);
 
-		@SuppressWarnings("unchecked")
-		List<Activity> listActivity = query.getResultList();
+		
+		listActivity = query.getResultList();
 
 		if (listActivity.isEmpty()) {
 			return null;
+		}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 
 		return listActivity;

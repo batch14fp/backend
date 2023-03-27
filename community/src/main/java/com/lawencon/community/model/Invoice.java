@@ -20,9 +20,6 @@ uniqueConstraints = {
         ),
         @UniqueConstraint(name = "user_activity_ck", 
         columnNames = {"user_id", "activity_id" }
-        ),
-        @UniqueConstraint(name = "user_membership_ck", 
-        columnNames = {"user_id", "membership_id" }
         )
         })
 public class Invoice  extends BaseEntity{
