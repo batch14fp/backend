@@ -363,6 +363,7 @@ public class ActivityService {
 		activity.setStartDate(data.getStartDate());
 		activity.setEndDate(data.getEndDate());
 		activity.setPrice(data.getPrice());
+		activity.setActivityLocation(data.getActivityLocation());
 		activity.setProviders(data.getProvider());
 		activity.setTypeCode(data.getTypeActivity().getTypeCode());
 		activity.setTypeName(data.getTypeActivity().getActivityName());
@@ -431,6 +432,7 @@ public class ActivityService {
 			pojo.setActivityId(activity.getId());
 			pojo.setTitle(activity.getTitle());
 			pojo.setContent(activity.getDescription());
+			pojo.setActivityLocation(activity.getActivityLocation());
 			pojo.setCategoryCode(activity.getCategory().getCategoryCode());
 			pojo.setCategoryName(activity.getCategory().getCategoryName());
 			pojo.setTypeCode(activity.getTypeActivity().getTypeCode());

@@ -74,14 +74,14 @@ public class PaymentService {
 					walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
 					walletRefSystem.setVersion(walletRefSystem.getVersion());
 					walletDao.save(walletRefSystem);
-					
 					final Subscription subs = subscriptionDao.getByProfileId(payment.getInvoice().getUser().getProfile().getId()).get();
+					final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
 					subs.setMemberStatus(payment.getInvoice().getMemberStatus());
 					subs.setProfile(payment.getInvoice().getUser().getProfile());
 					subs.setStartDate(LocalDateTime.now());
 					Long day = (long) payment.getInvoice().getMemberStatus().getPeriodDay();
 					subs.setEndDate(LocalDateTime.now().plusDays(day));
-					subscriptionDao.save(subs);
+					subscriptionDao.save(subsRef);
 					res.setMessage("Update Membership Success");
 				}
 				else {
