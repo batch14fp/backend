@@ -39,17 +39,20 @@ public class ProfileService {
 	private IndustryDao industryDao;
 	private PositionDao positionDao;
 	private FileDao fileDao;
+	private SocialMediaDao socialMediaDao;
 	
 	@Autowired
 	private PrincipalService principalService;
 
-	public ProfileService(final SubscriptionDao subscriptionDao,  FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final SocialMediaDao socialMediaDao, final ProfileSocialMediaDao profileSocialMediaDao,
-			final ProfileDao profileDao, final UserDao userDao) {
+
+	public ProfileService(final SocialMediaDao socialMediaDao,final FileDao fileDao, final PositionDao positionDao, final IndustryDao industryDao, final ProfileSocialMediaDao profileSocialMediaDao,
+			final ProfileDao profileDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
 		this.profileDao = profileDao;
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileSocialMediaDao = profileSocialMediaDao;
 		this.subscriptionDao = subscriptionDao;
+		this.socialMediaDao = socialMediaDao;
 		this.industryDao =  industryDao;
 		this.positionDao = positionDao;
 		
@@ -64,6 +67,7 @@ public class ProfileService {
 		resGetProfile.setProfileId(profile.getId());
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
+
 		resGetProfile.setCompany(profile.getCompanyName());
 		final Subscription subs = subscriptionDao.getByProfileId(profile.getId()).get();
 		final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
@@ -78,11 +82,12 @@ public class ProfileService {
 		if(profile.getImageProfile()!=null) {
 		resGetProfile.setImageId(profile.getImageProfile().getId());
 		resGetProfile.setImageVer(profile.getImageProfile().getVersion());
+
 		}
 		resGetProfile.setUserBalance(user.getWallet().getBalance());
-		resGetProfile.setCity(profile.getCity());
+		resGetProfile.setCity(user.getProfile().getCity());
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
-		
+
 		
 		profileSocialMediaDao.getSocialMediaByProfileId(profile.getId()).forEach(data -> {
 			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
@@ -97,9 +102,9 @@ public class ProfileService {
 
 
 		resGetProfile.setSocialMediaList(socialMediaList);
-		resGetProfile.setPostalCode(profile.getPostalCode());
-		resGetProfile.setPhoneNumber(profile.getPhoneNumber());
-		resGetProfile.setDob(profile.getDob());
+		resGetProfile.setPostalCode(user.getProfile().getPostalCode());
+		resGetProfile.setPhoneNumber(user.getProfile().getPhoneNumber());
+		resGetProfile.setDob(user.getProfile().getDob());
 		return resGetProfile;
 	}
 

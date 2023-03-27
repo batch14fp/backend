@@ -6,6 +6,8 @@ public class PojoPasswordReqUpdate {
 	private String newPassword;
 	private String confirmNewPassword;
 	private Integer ver;
+	
+	
 	public String getNewPassword() {
 		return newPassword;
 	}
