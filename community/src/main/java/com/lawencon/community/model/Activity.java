@@ -58,6 +58,7 @@ public class Activity extends BaseEntity{
 	
 	private String description;
 	
+
 	
 	public ActivityType getTypeActivity() {
 		return typeActivity;
@@ -95,6 +96,8 @@ public class Activity extends BaseEntity{
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
 	}
+	
+	
 
 	public LocalDateTime getStartDate() {
 		return startDate;

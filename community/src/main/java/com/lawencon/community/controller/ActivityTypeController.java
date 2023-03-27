@@ -20,7 +20,6 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqInsert;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqUpdate;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
-import com.lawencon.community.pojo.article.PojoArticleRes;
 import com.lawencon.community.service.ActivityTypeService;
 
 @RestController

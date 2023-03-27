@@ -2,7 +2,6 @@ package com.lawencon.community.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,17 +22,15 @@ import com.lawencon.community.pojo.article.PojoArticleReqUpdate;
 import com.lawencon.community.pojo.article.PojoArticleRes;
 import com.lawencon.community.pojo.article.PojoArticleResData;
 import com.lawencon.community.service.ArticleService;
-import com.lawencon.community.service.PaginationService;
 
 @RestController
 @RequestMapping("articles")
 public class ArticleController {
 	private ArticleService articleService;
-	private PaginationService paginationService;
 	
-	public ArticleController(final ArticleService articleService, final  PaginationService paginationService) {
+	public ArticleController(final ArticleService articleService) {
 		this.articleService = articleService;
-		this.paginationService = paginationService;
+	
 	}
 	
 	@GetMapping
@@ -43,20 +40,28 @@ public class ArticleController {
 	        return new ResponseEntity<>(dataList, HttpStatus.OK);
 	    }
 	
-	
-	
+	@GetMapping("/all")
+	public ResponseEntity<PojoArticleRes> getAllArticle(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) {
+	        final PojoArticleRes dataList = articleService.getAllArticle(page, size);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
+	    }
+
 	@GetMapping("/most-viewer")
 	public ResponseEntity<List<PojoArticleResData>> getAllByMostViewer(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) {
-		
+
 	        final List<PojoArticleResData> dataList = articleService.getAllByMostViewer(page, size);
-	        int totalCount = articleService.getTotalCount();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        return new ResponseEntity<>(dataList,HttpStatus.OK);
 	    }
+
+	@GetMapping("member/all")
+	public ResponseEntity<List<PojoArticleResData>> getAll(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) {
+	        final List<PojoArticleResData> dataList = articleService.getAllForMember(page, size);
+	        return new ResponseEntity<>(dataList,HttpStatus.OK);
+	    }
+	
 	
 	
 	@GetMapping("admin/{id}")
