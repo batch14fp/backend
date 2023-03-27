@@ -262,10 +262,40 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("ON p.invoice_id = i.id ");
 		sqlQuery.append("WHERE a.id = :activityId ");
 		sqlQuery.append("AND a.user_id = :userId ");
-		sqlQuery.append("AND is_paid = TRUE ");
+		sqlQuery.append("AND p.is_paid = TRUE ");
 
 		count = Long.valueOf(ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setParameter("userId", userId).setParameter("activityId", activityId).getSingleResult().toString());
+
+		return count;
+
+	}
+	
+	
+
+	public Long getTotalParticipanByUserIdByType(final String typeCode, final String userId) {
+		final StringBuilder sqlQuery = new StringBuilder();
+		Long count = null;
+		sqlQuery.append("SELECT COUNT(i.id) FROM t_invoice i ");
+		sqlQuery.append("INNER JOIN t_payment p ");
+		sqlQuery.append("ON p.invoice_id = i.id ");
+		sqlQuery.append("INNER JOIN t_activity a ");
+		sqlQuery.append("ON a.id  = i.activity_id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ");
+		sqlQuery.append("ON tat.id = a.type_activity_id ");
+		sqlQuery.append("WHERE p.is_paid = TRUE  ");
+		if(typeCode!=null) {
+			sqlQuery.append("AND tat.type_code = :typeCode ");
+		}
+		sqlQuery.append("AND a.user_id = :userId ");
+		
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setParameter("userId", userId);
+		if(typeCode!=null ) {
+			query.setParameter("typeCode", typeCode);
+		}
+		
+		count = Long.valueOf(query.getSingleResult().toString());
 
 		return count;
 
@@ -419,6 +449,7 @@ public class ActivityDao extends AbstractJpaDao {
 			final PojoResportIncomesAdminRes data = new PojoResportIncomesAdminRes();
 			data.setMemberName(obj[0].toString());
 			data.setType(obj[1].toString());
+
 			if (obj[2] != null) {
 				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
 			} else {
@@ -430,6 +461,27 @@ public class ActivityDao extends AbstractJpaDao {
 		return resultList;
 	}
 
+	public BigDecimal getTotalIncomeByUserId(String userId, Float percentIncome) {
+		BigDecimal total = BigDecimal.ZERO;
+
+		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		sqlQuery.append("WHERE i.user_id = :userId ");
+		sqlQuery.append("AND p.is_paid = TRUE ");
+		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setParameter("userId", userId).setParameter("percentValue", percentValue).getSingleResult();
+	
+		if (result != null) {
+			final Object[] obj = (Object[]) result;
+			total = BigDecimal.valueOf(Double.valueOf(obj[0].toString()));
+		} 
+		return total;
+	}
 
 	@SuppressWarnings("unchecked")
 	public PojoUpcomingActivityByTypeRes getAllUpcomingActivity(final int offset, final int limit,
@@ -445,13 +497,12 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND a.start_date <= (CURRENT_DATE + INTERVAL '1 DAY' ) ");
-		sqlQuery.append("AND a.start_date >= CURRENT_DATE ");
+		sqlQuery.append("AND a.start_date <= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
 		sqlQuery.append("GROUP BY i.id, tat.activity_name,a.title, a.start_date ");
-		sqlQuery.append("ORDER BY  a.start_date ");
+		sqlQuery.append("ORDER BY  a.start_date DESC ");
 		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 
 		if (offset >= 0) {
@@ -472,8 +523,7 @@ public class ActivityDao extends AbstractJpaDao {
 		countQueryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		countQueryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		countQueryBuilder.append("WHERE p.is_paid = TRUE ");
-		countQueryBuilder.append("AND a.start_date <= (CURRENT_DATE + INTERVAL '1 DAY' ) ");
-		countQueryBuilder.append("AND a.start_date >= CURRENT_DATE ");
+		countQueryBuilder.append("AND a.start_date <= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			countQueryBuilder.append("AND tat.type_code = :typeCode ");
 		}
@@ -498,6 +548,7 @@ public class ActivityDao extends AbstractJpaDao {
 		dataUpcoming.setTotal(totalData);
 		return dataUpcoming;
 	}
+
 	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
 			final int offset, final int limit) {
 		StringBuilder sqlQuery = new StringBuilder();
@@ -548,6 +599,5 @@ public class ActivityDao extends AbstractJpaDao {
 
 		return listActivity;
 	}
-
 
 }

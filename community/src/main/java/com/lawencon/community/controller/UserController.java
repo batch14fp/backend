@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.community.constant.RoleEnum;
 import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
@@ -66,12 +67,7 @@ public class UserController {
 		PojoInsertRes res = userService.userRegistration(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}	
-	
-	@PostMapping("admin/add")
-	public ResponseEntity<PojoInsertRes>insertUserAdmin(@RequestBody PojoSignUpReqInsert data){
-		PojoInsertRes res = userService.insertUser(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
-	}
+
 	
 	@PostMapping("sign-up/verify-code")
 	public ResponseEntity<PojoVerificationRes>checkVerified(@RequestBody PojoResGetVerificationCode data){
@@ -114,9 +110,13 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		
+		if(userOptional.get().getRole().getRoleCode().equalsIgnoreCase(RoleEnum.MEMBER.getRoleCode())) {
 		final Subscription subs = subscriptionDao.getByProfileId(userOptional.get().getProfile().getId()).get();
 		final Subscription subsRef = subscriptionDao.getByIdRef(Subscription.class, subs.getId());
 		loginRes.setMemberCode(subsRef.getMemberStatus().getCodeStatus());
+		}
+		
 		if(userOptional.get().getProfile().getImageProfile()!=null) {
 		loginRes.setImageId(userOptional.get().getProfile().getImageProfile().getId());
 		}

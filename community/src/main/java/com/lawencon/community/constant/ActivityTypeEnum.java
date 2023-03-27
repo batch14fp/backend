@@ -1,7 +1,7 @@
 package com.lawencon.community.constant;
 
 public enum ActivityTypeEnum {
-	MEMBERSHIP("MBR", "MEMBERSHIP");
+	EVENT("EVN", "Event"), COURSE("COU", "Course");
 	private String code;
 	private String name;
 	

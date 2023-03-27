@@ -127,4 +127,10 @@ public class PostController {
 
 	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
+	
+	@DeleteMapping("/unvote/{id}")
+	public ResponseEntity<PojoRes> deletePollingRespon(@PathVariable ("id")String id) throws Exception{
+		PojoRes resDelete = postService.deletePostResponById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
+	}
 }

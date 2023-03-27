@@ -30,6 +30,7 @@ import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaymentService;
@@ -198,5 +199,12 @@ public class ActivityController {
 		PojoRes resGet = paymentService.updateByUser(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/total")
+	public ResponseEntity<PojoReportCountMemberRes> getDataActivity(){
+		final PojoReportCountMemberRes res = activityService.getTotalData();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
 
 }

@@ -25,10 +25,12 @@ import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
+import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.BankPaymentService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.community.service.SalesSettingService;
+import com.lawencon.community.service.UserService;
 
 @RestController
 @RequestMapping("admin")
@@ -37,13 +39,15 @@ public class AdminController {
 	private SalesSettingService salesSettingService;
 	private BankPaymentService bankPaymentService;
 	private ActivityService activityService;
+	private UserService userService;
 	
 	
-	public AdminController(final ActivityService activityService, final BankPaymentService bankPaymentService, final  PaymentService paymentService, final SalesSettingService salesSettingService) {
+	public AdminController(final UserService userService, final ActivityService activityService, final BankPaymentService bankPaymentService, final  PaymentService paymentService, final SalesSettingService salesSettingService) {
 		this.paymentService = paymentService;
 		this.salesSettingService = salesSettingService;
 		this.bankPaymentService = bankPaymentService;
 		this.activityService = activityService ;
+		this.userService = userService;
 		
 	}
 	
@@ -53,9 +57,12 @@ public class AdminController {
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
-	
-	
-	
+
+	@PostMapping("/user")
+	public ResponseEntity<PojoInsertRes>insertUserAdmin(@RequestBody PojoSignUpReqInsert data){
+		PojoInsertRes res = userService.insertUser(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
 	
 	@GetMapping("/sales-setting")
 	public ResponseEntity<PojoSalesSettingRes> getSalesSetting(){
