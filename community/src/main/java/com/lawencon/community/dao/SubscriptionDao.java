@@ -42,7 +42,7 @@ public class SubscriptionDao extends AbstractJpaDao {
 				final MemberStatus memberStatus = new MemberStatus();
 				memberStatus.setId(obj[7].toString());
 				memberStatus.setStatusName(obj[8].toString());
-				memberStatus.setPeriodDay(Integer.parseInt(obj[9].toString()));
+				memberStatus.setPeriodDay(Integer.valueOf(obj[9].toString()));
 				memberStatus.setCodeStatus(obj[10].toString());
 				subscription.setMemberStatus(memberStatus);
 			}

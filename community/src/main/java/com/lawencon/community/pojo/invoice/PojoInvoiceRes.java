@@ -17,9 +17,6 @@ public class PojoInvoiceRes {
 	private Boolean isActive;
 	private Integer ver;
 
-	
-	
-	
 	public String getMembershipId() {
 		return membershipId;
 	}

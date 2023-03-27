@@ -132,7 +132,7 @@ public class PostService {
 				options.add(option);
 			}
 		    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-		    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+		    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
 	        Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
 	        for (String optionId : optionCounts.keySet()) {
 	            Map<String, Integer> optionCount = optionCounts.get(optionId);
@@ -501,7 +501,7 @@ public class PostService {
 					options.add(option);
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
 			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
 		        for (String optionId : optionCounts.keySet()) {
 		            Map<String, Integer> optionCount = optionCounts.get(optionId);
@@ -605,7 +605,7 @@ public class PostService {
 					options.add(option);
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
 			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
 		        for (String optionId : optionCounts.keySet()) {
 		            Map<String, Integer> optionCount = optionCounts.get(optionId);
@@ -686,7 +686,7 @@ public class PostService {
 					options.add(option);
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
 			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
 		        for (String optionId : optionCounts.keySet()) {
 		            Map<String, Integer> optionCount = optionCounts.get(optionId);

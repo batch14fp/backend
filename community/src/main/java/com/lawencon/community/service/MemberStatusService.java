@@ -12,7 +12,6 @@ import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.MemberStatus;
-import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;

@@ -115,7 +115,7 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	public Integer countOptionByPollingId(String id) throws Exception {
 	    try {
 	        final StringBuilder sqlQuery = new StringBuilder();
-	        sqlQuery.append("SELECT COUNT(*) FROM t_polling_option po ");
+	        sqlQuery.append("SELECT COUNT(po.id) FROM t_polling_option po ");
 	        sqlQuery.append("INNER JOIN t_polling p ");
 	        sqlQuery.append("ON p.id= po.polling_id ");
 	        sqlQuery.append("WHERE p.id = :id");
