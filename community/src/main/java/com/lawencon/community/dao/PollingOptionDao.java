@@ -63,15 +63,14 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	    Map<String, Integer> pollingOptionUserCounts = new HashMap<>();
 	    try {
 	        final StringBuilder sqlQuery = new StringBuilder();
-	        sqlQuery.append("SELECT po.id, COUNT(*) as user_count ");
+	        sqlQuery.append("SELECT po.id, COUNT(ps.id) as user_count ");
 	        sqlQuery.append("FROM t_polling_option po ");
-	        sqlQuery.append("INNER JOIN t_polling_respon ps ");
+	        sqlQuery.append("LEFT JOIN t_polling_respon ps ");
 	        sqlQuery.append("ON po.id = ps.polling_option_id ");
 	        sqlQuery.append("WHERE po.polling_id = :pollingId ");
 	        sqlQuery.append("GROUP BY po.id");
 	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	                .setParameter("pollingId", pollingId).getResultList();
-
 	        if (result != null) {
 	            for (Object objs : result) {
 	                final Object[] obj = (Object[]) objs;
@@ -86,6 +85,7 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	    }
 	    return pollingOptionUserCounts;
 	}
+
 
 	public int countTotalPollingUsers(String pollingId) throws Exception {
 	    int totalPollingUsers = 0;
