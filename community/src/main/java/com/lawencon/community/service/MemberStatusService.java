@@ -33,6 +33,7 @@ public class MemberStatusService {
 			memberStatus.setCodeStatus(data.getCodeStatus());
 			memberStatus.setPeriodDay(data.getPeriodDay());
 			memberStatus.setStatusName(data.getStatusName());
+			memberStatus.setPrice(data.getPrice());
 			memberStatus.setIsActive(data.getIsActive());
 			memberStatus.setVer(data.getVersion());
 			res.add(memberStatus);
@@ -42,14 +43,14 @@ public class MemberStatusService {
 		return res;
 	}
 
-	
-	
+
 	public PojoInsertRes save(PojoMemberStatusReqInsert data) {
 		ConnHandler.begin();
 		final MemberStatus memberStatus = new MemberStatus();
 		memberStatus.setCodeStatus(data.getCodeStatus());
 		memberStatus.setStatusName(data.getStatusName());
 		memberStatus.setPeriodDay(data.getPeriodDay());
+		memberStatus.setPrice(data.getPrice());
 		memberStatus.setIsActive(true);
 		final MemberStatus memberStatusNew = memberStatusDao.save(memberStatus);
 		ConnHandler.commit();

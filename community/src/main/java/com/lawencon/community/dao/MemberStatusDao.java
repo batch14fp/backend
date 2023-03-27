@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class MemberStatusDao extends AbstractJpaDao{
 		final List<MemberStatus> listMemberStatus = new ArrayList<>();
 		
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT id, status_name, code_status, period_day, ver, is_active FROM t_member_status ");
+		sqlQuery.append("SELECT id, status_name, code_status, period_day, price, ver, is_active FROM t_member_status ");
 		sqlQuery.append("WHERE is_active = TRUE ");
 		
 		final List <Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
@@ -33,8 +34,9 @@ public class MemberStatusDao extends AbstractJpaDao{
 			memberStatus.setStatusName(obj[1].toString());
 			memberStatus.setCodeStatus(obj[2].toString());
 			memberStatus.setPeriodDay(Integer.valueOf(obj[3].toString()));
-			memberStatus.setVersion(Integer.valueOf(obj[4].toString()));
-			memberStatus.setIsActive(Boolean.valueOf(obj[5].toString()));
+			memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[4].toString())));
+			memberStatus.setVersion(Integer.valueOf(obj[5].toString()));
+			memberStatus.setIsActive(Boolean.valueOf(obj[6].toString()));
 			listMemberStatus.add(memberStatus);
 		}
 		}
@@ -46,7 +48,7 @@ public class MemberStatusDao extends AbstractJpaDao{
 	public MemberStatus getByCode(final String statusCode) {
 		final MemberStatus memberStatus = new MemberStatus();
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT id, status_name, code_status, period_day, ver, is_active FROM t_member_status ");
+		sqlQuery.append("SELECT id, status_name, code_status, period_day,price, ver, is_active FROM t_member_status ");
 		sqlQuery.append("WHERE code_status = :statusCode ");
 		sqlQuery.append("AND is_active = TRUE ");
 		
@@ -58,8 +60,9 @@ public class MemberStatusDao extends AbstractJpaDao{
 			memberStatus.setCodeStatus(obj[1].toString());
 			memberStatus.setStatusName(obj[2].toString());
 			memberStatus.setPeriodDay(Integer.valueOf(obj[3].toString()));
-			memberStatus.setVersion(Integer.valueOf(obj[4].toString()));
-			memberStatus.setIsActive(Boolean.valueOf(obj[5].toString()));
+			memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[4].toString())));
+			memberStatus.setVersion(Integer.valueOf(obj[5].toString()));
+			memberStatus.setIsActive(Boolean.valueOf(obj[6].toString()));
 		}
 		
 		

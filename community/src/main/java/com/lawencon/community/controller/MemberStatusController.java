@@ -16,17 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.invoice.PojoInvoiceRes;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqInsert;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusReqUpdate;
 import com.lawencon.community.pojo.memberstatus.PojoMemberStatusRes;
+import com.lawencon.community.pojo.payment.PojoMembershipPaymentReqInsert;
+import com.lawencon.community.service.InvoiceService;
 import com.lawencon.community.service.MemberStatusService;
 
 @RestController
 @RequestMapping("members/status")
 public class MemberStatusController {
 	private MemberStatusService memberStatusService;
-	public MemberStatusController(final MemberStatusService memberStatusService) {
+	private InvoiceService invoiceService;
+	
+	public MemberStatusController(final InvoiceService invoiceService, final MemberStatusService memberStatusService) {
 		this.memberStatusService = memberStatusService;
+		this.invoiceService = invoiceService;
 	}
 	
 	
@@ -54,5 +60,23 @@ public class MemberStatusController {
 		PojoRes resDelete = memberStatusService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
+	
+	
+	@PostMapping("/subscription")
+	public ResponseEntity<PojoInvoiceRes> subscribtionMembership(@RequestBody PojoMembershipPaymentReqInsert data){
+		PojoInvoiceRes resGet = invoiceService.membershipSave(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

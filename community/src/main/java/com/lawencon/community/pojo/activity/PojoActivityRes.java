@@ -7,7 +7,7 @@ public class PojoActivityRes {
 	private String activityId;
 	private String userId;
 	private String fullname;
-	private String timeAgo;
+	private LocalDateTime createdAt;
 	private String title;
 	private String content;
 	private String providers;
@@ -20,6 +20,7 @@ public class PojoActivityRes {
 	private String categoryName;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
+	private Integer ver;
 
 	private Boolean isActive;
 	public String getUserId() {
@@ -34,11 +35,12 @@ public class PojoActivityRes {
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
-	public String getTimeAgo() {
-		return timeAgo;
+	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
-	public void setTimeAgo(String timeAgo) {
-		this.timeAgo = timeAgo;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 	public String getTitle() {
 		return title;
@@ -124,6 +126,12 @@ public class PojoActivityRes {
 	}
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 	

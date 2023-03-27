@@ -7,15 +7,8 @@ public class PojoSalesSettingReqUpdate {
 	private float systemIncome;
 	private float memberIncome;
 	private float tax;
-	private Boolean isActive;
 	private Integer ver;
-	
-	public Boolean getIsActive() {
-		return isActive;
-	}
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
+
 	public Integer getVer() {
 		return ver;
 	}

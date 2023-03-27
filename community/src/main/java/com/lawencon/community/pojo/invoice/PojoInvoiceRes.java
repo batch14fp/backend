@@ -7,15 +7,25 @@ public class PojoInvoiceRes {
 	private String invoiceId;
 	private String activityId;
 	private String voucherId;
+	private String membershipId;
 	private String voucherCode;
 	private String invoiceCode;
 	private String activityTitle;
 	private BigDecimal price;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	
+	private Boolean isActive;
+	private Integer ver;
 
 	
+	
+	
+	public String getMembershipId() {
+		return membershipId;
+	}
+	public void setMembershipId(String membershipId) {
+		this.membershipId = membershipId;
+	}
 	public String getActivityTitle() {
 		return activityTitle;
 	}
@@ -71,6 +81,18 @@ public class PojoInvoiceRes {
 	}
 	public void setVoucherCode(String voucherCode) {
 		this.voucherCode = voucherCode;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	

@@ -27,10 +27,11 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
+import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.service.ActivityService;
-import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.util.JasperUtil;
 
@@ -41,53 +42,28 @@ public class ActivityController {
 	private JasperUtil jasperUtil;
 
 	private ActivityService activityService;
-	private PaginationService paginationService;
 	private PaymentService paymentService;
 
-	public ActivityController(final PaginationService paginationService, final PaymentService paymentService,
+	public ActivityController( final PaymentService paymentService,
 			final ActivityService activityService) {
 		this.activityService = activityService;
-		this.paginationService = paginationService;
 		this.paymentService = paymentService;
 	}
 
 	@GetMapping
 	public ResponseEntity<List<PojoActivityRes>> getData(@RequestParam("page") int page,
 			@RequestParam("size") int size) {
-		int offset = (page - 1) * size;
-		final List<PojoActivityRes> dataList = activityService.getAll(offset, size);
-		int totalCount = activityService.getTotalCount();
-		int pageCount = paginationService.getPageCount(totalCount, size);
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-Total-Count", String.valueOf(totalCount));
-		headers.add("X-Total-Pages", String.valueOf(pageCount));
-		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+		final List<PojoActivityRes> dataList = activityService.getAll(page, size);
+		return new ResponseEntity<>(dataList, HttpStatus.OK);
 	}
 
-	@GetMapping("/lowest")
-	public ResponseEntity<List<PojoActivityRes>> getDataByLowestPrice(@RequestParam("page") int page,
-			@RequestParam("size") int size) {
-		int offset = (page - 1) * size;
-		final List<PojoActivityRes> dataList = activityService.getAllByLowestPrice(offset, size);
-		int totalCount = activityService.getTotalCount();
-		int pageCount = paginationService.getPageCount(totalCount, size);
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-Total-Count", String.valueOf(totalCount));
-		headers.add("X-Total-Pages", String.valueOf(pageCount));
-		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
-	}
-
-	@GetMapping("/highest")
-	public ResponseEntity<List<PojoActivityRes>> getDataByHighestPrice(@RequestParam("page") int page,
-			@RequestParam("size") int size) {
-		int offset = (page - 1) * size;
-		final List<PojoActivityRes> dataList = activityService.getAllByHighestPrice(offset, size);
-		int totalCount = activityService.getTotalCount();
-		int pageCount = paginationService.getPageCount(totalCount, size);
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-Total-Count", String.valueOf(totalCount));
-		headers.add("X-Total-Pages", String.valueOf(pageCount));
-		return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	@GetMapping("/sort")
+	public ResponseEntity<List<PojoActivityRes>> getDataActivity(@RequestParam("page") int page,
+			@RequestParam("size") int size,
+		    @RequestParam(required = false) String sortType,  
+		    @RequestParam(defaultValue = "") String title)  {
+		final List<PojoActivityRes> dataList = activityService.getAllBySort(page, size,sortType, title);
+		return new ResponseEntity<>(dataList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -115,10 +91,12 @@ public class ActivityController {
 	}
 
 	@GetMapping("/filter")
-	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
-			@RequestParam(required = false) String categoryCode, @RequestParam(required = false) String typeCode) {
+	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(@RequestParam("page") int page,
+			@RequestParam("size") int size,
+			@RequestParam(value="categoryCode", required = false) String categoryCode, @RequestParam(value="typeCode", required = false) String typeCode) {
 		try {
-			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode, typeCode);
+			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode,
+					typeCode,page,size);
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,6 +104,48 @@ public class ActivityController {
 		}
 	}
 
+	  @GetMapping("/listByCategoryAndType")
+	    public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
+	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
+	    		@RequestParam(value = "typeCode", required = false) String typeCode,
+	            @RequestParam(value = "page", defaultValue = "0") int page,
+	            @RequestParam(value = "size", defaultValue = "10") int size
+	    ) {
+	        try {
+	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size);
+	            if (activities == null) {
+	            
+	                return ResponseEntity.noContent().build();
+	            }
+	            return ResponseEntity.ok(activities);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	  
+	  
+	  @GetMapping("/upcoming")
+	    public ResponseEntity<PojoUpcomingActivityByTypeRes> getUpcomingActivity(
+	            @RequestParam(value = "typeCode", required = false) String typeCode,
+	            @RequestParam(value = "page", required = false) int page,
+	            @RequestParam(value = "size",required = false) int size
+	    ) {
+	        try {
+	        	PojoUpcomingActivityByTypeRes activities = activityService.getUpcomingEvent(page, size, typeCode);
+	            if (activities == null) {
+	                return ResponseEntity.noContent().build();
+	            }
+	            return ResponseEntity.ok(activities);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	  
+	  
+	  
+	  
 //	@GetMapping("/report")
 //	public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(@RequestParam String startDate,
 //			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
@@ -155,6 +175,23 @@ public class ActivityController {
 		headers.setContentLength(pdfBytes.length);
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
+	
+	
+
+	@GetMapping("/member/report/incomes")
+	public ResponseEntity<List<PojoReportIncomesMemberRes>> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) String typeCode) {
+		try {
+			List<PojoReportIncomesMemberRes> activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode);
+			return ResponseEntity.ok(activities);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	
+	
 
 	@PutMapping("/payment")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data) {

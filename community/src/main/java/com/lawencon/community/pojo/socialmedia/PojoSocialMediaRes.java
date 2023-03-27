@@ -44,6 +44,5 @@ public class PojoSocialMediaRes {
 	public void setProfileSocialMediaId(String profileSocialMediaId) {
 		this.profileSocialMediaId = profileSocialMediaId;
 	}
-	
-	
+
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Industry;
-import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
@@ -85,14 +84,12 @@ public class UserDao extends BaseMasterDao<User> {
 	public List<User> getUserByRoleCode(final String roleCode) {
 		final List<User> userList = new ArrayList<>();
 		final StringBuilder sqlQuery = new StringBuilder();
-
 		sqlQuery.append(
-				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, ps.id as member_status_id, ps.code_status, ps.status_name, i.id as industry_id, i.industry_name, p.position_id ");
+				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, i.id as industry_id, i.industry_name, p.position_id, u.ver, u.is_active ");
 		sqlQuery.append("FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("INNER JOIN t_position po ON po.id = p.position_id ");
-		sqlQuery.append("INNER JOIN t_member_status ps ON ps.id = p.member_status_id ");
 		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id ");
 		sqlQuery.append("WHERE r.role_code = :roleCode AND u.is_active = TRUE");
 
@@ -126,25 +123,20 @@ public class UserDao extends BaseMasterDao<User> {
 			profile.setCity(obj[12].toString());
 			profile.setProvince(obj[13].toString());
 			profile.setPostalCode(obj[14].toString());
-
-			final MemberStatus memberStatus = new MemberStatus();
-			memberStatus.setId(obj[15].toString());
-			memberStatus.setCodeStatus(obj[16].toString());
-			memberStatus.setStatusName(obj[17].toString());
-
+			
 			final Industry industry = new Industry();
-			industry.setId(obj[18].toString());
-			industry.setIndustryName(obj[19].toString());
-
-			profile.setMemberStatus(memberStatus);
-
+			industry.setId(obj[15].toString());
+			industry.setIndustryName(obj[16].toString());
+			
 			final Position position = new Position();
-			position.setId(obj[20].toString());
+			position.setId(obj[17].toString());
 			profile.setPosition(position);
 			profile.setIndustry(industry);
 
 			user.setRole(role);
 			user.setProfile(profile);
+			user.setVersion(Integer.valueOf(obj[18].toString()));
+			user.setIsActive(Boolean.valueOf(obj[19].toString()));
 
 			userList.add(user);
 		}
@@ -159,12 +151,11 @@ public class UserDao extends BaseMasterDao<User> {
 		final StringBuilder sqlQuery = new StringBuilder();
 
 		sqlQuery.append(
-				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, ps.id as member_status_id, ps.code_status, ps.status_name, i.id as industry_id, i.industry_name, p.position_id, u.ver, u.is_active ");
+				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, i.id as industry_id, i.industry_name, p.position_id, u.ver, u.is_active ");
 		sqlQuery.append("FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("INNER JOIN t_position po ON po.id = p.position_id ");
-		sqlQuery.append("INNER JOIN t_member_status ps ON ps.id = p.member_status_id ");
 		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id ");
 		sqlQuery.append("WHERE u.is_active = TRUE");
 
@@ -210,26 +201,18 @@ public class UserDao extends BaseMasterDao<User> {
 			if(obj[14]!=null) {
 			profile.setPostalCode(obj[14].toString());
 			}
-			final MemberStatus memberStatus = new MemberStatus();
-			memberStatus.setId(obj[15].toString());
-			memberStatus.setCodeStatus(obj[16].toString());
-			memberStatus.setStatusName(obj[17].toString());
-
 			final Industry industry = new Industry();
-			industry.setId(obj[18].toString());
-			industry.setIndustryName(obj[19].toString());
-
-			profile.setMemberStatus(memberStatus);
+			industry.setId(obj[15].toString());
+			industry.setIndustryName(obj[16].toString());
 
 			final Position position = new Position();
-			position.setId(obj[20].toString());
+			position.setId(obj[17].toString());
 			profile.setPosition(position);
 			profile.setIndustry(industry);
-
 			user.setRole(role);
 			user.setProfile(profile);
-			user.setVersion(Integer.valueOf(obj[21].toString()));
-			user.setIsActive(Boolean.valueOf(obj[22].toString()));
+			user.setVersion(Integer.valueOf(obj[18].toString()));
+			user.setIsActive(Boolean.valueOf(obj[19].toString()));
 
 			userList.add(user);
 		}
@@ -252,12 +235,11 @@ public class UserDao extends BaseMasterDao<User> {
 		final StringBuilder sqlQuery = new StringBuilder();
 		final User user = new User();
 		sqlQuery.append(
-				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, ps.id as member_status_id, ps.code_status, ps.status_name, i.id as industry_id, i.industry_name, p.position_id ");
+				"SELECT u.id as user_id, u.email, u.wallet_id, r.id as role_id, r.role_code, r.role_name, p.id as profile_id, p.fullname, p.company_name, p.dob, p.phone_number, p.country, p.city, p.province, p.postal_code, i.id as industry_id, i.industry_name, p.position_id, u.ver, u.is_active ");
 		sqlQuery.append("FROM t_user u ");
 		sqlQuery.append("INNER JOIN t_role r ON r.id = u.role_id ");
 		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
 		sqlQuery.append("INNER JOIN t_position po ON po.id = p.position_id ");
-		sqlQuery.append("INNER JOIN t_member_status ps ON ps.id = p.member_status_id ");
 		sqlQuery.append("INNER JOIN t_industry i ON i.id = p.industry_id ");
 		sqlQuery.append("WHERE r.role_code = :roleCode AND u.is_active = TRUE");
 
@@ -290,24 +272,21 @@ public class UserDao extends BaseMasterDao<User> {
 		profile.setProvince(obj[13].toString());
 		profile.setPostalCode(obj[14].toString());
 
-		final MemberStatus memberStatus = new MemberStatus();
-		memberStatus.setId(obj[15].toString());
-		memberStatus.setCodeStatus(obj[16].toString());
-		memberStatus.setStatusName(obj[17].toString());
-
+	
 		final Industry industry = new Industry();
-		industry.setId(obj[18].toString());
-		industry.setIndustryName(obj[19].toString());
-
-		profile.setMemberStatus(memberStatus);
+		industry.setId(obj[15].toString());
+		industry.setIndustryName(obj[16].toString());
 
 		final Position position = new Position();
-		position.setId(obj[20].toString());
+		position.setId(obj[17].toString());
 		profile.setPosition(position);
 		profile.setIndustry(industry);
+		
 
 		user.setRole(role);
 		user.setProfile(profile);
+		user.setVersion(Integer.valueOf(obj[18].toString()));
+		user.setIsActive(Boolean.valueOf(obj[19].toString()));
 
 
 		return user;

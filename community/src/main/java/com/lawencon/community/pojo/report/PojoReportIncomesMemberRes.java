@@ -1,16 +1,13 @@
 package com.lawencon.community.pojo.report;
 
+import java.math.BigDecimal;
+
 public class PojoReportIncomesMemberRes {
-	private Integer no;
+	
 	private String type;
 	private String title;
-	private String totalIncomes;
-	public Integer getNo() {
-		return no;
-	}
-	public void setNo(Integer no) {
-		this.no = no;
-	}
+	private BigDecimal totalIncomes;
+
 	public String getType() {
 		return type;
 	}
@@ -23,10 +20,10 @@ public class PojoReportIncomesMemberRes {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getTotalIncomes() {
+	public BigDecimal getTotalIncomes() {
 		return totalIncomes;
 	}
-	public void setTotalIncomes(String totalIncomes) {
+	public void setTotalIncomes(BigDecimal totalIncomes) {
 		this.totalIncomes = totalIncomes;
 	}
 	
