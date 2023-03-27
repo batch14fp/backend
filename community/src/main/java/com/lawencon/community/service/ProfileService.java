@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.IndustryDao;
+import com.lawencon.community.dao.MemberStatusDao;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.ProfileSocialMediaDao;
@@ -64,11 +65,12 @@ public class ProfileService {
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setCompany(profile.getCompanyName());
-		final Subscription subs = subscriptionDao.getById(profile.getId()).get();
-		resGetProfile.setStatusMemberId(subs.getMemberStatus().getId());
-		resGetProfile.setStatusMember(subs.getMemberStatus().getStatusName());
-		resGetProfile.setStartDateMember(subs.getStartDate());
-		resGetProfile.setEndDateMember(subs.getEndDate());
+		final Subscription subs = subscriptionDao.getByProfileId(profile.getId()).get();
+		final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
+		resGetProfile.setStatusMemberId(subsRef.getMemberStatus().getId());
+		resGetProfile.setStatusMember(subsRef.getMemberStatus().getStatusName());
+		resGetProfile.setStartDateMember(subsRef.getStartDate());
+		resGetProfile.setEndDateMember(subsRef.getEndDate());
 		resGetProfile.setIndustryId(profile.getIndustry().getId());
 		resGetProfile.setPositionId(profile.getPosition().getId());
 		resGetProfile.setProvince(profile.getProvince());
@@ -82,17 +84,9 @@ public class ProfileService {
 		final List<PojoSocialMediaRes> socialMediaList = new ArrayList<>();
 		
 		
-		profileSocialMediaDao.getEmptyByProfileId(profile.getId()).forEach(data->{
+		profileSocialMediaDao.getSocialMediaByProfileId(profile.getId()).forEach(data -> {
 			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
-			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
-			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
-			socialMedia.setIsActive(data.getIsActive());
-			socialMedia.setVer(0);
-			socialMediaList.add(socialMedia);
-		});
-	
-		profileSocialMediaDao.getByProfileId(profile.getId()).forEach(data -> {
-			final PojoSocialMediaRes socialMedia = new PojoSocialMediaRes();
+			socialMedia.setProfileSocialMediaId(data.getId());
 			socialMedia.setPlatformName(data.getSocialMedia().getPlatformName());
 			socialMedia.setSocialMediaId(data.getSocialMedia().getId());
 			socialMedia.setUrl(data.getUrl());
@@ -100,6 +94,7 @@ public class ProfileService {
 			socialMedia.setIsActive(data.getIsActive());
 			socialMediaList.add(socialMedia);
 		});
+
 
 		resGetProfile.setSocialMediaList(socialMediaList);
 		resGetProfile.setPostalCode(profile.getPostalCode());

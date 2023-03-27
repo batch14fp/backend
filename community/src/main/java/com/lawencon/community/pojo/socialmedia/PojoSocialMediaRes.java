@@ -1,6 +1,7 @@
 package com.lawencon.community.pojo.socialmedia;
 
 public class PojoSocialMediaRes {
+	private String profileSocialMediaId;
 	private String socialMediaId;
 	private String platformName;
 	private String url;
@@ -37,6 +38,14 @@ public class PojoSocialMediaRes {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
+	public String getProfileSocialMediaId() {
+		return profileSocialMediaId;
+	}
+	public void setProfileSocialMediaId(String profileSocialMediaId) {
+		this.profileSocialMediaId = profileSocialMediaId;
+	}
+	
+	
 	
 	
 }
