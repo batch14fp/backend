@@ -1,6 +1,7 @@
 package com.lawencon.community.dao;
 
-import java.time.LocalDateTime;
+
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -32,9 +33,9 @@ public class SubscriptionDao extends AbstractJpaDao {
 				Object[] obj = (Object[]) result;
 
 				subscription.setId(obj[0].toString());
-				subscription.setStartDate(LocalDateTime.parse(obj[1].toString()));
-				subscription.setEndDate(LocalDateTime.parse(obj[2].toString()));
-				subscription.setCreatedAt(LocalDateTime.parse(obj[3].toString()));
+				subscription.setStartDate(Timestamp.valueOf(obj[1].toString()).toLocalDateTime());
+				subscription.setEndDate(Timestamp.valueOf(obj[2].toString()).toLocalDateTime());
+				subscription.setCreatedAt(Timestamp.valueOf(obj[3].toString()).toLocalDateTime());
 				subscription.setCreatedBy(obj[4].toString());
 				subscription.setIsActive(Boolean.valueOf(obj[5].toString()));
 				subscription.setVersion(Integer.valueOf(obj[6].toString()));
