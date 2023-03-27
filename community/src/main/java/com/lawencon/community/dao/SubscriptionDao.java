@@ -39,6 +39,7 @@ public class SubscriptionDao extends AbstractJpaDao {
 				subscription.setCreatedBy(obj[4].toString());
 				subscription.setIsActive(Boolean.valueOf(obj[5].toString()));
 				subscription.setVersion(Integer.valueOf(obj[6].toString()));
+				
 				final MemberStatus memberStatus = new MemberStatus();
 				memberStatus.setId(obj[7].toString());
 				memberStatus.setStatusName(obj[8].toString());

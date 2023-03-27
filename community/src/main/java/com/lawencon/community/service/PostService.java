@@ -28,6 +28,7 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.FilePost;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.model.PollingRespon;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostBookmark;
@@ -69,7 +70,6 @@ public class PostService {
 	private PollingDao pollingDao;
 	private PollingOptionDao pollingOptionDao;
 	private PollingResponDao pollingResponDao;
-	private ProfileDao profileDao;	
 	private PositionDao positionDao;
 
 	@Autowired
@@ -91,7 +91,6 @@ public class PostService {
 		this.pollingDao = pollingDao;
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingResponDao = pollingResponDao;
-		this.profileDao = profileDao;
 		this.positionDao = positionDao;
 
 	}
@@ -809,6 +808,22 @@ public class PostService {
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
 		Boolean result = postCommentDao.deleteById(PostComment.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
+
+	}
+	
+	public PojoRes deletePostResponById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+		Boolean result = pollingResponDao.deleteById(PollingRespon.class, id);
 		ConnHandler.commit();
 		if (result) {
 			return pojoRes;

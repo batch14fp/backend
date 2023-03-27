@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.ActivityTypeEnum;
 import com.lawencon.community.dao.ActivityDao;
 import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.ActivityVoucherDao;
@@ -31,6 +32,7 @@ import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
 import com.lawencon.community.util.GenerateString;
@@ -468,9 +470,19 @@ public class ActivityService {
 	
 	
 	
-
 	
 	
+	
+	public PojoReportCountMemberRes getTotalData() {
+		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
+		PojoReportCountMemberRes res = new PojoReportCountMemberRes();
+		res.setTotalParticipantEvent(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.EVENT.getCode(), principalService.getAuthPrincipal()));
+		res.setTotalParticipantCourse(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.COURSE.getCode(), principalService.getAuthPrincipal()));
+		res.setTotalIncomes(activityDao.getTotalIncomeByUserId(principalService.getAuthPrincipal(), percentMember));
+		res.setTotalAllParticipant(activityDao.getTotalParticipanByUserIdByType(null, principalService.getAuthPrincipal()));
+		return res;
+		
+	}
 	
 	
 }
