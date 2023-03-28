@@ -21,8 +21,8 @@ import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeResData;
-import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
-import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
+import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
 
 @Repository
 public class ActivityDao extends AbstractJpaDao {
@@ -352,9 +352,9 @@ public class ActivityDao extends AbstractJpaDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PojoReportIncomesMemberRes> getActivityIncomeByUser(String userId, Float percentIncome,
+	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
 			LocalDate startDate, LocalDate endDate, String typeCode) {
-		final List<PojoReportIncomesMemberRes> resultList = new ArrayList<>();
+		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
@@ -384,7 +384,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<Object> result = query.getResultList();
 		for (Object objs : result) {
 			final Object[] obj = (Object[]) objs;
-			final PojoReportIncomesMemberRes data = new PojoReportIncomesMemberRes();
+			final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
 			data.setTitle(obj[0].toString());
 			data.setType(obj[1].toString());
 			if (obj[2] != null) {
@@ -399,9 +399,9 @@ public class ActivityDao extends AbstractJpaDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PojoResportIncomesAdminRes> getActivityIncome(Float percentIncome, LocalDate startDate,
+	public List<PojoReportIncomesAdminResData> getActivityIncome(Float percentIncome, LocalDate startDate,
 			LocalDate endDate, String typeCode) {
-		final List<PojoResportIncomesAdminRes> resultList = new ArrayList<>();
+		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT p.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
@@ -429,7 +429,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<Object> result = query.getResultList();
 		for (Object objs : result) {
 			final Object[] obj = (Object[]) objs;
-			final PojoResportIncomesAdminRes data = new PojoResportIncomesAdminRes();
+			final PojoReportIncomesAdminResData data = new PojoReportIncomesAdminResData();
 			data.setMemberName(obj[0].toString());
 			data.setType(obj[1].toString());
 
