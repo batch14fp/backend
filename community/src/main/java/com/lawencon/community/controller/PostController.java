@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentReqUpdate;
 import com.lawencon.community.pojo.post.PojoPostCommentRes;
 import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
 import com.lawencon.community.pojo.post.PojoPostReqInsert;
@@ -64,6 +65,11 @@ public class PostController {
 	@PostMapping("/comment")
 	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentReqInsert data){
 		PojoInsertRes resGet = postService.savePostComment(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	@PutMapping("/comment")
+	public ResponseEntity<PojoRes> updatePostComment(@RequestBody PojoPostCommentReqUpdate data){
+		PojoRes resGet = postService.updatePostComment(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
 	
