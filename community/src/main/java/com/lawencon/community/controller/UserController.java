@@ -110,6 +110,8 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		loginRes.setPosition(userOptional.get().getProfile().getPosition().getPositionName());
+	
 		
 		if(userOptional.get().getRole().getRoleCode().equalsIgnoreCase(RoleEnum.MEMBER.getRoleCode())) {
 		final Subscription subs = subscriptionDao.getByProfileId(userOptional.get().getProfile().getId()).get();
