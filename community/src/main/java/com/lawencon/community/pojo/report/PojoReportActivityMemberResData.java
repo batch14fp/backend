@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.report;
 
-public class PojoReportActivityMemberRes {
+public class PojoReportActivityMemberResData {
 	
 	private Integer no;
 	private String title;

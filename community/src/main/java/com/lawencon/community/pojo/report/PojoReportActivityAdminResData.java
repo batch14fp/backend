@@ -2,7 +2,7 @@ package com.lawencon.community.pojo.report;
 
 import java.time.LocalDate;
 
-public class PojoReportActivityAdminRes {
+public class PojoReportActivityAdminResData {
 	private Integer no;
 	private String memberName;
 	private String providerName;

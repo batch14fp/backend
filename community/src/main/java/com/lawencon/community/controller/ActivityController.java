@@ -29,7 +29,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
-import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
@@ -161,7 +161,7 @@ public class ActivityController {
 	@GetMapping("/report/test")
 	public ResponseEntity<byte[]> generateReport( @RequestParam String id, @RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
-		List<PojoReportActivityMemberRes> data = activityService.getMemberReport(id, Date.valueOf(startDate).toLocalDate(),
+		List<PojoReportActivityMemberResData> data = activityService.getMemberReport(id, Date.valueOf(startDate).toLocalDate(),
 				Date.valueOf(endDate).toLocalDate(), offset, limit);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);

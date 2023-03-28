@@ -30,8 +30,8 @@ import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
-import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
-import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
@@ -99,16 +99,15 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportActivityMemberRes> getMemberReport(final String id, final LocalDate startDate,
-			final LocalDate endDate, Integer offset, Integer limit) {
-		final List<PojoReportActivityMemberRes> res = new ArrayList<>();
+	public List<PojoReportActivityMemberResData> getMemberReport(final String id, final LocalDate startDate,
+		final LocalDate endDate, Integer offset, Integer limit) {
+		final List<PojoReportActivityMemberResData> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(id);
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
 				limit);
-
 		for (int i = 0; i < activityList.size(); i++) {
 
-			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
+			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 
 			reportMember.setNo(i + 1);
 
@@ -151,13 +150,13 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate, final LocalDate endDate,
+	public List<PojoReportActivityAdminResData> getAdminReport(final LocalDate startDate, final LocalDate endDate,
 			Integer offset, Integer limit) {
-		final List<PojoReportActivityAdminRes> res = new ArrayList<>();
+		final List<PojoReportActivityAdminResData> res = new ArrayList<>();
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
 		for (int i = 0; i < activityList.size(); i++) {
 
-			final PojoReportActivityAdminRes reportMember = new PojoReportActivityAdminRes();
+			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
 
 			reportMember.setNo(i + 1);
 			reportMember.setStartDate(
