@@ -33,15 +33,15 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 			for (Object obj : listObj) {
 				final Object[] objArr = (Object[]) obj;
 				PollingRespon pollingRespon = new PollingRespon();
-				pollingRespon.setId((String) objArr[0]);
+				pollingRespon.setId(objArr[0].toString());
 
 				final PollingOption pollingOption = new PollingOption();
-				pollingOption.setId((String) objArr[1]);
-				pollingOption.setContentPolling((String) objArr[2]);
+				pollingOption.setId( objArr[1].toString());
+				pollingOption.setContentPolling(objArr[2].toString());
 				pollingRespon.setPollingOption(pollingOption);
 
 				final User user = new User();
-				user.setId((String) objArr[3]);
+				user.setId(objArr[3].toString());
 				pollingRespon.setUser(user);
 
 				listResult.add(pollingRespon);

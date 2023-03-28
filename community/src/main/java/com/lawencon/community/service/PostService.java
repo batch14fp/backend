@@ -2,7 +2,6 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,8 +120,7 @@ public class PostService {
 			res.setEndAt(polling.getEndAt());		
 			final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 				
-			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-			
+			List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 			res.setTitlePolling(polling.getTitle());
 			final List<PojoPollingOptionRes> options = new ArrayList<>();
 			final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
@@ -136,17 +134,9 @@ public class PostService {
 			}
 		    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
 		    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-	        Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
-	        for (String optionId : optionCounts.keySet()) {
-	            Map<String, Integer> optionCount = optionCounts.get(optionId);
-	            for (String optionContent : optionCount.keySet()) {
-	                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
-	                optionCountRes.setPollingOptionId(optionId);
-	                optionCountRes.setPollingContent(optionContent);
-	                optionCountRes.setCount(optionCount.get(optionContent));
-	                pollingOptionUserCounts.add(optionCountRes);
-	            }
-	        }
+		    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		     
+		     
 	        pollingRes.setData(pollingOptionUserCounts);
 	
 			res.setPollingOption(options);
@@ -494,7 +484,7 @@ public class PostService {
 				res.setEndAt(polling.getEndAt());		
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					
-				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
@@ -509,21 +499,7 @@ public class PostService {
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
 			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String optionId : optionCounts.keySet()) {
-		            Map<String, Integer> optionCount = optionCounts.get(optionId);
-		            for (String optionContent : optionCount.keySet()) {
-		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
-		                optionCountRes.setPollingOptionId(optionId);
-		                optionCountRes.setPollingContent(optionContent);
-		                optionCountRes.setCount(optionCount.get(optionContent));
-		                pollingOptionUserCounts.add(optionCountRes);
-		            }
-		        }
-		      
-		        
-		        
-		        
+			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
 				res.setPollingOption(options);
@@ -602,7 +578,7 @@ public class PostService {
 				}
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					
-				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
@@ -617,17 +593,8 @@ public class PostService {
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
 			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String optionId : optionCounts.keySet()) {
-		            Map<String, Integer> optionCount = optionCounts.get(optionId);
-		            for (String optionContent : optionCount.keySet()) {
-		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
-		                optionCountRes.setPollingOptionId(optionId);
-		                optionCountRes.setPollingContent(optionContent);
-		                optionCountRes.setCount(optionCount.get(optionContent));
-		                pollingOptionUserCounts.add(optionCountRes);
-		            }
-		        }
+			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
+		        
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
 				res.setPollingOption(options);
@@ -687,7 +654,7 @@ public class PostService {
 				res.setEndAt(polling.getEndAt());		
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					
-				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
+				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 				
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
@@ -702,17 +669,8 @@ public class PostService {
 				}
 			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
 			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        for (String optionId : optionCounts.keySet()) {
-		            Map<String, Integer> optionCount = optionCounts.get(optionId);
-		            for (String optionContent : optionCount.keySet()) {
-		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
-		                optionCountRes.setPollingOptionId(optionId);
-		                optionCountRes.setPollingContent(optionContent);
-		                optionCountRes.setCount(optionCount.get(optionContent));
-		                pollingOptionUserCounts.add(optionCountRes);
-		            }
-		        }
+			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
+			     
 		        pollingRes.setData(pollingOptionUserCounts);
 		  
 				res.setPollingOption(options);
