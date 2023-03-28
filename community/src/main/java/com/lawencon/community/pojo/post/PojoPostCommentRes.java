@@ -6,6 +6,8 @@ import java.util.List;
 public class PojoPostCommentRes {
 	private String postCommentId;
 	private String userId;
+	private String imageProfileId;
+	private String position;	
 	private String fullname;
 	private String contentComment;
 	private LocalDateTime createdAt;
@@ -53,6 +55,18 @@ public class PojoPostCommentRes {
 	}
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getImageProfileId() {
+		return imageProfileId;
+	}
+	public void setImageProfileId(String imageProfileId) {
+		this.imageProfileId = imageProfileId;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 	

@@ -13,7 +13,7 @@ public class PojoArticleResData {
 	private Integer fileVer;
 	private String nameUser;
 	private Integer ver;
-	private Integer viewers;
+	private Long viewers;
 	private Boolean isActive;
 	private LocalDateTime createdAt;
 	
@@ -59,10 +59,11 @@ public class PojoArticleResData {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public Integer getViewers() {
+
+	public Long getViewers() {
 		return viewers;
 	}
-	public void setViewers(Integer viewers) {
+	public void setViewers(Long viewers) {
 		this.viewers = viewers;
 	}
 	public LocalDateTime getCreatedAt() {

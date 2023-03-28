@@ -1,5 +1,6 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,17 +18,45 @@ public class PojoPostRes {
 	private String typeName;
 	private String categoryCode;
 	private String categoryName;
+
 	private Long countPostLike;
 	private Long countPostComment;
 
-	private boolean isLike;
-	private boolean isBookmark;
+	private Boolean isLike;
+	private Boolean isBookmark;
 	private String titlePolling;
+	private Boolean isVote;
 	private Integer ver;
+	private PojoPollingResponRes pollingRespon;
+	private LocalDate endAt;
 	private List<PojoPollingOptionRes> pollingOption;
 	private List<PojoFileResData> data;
 	
 
+	public PojoPollingResponRes getPollingRespon() {
+		return pollingRespon;
+	}
+	public void setPollingRespon(PojoPollingResponRes pollingRespon) {
+		this.pollingRespon = pollingRespon;
+	}
+	public Boolean getIsLike() {
+		return isLike;
+	}
+	public void setIsLike(Boolean isLike) {
+		this.isLike = isLike;
+	}
+	public Boolean getIsBookmark() {
+		return isBookmark;
+	}
+	public void setIsBookmark(Boolean isBookmark) {
+		this.isBookmark = isBookmark;
+	}
+	public Boolean getIsVote() {
+		return isVote;
+	}
+	public void setIsVote(Boolean isVote) {
+		this.isVote = isVote;
+	}
 	public List<PojoFileResData> getData() {
 		return data;
 	}
@@ -111,16 +140,16 @@ public class PojoPostRes {
 	public void setCountPostComment(Long countPostComment) {
 		this.countPostComment = countPostComment;
 	}
-	public boolean isLike() {
+	public Boolean isLike() {
 		return isLike;
 	}
-	public void setLike(boolean isLike) {
+	public void setLike(Boolean isLike) {
 		this.isLike = isLike;
 	}
-	public boolean isBookmark() {
+	public Boolean isBookmark() {
 		return isBookmark;
 	}
-	public void setBookmark(boolean isBookmark) {
+	public void setBookmark(Boolean isBookmark) {
 		this.isBookmark = isBookmark;
 	}
 	public String getTitlePolling() {
@@ -161,8 +190,12 @@ public class PojoPostRes {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-
-	
+	public LocalDate getEndAt() {
+		return endAt;
+	}
+	public void setEndAt(LocalDate endAt) {
+		this.endAt = endAt;
+	}
 	
 	
 }

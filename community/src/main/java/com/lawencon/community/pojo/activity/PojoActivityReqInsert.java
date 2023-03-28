@@ -4,34 +4,36 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.lawencon.community.pojo.file.PojoFileReqInsert;
+
 public class PojoActivityReqInsert {
-	private String timeAgo;
+//	private String timeAgo;
 	private String title;
 	private String content;
 	private String providers;
 	private String typeId;
 	private String activityLocation;
-	private String imgActivityId;
 	private BigDecimal price;
 	private String categoryId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private LocalDate endAt;
-	private String vourcherName;
+//	private String vourcherName;
 	private Integer limitApplied;
-
 	private String voucherCode;
 	private Float discountPercent;
-
-	private Boolean isActive;
+	private Integer ver;
+//	private Boolean isActive;	
+	private PojoFileReqInsert file;
 	
 	
-	public String getTimeAgo() {
-		return timeAgo;
-	}
-	public void setTimeAgo(String timeAgo) {
-		this.timeAgo = timeAgo;
-	}
+	
+//	public String getTimeAgo() {
+//		return timeAgo;
+//	}
+//	public void setTimeAgo(String timeAgo) {
+//		this.timeAgo = timeAgo;
+//	}
 	public String getTitle() {
 		return title;
 	}
@@ -51,12 +53,7 @@ public class PojoActivityReqInsert {
 		this.providers = providers;
 	}
 
-	public String getImgActivityId() {
-		return imgActivityId;
-	}
-	public void setImgActivityId(String imgActivityId) {
-		this.imgActivityId = imgActivityId;
-	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -76,12 +73,12 @@ public class PojoActivityReqInsert {
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public Boolean getIsActive() {
-		return isActive;
-	}
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
+//	public Boolean getIsActive() {
+//		return isActive;
+//	}
+//	public void setIsActive(Boolean isActive) {
+//		this.isActive = isActive;
+//	}
 	public String getTypeId() {
 		return typeId;
 	}
@@ -94,12 +91,12 @@ public class PojoActivityReqInsert {
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
-	public String getVourcherName() {
-		return vourcherName;
-	}
-	public void setVourcherName(String vourcherName) {
-		this.vourcherName = vourcherName;
-	}
+//	public String getVourcherName() {
+//		return vourcherName;
+//	}
+//	public void setVourcherName(String vourcherName) {
+//		this.vourcherName = vourcherName;
+//	}
 	public Integer getLimitApplied() {
 		return limitApplied;
 	}
@@ -130,6 +127,18 @@ public class PojoActivityReqInsert {
 	}
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	public PojoFileReqInsert getFile() {
+		return file;
+	}
+	public void setFile(PojoFileReqInsert file) {
+		this.file = file;
 	}
 	
 	

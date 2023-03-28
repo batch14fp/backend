@@ -41,6 +41,30 @@ public class ActivityTypeDao extends BaseMasterDao<ActivityType>{
 		}
 		return activityTypes;
 	}
+	
+	public ActivityType getByCode(String typeCode) {
+		final StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT id, type_code, activity_name,ver,is_active ");
+		sqlQuery.append("FROM t_activity_type ");
+		sqlQuery.append("WHERE is_active = TRUE AND ");
+		sqlQuery.append("type_code = :typeCode "); 
+		final ActivityType activityType = new ActivityType();
+		final Object result = 	ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("typeCode", typeCode).getSingleResult();
+		try {
+				final Object[] obj = (Object[]) result;
+		
+				activityType.setId( obj[0].toString());
+				activityType.setTypeCode( obj[1].toString());
+				activityType.setActivityName( obj[2].toString());
+				activityType.setVersion(Integer.valueOf(obj[3].toString()));
+				activityType.setIsActive(Boolean.valueOf(obj[4].toString()));
+			
+		}catch(final Exception e) {
+			e.printStackTrace();
+		}
+		return activityType;
+	}
+
 
 	@Override
 	public Optional<ActivityType> getById(String id) {

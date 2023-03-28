@@ -3,6 +3,8 @@ package com.lawencon.community.pojo.activity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.lawencon.community.pojo.file.PojoFileReqUpdate;
+
 public class PojoActivityReqUpdate {
 	private String activityId;
 	private String timeAgo;
@@ -16,7 +18,7 @@ public class PojoActivityReqUpdate {
 	private String categoryId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-
+	private PojoFileReqUpdate file;
 	private Boolean isActive;
 	private Integer ver;
 	public String getActivityId() {
@@ -66,6 +68,12 @@ public class PojoActivityReqUpdate {
 	}
 
 
+	public PojoFileReqUpdate getFile() {
+		return file;
+	}
+	public void setFile(PojoFileReqUpdate file) {
+		this.file = file;
+	}
 	public LocalDateTime getStartDate() {
 		return startDate;
 	}

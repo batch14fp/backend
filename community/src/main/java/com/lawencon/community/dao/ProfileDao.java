@@ -26,12 +26,6 @@ public class ProfileDao extends BaseMasterDao<Profile>{
 		return Optional.ofNullable(super.getById(Profile.class, id));
 	}
 	
-	
-	
-	
-	
-	
-
 	public Profile getByIdRef(String id) {
 		return super.getByIdRef(Profile.class, id);
 	}

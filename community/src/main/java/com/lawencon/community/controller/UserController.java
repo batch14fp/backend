@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.community.constant.RoleEnum;
+import com.lawencon.community.dao.SubscriptionDao;
+import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -35,7 +37,6 @@ import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.service.JwtService;
-import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.UserService;
 
 @RestController
@@ -44,14 +45,14 @@ public class UserController {
 	private UserService userService;
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
-	private PaginationService paginationService;
+	private SubscriptionDao subscriptionDao;
 
 
-	public UserController(final  PaginationService paginationService, final UserService userService, final JwtService jwtService, 
+	public UserController(final SubscriptionDao subscriptionDao,  final UserService userService, final JwtService jwtService, 
 			final AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.jwtService = jwtService;
-		this.paginationService = paginationService;
+		this.subscriptionDao = subscriptionDao;
 		this.authenticationManager = authenticationManager;
 	}
 
@@ -66,12 +67,7 @@ public class UserController {
 		PojoInsertRes res = userService.userRegistration(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}	
-	
-	@PostMapping("admin/add")
-	public ResponseEntity<PojoInsertRes>insertUserAdmin(@RequestBody PojoSignUpReqInsert data){
-		PojoInsertRes res = userService.insertUser(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
-	}
+
 	
 	@PostMapping("sign-up/verify-code")
 	public ResponseEntity<PojoVerificationRes>checkVerified(@RequestBody PojoResGetVerificationCode data){
@@ -91,12 +87,7 @@ public class UserController {
 	public ResponseEntity<PojoAllUsersRes>getAllUser(@RequestParam("page") int page,
             @RequestParam("size") int size) {
 			PojoAllUsersRes dataList = userService.getAllUser(page, size);
-	        int totalCount = userService.getTotalCount();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	}
 	
 	@PostMapping("login")
@@ -119,6 +110,13 @@ public class UserController {
 		loginRes.setUserId(userOptional.get().getId());
 		loginRes.setFullname(userOptional.get().getProfile().getFullname());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		
+		if(userOptional.get().getRole().getRoleCode().equalsIgnoreCase(RoleEnum.MEMBER.getRoleCode())) {
+		final Subscription subs = subscriptionDao.getByProfileId(userOptional.get().getProfile().getId()).get();
+		final Subscription subsRef = subscriptionDao.getByIdRef(Subscription.class, subs.getId());
+		loginRes.setMemberCode(subsRef.getMemberStatus().getCodeStatus());
+		}
+		
 		if(userOptional.get().getProfile().getImageProfile()!=null) {
 		loginRes.setImageId(userOptional.get().getProfile().getImageProfile().getId());
 		}

@@ -2,6 +2,7 @@ package com.lawencon.community.pojo.profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
@@ -9,12 +10,18 @@ import com.lawencon.community.pojo.socialmedia.PojoSocialMediaRes;
 public class PojoProfileDetailRes {
 	
 	private String userId;
+	private String profileId;
 	private String industryId;
 	private String positionId;
 	private String statusMemberId;
 	private String fullname;
 	private String email;
+	private String walletId;
+	private Integer walletVer;
 	private BigDecimal userBalance;
+	private String bankPanymentId;
+	private String accountNumber;
+	private String accountName;
 	private String statusMember;
 	private String phoneNumber;
 	private LocalDate dob;
@@ -24,9 +31,45 @@ public class PojoProfileDetailRes {
 	private String postalCode;
 	private String company;
 	private String imageId;
+	private Integer imageVer;
+	private LocalDateTime startDateMember;
+	private LocalDateTime endDateMember;	
 	private List<PojoSocialMediaRes> socialMediaList;
 
 	
+	
+	
+	
+	public String getWalletId() {
+		return walletId;
+	}
+	public void setWalletId(String walletId) {
+		this.walletId = walletId;
+	}
+	public Integer getWalletVer() {
+		return walletVer;
+	}
+	public void setWalletVer(Integer walletVer) {
+		this.walletVer = walletVer;
+	}
+	public String getBankPanymentId() {
+		return bankPanymentId;
+	}
+	public void setBankPanymentId(String bankPanymentId) {
+		this.bankPanymentId = bankPanymentId;
+	}
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	public String getAccountName() {
+		return accountName;
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 	public String getImageId() {
 		return imageId;
 	}
@@ -131,5 +174,31 @@ public class PojoProfileDetailRes {
 	public void setSocialMediaList(List<PojoSocialMediaRes> socialMediaList) {
 		this.socialMediaList = socialMediaList;
 	}
+	public String getProfileId() {
+		return profileId;
+	}
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
+	}
+	public Integer getImageVer() {
+		return imageVer;
+	}
+	public void setImageVer(Integer imageVer) {
+		this.imageVer = imageVer;
+	}
+	public LocalDateTime getStartDateMember() {
+		return startDateMember;
+	}
+	public void setStartDateMember(LocalDateTime startDateMember) {
+		this.startDateMember = startDateMember;
+	}
+	public LocalDateTime getEndDateMember() {
+		return endDateMember;
+	}
+	public void setEndDateMember(LocalDateTime endDateMember) {
+		this.endDateMember = endDateMember;
+	}
+	
+	
 	
 }

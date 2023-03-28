@@ -37,9 +37,6 @@ public class Article  extends BaseEntity{
 
 	private String contentArticle;
 	
-	private Integer viewers;
-
-
 	public File getFile() {
 		return file;
 	}
@@ -70,14 +67,7 @@ public class Article  extends BaseEntity{
 	}
 
 
-	public Integer getViewers() {
-		return viewers;
-	}
 
 
-	public void setViewers(Integer viewers) {
-		this.viewers = viewers;
-	}
-	
 	
 }

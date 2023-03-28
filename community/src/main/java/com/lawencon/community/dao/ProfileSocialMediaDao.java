@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.File;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.ProfileSocialMedia;
 import com.lawencon.community.model.SocialMedia;
@@ -77,11 +78,69 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 				profileSocialMedia.setSocialMedia(socialMedia);
 				profileSocialMedia.setVersion(Integer.valueOf(obj[6].toString()));
 				list.add(profileSocialMedia);
+			}
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ProfileSocialMedia> getSocialMediaByProfileId(String id) throws Exception {
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT tp.id , sm.id as social_media_id,tp.profile_id,file_id, platform_name,tp.url, tp.is_active,tp.ver ");
+		sqlQuery.append("FROM t_profile_social_media tp ");
+		sqlQuery.append("INNER JOIN t_social_media sm ON tp.social_media_id = sm.id ");
+		sqlQuery.append("WHERE tp.profile_id = :id ");
+		sqlQuery.append("UNION ALL ");
+		sqlQuery.append("SELECT null,sm.id,null,file_id,platform_name, null, null,null ");
+		sqlQuery.append("FROM t_social_media sm ");
+		sqlQuery.append("WHERE sm.id NOT IN (SELECT tp.social_media_id FROM t_profile_social_media tp WHERE tp.profile_id = :id)");
+
+		final List<Object[]> objs = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("id", id).getResultList();
+				
+		final List<ProfileSocialMedia> list = new ArrayList<>();
+
+		if (!objs.isEmpty()) {
+			for (Object[] obj : objs) {
+				final ProfileSocialMedia profileSocialMedia = new ProfileSocialMedia();
+				if(obj[0]!=null) {
+				profileSocialMedia.setId(obj[0].toString());
+				}
+				final SocialMedia socialMedia = new SocialMedia();
+				socialMedia.setId(obj[1].toString());
+				
+				if(obj[2]!=null) {
+					final Profile profile = new Profile();
+					profile.setId(obj[2].toString());
+					profileSocialMedia.setProfile(profile);
+					}
+				if(obj[3]!=null) {
+				final File file = new File();
+				file.setId(obj[3].toString());
+				socialMedia.setFile(file);
+				}
+				socialMedia.setPlatformName(obj[4].toString());
+				if(obj[5]!=null) {
+				profileSocialMedia.setUrl(obj[5].toString());
+				}
+				
+				
+				if(obj[6]!=null) {
+				profileSocialMedia.setIsActive(Boolean.valueOf(obj[6].toString()));
+				}
+				if(obj[7]!=null) {
+					profileSocialMedia.setVersion(Integer.valueOf(obj[7].toString()));
+					}
+				
+				profileSocialMedia.setSocialMedia(socialMedia);
 				list.add(profileSocialMedia);
 			}
 		}
 		return list;
 	}
+	
+	
+	
+	
 
 	@Override
 	Optional<ProfileSocialMedia> getById(String id) {

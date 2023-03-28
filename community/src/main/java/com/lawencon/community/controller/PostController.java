@@ -4,7 +4,6 @@ package com.lawencon.community.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,23 +21,20 @@ import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
-import com.lawencon.community.pojo.post.PojoPostReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentRes;
 import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
+import com.lawencon.community.pojo.post.PojoPostReqInsert;
 import com.lawencon.community.pojo.post.PojoPostReqUpdate;
 import com.lawencon.community.pojo.post.PojoPostRes;
-import com.lawencon.community.pojo.post.PojoPostCommentRes;
-import com.lawencon.community.service.PaginationService;
 import com.lawencon.community.service.PostService;
 
 @RestController
 @RequestMapping("posts")
 public class PostController {
 	private PostService postService;
-	private PaginationService paginationService;
 	
-	public PostController(final PostService postService, final PaginationService paginationService) {
+	public PostController(final PostService postService) {
 		this.postService = postService;
-		this.paginationService = paginationService;
 	}
 
 	@GetMapping("/{id}")
@@ -97,50 +93,44 @@ public class PostController {
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("/comment/{id}")
+	public ResponseEntity<PojoRes> deletePostComment(@PathVariable ("id")String id){
+		PojoRes resDelete = postService.deletePostCommentById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
+	}
+	
+	
 	@GetMapping
 	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception {
 	        final List<PojoPostRes> dataList = postService.getData(page, size);
-	        int totalCount = postService.getTotalCount();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
 	
 	@GetMapping("/most-like")
 	public ResponseEntity<List<PojoPostRes>> getAllPostByMostLike(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
 	        final List<PojoPostRes> dataList = postService.getMostLike(page, size);
-	        int totalCount = postService.getTotalCount();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
 	@GetMapping("/{id}/comment")
 	public ResponseEntity<List<PojoPostCommentRes>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
 	        final List<PojoPostCommentRes> dataList = postService.getAllCommentByPostId(id, page, size);
-	        Long totalCount = postService.getCountComment(id);
-	        int pageCount = paginationService.getPageCount(totalCount.intValue(), size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
 	    }
 	
 	@GetMapping("/user")
 	public ResponseEntity<List<PojoPostRes>> getAllPostByUser(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
 	        final List<PojoPostRes> dataList = postService.getAllPostByUserId(page, size);
-	        int totalCount = postService.getTotalCountByUserId();
-	        int pageCount = paginationService.getPageCount(totalCount, size);
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("X-Total-Count", String.valueOf(totalCount));
-			headers.add("X-Total-Pages", String.valueOf(pageCount));
-	        return new ResponseEntity<>(dataList, headers, HttpStatus.OK);
+
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
+	
+	@DeleteMapping("/unvote/{id}")
+	public ResponseEntity<PojoRes> deletePollingRespon(@PathVariable ("id")String id) throws Exception{
+		PojoRes resDelete = postService.deletePostResponById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
+	}
 }

@@ -2,9 +2,12 @@ package com.lawencon.community.pojo.profile;
 
 public class PojoPasswordReqUpdate {
 	private String profileId;
+	private String oldPassword;
 	private String newPassword;
 	private String confirmNewPassword;
 	private Integer ver;
+	
+	
 	public String getNewPassword() {
 		return newPassword;
 	}
@@ -29,6 +32,13 @@ public class PojoPasswordReqUpdate {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
+	public String getOldPassword() {
+		return oldPassword;
+	}
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+	
 	
 	
 	

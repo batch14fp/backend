@@ -6,6 +6,7 @@ public class PojoLoginRes {
 	private String fullname;
 	private String token;
 	private String imageId;
+	private String memberCode;
 
 	public String getRoleCode() {
 		return roleCode;
@@ -38,6 +39,13 @@ public class PojoLoginRes {
 	public void setImageId(String imageId) {
 		this.imageId = imageId;
 	}
+	public String getMemberCode() {
+		return memberCode;
+	}
+	public void setMemberCode(String memberCode) {
+		this.memberCode = memberCode;
+	}
+	
 	
 	
 }

@@ -3,7 +3,6 @@ package com.lawencon.community.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
-import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
 import com.lawencon.community.pojo.profile.PojoProfileDetailRes;
+import com.lawencon.community.pojo.profile.PojoProfileReqUpdate;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqInsert;
 import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
 import com.lawencon.community.service.ProfileService;
@@ -34,9 +33,11 @@ public class ProfileController {
 		this.socialMediaService = socialMediaService;
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<PojoProfileDetailRes> getProfileDetail(@PathVariable("id") String id) throws Exception{
-		PojoProfileDetailRes resGet = profileService.getById(id);
+	@GetMapping
+	public ResponseEntity<PojoProfileDetailRes> getDetailProfile() throws Exception{
+
+		PojoProfileDetailRes resGet = profileService.getDetailProfile();
+
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	

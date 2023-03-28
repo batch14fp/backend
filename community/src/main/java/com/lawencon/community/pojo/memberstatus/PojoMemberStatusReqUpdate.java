@@ -1,9 +1,12 @@
 package com.lawencon.community.pojo.memberstatus;
 
+import java.math.BigDecimal;
+
 public class PojoMemberStatusReqUpdate {
 	private String memberStatusId;
 	private String statusName;
 	private Integer periodDay;
+	private BigDecimal price;
 	private Boolean isActive;
 	private Integer ver;
 	
@@ -11,6 +14,18 @@ public class PojoMemberStatusReqUpdate {
 	public String getStatusName() {
 		return statusName;
 	}
+	
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
