@@ -33,6 +33,8 @@ import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.voucher.PojoActivityVoucherRes;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.community.service.VoucherService;
@@ -216,6 +218,15 @@ public class ActivityController {
 		final List<PojoActivityVoucherRes> res = voucherService.getListVoucher(activityId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	
+	@PostMapping("/voucher/applied")
+	public ResponseEntity<PojoVoucherAppliedRes> setVoucherCode(@RequestBody PojoVoucherAppliedReq data){
+		final PojoVoucherAppliedRes res = activityService.getVoucherApplied(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
+
 
 
 }
