@@ -476,6 +476,7 @@ public class ActivityService {
 	
 	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
 		final PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
+
 		final List <ActivityVoucher> acticvityVoucherList = activityVoucherDao.getListActivityVoucher(data.getActivityId());
 		acticvityVoucherList.forEach(activityVoucher->{
 			LocalDate expDate = activityVoucher.getVoucher().getExpDate();

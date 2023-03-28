@@ -1,9 +1,7 @@
 package com.lawencon.community.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Polling;
 import com.lawencon.community.model.PollingOption;
+import com.lawencon.community.pojo.post.PojoOptionCountRes;
 
 @Repository
 public class PollingOptionDao extends BaseMasterDao<PollingOption> {
@@ -32,7 +31,9 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 			sqlQuery.append("FROM t_polling_option po ");
 			sqlQuery.append("INNER JOIN t_polling p ");
 			sqlQuery.append("ON  p.id= po.polling_id ");
-			sqlQuery.append("WHERE p.id = :id");
+			sqlQuery.append("WHERE p.id = :id ");
+			sqlQuery.append("GROUP BY po.id, po.content_polling ");
+			sqlQuery.append("ORDER BY po.created_at ");
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 					.setParameter("id", id).getResultList();
 
@@ -59,8 +60,8 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 		return listPollingOption;
 	}
 	@SuppressWarnings("unchecked")
-	public Map<String, Map<String, Integer>> countPollingOptionUsers(String pollingId) throws Exception {
-	    Map<String, Map<String, Integer>> pollingOptionUserCounts = new HashMap<>();
+	public List<PojoOptionCountRes> countPollingOptionUsers(String pollingId) throws Exception {
+	    List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 	    try {
 	        final StringBuilder sqlQuery = new StringBuilder();
 	        sqlQuery.append("SELECT po.id, po.content_polling, COUNT(ps.id) as user_count ");
@@ -68,7 +69,8 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	        sqlQuery.append("LEFT JOIN t_polling_respon ps ");
 	        sqlQuery.append("ON po.id = ps.polling_option_id ");
 	        sqlQuery.append("WHERE po.polling_id = :pollingId ");
-	        sqlQuery.append("GROUP BY po.id, po.content_polling");
+	        sqlQuery.append("GROUP BY po.id, po.content_polling ");
+	        sqlQuery.append("ORDER BY po.created_at ");
 	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	                .setParameter("pollingId", pollingId).getResultList();
 	        if (result != null) {
@@ -77,11 +79,11 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	                final String pollingOptionId = obj[0].toString();
 	                final String pollingContent = obj[1].toString();
 	                final int userCount = Integer.parseInt(obj[2].toString());
-	                
-	                if (!pollingOptionUserCounts.containsKey(pollingOptionId)) {
-	                    pollingOptionUserCounts.put(pollingOptionId, new HashMap<>());
-	                }
-	                pollingOptionUserCounts.get(pollingOptionId).put(pollingContent, userCount);
+	                PojoOptionCountRes pojo = new PojoOptionCountRes();
+	                pojo.setPollingOptionId(pollingOptionId);
+	                pojo.setPollingContent(pollingContent);
+	                pojo.setCount(userCount);
+	                pollingOptionUserCounts.add(pojo);
 	            }
 	        }
 	    } catch (Exception e) {

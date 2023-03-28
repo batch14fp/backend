@@ -32,10 +32,12 @@ import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
+import com.lawencon.community.pojo.voucher.PojoActivityVoucherRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaymentService;
+import com.lawencon.community.service.VoucherService;
 import com.lawencon.util.JasperUtil;
 
 @RestController
@@ -46,11 +48,13 @@ public class ActivityController {
 
 	private ActivityService activityService;
 	private PaymentService paymentService;
+	private VoucherService voucherService;
 
-	public ActivityController( final PaymentService paymentService,
+	public ActivityController(final  VoucherService voucherService,  final PaymentService paymentService,
 			final ActivityService activityService) {
 		this.activityService = activityService;
 		this.paymentService = paymentService;
+		this.voucherService =voucherService;
 	}
 
 	@GetMapping
@@ -208,11 +212,19 @@ public class ActivityController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+
 	@PostMapping("/voucher/applied")
 	public ResponseEntity<PojoVoucherAppliedRes> appliedVoucher(@RequestBody PojoVoucherAppliedReq data) {
 		PojoVoucherAppliedRes resGet = activityService.getVoucherApplied(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/vouchers-list")
+	public ResponseEntity<List<PojoActivityVoucherRes>> getListVooucher(@RequestParam("activityId") String activityId){
+		final List<PojoActivityVoucherRes> res = voucherService.getListVoucher(activityId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 
 
 

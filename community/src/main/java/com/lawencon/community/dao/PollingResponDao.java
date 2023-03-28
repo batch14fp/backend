@@ -25,6 +25,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 		sql.append("FROM t_polling_respon pr ");
 		sql.append("INNER JOIN t_polling_option po ON pr.polling_option_id = po.id ");
 		sql.append("INNER JOIN t_user u ON pr.user_id = u.id ");
+		sql.append("ORDER BY po.created_at ");
 
 		final List<PollingRespon> listResult = new ArrayList<>();
 		try {
@@ -32,15 +33,15 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 			for (Object obj : listObj) {
 				final Object[] objArr = (Object[]) obj;
 				PollingRespon pollingRespon = new PollingRespon();
-				pollingRespon.setId((String) objArr[0]);
+				pollingRespon.setId(objArr[0].toString());
 
 				final PollingOption pollingOption = new PollingOption();
-				pollingOption.setId((String) objArr[1]);
-				pollingOption.setContentPolling((String) objArr[2]);
+				pollingOption.setId( objArr[1].toString());
+				pollingOption.setContentPolling(objArr[2].toString());
 				pollingRespon.setPollingOption(pollingOption);
 
 				final User user = new User();
-				user.setId((String) objArr[3]);
+				user.setId(objArr[3].toString());
 				pollingRespon.setUser(user);
 
 				listResult.add(pollingRespon);
@@ -108,6 +109,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 			sqlQuery.append("ON p.id = po.polling_id ");
 			sqlQuery.append("WHERE pr.user_id= :userId ");
 			sqlQuery.append("AND po.polling_id = :pollingId ");
+			sqlQuery.append("ORDER BY po.created_at ");
 			final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 					.setParameter("userId", userId).setParameter("pollingId", pollingId).getSingleResult();
 			if(result!=null) {

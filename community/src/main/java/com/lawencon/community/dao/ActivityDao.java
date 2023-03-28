@@ -40,7 +40,7 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
-		sqlQuery.append("ORDER BY a.created_at DESC");
+		sqlQuery.append("ORDER BY a.created_at DESC ");
 		try {
 		final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 				.setFirstResult(offset).setMaxResults(limit)
@@ -486,7 +486,7 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND a.start_date <= NOW() ");
+		sqlQuery.append("AND a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
@@ -512,7 +512,7 @@ public class ActivityDao extends AbstractJpaDao {
 		countQueryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		countQueryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		countQueryBuilder.append("WHERE p.is_paid = TRUE ");
-		countQueryBuilder.append("AND a.start_date <= NOW() ");
+		countQueryBuilder.append("AND a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			countQueryBuilder.append("AND tat.type_code = :typeCode ");
 		}
