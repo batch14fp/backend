@@ -32,6 +32,8 @@ import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.service.ActivityService;
 import com.lawencon.community.service.PaymentService;
 import com.lawencon.util.JasperUtil;
@@ -205,6 +207,13 @@ public class ActivityController {
 		final PojoReportCountMemberRes res = activityService.getTotalData();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@PostMapping("/voucher/applied")
+	public ResponseEntity<PojoVoucherAppliedRes> appliedVoucher(@RequestBody PojoVoucherAppliedReq data) {
+		PojoVoucherAppliedRes resGet = activityService.getVoucherApplied(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+
 
 
 }
