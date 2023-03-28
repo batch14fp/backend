@@ -32,7 +32,8 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 			sqlQuery.append("FROM t_polling_option po ");
 			sqlQuery.append("INNER JOIN t_polling p ");
 			sqlQuery.append("ON  p.id= po.polling_id ");
-			sqlQuery.append("WHERE p.id = :id");
+			sqlQuery.append("WHERE p.id = :id ");
+			sqlQuery.append("ORDER BY po.created_at ");
 			final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 					.setParameter("id", id).getResultList();
 
@@ -68,7 +69,8 @@ public class PollingOptionDao extends BaseMasterDao<PollingOption> {
 	        sqlQuery.append("LEFT JOIN t_polling_respon ps ");
 	        sqlQuery.append("ON po.id = ps.polling_option_id ");
 	        sqlQuery.append("WHERE po.polling_id = :pollingId ");
-	        sqlQuery.append("GROUP BY po.id, po.content_polling");
+	        sqlQuery.append("GROUP BY po.id, po.content_polling ");
+	        sqlQuery.append("ORDER BY po.created_at ");
 	        final List<Object> result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 	                .setParameter("pollingId", pollingId).getResultList();
 	        if (result != null) {

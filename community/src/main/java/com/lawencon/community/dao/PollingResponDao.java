@@ -25,6 +25,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 		sql.append("FROM t_polling_respon pr ");
 		sql.append("INNER JOIN t_polling_option po ON pr.polling_option_id = po.id ");
 		sql.append("INNER JOIN t_user u ON pr.user_id = u.id ");
+		sql.append("ORDER BY po.created_at ");
 
 		final List<PollingRespon> listResult = new ArrayList<>();
 		try {
@@ -108,6 +109,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 			sqlQuery.append("ON p.id = po.polling_id ");
 			sqlQuery.append("WHERE pr.user_id= :userId ");
 			sqlQuery.append("AND po.polling_id = :pollingId ");
+			sqlQuery.append("ORDER BY po.created_at ");
 			final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
 					.setParameter("userId", userId).setParameter("pollingId", pollingId).getSingleResult();
 			if(result!=null) {
