@@ -100,7 +100,7 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 		PollingRespon pollingRespon = new PollingRespon();
 		try {
 			final StringBuilder sqlQuery = new StringBuilder();
-			sqlQuery.append("SELECT pr.id ");
+			sqlQuery.append("SELECT pr.id, pr.polling_option_id ");
 			sqlQuery.append("FROM t_polling_respon pr ");
 			sqlQuery.append("INNER JOIN t_polling_option po ");
 			sqlQuery.append("ON po.id = pr.polling_option_id ");
@@ -113,6 +113,10 @@ public class PollingResponDao extends BaseMasterDao<PollingRespon> {
 			if(result!=null) {
 			Object[] obj =(Object[]) result;
 			pollingRespon.setId(obj[0].toString());
+			final PollingOption pollingOption = new PollingOption();
+			pollingOption.setId(obj[1].toString());
+			pollingRespon.setPollingOption(pollingOption);
+			
 			}
 		} catch (NoResultException e) {
 			return Optional.empty();
