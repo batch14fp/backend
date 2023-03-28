@@ -3,6 +3,8 @@ package com.lawencon.community.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NonUniqueResultException;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
@@ -18,6 +20,8 @@ public class ArticleViewerDao extends AbstractJpaDao{
 	@SuppressWarnings("unchecked")
 	public List<ArticleViewer> getByIdPost(String articleId) {
 		 StringBuilder sqlQuery = new StringBuilder();
+		 final List<ArticleViewer> result = new ArrayList<>();
+		 try {
 		 sqlQuery.append("SELECT id, user_id, article_id ");
 		 sqlQuery.append("FROM t_article_viewer ");
 		 sqlQuery.append("WHERE article_id = :articleId ");
@@ -28,7 +32,7 @@ public class ArticleViewerDao extends AbstractJpaDao{
 				    .createNativeQuery(sqlQuery.toString())
 				    .setParameter("articleId", articleId)
 				    .getResultList();
-		    final List<ArticleViewer> result = new ArrayList<>();
+		
 		    for (Object[] obj : articleViewerList) {
 		        final ArticleViewer articleViewer = new ArticleViewer();
 		        articleViewer.setId(obj[0].toString());
@@ -43,11 +47,15 @@ public class ArticleViewerDao extends AbstractJpaDao{
 
 		        result.add(articleViewer);
 		    }
+		 }catch(Exception e) {
+			 e.printStackTrace();
+		 }
 		    return result;
 	}
 	
 	
 	public Long countViewer( String artcileId) {
+		try {
 		final StringBuilder sql = new StringBuilder();
 		Long count =null;
 		sql.append("SELECT COUNT(id) FROM t_article_viewer ");
@@ -58,9 +66,13 @@ public class ArticleViewerDao extends AbstractJpaDao{
 				.setParameter("artcileId",artcileId)
 				.getSingleResult().toString());
 		
-	
-	return count;	
-		
+		return count;	
+		}catch (NonUniqueResultException e) {
+	        throw new IllegalStateException("Expected single result, but got multiple", e);
+	    } 
+	    catch (Exception e) {
+	        throw new RuntimeException("Unexpected error", e);
+	    }
 	}
 	
 	
@@ -85,9 +97,6 @@ public class ArticleViewerDao extends AbstractJpaDao{
 		 
 		 }catch(final Exception e)
 		 {}
-			 
-		 
-		    
 		    return data;
 	}
 	

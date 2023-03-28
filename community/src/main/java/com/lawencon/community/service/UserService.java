@@ -63,8 +63,6 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder encoder;
-
-
 	public UserService(final SubscriptionDao subscriptionDao, final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
 			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
@@ -119,7 +117,7 @@ public class UserService implements UserDetailsService {
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
 		profile.setPhoneNumber(data.getPhoneNumber());
-		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode());
+		final MemberStatus memberStatus = memberStatusDao.getByCode(StatusEnum.REGULAR.getStatusCode()).get();
 		final MemberStatus memberStatusRef = memberStatusDao.getByIdRef(memberStatus.getId());
 	
 		

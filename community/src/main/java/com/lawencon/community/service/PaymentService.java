@@ -14,12 +14,14 @@ import com.lawencon.community.dao.PaymentDao;
 import com.lawencon.community.dao.SalesSettingDao;
 import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Subscription;
+import com.lawencon.community.model.Voucher;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
@@ -40,14 +42,16 @@ public class PaymentService {
 	private SalesSettingDao salesSettingDao;
 	private UserDao userDao;
 	private SubscriptionDao subscriptionDao;
+	private VoucherDao voucherDao;
 
-	public PaymentService(final SubscriptionDao subscriptionDao, final UserDao userDao, final SalesSettingDao salesSettingDao, final WalletDao walletDao,
+	public PaymentService(final VoucherDao voucherDao, final SubscriptionDao subscriptionDao, final UserDao userDao, final SalesSettingDao salesSettingDao, final WalletDao walletDao,
 			final FileDao fileDao, final BankPaymentDao bankPaymentDao, final PaymentDao paymentDao) {
 		this.paymentDao = paymentDao;
 		this.bankPaymentDao = bankPaymentDao;
 		this.fileDao = fileDao;
 		this.walletDao = walletDao;
 		this.salesSettingDao = salesSettingDao;
+		this.voucherDao = voucherDao;
 		this.userDao = userDao;
 		this.subscriptionDao = subscriptionDao;
 
@@ -67,7 +71,7 @@ public class PaymentService {
 			payment.setIsPaid(data.getIsPaid());
 			if (data.getIsPaid()) {
 				if(payment.getInvoice().getActivity()==null) {
-					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal());
+					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal()).get();
 					final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
 					final BigDecimal newIncomSystem = payment.getTotal();
@@ -82,13 +86,20 @@ public class PaymentService {
 					Long day = (long) payment.getInvoice().getMemberStatus().getPeriodDay();
 					subs.setEndDate(LocalDateTime.now().plusDays(day));
 					subscriptionDao.save(subsRef);
+					
+					
 					res.setMessage("Update Membership Success");
+					
 				}
 				else {
-
+					if(payment.getInvoice().getVoucher()!=null) {
+					Voucher voucher = voucherDao.getByIdRef(Voucher.class, payment.getInvoice().getVoucher().getId());
+					voucher.setUsedCount((voucher.getUsedCount()+1));
+					voucherDao.save(voucher);
+					}
 					final SalesSettings setting = salesSettingDao.getSalesSetting();
 
-					final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId());
+					final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId()).get();
 					final Wallet walletRef = walletDao.getByIdRef(wallet.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRef.getId());
 					final BigDecimal newIncome = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getMemberIncome()));
@@ -96,7 +107,7 @@ public class PaymentService {
 					walletRef.setVersion(walletRef.getVersion());
 					walletDao.save(walletRef);
 
-					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal());
+					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal()).get();
 					final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
 					final BigDecimal newIncomSystem = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getSystemIncome()));

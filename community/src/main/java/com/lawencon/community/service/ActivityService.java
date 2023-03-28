@@ -35,6 +35,8 @@ import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
 import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
+import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -152,8 +154,7 @@ public class ActivityService {
 	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate, final LocalDate endDate,
 			Integer offset, Integer limit) {
 		final List<PojoReportActivityAdminRes> res = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, offset, limit);
-
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminRes reportMember = new PojoReportActivityAdminRes();
@@ -416,7 +417,6 @@ public class ActivityService {
 
 			pojoList.add(pojo);
 		}
-
 		return pojoList;
 	}
 
@@ -451,15 +451,11 @@ public class ActivityService {
 				pojo.setUserId(activity.getUser().getId());
 				pojo.setFullname(fullname);
 			}
-
 			String imgActivityId = activity.getFile() != null ? activity.getFile().getId() : null;
 			pojo.setImgActivityId(imgActivityId);
-
 			pojoList.add(pojo);
 		}
-
 		return pojoList;
-
 	}
 	
 	
@@ -467,12 +463,6 @@ public class ActivityService {
 		final  PojoUpcomingActivityByTypeRes res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
 		return res;
 	}
-	
-	
-	
-	
-	
-	
 	public PojoReportCountMemberRes getTotalData() {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		PojoReportCountMemberRes res = new PojoReportCountMemberRes();
@@ -480,6 +470,39 @@ public class ActivityService {
 		res.setTotalParticipantCourse(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.COURSE.getCode(), principalService.getAuthPrincipal()));
 		res.setTotalIncomes(activityDao.getTotalIncomeByUserId(principalService.getAuthPrincipal(), percentMember));
 		res.setTotalAllParticipant(activityDao.getTotalParticipanByUserIdByType(null, principalService.getAuthPrincipal()));
+		return res;
+		
+	}
+	
+	
+	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
+		final PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
+		
+		
+		
+		final List <ActivityVoucher> acticvityVoucherList = activityVoucherDao.getListActivityVoucher(data.getActivityId());
+		
+
+		acticvityVoucherList.forEach(activityVoucher->{
+			LocalDate expDate = activityVoucher.getVoucher().getExpDate();
+			  if (activityVoucher.getVoucher().getVoucherCode().equalsIgnoreCase(data.getVoucherCode()) && expDate.isBefore(LocalDate.now())) {
+				     	if(activityVoucher.getVoucher().getLimitApplied()< activityVoucher.getVoucher().getUsedCount()) {
+					res.setIsAllowed(true);
+					   throw new IllegalStateException("Coupon code applied successfully ");
+					
+				}
+				else {
+					res.setIsAllowed(false);
+					 throw new IllegalStateException("Sorry, the usage limit for this voucher code has been reached. It can no longer be used");
+				}
+			}
+			else {
+				res.setIsAllowed(false);
+				 throw new IllegalStateException("Sorry, the voucher code you entered is not valid or has expired. Please try again with a different voucher code.");
+			}
+			
+		});
+		
 		return res;
 		
 	}

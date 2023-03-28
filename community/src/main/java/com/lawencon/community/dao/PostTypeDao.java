@@ -19,8 +19,10 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 		   final StringBuilder sb = new StringBuilder();
 		    sb.append("SELECT id, type_code, type_name, ver , is_active ");
 		    sb.append("FROM t_post_type ");
-		    final List<Object[]> postTypeList = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
 		    final List<PostType> result = new ArrayList<>();
+		    try {
+		    final List<Object[]> postTypeList = ConnHandler.getManager().createNativeQuery(sb.toString()).getResultList();
+		   
 		    for (Object[] obj : postTypeList) {
 		        PostType postType = new PostType();
 		        postType.setId((String) obj[0]);
@@ -31,6 +33,9 @@ public class PostTypeDao extends BaseMasterDao<PostType>{
 		      
 		   
 		        result.add(postType);
+		    }
+		    }catch(Exception e) {
+		    	e.printStackTrace();
 		    }
 		    return result;
 	}
