@@ -2,7 +2,7 @@ package com.lawencon.community.pojo.report;
 
 import java.math.BigDecimal;
 
-public class PojoResportIncomesAdminRes {
+public class PojoReportIncomesAdminResData {
 
 	private String memberName;
 	private String type;
