@@ -2,13 +2,13 @@ package com.lawencon.community.pojo.report;
 
 import java.util.List;
 
-public class PojoReportIncomesMemberRes {
-	private List<PojoReportIncomesMemberResData> data;
+public class PojoReportIncomesAdminRes {
+	private List<PojoReportIncomesAdminResData> data;
 	private Long total;
-	public List<PojoReportIncomesMemberResData> getData() {
+	public List<PojoReportIncomesAdminResData> getData() {
 		return data;
 	}
-	public void setData(List<PojoReportIncomesMemberResData> data) {
+	public void setData(List<PojoReportIncomesAdminResData> data) {
 		this.data = data;
 	}
 	public Long getTotal() {
@@ -18,5 +18,5 @@ public class PojoReportIncomesMemberRes {
 		this.total = total;
 	}
 	
-
+	
 }

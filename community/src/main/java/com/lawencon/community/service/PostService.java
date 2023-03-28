@@ -47,6 +47,7 @@ import com.lawencon.community.pojo.post.PojoPollingResponRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReplyResData;
 import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
+import com.lawencon.community.pojo.post.PojoPostCommentReqUpdate;
 import com.lawencon.community.pojo.post.PojoPostCommentRes;
 import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
 import com.lawencon.community.pojo.post.PojoPostReqInsert;
@@ -729,6 +730,25 @@ public class PostService {
 		return res;
 
 	}
+
+	public PojoRes updatePostComment(PojoPostCommentReqUpdate data) {
+		ConnHandler.begin();
+		PostComment postComment = postCommentDao.getByIdRef(data.getPostCommentId());
+		postCommentDao.getByIdAndDetach(postComment.getId());
+		postComment.setVersion(data.getVer());
+		postComment.setBody(data.getContentComment());
+	
+		postCommentDao.save(postComment);
+
+		ConnHandler.commit();
+
+		final PojoRes res = new PojoRes();
+		res.setMessage("Update Success");
+		return res;
+
+	}
+	
+	
 
 	public List<PojoPostCommentRes> getAllCommentByPostId(final String postId, int offset, int limit) throws Exception {
 
