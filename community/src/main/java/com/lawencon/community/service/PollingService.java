@@ -2,7 +2,6 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,20 +112,7 @@ public class PollingService {
 		
 	    final PojoPollingResponRes res = new PojoPollingResponRes();
 		
-			final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-		
-
-		        Map<String, Map<String, Integer>> optionCounts = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
-		        for (String optionId : optionCounts.keySet()) {
-		            Map<String, Integer> optionCount = optionCounts.get(optionId);
-		            for (String optionContent : optionCount.keySet()) {
-		                PojoOptionCountRes optionCountRes = new PojoOptionCountRes();
-		                optionCountRes.setPollingOptionId(optionId);
-		                optionCountRes.setPollingContent(optionContent);
-		                optionCountRes.setCount(optionCount.get(optionContent));
-		                pollingOptionUserCounts.add(optionCountRes);
-		            }
-		        }
+			final List<PojoOptionCountRes> pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(pollingOption.getPolling().getId());
 		        res.setData(pollingOptionUserCounts);
 		        res.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
 		        res.setTotalOption(pollingOptionDao.countTotalPollingUsers(pollingOption.getPolling().getId()));
