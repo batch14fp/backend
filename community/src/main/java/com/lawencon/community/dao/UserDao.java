@@ -46,6 +46,10 @@ public class UserDao extends BaseMasterDao<User> {
 			sqlQuery.append("SELECT *  FROM t_user u ");
 			sqlQuery.append("INNER JOIN t_role r ");
 			sqlQuery.append("ON r.id = u.role_id ");
+			sqlQuery.append("INNER JOIN t_profile pr ");
+			sqlQuery.append("ON pr.id = u.profile_id ");
+			sqlQuery.append("INNER JOIN t_position p ");
+			sqlQuery.append("ON p.id = pr.position_id ");
 			sqlQuery.append("WHERE u.email= :email ");
 			sqlQuery.append("AND u.is_active = TRUE ");
 
