@@ -1,32 +1,23 @@
 package com.lawencon.community.pojo.report;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 public class PojoResportIncomesAdminRes {
+	private List<PojoResportIncomesAdminResData> data;
+	private Long total;
+	public List<PojoResportIncomesAdminResData> getData() {
+		return data;
+	}
+	public void setData(List<PojoResportIncomesAdminResData> data) {
+		this.data = data;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+	
+	
 
-	private String memberName;
-	private String type;
-	private BigDecimal totalIncomes;
-
-	public String getMemberName() {
-		return memberName;
-	}
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public BigDecimal getTotalIncomes() {
-		return totalIncomes;
-	}
-	public void setTotalIncomes(BigDecimal totalIncomes) {
-		this.totalIncomes = totalIncomes;
-	}
-	
-	
-	
 }

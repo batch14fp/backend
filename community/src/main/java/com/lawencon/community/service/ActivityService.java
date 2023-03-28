@@ -33,8 +33,8 @@ import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
-import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
-import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
+import com.lawencon.community.pojo.report.PojoResportIncomesAdminResData;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.util.GenerateString;
@@ -123,28 +123,28 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
+	public List<PojoReportIncomesMemberResData> getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
 			String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(user.getId(), percentMember,
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(user.getId(), percentMember,
 				startDate, endDate, typeCode);
 		return res;
 
 	}
 
-	public List<PojoResportIncomesAdminRes> getIncomesReportAdmin(final LocalDate startDate, final LocalDate endDate,
+	public List<PojoResportIncomesAdminResData> getIncomesReportAdmin(final LocalDate startDate, final LocalDate endDate,
 			String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final List<PojoResportIncomesAdminRes> res = activityDao.getActivityIncome(percentMember, startDate, endDate,
+		final List<PojoResportIncomesAdminResData> res = activityDao.getActivityIncome(percentMember, startDate, endDate,
 				typeCode);
 		return res;
 	}
 
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReportFile(final String userId, final LocalDate startDate,
+	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final String userId, final LocalDate startDate,
 			final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getSystemIncome();
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(userId, percentMember,
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(userId, percentMember,
 				startDate, endDate, categoryCode);
 		return res;
 

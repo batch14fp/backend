@@ -31,7 +31,7 @@ import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
-import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.service.ActivityService;
@@ -182,10 +182,10 @@ public class ActivityController {
 	
 
 	@GetMapping("/member/report/incomes")
-	public ResponseEntity<List<PojoReportIncomesMemberRes>> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
+	public ResponseEntity<List<PojoReportIncomesMemberResData>> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam(required = false) String typeCode) {
 		try {
-			List<PojoReportIncomesMemberRes> activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode);
+			List<PojoReportIncomesMemberResData> activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode);
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
