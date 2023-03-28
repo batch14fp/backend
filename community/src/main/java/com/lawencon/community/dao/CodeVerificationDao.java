@@ -42,8 +42,9 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 	
 	@SuppressWarnings("unchecked")
 	public Optional<CodeVerification> getByCode(String code){
+		try {
 		List<CodeVerification> codeVerifications = new ArrayList<>();
-	
+		
 			StringBuilder sqlQuery = new StringBuilder();
 			sqlQuery.append("SELECT * FROM t_code_verification c ");
 			sqlQuery.append("WHERE c.code = :code ");
@@ -57,6 +58,9 @@ public class CodeVerificationDao extends BaseMasterDao<CodeVerification>{
 			}
 			
 			return Optional.ofNullable(codeVerifications.get(0));
+		}  catch (Exception e) {
+	        return Optional.empty();
+	    }
 	}
 	
 }

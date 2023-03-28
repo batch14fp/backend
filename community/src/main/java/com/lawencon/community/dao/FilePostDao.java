@@ -46,6 +46,7 @@ public class FilePostDao extends AbstractJpaDao{
 	@SuppressWarnings("unchecked")
 	public List<FilePost> getAllFileByPostId(final String postId){
 		final List<FilePost> listFilePosts = new ArrayList<>();
+		try {
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT id, file_id, post_id ");
 		sqlQuery.append("FROM t_file_post ");
@@ -70,7 +71,9 @@ public class FilePostDao extends AbstractJpaDao{
 
 			listFilePosts.add(filePost);
 		}
-
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		return listFilePosts;
 	}
 

@@ -20,6 +20,7 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 		    sql.append("FROM t_social_media");
 
 		    List<SocialMedia> socialMediaList = new ArrayList<>();
+		    try {
 		    List<Object[]> result = ConnHandler.getManager().createNativeQuery(sql.toString()).getResultList();
 
 		    for (Object[] obj : result) {
@@ -29,6 +30,9 @@ public class SocialMediaDao extends BaseMasterDao<SocialMedia> {
 		        socialMedia.setVersion(Integer.valueOf(obj[2].toString()));
 		        socialMedia.setIsActive(Boolean.valueOf(obj[3].toString()));
 		        socialMediaList.add(socialMedia);
+		    }
+		    }catch(Exception e) {
+		    	e.printStackTrace();
 		    }
 
 		    return socialMediaList;

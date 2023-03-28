@@ -94,10 +94,11 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 		sqlQuery.append("SELECT null,sm.id,null,file_id,platform_name, null, null,null ");
 		sqlQuery.append("FROM t_social_media sm ");
 		sqlQuery.append("WHERE sm.id NOT IN (SELECT tp.social_media_id FROM t_profile_social_media tp WHERE tp.profile_id = :id)");
-
+		final List<ProfileSocialMedia> list = new ArrayList<>();
+		try {
 		final List<Object[]> objs = ConnHandler.getManager().createNativeQuery(sqlQuery.toString()).setParameter("id", id).getResultList();
 				
-		final List<ProfileSocialMedia> list = new ArrayList<>();
+
 
 		if (!objs.isEmpty()) {
 			for (Object[] obj : objs) {
@@ -134,6 +135,9 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 				profileSocialMedia.setSocialMedia(socialMedia);
 				list.add(profileSocialMedia);
 			}
+		}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 		return list;
 	}

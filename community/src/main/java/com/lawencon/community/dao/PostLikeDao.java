@@ -80,14 +80,15 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		    sb.append("SELECT id, user_id, post_id ");
 		    sb.append("FROM t_post_like ");
 		    sb.append("WHERE post_id = :postId ");
-
+		    final List<PostLike> result = new ArrayList<>();
+		    try {
 		    final List<Object[]> postLikeList =  ConnHandler
 				    .getManager()
 				    
 				    .createNativeQuery(sb.toString())
 				    .setParameter("postId", postId)
 				    .getResultList();
-		    final List<PostLike> result = new ArrayList<>();
+		
 		    for (Object[] obj : postLikeList) {
 		        final PostLike postLike = new PostLike();
 		        postLike.setId((String) obj[0]);
@@ -101,6 +102,9 @@ public class PostLikeDao extends BaseMasterDao<PostLike> {
 		        postLike.setPost(post);
 
 		        result.add(postLike);
+		    }
+		    }catch(Exception e) {
+		    	e.printStackTrace();
 		    }
 		    return result;
 	}
