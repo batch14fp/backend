@@ -114,6 +114,10 @@ public class PostService {
 			final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 			res.setPollingId(polling.getId());
 			res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+			if(getIsVote(userRef.getId(),data.getPolling().getId())){
+				PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+				res.setPollingResponId(pollingRespionData.getId());
+			}
 			res.setEndAt(polling.getEndAt());		
 			final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 				
@@ -483,6 +487,10 @@ public class PostService {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
 				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+				if(getIsVote(userRef.getId(),data.getPolling().getId())){
+					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+					res.setPollingResponId(pollingRespionData.getId());
+				}
 				res.setEndAt(polling.getEndAt());		
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					
@@ -588,6 +596,10 @@ public class PostService {
 				res.setPollingId(polling.getId());
 				res.setEndAt(polling.getEndAt());				
 				res.setIsVote(getIsVote(userRef.getId(), polling.getId()));
+				if(getIsVote(userRef.getId(),data.getPolling().getId())){
+					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+					res.setPollingResponId(pollingRespionData.getId());
+				}
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					
 				final List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
@@ -668,6 +680,10 @@ public class PostService {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
 				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
+				if(getIsVote(userRef.getId(),data.getPolling().getId())){
+					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+					res.setPollingResponId(pollingRespionData.getId());
+				}
 				res.setEndAt(polling.getEndAt());		
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
 					

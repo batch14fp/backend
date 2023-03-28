@@ -9,6 +9,7 @@ public class PojoPostRes {
 	private String userId;
 	private String imageProfileId;
 	private String pollingId;
+	private String pollingResponId;
 	private String fullname;
 	private String position;
 	private LocalDateTime timeAgo;
@@ -195,6 +196,12 @@ public class PojoPostRes {
 	}
 	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
+	}
+	public String getPollingResponId() {
+		return pollingResponId;
+	}
+	public void setPollingResponId(String pollingResponId) {
+		this.pollingResponId = pollingResponId;
 	}
 	
 	
