@@ -404,7 +404,6 @@ public class ActivityService {
 			pojo.setIsActive(activity.getIsActive());
 			pojo.setCreatedAt(activity.getCreatedAt());
 			pojo.setVer(activity.getVersion());
-		
 
 			if (activity.getUser() != null) {
 				String fullname = activity.getUser().getProfile().getFullname();
@@ -420,9 +419,9 @@ public class ActivityService {
 		return pojoList;
 	}
 
-	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String> categoryCodes ,
+	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String> categoryCodes,
 			final String typeCode, final int offset, final int limit) {
-		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(categoryCodes,typeCode,
+		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(categoryCodes, typeCode,
 				offset, limit);
 
 		if (listActivity == null || listActivity.isEmpty()) {
@@ -457,53 +456,56 @@ public class ActivityService {
 		}
 		return pojoList;
 	}
-	
-	
-	public PojoUpcomingActivityByTypeRes getUpcomingEvent(final int offset, final int limit, final String typeCode){
-		final  PojoUpcomingActivityByTypeRes res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
+
+	public PojoUpcomingActivityByTypeRes getUpcomingEvent(final int offset, final int limit, final String typeCode) {
+		final PojoUpcomingActivityByTypeRes res = activityDao.getAllUpcomingActivity(offset, limit, typeCode);
 		return res;
 	}
+
 	public PojoReportCountMemberRes getTotalData() {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		PojoReportCountMemberRes res = new PojoReportCountMemberRes();
-		res.setTotalParticipantEvent(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.EVENT.getCode(), principalService.getAuthPrincipal()));
-		res.setTotalParticipantCourse(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.COURSE.getCode(), principalService.getAuthPrincipal()));
+		res.setTotalParticipantEvent(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.EVENT.getCode(),
+				principalService.getAuthPrincipal()));
+		res.setTotalParticipantCourse(activityDao.getTotalParticipanByUserIdByType(ActivityTypeEnum.COURSE.getCode(),
+				principalService.getAuthPrincipal()));
 		res.setTotalIncomes(activityDao.getTotalIncomeByUserId(principalService.getAuthPrincipal(), percentMember));
-		res.setTotalAllParticipant(activityDao.getTotalParticipanByUserIdByType(null, principalService.getAuthPrincipal()));
+		res.setTotalAllParticipant(
+				activityDao.getTotalParticipanByUserIdByType(null, principalService.getAuthPrincipal()));
 		return res;
-		
-	}
-	
-	
-	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
-		final PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
-		
-		final List <ActivityVoucher> acticvityVoucherList = activityVoucherDao.getListActivityVoucher(data.getActivityId());
-		
 
-		acticvityVoucherList.forEach(activityVoucher->{
+	}
+
+	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
+	PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
+	
+
+		final List<ActivityVoucher> acticvityVoucherList = activityVoucherDao
+				.getListActivityVoucher(data.getActivityId());
+
+		acticvityVoucherList.forEach(activityVoucher -> {
 			LocalDate expDate = activityVoucher.getVoucher().getExpDate();
-			  if (activityVoucher.getVoucher().getVoucherCode().equalsIgnoreCase(data.getVoucherCode()) && expDate.isBefore(LocalDate.now())) {
-				     	if(activityVoucher.getVoucher().getLimitApplied()< activityVoucher.getVoucher().getUsedCount()) {
+			if (activityVoucher.getVoucher().getVoucherCode().equalsIgnoreCase(data.getVoucherCode())
+					&& expDate.isAfter(LocalDate.now())) {
+				if (activityVoucher.getVoucher().getLimitApplied() > activityVoucher.getVoucher().getUsedCount()) {
 					res.setIsAllowed(true);
-					   throw new IllegalStateException("Coupon code applied successfully ");
+					Voucher voucher = voucherDao.getByCode(data.getVoucherCode()).get();
+					res.setVoucherId(voucher.getId());
 					
-				}
-				else {
+
+				} else {
 					res.setIsAllowed(false);
-					 throw new IllegalStateException("Sorry, the usage limit for this voucher code has been reached. It can no longer be used");
+			
 				}
-			}
-			else {
+			} else {
 				res.setIsAllowed(false);
-				 throw new IllegalStateException("Sorry, the voucher code you entered is not valid or has expired. Please try again with a different voucher code.");
+				
 			}
 			
 		});
-		
+
 		return res;
-		
+
 	}
-	
-	
+
 }
