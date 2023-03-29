@@ -519,7 +519,8 @@ public class ActivityService {
 	}
 
 	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
-		final PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
+	PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
+	
 
 		final List<ActivityVoucher> acticvityVoucherList = activityVoucherDao
 				.getListActivityVoucher(data.getActivityId());
@@ -527,20 +528,20 @@ public class ActivityService {
 		acticvityVoucherList.forEach(activityVoucher -> {
 			LocalDate expDate = activityVoucher.getVoucher().getExpDate();
 			if (activityVoucher.getVoucher().getVoucherCode().equalsIgnoreCase(data.getVoucherCode())
-					&& expDate.isBefore(LocalDate.now())) {
-				if (activityVoucher.getVoucher().getLimitApplied() < activityVoucher.getVoucher().getUsedCount()) {
+					&& expDate.isAfter(LocalDate.now())) {
+				if (activityVoucher.getVoucher().getLimitApplied() > activityVoucher.getVoucher().getUsedCount()) {
 					res.setIsAllowed(true);
-					throw new IllegalStateException("Coupon code applied successfully ");
+					Voucher voucher = voucherDao.getByCode(data.getVoucherCode()).get();
+					res.setVoucherId(voucher.getId());
+					
 
 				} else {
 					res.setIsAllowed(false);
-					throw new IllegalStateException(
-							"Sorry, the usage limit for this voucher code has been reached. It can no longer be used");
+			
 				}
 			} else {
 				res.setIsAllowed(false);
-				throw new IllegalStateException(
-						"Sorry, the voucher code you entered is not valid or has expired. Please try again with a different voucher code.");
+			
 			}
 
 		});
