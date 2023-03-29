@@ -66,85 +66,11 @@
 		<fieldDescription><![CDATA[no]]></fieldDescription>
 	</field>
 	<field name="title" class="java.lang.String"/>
-	<field name="startDate" class="java.lang.String"/>
+	<field name="totalIncomes" class="java.math.BigDecimal"/>
 	<field name="totalParticipants" class="java.lang.Long"/>
 	<field name="type" class="java.lang.String"/>
 	<title>
-		<band height="198" splitType="Stretch">
-			<line>
-				<reportElement x="0" y="80" width="556" height="2" forecolor="#C9C9C9" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-			</line>
-			<staticText>
-				<reportElement x="415" y="10" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right">
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Date:]]></text>
-			</staticText>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="465" y="30" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<textFieldExpression><![CDATA["INV0001"]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="415" y="30" width="50" height="20" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right">
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Invoice #]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="0" width="210" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement>
-					<font fontName="Lato" size="19" isBold="true"/>
-				</textElement>
-				<text><![CDATA[WECOMMUNITY]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="25" width="205" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="95" y="40" width="205" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="380" y="100" width="65" height="30" uuid="742016f3-01d4-4a2d-a6da-aab59e3eb8e4"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="449" y="100" width="100" height="30" uuid="44dbc5f6-440c-4b3b-939e-77e40873ebcb"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
-			</textField>
+		<band height="219" splitType="Stretch">
 			<staticText>
 				<reportElement x="220" y="130" width="122" height="30" uuid="b79ac304-9e00-4a37-aed2-ec36503f2faf"/>
 				<textElement textAlignment="Center">
@@ -154,10 +80,90 @@
 
 ]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="80" width="556" height="2" forecolor="#050505" uuid="b7d9d080-1f49-41fd-8a21-f765d7cf048c">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
 			<image>
-				<reportElement x="5" y="0" width="90" height="68" uuid="5dd2289e-4b38-46ed-8549-277ab61938c2"/>
-				<imageExpression><![CDATA["src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
+				<reportElement x="50" y="0" width="92" height="78" uuid="f017f216-36d1-4b07-a418-57d727342bce"/>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="190" y="40" width="205" height="15" uuid="98df426c-44cf-4189-9da3-9e526fd3d27d"/>
+				<textElement>
+					<font fontName="Lato"/>
+				</textElement>
+				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="10" width="210" height="25" uuid="d75839b4-e5b4-489a-b45e-1cb611e7992a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Lato" size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WECOMMUNITY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="166" y="52" width="245" height="30" uuid="393f64a5-3c4c-46c3-8de2-8394cab73ce9"/>
+				<textElement>
+					<font fontName="Lato"/>
+				</textElement>
+				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="150" width="114" height="20" uuid="9fc9c517-c804-45c9-b81c-8200486388e1"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="55" y="150" width="45" height="20" uuid="fcc06b1d-fac8-4174-9e78-d5000f4744db"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[From :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="170" width="45" height="20" uuid="5ca60fcc-b965-426d-b529-bd011f9e2452"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[To     :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="170" width="114" height="20" uuid="3d57beda-2424-4aa7-9bd0-c3c61c08b575"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd  MMMMM  yyyy  -">
+				<reportElement x="126" y="199" width="98" height="20" uuid="651ca442-c12a-460d-92b2-d072e86988de"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="226" y="199" width="90" height="20" uuid="a1a3d246-8f0e-412c-b993-b5c1d5c64bc5"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="56" y="199" width="70" height="20" uuid="e13bbba6-492d-491d-8182-9c70bad69a92"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<text><![CDATA[Generate on]]></text>
+			</staticText>
 		</band>
 	</title>
 	<columnHeader>
@@ -230,7 +236,7 @@
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="86" y="0" width="52" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
@@ -248,7 +254,7 @@
 		<band height="30">
 			<image>
 				<reportElement x="-20" y="0" width="595" height="30" uuid="0b451bdc-8272-4246-93c6-e1b97dda4b68"/>
-				<imageExpression><![CDATA["/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="181" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="d5bc19ab-5697-4207-9521-f669d2371a54"/>

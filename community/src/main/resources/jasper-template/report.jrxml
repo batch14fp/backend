@@ -272,7 +272,7 @@
 		<band height="30">
 			<image>
 				<reportElement x="-20" y="0" width="595" height="30" uuid="0b451bdc-8272-4246-93c6-e1b97dda4b68"/>
-				<imageExpression><![CDATA["/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="181" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="d5bc19ab-5697-4207-9521-f669d2371a54"/>

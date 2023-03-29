@@ -62,12 +62,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="no" class="java.lang.Integer">
-		<fieldDescription><![CDATA[no]]></fieldDescription>
-	</field>
 	<field name="memberName" class="java.lang.String"/>
 	<field name="totalIncomes" class="java.math.BigDecimal"/>
-	<field name="totalParticipants" class="java.lang.Long"/>
 	<field name="type" class="java.lang.String"/>
 	<title>
 		<band height="223" splitType="Stretch">
@@ -126,7 +122,7 @@
 			</staticText>
 			<image>
 				<reportElement x="50" y="0" width="92" height="78" uuid="5dd2289e-4b38-46ed-8549-277ab61938c2"/>
-				<imageExpression><![CDATA["src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="55" y="150" width="45" height="20" uuid="30dd23b6-ff6c-461b-8f72-a75d18fe8414"/>
@@ -209,16 +205,6 @@
 	<detail>
 		<band height="186">
 			<textField>
-				<reportElement x="53" y="0" width="33" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
-				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="166" y="0" width="213" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec14ba10-b451-41ab-b9d2-3125f330647d"/>
 				</reportElement>
@@ -254,7 +240,7 @@
 		<band height="30">
 			<image>
 				<reportElement x="-20" y="0" width="595" height="30" uuid="0b451bdc-8272-4246-93c6-e1b97dda4b68"/>
-				<imageExpression><![CDATA["/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/footer.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="181" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="d5bc19ab-5697-4207-9521-f669d2371a54"/>
