@@ -353,7 +353,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
-			LocalDate startDate, LocalDate endDate, String typeCode) {
+			LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
@@ -377,6 +377,18 @@ public class ActivityDao extends AbstractJpaDao {
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		
+		if (typeCode != null && !typeCode.isEmpty()) {
+			query.setParameter("typeCode", typeCode);
+		}
+		
+		if (limit != null) {
+			query.setMaxResults(limit);
+		}
+		if (offset != null) {
+			query.setFirstResult(offset);
+		}
+		
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}
@@ -400,7 +412,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesAdminResData> getActivityIncome(Float percentIncome, LocalDate startDate,
-			LocalDate endDate, String typeCode) {
+			LocalDate endDate, String typeCode, Integer offset,Integer limit) {
 		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
@@ -422,6 +434,14 @@ public class ActivityDao extends AbstractJpaDao {
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		
+		if (limit != null) {
+			query.setMaxResults(limit);
+		}
+		if (offset != null) {
+			query.setFirstResult(offset);
+		}
+		
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}
