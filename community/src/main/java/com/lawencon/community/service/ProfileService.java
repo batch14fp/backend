@@ -64,7 +64,7 @@ public class ProfileService {
 		resGetProfile.setProfileId(profile.getId());
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
-
+		resGetProfile.setVer(profile.getVersion());
 		resGetProfile.setCompany(profile.getCompanyName());
 		final Subscription subs = subscriptionDao.getByProfileId(profile.getId()).get();
 		final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
@@ -133,7 +133,9 @@ public class ProfileService {
 		}file.setFileExtension(data.getFile().getExtension());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileName(GenerateString.generateFileName(data.getFile().getExtension()));
+		file = fileDao.save(file);
 		profile.setImageProfile(file);
+		
 		}
 		
 		if(data.getWalletId()!=null) {
@@ -149,7 +151,6 @@ public class ProfileService {
 		profile.setPostalCode(data.getPostalCode());
 		profile.setDob(data.getDob());
 		profile.setVersion(data.getVer());
-		profile.setIsActive(data.getIsActive());
 		profileDao.saveAndFlush(profile);
 	
 		ConnHandler.commit();

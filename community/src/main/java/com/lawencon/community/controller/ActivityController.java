@@ -29,9 +29,15 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesAdminRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
 import com.lawencon.community.pojo.voucher.PojoActivityVoucherRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
@@ -149,23 +155,19 @@ public class ActivityController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	        }
 	    }
-	  
-	  
-	  
-	  
-//	@GetMapping("/report")
-//	public ResponseEntity<List<PojoReportActivityMemberRes>> getAllByDateRange(@RequestParam String startDate,
-//			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
-//			@RequestParam(required = false) Integer limit) {
-//		List<PojoReportActivityMemberRes> activities = activityService.getMemberReport(
-//				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
-//		return ResponseEntity.ok(activities);
-//	}
 
-	@GetMapping("/report/test")
-	public ResponseEntity<byte[]> generateReport( @RequestParam String id, @RequestParam String startDate, @RequestParam String endDate,
+	@GetMapping("member/report")
+	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam String startDate,
+			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit) {
+		PojoReportActivityMemberRes activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+		return ResponseEntity.ok(activities);
+	}
+
+	@GetMapping("member/report/file")
+	public ResponseEntity<byte[]> generateReportFile( @RequestParam String id, @RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
-		List<PojoReportActivityMemberRes> data = activityService.getMemberReport(id, Date.valueOf(startDate).toLocalDate(),
+		List<PojoReportActivityMemberResData> data = activityService.getMemberReportFile(id, Date.valueOf(startDate).toLocalDate(),
 				Date.valueOf(endDate).toLocalDate(), offset, limit);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
@@ -183,21 +185,105 @@ public class ActivityController {
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
 	
-	
+	@GetMapping("admin/report")
+	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRangeAdmin(@RequestParam String startDate,
+			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit) {
+		PojoReportActivityAdminRes activities = activityService.getAdminReport(
+				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+		return ResponseEntity.ok(activities);
+	}
 
-	@GetMapping("/member/report/incomes")
-	public ResponseEntity<List<PojoReportIncomesMemberRes>> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
-			@RequestParam(required = false) String typeCode) {
+	@GetMapping("admin/report/file")
+	public ResponseEntity<byte[]> generateReportFileAdmin(  @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+		List<PojoReportActivityAdminResData> data = activityService.getAdminReportFile( Date.valueOf(startDate).toLocalDate(),
+				Date.valueOf(endDate).toLocalDate());
+		Map<String, Object> params = new HashMap<>();
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		byte[] pdfBytes;
 		try {
-			List<PojoReportIncomesMemberRes> activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode);
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("attachment", "report.pdf");
+		headers.setContentLength(pdfBytes.length);
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/member/report/incomes")
+	public ResponseEntity<PojoReportIncomesMemberRes> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit) {
+		try {
+			PojoReportIncomesMemberRes activities = activityService.getMemberIncomesReport(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode, offset,  limit);
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-
 	
+	@GetMapping("member/report/incomes/file")
+	public ResponseEntity<byte[]> generateReportFileIncomesMember(  @RequestParam String startDate, @RequestParam String endDate,
+		 @RequestParam(required = false) String typeCode) {
+		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( Date.valueOf(startDate).toLocalDate(),
+				Date.valueOf(endDate).toLocalDate(),typeCode);
+		Map<String, Object> params = new HashMap<>();
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		byte[] pdfBytes;
+		try {
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-income-member");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("attachment", "report.pdf");
+		headers.setContentLength(pdfBytes.length);
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
+	
+	
+	
+	@GetMapping("/admin/report/incomes")
+	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports( @RequestParam String startDate, @RequestParam String endDate,
+			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit) {
+		try {
+			PojoReportIncomesAdminRes activities = activityService.getIncomesReportAdmin(Date.valueOf(startDate).toLocalDate(),Date.valueOf(endDate).toLocalDate(), typeCode, offset, limit);
+			return ResponseEntity.ok(activities);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("admin/report/incomes/file")
+	public ResponseEntity<byte[]> generateReportFileIncomesAdmin(  @RequestParam String startDate, @RequestParam String endDate,
+		 @RequestParam(required = false) String typeCode) {
+		List<PojoReportIncomesAdminResData> data = activityService.getIncomesReportAdminFile( Date.valueOf(startDate).toLocalDate(),
+				Date.valueOf(endDate).toLocalDate(),typeCode);
+		Map<String, Object> params = new HashMap<>();
+		params.put("startDate", startDate);
+		params.put("endDate", endDate);
+		byte[] pdfBytes;
+		try {
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-income-admin");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setContentDispositionFormData("attachment", "report.pdf");
+		headers.setContentLength(pdfBytes.length);
+		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+	}
 	
 
 	@PutMapping("/payment")

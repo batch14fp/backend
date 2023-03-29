@@ -96,6 +96,7 @@ public class PostService {
 	}
 
 	public PojoPostRes getById(String id) throws Exception {
+		
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
