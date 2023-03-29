@@ -148,6 +148,7 @@ public class InvoiceService {
 		res.setEndDate(invoice.getActivity().getEndDate());
 		res.setInvoiceCode(invoice.getInvoiceCode());
 		res.setInvoiceId(invoice.getId());
+		res.setImageId(invoice.getActivity().getFile().getId());
 		res.setPrice(invoice.getActivity().getPrice());
 		res.setStartDate(invoice.getActivity().getStartDate());
 		res.setVoucherId(invoice.getVoucher().getId());

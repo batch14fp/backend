@@ -8,6 +8,7 @@ public class PojoInvoiceRes {
 	private String activityId;
 	private String voucherId;
 	private String membershipId;
+	private String imageId;
 	private String voucherCode;
 	private String invoiceCode;
 	private String activityTitle;
@@ -16,7 +17,14 @@ public class PojoInvoiceRes {
 	private LocalDateTime endDate;
 	private Boolean isActive;
 	private Integer ver;
+	
 
+	public String getImageId() {
+		return imageId;
+	}
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
 	public String getMembershipId() {
 		return membershipId;
 	}

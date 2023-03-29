@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ActivityVoucherDao extends AbstractJpaDao{
 
 		List<ActivityVoucher> listActivityVoucher = new ArrayList<>();
 		try {
-		sqlQuery.append("SELECT av.id as activity_voucher_id,  v.id as voucher_id, v.voucher_code,v.limit_applied, v.used_count, a.id as activity_id, a.type_activity_id ");
+		sqlQuery.append("SELECT av.id as activity_voucher_id,  v.id as voucher_id, v.voucher_code,v.limit_applied, v.used_count,v.exp_date, a.id as activity_id, a.type_activity_id ");
 		sqlQuery.append("FROM t_activity_voucher av ");
 		sqlQuery.append("JOIN t_voucher v ON av.voucher_id = v.id ");
 		sqlQuery.append("JOIN t_activity a ON av.activity_id = a.id ");
@@ -49,14 +50,15 @@ public class ActivityVoucherDao extends AbstractJpaDao{
 			voucher.setVoucherCode(obj[2].toString());
 			voucher.setLimitApplied(Integer.valueOf(obj[3].toString()));
 			voucher.setUsedCount(Integer.valueOf(obj[4].toString()));
+			voucher.setExpDate(Date.valueOf(obj[5].toString()).toLocalDate());
 			
 			
 			activityVoucher.setVoucher(voucher);
 			
 			final Activity activity = new Activity();
-			activity.setId(obj[5].toString());
+			activity.setId(obj[6].toString());
 			final ActivityType activityType = new ActivityType();  
-			activityType.setId(obj[6].toString());
+			activityType.setId(obj[7].toString());
 			
 			activity.setTypeActivity(activityType);
 			
