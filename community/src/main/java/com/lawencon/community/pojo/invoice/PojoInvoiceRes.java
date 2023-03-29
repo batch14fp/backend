@@ -9,16 +9,37 @@ public class PojoInvoiceRes {
 	private String voucherId;
 	private String membershipId;
 	private String imageId;
+	private String provider;
+	private String location;
 	private String voucherCode;
 	private String invoiceCode;
 	private String activityTitle;
 	private BigDecimal price;
+	private Long discountNum;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private Boolean isActive;
 	private Integer ver;
 	
-
+	
+	public Long getDiscountNum() {
+		return discountNum;
+	}
+	public void setDiscountNum(Long discountNum) {
+		this.discountNum = discountNum;
+	}
+	public String getProvider() {
+		return provider;
+	}
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
 	public String getImageId() {
 		return imageId;
 	}

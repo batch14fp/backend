@@ -152,6 +152,11 @@ public class InvoiceService {
 		res.setPrice(invoice.getActivity().getPrice());
 		res.setStartDate(invoice.getActivity().getStartDate());
 		res.setVoucherId(invoice.getVoucher().getId());
+		res.setVoucherCode(invoice.getVoucher().getVoucherCode());
+		Long discountNum = (long) (invoice.getVoucher().getDiscountPercent()*100);
+		res.setDiscountNum(discountNum);
+		res.setProvider(invoice.getActivity().getProvider());
+		res.setLocation(invoice.getActivity().getActivityLocation());
 		return res;
 
 	}
