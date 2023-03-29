@@ -65,79 +65,20 @@
 	<field name="no" class="java.lang.Integer">
 		<fieldDescription><![CDATA[no]]></fieldDescription>
 	</field>
-	<field name="title" class="java.lang.String"/>
-	<field name="startDate" class="java.lang.String"/>
+	<field name="memberName" class="java.lang.String"/>
+	<field name="totalIncomes" class="java.math.BigDecimal"/>
 	<field name="totalParticipants" class="java.lang.Long"/>
 	<field name="type" class="java.lang.String"/>
 	<title>
-		<band height="219" splitType="Stretch">
-			<staticText>
-				<reportElement x="220" y="100" width="122" height="30" uuid="b79ac304-9e00-4a37-aed2-ec36503f2faf"/>
-				<textElement textAlignment="Center">
-					<font fontName="Lato" size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[EVENT REPORT
-
-]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="74" y="141" width="114" height="20" uuid="e13c1cf2-a172-444f-9265-ab9f254405ea"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="74" y="161" width="114" height="20" uuid="9826ecf1-5044-4ea6-b65f-138e2e3ba7e1"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="29" y="141" width="45" height="20" uuid="e76bdd3c-2eed-45ae-a180-d4b13383693c"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[From :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="29" y="161" width="45" height="20" uuid="4af35017-e04a-40db-96d4-5687fe96935a"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[To     :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="190" width="70" height="20" uuid="a2357148-807c-4339-aa5d-d70fadd7fb32"/>
-				<box rightPadding="0"/>
-				<textElement textAlignment="Left">
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<text><![CDATA[Generate on]]></text>
-			</staticText>
-			<textField pattern="HH:mm">
-				<reportElement x="200" y="190" width="90" height="20" uuid="13df323f-046a-4002-8509-914294ba82cd"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd  MMMMM  yyyy  -">
-				<reportElement x="100" y="190" width="98" height="20" uuid="b3dbf626-dc3e-4825-b0e6-1f574da10b99"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
+		<band height="223" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="80" width="556" height="2" forecolor="#050505" uuid="fd682dae-c8ca-464e-868f-fe06f837ccab">
+				<reportElement x="0" y="80" width="556" height="2" forecolor="#050505" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="172" y="10" width="210" height="25" uuid="324709d2-0ae0-4544-adf4-078a689f0738">
+				<reportElement x="172" y="10" width="210" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -147,29 +88,88 @@
 				<text><![CDATA[WECOMMUNITY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="190" y="40" width="205" height="15" uuid="6b000897-0a3f-4d48-95c2-5d9a5336f2fc"/>
+				<reportElement x="190" y="40" width="205" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
 				<textElement>
 					<font fontName="Lato"/>
 				</textElement>
 				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="166" y="52" width="245" height="30" uuid="859e1b8a-8c9c-4f53-8d48-267e1819ff2c"/>
+				<reportElement x="166" y="52" width="245" height="30" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
 				<textElement>
 					<font fontName="Lato"/>
 				</textElement>
 				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="100" y="150" width="114" height="20" uuid="742016f3-01d4-4a2d-a6da-aab59e3eb8e4"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="170" width="114" height="20" uuid="44dbc5f6-440c-4b3b-939e-77e40873ebcb"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="220" y="100" width="122" height="30" uuid="b79ac304-9e00-4a37-aed2-ec36503f2faf"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lato" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INCOMES REPORT
+
+]]></text>
+			</staticText>
 			<image>
-				<reportElement x="50" y="0" width="92" height="78" uuid="434ee0bd-0401-44ab-989c-fa9782980204"/>
+				<reportElement x="50" y="0" width="92" height="78" uuid="5dd2289e-4b38-46ed-8549-277ab61938c2"/>
 				<imageExpression><![CDATA["src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="55" y="150" width="45" height="20" uuid="30dd23b6-ff6c-461b-8f72-a75d18fe8414"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[From :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="170" width="45" height="20" uuid="20f2c627-4634-414b-9124-e8e7cd7e2967"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[To     :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="199" width="70" height="20" uuid="b9bbeae3-1ae8-4164-be77-65ec2a85fd6c"/>
+				<box rightPadding="0"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<text><![CDATA[Generate on]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement x="226" y="199" width="90" height="20" uuid="defe697f-1a42-450e-b381-520d82718938"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd  MMMMM  yyyy  -">
+				<reportElement x="126" y="199" width="98" height="20" uuid="6f8bcd64-713b-4373-aa58-efdf952b1deb"/>
+				<textElement>
+					<font fontName="Lato" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
 		<band height="33">
 			<staticText>
-				<reportElement mode="Opaque" x="25" y="3" width="33" height="30" backcolor="#F2F2F2" uuid="b6ecbf30-2ab4-4f4d-b033-083cb6ee05aa"/>
+				<reportElement mode="Opaque" x="53" y="3" width="33" height="30" backcolor="#F2F2F2" uuid="b6ecbf30-2ab4-4f4d-b033-083cb6ee05aa"/>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
@@ -177,33 +177,25 @@
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="110" y="3" width="213" height="30" backcolor="#F2F2F2" uuid="7b6b7511-ad85-4702-ab94-e55c285ff5f1"/>
+				<reportElement mode="Opaque" x="166" y="3" width="213" height="30" backcolor="#F2F2F2" uuid="7b6b7511-ad85-4702-ab94-e55c285ff5f1"/>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<text><![CDATA[Title]]></text>
+				<text><![CDATA[Member Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="428" y="3" width="100" height="30" backcolor="#F2F2F2" uuid="a60d5d1b-3875-4602-962b-6fabe7efaa42"/>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<text><![CDATA[Total Participants]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="323" y="3" width="105" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
+				<reportElement mode="Opaque" x="379" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<text><![CDATA[Start Date]]></text>
+				<text><![CDATA[Total Incomes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="58" y="3" width="52" height="30" backcolor="#F2F2F2" uuid="1c43ab9b-e913-409a-872d-23766a70f6a2">
+				<reportElement mode="Opaque" x="86" y="3" width="80" height="30" backcolor="#F2F2F2" uuid="1c43ab9b-e913-409a-872d-23766a70f6a2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf62917e-9597-4720-a286-6644bfc2d678"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -217,7 +209,7 @@
 	<detail>
 		<band height="186">
 			<textField>
-				<reportElement x="25" y="0" width="33" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
+				<reportElement x="53" y="0" width="33" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -227,37 +219,27 @@
 				<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="0" width="213" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
+				<reportElement x="166" y="0" width="213" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec14ba10-b451-41ab-b9d2-3125f330647d"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{memberName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="323" y="0" width="105" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
+				<reportElement x="379" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="428" y="0" width="100" height="30" uuid="5d4f73a5-28f7-4bb0-9bd1-d1c5e2dca3bc">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71248de5-2d2b-4341-89aa-3f2077e7d601"/>
-				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalParticipants}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="58" y="0" width="52" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
+				<reportElement x="86" y="0" width="80" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf62917e-9597-4720-a286-6644bfc2d678"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -295,7 +277,7 @@
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<text><![CDATA[Total Participants :]]></text>
+				<text><![CDATA[Total Incomes :]]></text>
 			</staticText>
 		</band>
 	</summary>

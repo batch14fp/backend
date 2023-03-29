@@ -129,11 +129,11 @@ public class ActivityService {
 	}
 	
 	
-	public PojoReportActivityMemberRes getMemberReport(final String id, final LocalDate startDate,
+	public PojoReportActivityMemberRes getMemberReport( final LocalDate startDate,
 			final LocalDate endDate, Integer offset, Integer limit) {
 		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
 		final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
-		final User user = userDao.getByIdRef(id);
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
 				limit);
 
@@ -163,7 +163,7 @@ public class ActivityService {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(user.getId(),
-				percentMember, startDate, endDate, typeCode);
+				percentMember, startDate, endDate, typeCode, null, null);
 		return res;
 
 	}
@@ -171,12 +171,12 @@ public class ActivityService {
 	
 
 	public PojoReportIncomesMemberRes getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
-			String typeCode) {
+			String typeCode, Integer offset, Integer limit) {
 		PojoReportIncomesMemberRes res = new PojoReportIncomesMemberRes();
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoReportIncomesMemberResData> resList = activityDao.getActivityIncomeByUser(user.getId(),
-				percentMember, startDate, endDate, typeCode);
+				percentMember, startDate, endDate, typeCode,offset, limit );
 		res.setData(resList);
 		res.setTotal((long)resList.size());
 		return res;
@@ -187,15 +187,15 @@ public class ActivityService {
 			final LocalDate endDate, String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final List<PojoReportIncomesAdminResData> res = activityDao.getActivityIncome(percentMember, startDate,
-				endDate, typeCode);
+				endDate, typeCode, null, null);
 		return res;
 	}
 	public PojoReportIncomesAdminRes getIncomesReportAdmin(final LocalDate startDate,
-			final LocalDate endDate, String typeCode) {
+			final LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 		PojoReportIncomesAdminRes res = new PojoReportIncomesAdminRes();
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final List<PojoReportIncomesAdminResData> resList = activityDao.getActivityIncome(percentMember, startDate,
-				endDate, typeCode);
+				endDate, typeCode, offset, limit);
 		
 		res.setData(resList);
 		res.setTotal((long)resList.size());
@@ -207,15 +207,14 @@ public class ActivityService {
 			final LocalDate startDate, final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getSystemIncome();
 		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(userId, percentMember,
-				startDate, endDate, categoryCode);
+				startDate, endDate, categoryCode, null, null);
 		return res;
 
 	}
 
-	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate,
-			Integer offset, Integer limit) {
+	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate	) {
 		final List<PojoReportActivityAdminResData> res = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, null, null);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();

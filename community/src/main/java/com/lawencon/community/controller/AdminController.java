@@ -22,7 +22,7 @@ import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqInsert;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
-import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;
@@ -103,10 +103,10 @@ public class AdminController {
 
 	
 	@GetMapping("/report")
-	public ResponseEntity<List<PojoReportActivityAdminResData>> getAllByDateRange(@RequestParam String startDate,
+	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRange(@RequestParam String startDate,
 			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
 			@RequestParam(required = false) Integer limit) {
-				List<PojoReportActivityAdminResData> activities = activityService.getAdminReportFile(
+			PojoReportActivityAdminRes activities = activityService.getAdminReport(
 				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
 		return ResponseEntity.ok(activities);
 	}

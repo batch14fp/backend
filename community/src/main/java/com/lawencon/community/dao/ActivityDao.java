@@ -205,7 +205,7 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
 		sqlQuery.append("WHERE a.is_active = TRUE ");
 		
-		if(!userId.isEmpty()&&userId!=null) {
+		if(userId!=null) {
 		sqlQuery.append("AND a.user_id = :userId ");
 		}
 		sqlQuery.append("AND a.start_date ");
@@ -216,6 +216,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		
 		if(userId!=null&&!userId.isEmpty()) {
 		query.setParameter("userId", userId);
 		}
@@ -353,7 +354,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
-			LocalDate startDate, LocalDate endDate, String typeCode) {
+			LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
@@ -377,6 +378,18 @@ public class ActivityDao extends AbstractJpaDao {
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		
+		if (typeCode != null && !typeCode.isEmpty()) {
+			query.setParameter("typeCode", typeCode);
+		}
+		
+		if (limit != null) {
+			query.setMaxResults(limit);
+		}
+		if (offset != null) {
+			query.setFirstResult(offset);
+		}
+		
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}
@@ -400,28 +413,36 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesAdminResData> getActivityIncome(Float percentIncome, LocalDate startDate,
-			LocalDate endDate, String typeCode) {
+			LocalDate endDate, String typeCode, Integer offset,Integer limit) {
 		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT p.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("SELECT pr.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_user u ON u.id = i.user_id ");
-		sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+		sqlQuery.append("INNER JOIN t_profile pr ON pr.id = u.profile_id ");
 		sqlQuery.append("WHERE p.is_paid = TRUE ");
 		sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
 
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
-		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title ");
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("percentValue", percentValue);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
+		
+		if (limit != null) {
+			query.setMaxResults(limit);
+		}
+		if (offset != null) {
+			query.setFirstResult(offset);
+		}
+		
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}

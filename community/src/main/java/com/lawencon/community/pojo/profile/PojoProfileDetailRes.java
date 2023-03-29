@@ -34,12 +34,9 @@ public class PojoProfileDetailRes {
 	private Integer imageVer;
 	private LocalDateTime startDateMember;
 	private LocalDateTime endDateMember;	
+	private Integer ver;
 	private List<PojoSocialMediaRes> socialMediaList;
 
-	
-	
-	
-	
 	public String getWalletId() {
 		return walletId;
 	}
@@ -198,7 +195,13 @@ public class PojoProfileDetailRes {
 	public void setEndDateMember(LocalDateTime endDateMember) {
 		this.endDateMember = endDateMember;
 	}
-	
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+
 	
 	
 }
