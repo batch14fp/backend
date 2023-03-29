@@ -65,7 +65,6 @@ public class ProfileService {
 		resGetProfile.setFullname(profile.getFullname());
 		resGetProfile.setEmail(user.getEmail());
 		resGetProfile.setVer(profile.getVersion());
-
 		resGetProfile.setCompany(profile.getCompanyName());
 		final Subscription subs = subscriptionDao.getByProfileId(profile.getId()).get();
 		final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());

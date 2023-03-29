@@ -8,7 +8,8 @@ public class PojoReportActivityAdminResData {
 	private String providerName;
 	private String type;
 	private String title;
-	private LocalDate startDate;
+	private Long totalParticipants;
+	private String startDate;
 	
 
 	public Integer getNo() {
@@ -41,12 +42,20 @@ public class PojoReportActivityAdminResData {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public LocalDate getStartDate() {
+	
+	public String getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
+	public Long getTotalParticipants() {
+		return totalParticipants;
+	}
+	public void setTotalParticipants(Long totalParticipants) {
+		this.totalParticipants = totalParticipants;
+	}
+	
 
 	
 	

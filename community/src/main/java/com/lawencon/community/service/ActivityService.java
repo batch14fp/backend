@@ -221,11 +221,12 @@ public class ActivityService {
 
 			reportMember.setNo(i + 1);
 			reportMember.setStartDate(
-					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
+					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setProviderName(activityList.get(i).getProvider());
+			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), activityList.get(i).getUser().getId()));
 			res.add(reportMember);
 		}
 		return res;
@@ -243,7 +244,7 @@ public class ActivityService {
 
 			reportMember.setNo(i + 1);
 			reportMember.setStartDate(
-					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
+					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
