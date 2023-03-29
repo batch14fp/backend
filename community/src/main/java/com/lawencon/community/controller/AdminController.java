@@ -23,7 +23,6 @@ import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
-import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
 import com.lawencon.community.pojo.user.PojoSignUpReqInsert;

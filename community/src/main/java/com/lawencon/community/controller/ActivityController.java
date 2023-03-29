@@ -157,11 +157,10 @@ public class ActivityController {
 	    }
 
 	@GetMapping("member/report")
-	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam String id,@RequestParam String startDate,
+	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam String startDate,
 			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
 			@RequestParam(required = false) Integer limit) {
-		PojoReportActivityMemberRes activities = activityService.getMemberReport(id,
-				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+		PojoReportActivityMemberRes activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
 		return ResponseEntity.ok(activities);
 	}
 
@@ -275,7 +274,7 @@ public class ActivityController {
 		params.put("endDate", endDate);
 		byte[] pdfBytes;
 		try {
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-income-admin");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
