@@ -31,10 +31,14 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
+import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
 import com.lawencon.community.pojo.report.PojoReportActivityMemberRes;
+import com.lawencon.community.pojo.report.PojoReportActivityMemberResData;
 import com.lawencon.community.pojo.report.PojoReportCountMemberRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesAdminRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberRes;
-import com.lawencon.community.pojo.report.PojoResportIncomesAdminRes;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
 import com.lawencon.community.util.GenerateString;
@@ -99,16 +103,16 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportActivityMemberRes> getMemberReport(final String id, final LocalDate startDate,
+	public List<PojoReportActivityMemberResData> getMemberReportFile(final String id, final LocalDate startDate,
 			final LocalDate endDate, Integer offset, Integer limit) {
-		final List<PojoReportActivityMemberRes> res = new ArrayList<>();
+		final List<PojoReportActivityMemberResData> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(id);
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
 
-			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
+			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 
 			reportMember.setNo(i + 1);
 
@@ -123,41 +127,98 @@ public class ActivityService {
 		return res;
 
 	}
+	
+	
+	public PojoReportActivityMemberRes getMemberReport(final String id, final LocalDate startDate,
+			final LocalDate endDate, Integer offset, Integer limit) {
+		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
+		final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
+		final User user = userDao.getByIdRef(id);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
+				limit);
 
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
-			String typeCode) {
+		for (int i = 0; i < activityList.size(); i++) {
+
+			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
+
+			reportMember.setNo(i + 1);
+
+			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
+			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
+			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
+
+			resList.add(reportMember);
+		}
+		res.setData(resList);
+		res.setTotal((long)resList.size());
+		return res;
+
+	}
+
+	
+	
+	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final LocalDate startDate,
+			final LocalDate endDate, String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(user.getId(), percentMember,
-				startDate, endDate, typeCode);
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(user.getId(),
+				percentMember, startDate, endDate, typeCode);
 		return res;
 
 	}
+	
+	
 
-	public List<PojoResportIncomesAdminRes> getIncomesReportAdmin(final LocalDate startDate, final LocalDate endDate,
+	public PojoReportIncomesMemberRes getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
 			String typeCode) {
+		PojoReportIncomesMemberRes res = new PojoReportIncomesMemberRes();
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final List<PojoResportIncomesAdminRes> res = activityDao.getActivityIncome(percentMember, startDate, endDate,
-				typeCode);
+		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
+		final List<PojoReportIncomesMemberResData> resList = activityDao.getActivityIncomeByUser(user.getId(),
+				percentMember, startDate, endDate, typeCode);
+		res.setData(resList);
+		res.setTotal((long)resList.size());
 		return res;
+
 	}
 
-	public List<PojoReportIncomesMemberRes> getMemberIncomesReportFile(final String userId, final LocalDate startDate,
-			final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
+	public List<PojoReportIncomesAdminResData> getIncomesReportAdminFile(final LocalDate startDate,
+			final LocalDate endDate, String typeCode) {
+		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
+		final List<PojoReportIncomesAdminResData> res = activityDao.getActivityIncome(percentMember, startDate,
+				endDate, typeCode);
+		return res;
+	}
+	public PojoReportIncomesAdminRes getIncomesReportAdmin(final LocalDate startDate,
+			final LocalDate endDate, String typeCode) {
+		PojoReportIncomesAdminRes res = new PojoReportIncomesAdminRes();
+		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
+		final List<PojoReportIncomesAdminResData> resList = activityDao.getActivityIncome(percentMember, startDate,
+				endDate, typeCode);
+		
+		res.setData(resList);
+		res.setTotal((long)resList.size());
+		return res;
+	}
+	
+
+	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final String userId,
+			final LocalDate startDate, final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getSystemIncome();
-		final List<PojoReportIncomesMemberRes> res = activityDao.getActivityIncomeByUser(userId, percentMember,
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(userId, percentMember,
 				startDate, endDate, categoryCode);
 		return res;
 
 	}
 
-	public List<PojoReportActivityAdminRes> getAdminReport(final LocalDate startDate, final LocalDate endDate,
+	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate,
 			Integer offset, Integer limit) {
-		final List<PojoReportActivityAdminRes> res = new ArrayList<>();
+		final List<PojoReportActivityAdminResData> res = new ArrayList<>();
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
 		for (int i = 0; i < activityList.size(); i++) {
 
-			final PojoReportActivityAdminRes reportMember = new PojoReportActivityAdminRes();
+			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
 
 			reportMember.setNo(i + 1);
 			reportMember.setStartDate(
@@ -168,53 +229,34 @@ public class ActivityService {
 			reportMember.setProviderName(activityList.get(i).getProvider());
 			res.add(reportMember);
 		}
+		return res;
+	}
 
+	public PojoReportActivityAdminRes getAdminReport(final LocalDate startDate, final LocalDate endDate, Integer offset,
+			Integer limit) {
+		final PojoReportActivityAdminRes res = new PojoReportActivityAdminRes();
+
+		final List<PojoReportActivityAdminResData> resList = new ArrayList<>();
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
+		for (int i = 0; i < activityList.size(); i++) {
+
+			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
+
+			reportMember.setNo(i + 1);
+			reportMember.setStartDate(
+					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate());
+			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
+			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
+			reportMember.setProviderName(activityList.get(i).getProvider());
+			resList.add(reportMember);
+		}
+		res.setData(resList);
+		res.setTotal((long) activityList.size());
 		return res;
 
 	}
 
-//	public List<PojoReportActivityMemberRes> getMemberReportFile(final LocalDate startDate,final LocalDate endDate, Integer offset, Integer limit){
-//		final JasperUtil jasperUtil = new JasperUtil();
-//		final  List<PojoReportActivityMemberRes> res = new ArrayList<>();
-//		try {
-//		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-//		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(), offset, limit );
-//		
-//		
-//		
-//		for (int  i=0;i<activityList.size();i++) {
-//
-//			final PojoReportActivityMemberRes reportMember = new PojoReportActivityMemberRes();
-//			
-//			reportMember.setNo(i+1);
-//			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
-//			reportMember.setTitle(activityList.get(i).getTitle());
-//			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(),user.getId() ));
-//			
-//			res.add(reportMember);
-//		}
-//		Map<String, Object> params = new HashMap<String, Object>();
-//		params.put("reportTitle", "Report Activity Member");
-//		params.put("createdBy", "WeCommunity");
-//		
-//		byte[] reportBytes = jasperUtil.responseToByteArray(res, params, "report_activity_member");
-//		
-//		String outputFileName = "report_activity_member.pdf";
-//		File outputFile = new File(outputFileName);
-//		FileOutputStream outputStream = new FileOutputStream(outputFile);
-//		outputStream.write(reportBytes);
-//		outputStream.close();
-//		
-//		System.out.println("Jasper report generated successfully.");
-//	} catch (Exception e) {
-//		e.printStackTrace();
-//	}
-//			
-//		return res;
-//		
-//	}
-//	
-//	
 	public Long getCountParticipant(String activityId, String userId) {
 		return activityDao.getTotalParticipanByUserId(activityId, userId);
 	}
@@ -499,9 +541,9 @@ public class ActivityService {
 				}
 			} else {
 				res.setIsAllowed(false);
-				
-			}
 			
+			}
+
 		});
 
 		return res;

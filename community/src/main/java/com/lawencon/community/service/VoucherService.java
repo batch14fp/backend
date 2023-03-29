@@ -32,16 +32,13 @@ public class VoucherService {
 		final PojoInsertRes res = new PojoInsertRes();
 		ConnHandler.begin();
 		if(data.getActivityId()!=null) {
-		
 		final Voucher voucher = new Voucher();
 		voucher.setDiscountPercent((data.getDiscountPercent()/100));
 		voucher.setExpDate(data.getExpDate());
 		voucher.setLimitApplied(data.getLimitApplied());
 		voucher.setUsedCount(data.getUsedCount());
 		voucher.setIsActive(true);
-		
 		final Voucher voucherNew = voucherDao.save(voucher);
-		
 		
 		final ActivityVoucher activityVoucher = new ActivityVoucher();
 		final Activity activity = activityDao.getByIdRef(data.getActivityId());
@@ -56,9 +53,7 @@ public class VoucherService {
 		res.setMessage("Save Success!");
 		}
 		else {
-
 			res.setMessage("Id actvity is null");
-			
 		}
 		
 		
