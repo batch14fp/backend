@@ -252,7 +252,7 @@ public class ActivityController {
 	
 	
 	
-	@GetMapping("/member/report/incomes")
+	@GetMapping("/admin/report/incomes")
 	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports( @RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,
 			@RequestParam(required = false) Integer limit) {
