@@ -22,6 +22,7 @@ import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqInsert;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
@@ -40,6 +41,7 @@ public class AdminController {
 	private BankPaymentService bankPaymentService;
 	private ActivityService activityService;
 	private UserService userService;
+	
 	
 	
 	public AdminController(final UserService userService, final ActivityService activityService, final BankPaymentService bankPaymentService, final  PaymentService paymentService, final SalesSettingService salesSettingService) {
@@ -110,6 +112,15 @@ public class AdminController {
 				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit, typeCode);
 		return ResponseEntity.ok(activities);
 	}
+	
+	
+	@GetMapping("/payments")
+	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid",required=false) Boolean isPaid, @RequestParam("offset") Integer offset,
+			@RequestParam("limit") Integer limit){
+	        final PojoPaymentDetailRes data = paymentService.getAll(isPaid, offset, limit);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
+	
 	
 	
 	
