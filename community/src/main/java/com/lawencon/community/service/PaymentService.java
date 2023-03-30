@@ -201,6 +201,7 @@ public class PaymentService {
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
+			res.setVer(data.getVersion());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 		}
@@ -249,6 +250,7 @@ public class PaymentService {
 			res.setSubTotal(data.getSubtotal());
 			res.setIsPaid(data.getIsPaid());
 			res.setTaxAmmount(data.getTaxAmount());
+			res.setVer(data.getVersion());
 			res.setTotal(data.getTotal());
 			resList.add(res);
 
@@ -298,6 +300,7 @@ public class PaymentService {
 			res.setPaymentId(data.getId());
 			res.setIsPaid(data.getIsPaid());
 			res.setSubTotal(data.getSubtotal());
+			res.setVer(data.getVersion());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 			resList.add(res);

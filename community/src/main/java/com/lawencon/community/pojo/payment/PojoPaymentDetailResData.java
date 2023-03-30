@@ -28,6 +28,7 @@ public class PojoPaymentDetailResData {
 	private BigDecimal priceMemberShip;
 	private Boolean isPaid;
 	private String invoiceCode;
+	private Integer ver;
 	public String getCodeStatus() {
 		return codeStatus;
 	}
@@ -173,6 +174,12 @@ public class PojoPaymentDetailResData {
 	}
 	public void setIsPaid(Boolean isPaid) {
 		this.isPaid = isPaid;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 }
