@@ -271,6 +271,7 @@ public class ActivityDao extends AbstractJpaDao {
 	        sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 	        sqlQuery.append("INNER JOIN t_profile pr ON u.profile_id = pr.id ");
 	        sqlQuery.append("WHERE a.is_active = TRUE ");
+
 			sqlQuery.append("AND p.is_paid = TRUE ");
 	        if(userId!=null&&!userId.isEmpty()) {
 	            sqlQuery.append("AND a.user_id = :userId ");
