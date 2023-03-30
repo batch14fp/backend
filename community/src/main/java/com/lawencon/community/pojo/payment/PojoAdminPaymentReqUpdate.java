@@ -1,6 +1,6 @@
 package com.lawencon.community.pojo.payment;
 
-public class PojoAdmimPaymentReqUpdate {
+public class PojoAdminPaymentReqUpdate {
 	private String paymentId;
 	private Boolean isApprove;
 
