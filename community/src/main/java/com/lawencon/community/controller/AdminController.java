@@ -115,13 +115,10 @@ public class AdminController {
 	
 	
 	@GetMapping("/payments")
-	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid" , required=false) String isPaid, @RequestParam(value="offset", defaultValue="0") Integer offset,
+	public ResponseEntity<PojoPaymentDetailRes> getAllTransaction(@RequestParam(value="isPaid",required=false) Boolean isPaid, @RequestParam(value="offset", defaultValue="0") Integer offset,
 			@RequestParam(value="limit", defaultValue="0") Integer limit){
-		Boolean isPaidParam = null;
-		if(isPaid!=null) {
-			isPaidParam = Boolean.valueOf(isPaid.toUpperCase());
-		}
-        final PojoPaymentDetailRes data = paymentService.getAll(isPaidParam, offset, limit);
+			
+        final PojoPaymentDetailRes data = paymentService.getAll(isPaid, offset, limit);
         return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
