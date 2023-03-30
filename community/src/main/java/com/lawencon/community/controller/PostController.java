@@ -139,4 +139,15 @@ public class PostController {
 		PojoRes resDelete = postService.deletePostResponById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
+	
+	
+	
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<PojoPostRes>> getAllPostByLikeOrBookmark(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size, @RequestParam(defaultValue="bookmark") String criteria) throws Exception {
+	        final List<PojoPostRes> dataList = postService.getAllPostByLikeOrBookmark(page, size, criteria);
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
+	    }
+	
 }

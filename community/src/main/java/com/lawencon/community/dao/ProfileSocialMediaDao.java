@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +54,8 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 	@SuppressWarnings("unchecked")
 	public List<ProfileSocialMedia> getByProfileId(String id) throws Exception {
 		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT ps.id, p.id as profile_id, p.fullname, sm.id as social_media_id, sm.platform_name, ps.url, ps.ver FROM t_profile_social_media ps ");
+		sqlQuery.append("SELECT ps.id, p.id as profile_id, p.fullname, sm.id as social_media_id, sm.platform_name, ps.url,  ps.ver, ps.is_active, ps.created_at, ps.created_by  ");
+		sqlQuery.append("FROM t_profile_social_media ps ");
 		sqlQuery.append("INNER JOIN t_profile p ON ps.profile_id = p.id ");
 		sqlQuery.append("INNER JOIN t_social_media sm ON ps.social_media_id = sm.id ");
 		sqlQuery.append("WHERE ps.profile_id = :id");
@@ -77,6 +79,9 @@ public class ProfileSocialMediaDao extends BaseMasterDao<ProfileSocialMedia>{
 				profileSocialMedia.setProfile(profile);
 				profileSocialMedia.setSocialMedia(socialMedia);
 				profileSocialMedia.setVersion(Integer.valueOf(obj[6].toString()));
+				profileSocialMedia.setIsActive(Boolean.valueOf(obj[7].toString()));
+				profileSocialMedia.setCreatedAt(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
+				profileSocialMedia.setCreatedBy(obj[9].toString());
 				list.add(profileSocialMedia);
 			}
 		}

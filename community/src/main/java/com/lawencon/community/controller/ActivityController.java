@@ -116,8 +116,22 @@ public class ActivityController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
+	@GetMapping("/my-activity/filter")
+	public ResponseEntity<List<PojoActivityRes>> getMyActivityByCategoryAndType(@RequestParam("page") int page,
+			@RequestParam("size") int size,
+			@RequestParam(value="categoryCode", required = false) String categoryCode, @RequestParam(value="typeCode", required = false) String typeCode) {
+		try {
+			List<PojoActivityRes> activities = activityService.getByUserIdActivityByCategoryAndType(categoryCode,
+					typeCode,page,size);
+			return ResponseEntity.ok(activities);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
-	  @GetMapping("/listByCategoryAndType")
+	  @GetMapping("/by-category-List")
 	    public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
 	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
 	    		@RequestParam(value = "typeCode", required = false) String typeCode,
@@ -157,18 +171,18 @@ public class ActivityController {
 	    }
 
 	@GetMapping("member/report")
-	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
-			@RequestParam(required = false) Integer limit) {
-		PojoReportActivityMemberRes activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
+		PojoReportActivityMemberRes activities = activityService.getMemberReport(Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(),limit, offset, typeCode);
 		return ResponseEntity.ok(activities);
 	}
 
 	@GetMapping("member/report/file")
-	public ResponseEntity<byte[]> generateReportFile( @RequestParam String id, @RequestParam String startDate, @RequestParam String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+	public ResponseEntity<byte[]> generateReportFile( @RequestParam String id, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
 		List<PojoReportActivityMemberResData> data = activityService.getMemberReportFile(id, Date.valueOf(startDate).toLocalDate(),
-				Date.valueOf(endDate).toLocalDate(), offset, limit);
+				Date.valueOf(endDate).toLocalDate(), offset, limit, typeCode);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
@@ -186,19 +200,19 @@ public class ActivityController {
 	}
 	
 	@GetMapping("admin/report")
-	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRangeAdmin(@RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
-			@RequestParam(required = false) Integer limit) {
+	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRangeAdmin(@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
 		PojoReportActivityAdminRes activities = activityService.getAdminReport(
-				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit, typeCode);
 		return ResponseEntity.ok(activities);
 	}
 
 	@GetMapping("admin/report/file")
-	public ResponseEntity<byte[]> generateReportFileAdmin(  @RequestParam String startDate, @RequestParam String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+	public ResponseEntity<byte[]> generateReportFileAdmin(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,  @RequestParam(required = false) String typeCode) {
 		List<PojoReportActivityAdminResData> data = activityService.getAdminReportFile( Date.valueOf(startDate).toLocalDate(),
-				Date.valueOf(endDate).toLocalDate());
+				Date.valueOf(endDate).toLocalDate(), typeCode);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
@@ -216,7 +230,7 @@ public class ActivityController {
 	}
 	
 	@GetMapping("/member/report/incomes")
-	public ResponseEntity<PojoReportIncomesMemberRes> getMemberReport( @RequestParam String startDate, @RequestParam String endDate,
+	public ResponseEntity<PojoReportIncomesMemberRes> getMemberReport( @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
 			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,
 			@RequestParam(required = false) Integer limit) {
 		try {
@@ -229,8 +243,8 @@ public class ActivityController {
 	}
 	
 	@GetMapping("member/report/incomes/file")
-	public ResponseEntity<byte[]> generateReportFileIncomesMember(  @RequestParam String startDate, @RequestParam String endDate,
-		 @RequestParam(required = false) String typeCode) {
+	public ResponseEntity<byte[]> generateReportFileIncomesMember(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+		@RequestParam(required = false) String typeCode) {
 		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( Date.valueOf(startDate).toLocalDate(),
 				Date.valueOf(endDate).toLocalDate(),typeCode);
 		Map<String, Object> params = new HashMap<>();
@@ -265,7 +279,7 @@ public class ActivityController {
 	}
 	
 	@GetMapping("admin/report/incomes/file")
-	public ResponseEntity<byte[]> generateReportFileIncomesAdmin(  @RequestParam String startDate, @RequestParam String endDate,
+	public ResponseEntity<byte[]> generateReportFileIncomesAdmin(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
 		 @RequestParam(required = false) String typeCode) {
 		List<PojoReportIncomesAdminResData> data = activityService.getIncomesReportAdminFile( Date.valueOf(startDate).toLocalDate(),
 				Date.valueOf(endDate).toLocalDate(),typeCode);

@@ -41,6 +41,7 @@ public class AbstractJpaDao {
 		}
 		return data;
 	}
+	
 
 	public <T extends BaseEntity> T save(T entity) {
 		if (entity.getId() != null) {
@@ -149,7 +150,17 @@ public class AbstractJpaDao {
 	    return savedEntities;
 	}
 	
-
+	public <T extends BaseEntity> List<T> saveAllAndFlush(List<T> entities) {
+	    List<T> savedEntities = new ArrayList<>();
+	    for (T entity : entities) {
+	        final T savedEntity = save(entity);
+	        if (em().contains(savedEntity)) {
+	            em().flush();
+	        }
+	        savedEntities.add(savedEntity);
+	    }
+	    return savedEntities;
+	}
 	
 
 
