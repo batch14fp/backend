@@ -18,7 +18,6 @@ import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.model.File;
-import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Subscription;
@@ -160,6 +159,7 @@ public class PaymentService {
 
 	}
 
+	
 	public PojoPaymentDetailRes getPaymentDetail(String invoiceId) {
 		PojoPaymentDetailRes res = new PojoPaymentDetailRes();
 		paymentDao.getAllPaymentByInvoiceId(invoiceId).forEach(data -> {
@@ -186,6 +186,9 @@ public class PaymentService {
 				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
 				res.setPrice(data.getInvoice().getMemberStatus().getPrice());
 			}
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
