@@ -21,11 +21,13 @@ import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqInsert;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqUpdate;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
 import com.lawencon.community.service.ActivityTypeService;
+import com.lawencon.community.service.PaymentService;
 
 @RestController
 @RequestMapping("activity-types")
 public class ActivityTypeController {
 	private ActivityTypeService activityTypeService;
+
 	
 	public ActivityTypeController(final ActivityTypeService activityTypeService) {
 		this.activityTypeService = activityTypeService;
@@ -59,6 +61,8 @@ public class ActivityTypeController {
 	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
+
+	
 	
 	
 }
