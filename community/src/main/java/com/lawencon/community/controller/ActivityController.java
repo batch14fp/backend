@@ -116,7 +116,6 @@ public class ActivityController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
 	@GetMapping("/my-activity/filter")
 	public ResponseEntity<List<PojoActivityRes>> getMyActivityByCategoryAndType(@RequestParam("page") int page,
 			@RequestParam("size") int size,

@@ -142,12 +142,14 @@ public class InvoiceService {
 	public PojoInvoiceRes getById(String id) {
 		final PojoInvoiceRes res = new PojoInvoiceRes();
 		final Invoice invoice = invoiceDao.getById(id).get();
-
 		res.setActivityId(invoice.getActivity().getId());
 		res.setActivityTitle(invoice.getActivity().getTitle());
 		res.setEndDate(invoice.getActivity().getEndDate());
 		res.setInvoiceCode(invoice.getInvoiceCode());
 		res.setInvoiceId(invoice.getId());
+		res.setVer(invoice.getVersion());
+		res.setIsActive(invoice.getIsActive());
+		res.setMembershipId(invoice.getMemberStatus().getId());
 		res.setImageId(invoice.getActivity().getFile().getId());
 		res.setPrice(invoice.getActivity().getPrice());
 		res.setStartDate(invoice.getActivity().getStartDate());
