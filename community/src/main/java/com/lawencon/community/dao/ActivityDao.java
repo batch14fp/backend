@@ -191,48 +191,133 @@ public class ActivityDao extends AbstractJpaDao {
 		return activities;
 
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
+	        LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
+	    final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
+	    BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
+	    final StringBuilder sqlQuery = new StringBuilder();
+	    sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+	    sqlQuery.append("FROM t_payment p ");
+	    sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+	    sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+	    sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+	    sqlQuery.append("WHERE i.user_id = :userId ");
+	    sqlQuery.append("AND p.is_paid = TRUE ");
+	    
+	    if(startDate != null && endDate != null) {
+	        sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+	    }
+	    
+	    if (typeCode != null && !typeCode.isEmpty()) {
+	        sqlQuery.append("AND tat.type_code = :typeCode ");
+	    }
+
+	    sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+
+	    Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
+	    query.setParameter("userId", userId);
+	    query.setParameter("percentValue", percentValue);
+	    
+	    if(startDate != null && endDate != null) {
+	        query.setParameter("startDate", startDate);
+	        query.setParameter("endDate", endDate);
+	    }
+	    
+	    if (typeCode != null && !typeCode.isEmpty()) {
+	        query.setParameter("typeCode", typeCode);
+	    }
+	    
+	    if (limit != null) {
+	        query.setMaxResults(limit);
+	    }
+	    if (offset != null) {
+	        query.setFirstResult(offset);
+	    }
+
+	    final List<Object> result = query.getResultList();
+	    for (Object objs : result) {
+	        final Object[] obj = (Object[]) objs;
+	        final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
+	        data.setTitle(obj[0].toString());
+	        data.setType(obj[1].toString());
+	        if (obj[2] != null) {
+	            data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+	        } else {
+	            data.setTotalIncomes(BigDecimal.ZERO);
+	        }
+	        resultList.add(data);
+	    }
+
+	    return resultList;
+	}
+
 
 	@SuppressWarnings("unchecked")
-	public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, String userId, Integer offset,
-			Integer limit) {
-		
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT * ");
-		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
-		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
-		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
-		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
-		sqlQuery.append("WHERE a.is_active = TRUE ");
-		
-		if(userId!=null) {
-		sqlQuery.append("AND a.user_id = :userId ");
-		}
-		sqlQuery.append("AND a.start_date ");
-		sqlQuery.append("BETWEEN :startDate AND :endDate ");
-		sqlQuery.append("ORDER BY a.created_at DESC ");
-		List<Activity> lisActivity = new ArrayList<>();
-	try {
-		final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-		
-		if(userId!=null&&!userId.isEmpty()) {
-		query.setParameter("userId", userId);
-		}
-		if (limit != null) {
-			query.setMaxResults(limit);
-		}
-		if (offset != null) {
-			query.setFirstResult(offset);
-		}
-	lisActivity = query.getResultList();
-	}catch(Exception e){
-        throw new RuntimeException("Error retrieving activities by date range"+ e.getMessage());
-	}
-	
-		return lisActivity;
-	}
+	public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, String userId, String typeCode, Integer offset,
+	            Integer limit) {
+	        
+	        StringBuilder sqlQuery = new StringBuilder();
+	        sqlQuery.append("SELECT * ");
+	        sqlQuery.append("FROM t_activity a ");
+	        sqlQuery.append("INNER JOIN t_activity_type tat ON at.id = a.type_activity_id ");
+	        sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
+	        sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
+	        sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
+	        sqlQuery.append("WHERE a.is_active = TRUE ");
+	        
+	        if(userId!=null) {
+	            sqlQuery.append("AND a.user_id = :userId ");
+	        }
+	        
+	        if(typeCode!=null) {
+	            sqlQuery.append("AND tat.type_code = :typeCode ");
+	        }
+	        
+	        if(startDate!=null && endDate!=null) {
+	            sqlQuery.append("AND a.start_date ");
+	            sqlQuery.append("BETWEEN :startDate AND :endDate ");
+	        }
+	        
+	        sqlQuery.append("ORDER BY a.created_at DESC ");
+	        
+	        List<Activity> lisActivity = new ArrayList<>();
+	        
+	        try {
+	            final Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
+	            
+	            if(startDate!=null && endDate!=null) {
+	                query.setParameter("startDate", startDate);
+	                query.setParameter("endDate", endDate);
+	            }
+	            
+	            if(userId!=null && !userId.isEmpty()) {
+	                query.setParameter("userId", userId);
+	            }
+	            
+	            if(typeCode!=null) {
+	                query.setParameter("typeCode", typeCode);
+	            }
+	            
+	            if (limit != null) {
+	                query.setMaxResults(limit);
+	            }
+	            
+	            if (offset != null) {
+	                query.setFirstResult(offset);
+	            }
+	            
+	            lisActivity = query.getResultList();
+	            
+	        } catch(Exception e) {
+	            throw new RuntimeException("Error retrieving activities by date range"+ e.getMessage());
+	        }
+	    
+	        return lisActivity;
+	    }
+
 
 
 	public Long getTotalParticipanByUserId(final String activityId, final String userId) {
@@ -310,7 +395,7 @@ public class ActivityDao extends AbstractJpaDao {
 	}
 
 	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode,
-			final int offset, final int limit) throws Exception {
+			final int offset, final int limit, final String userId) throws Exception {
 		StringBuilder sql = new StringBuilder();
 		sql.append(
 				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
@@ -328,6 +413,11 @@ public class ActivityDao extends AbstractJpaDao {
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sql.append("AND at.type_code = :typeCode ");
 		}
+		
+		if (userId != null && !userId.isEmpty()) {
+			sql.append("AND a.user_id = :userId ");
+		}
+
 
 		Query q = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
 
@@ -337,6 +427,9 @@ public class ActivityDao extends AbstractJpaDao {
 
 		if (typeCode != null && !typeCode.isEmpty()) {
 			q.setParameter("typeCode", typeCode);
+		}
+		if (userId != null && !userId.isEmpty()) {
+			q.setParameter("userId", userId);
 		}
 		q.setMaxResults(limit);
 		q.setFirstResult((offset - 1) * limit);
@@ -352,118 +445,73 @@ public class ActivityDao extends AbstractJpaDao {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
-			LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
-		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
-		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
-		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
-		sqlQuery.append("FROM t_payment p ");
-		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
-		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
-		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		sqlQuery.append("WHERE i.user_id = :userId ");
-		sqlQuery.append("AND p.is_paid = TRUE ");
-		sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
-
-		if (typeCode != null && !typeCode.isEmpty()) {
-			sqlQuery.append("AND tat.type_code = :typeCode ");
-		}
-
-		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
-
-		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
-		query.setParameter("userId", userId);
-		query.setParameter("percentValue", percentValue);
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-		
-		if (typeCode != null && !typeCode.isEmpty()) {
-			query.setParameter("typeCode", typeCode);
-		}
-		
-		if (limit != null) {
-			query.setMaxResults(limit);
-		}
-		if (offset != null) {
-			query.setFirstResult(offset);
-		}
-		
-		if (typeCode != null && !typeCode.isEmpty()) {
-			query.setParameter("typeCode", typeCode);
-		}
-
-		final List<Object> result = query.getResultList();
-		for (Object objs : result) {
-			final Object[] obj = (Object[]) objs;
-			final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
-			data.setTitle(obj[0].toString());
-			data.setType(obj[1].toString());
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-			} else {
-				data.setTotalIncomes(BigDecimal.ZERO);
-			}
-			resultList.add(data);
-		}
-
-		return resultList;
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesAdminResData> getActivityIncome(Float percentIncome, LocalDate startDate,
-			LocalDate endDate, String typeCode, Integer offset,Integer limit) {
-		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
-		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
-		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT pr.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
-		sqlQuery.append("FROM t_payment p ");
-		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
-		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
-		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		sqlQuery.append("INNER JOIN t_user u ON u.id = i.user_id ");
-		sqlQuery.append("INNER JOIN t_profile pr ON pr.id = u.profile_id ");
-		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND p.updated_at BETWEEN :startDate AND :endDate ");
+	        LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 
-		if (typeCode != null && !typeCode.isEmpty()) {
-			sqlQuery.append("AND tat.type_code = :typeCode ");
-		}
-		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title ");
-		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
-		query.setParameter("percentValue", percentValue);
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-		
-		if (limit != null) {
-			query.setMaxResults(limit);
-		}
-		if (offset != null) {
-			query.setFirstResult(offset);
-		}
-		
-		if (typeCode != null && !typeCode.isEmpty()) {
-			query.setParameter("typeCode", typeCode);
-		}
+	    final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
+	    BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
+	    final StringBuilder sqlQuery = new StringBuilder();
+	    sqlQuery.append("SELECT pr.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+	    sqlQuery.append("FROM t_payment p ");
+	    sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
+	    sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+	    sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+	    sqlQuery.append("INNER JOIN t_user u ON u.id = i.user_id ");
+	    sqlQuery.append("INNER JOIN t_profile pr ON pr.id = u.profile_id ");
+	    sqlQuery.append("WHERE p.is_paid = TRUE ");
+	    if (startDate != null) {
+	        sqlQuery.append("AND p.updated_at >= :startDate ");
+	    }
+	    if (endDate != null) {
+	        sqlQuery.append("AND p.updated_at <= :endDate ");
+	    }
 
-		final List<Object> result = query.getResultList();
-		for (Object objs : result) {
-			final Object[] obj = (Object[]) objs;
-			final PojoReportIncomesAdminResData data = new PojoReportIncomesAdminResData();
-			data.setMemberName(obj[0].toString());
-			data.setType(obj[1].toString());
+	    if (typeCode != null && !typeCode.isEmpty()) {
+	        sqlQuery.append("AND tat.type_code = :typeCode ");
+	    }
+	    sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title ");
 
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-			} else {
-				data.setTotalIncomes(BigDecimal.ZERO);
-			}
-			resultList.add(data);
-		}
+	    Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
+	    query.setParameter("percentValue", percentValue);
+	    
+	    if (startDate != null) {
+	        query.setParameter("startDate", startDate);
+	    }
+	    if (endDate != null) {
+	        query.setParameter("endDate", endDate);
+	    }
 
-		return resultList;
+	    if (typeCode != null && !typeCode.isEmpty()) {
+	        query.setParameter("typeCode", typeCode);
+	    }
+
+	    if (limit != null) {
+	        query.setMaxResults(limit);
+	    }
+	    if (offset != null) {
+	        query.setFirstResult(offset);
+	    }
+
+	    final List<Object> result = query.getResultList();
+	    for (Object objs : result) {
+	        final Object[] obj = (Object[]) objs;
+	        final PojoReportIncomesAdminResData data = new PojoReportIncomesAdminResData();
+	        data.setMemberName(obj[0].toString());
+	        data.setType(obj[1].toString());
+
+	        if (obj[2] != null) {
+	            data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+	        } else {
+	            data.setTotalIncomes(BigDecimal.ZERO);
+	        }
+	        resultList.add(data);
+	    }
+
+	    return resultList;
 	}
+
 
 	public BigDecimal getTotalIncomeByUserId(String userId, Float percentIncome) {
 		BigDecimal total = BigDecimal.ZERO;

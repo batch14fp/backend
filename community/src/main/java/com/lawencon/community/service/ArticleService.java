@@ -175,7 +175,7 @@ public class ArticleService {
 			articleViewer.setArticle(data);
 			articleViewer.setUser(user);
 			articleViewer.setIsActive(true);
-		    articleDao.save(articleViewer);
+			articleViewerDao.save(articleViewer);
 		    ConnHandler.commit();
 		}
 		article.setArticleId(data.getId());

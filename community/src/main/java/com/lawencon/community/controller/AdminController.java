@@ -103,11 +103,11 @@ public class AdminController {
 
 	
 	@GetMapping("/report")
-	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRange(@RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam(required = false) Integer offset,
-			@RequestParam(required = false) Integer limit) {
+	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRange(@RequestParam(required = false) String startDate,
+			@RequestParam(required = false) String endDate, @RequestParam(required = false) Integer offset,
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
 			PojoReportActivityAdminRes activities = activityService.getAdminReport(
-				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit);
+				Date.valueOf(startDate).toLocalDate(), Date.valueOf(endDate).toLocalDate(), offset, limit, typeCode);
 		return ResponseEntity.ok(activities);
 	}
 	
