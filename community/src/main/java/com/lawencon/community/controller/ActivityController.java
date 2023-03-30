@@ -355,8 +355,14 @@ public class ActivityController {
 
 	@PutMapping("/payment")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data) {
-		PojoRes resGet = paymentService.updateByUser(data);
-		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+		PojoRes resPut = paymentService.updateByUser(data);
+		return new ResponseEntity<>(resPut, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/payment/{id}")
+	public ResponseEntity<PojoPaymentDetailResData> getPaymentById(@PathVariable("id") String id) {
+		PojoPaymentDetailResData resGet = paymentService.getPaymentDetailById(id);
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
 	@GetMapping("/total")

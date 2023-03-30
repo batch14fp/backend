@@ -9,6 +9,7 @@ public class PojoPaymentDetailResData {
 	private String bankPaymetId;
 	private String paymentId;
 	private String membershipId;
+	private String filePaymentId;
 	private LocalDateTime paymentExpired;
 	private BigDecimal activityPrice;
 	private BigDecimal taxAmmount;
@@ -180,6 +181,12 @@ public class PojoPaymentDetailResData {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getFilePaymentId() {
+		return filePaymentId;
+	}
+	public void setFilePaymentId(String filePaymentId) {
+		this.filePaymentId = filePaymentId;
 	}
 	
 }
