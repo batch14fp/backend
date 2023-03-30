@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PojoPaymentDetailRes {
+	private String invoiceId;
 	private String activityId;
 	private String bankPaymetId;
 	private String paymentId;
@@ -20,11 +21,11 @@ public class PojoPaymentDetailRes {
 	private String imageActivity;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	
 	private String codeStatus;
 	private String statusName;
 	private Integer periodDay;
 	private BigDecimal price;
+	private String invoiceCode;
 	public String getCodeStatus() {
 		return codeStatus;
 	}
@@ -145,6 +146,18 @@ public class PojoPaymentDetailRes {
 	}
 	public void setActivityPrice(BigDecimal activityPrice) {
 		this.activityPrice = activityPrice;
+	}
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	public String getInvoiceCode() {
+		return invoiceCode;
+	}
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
 	}
 	
 	

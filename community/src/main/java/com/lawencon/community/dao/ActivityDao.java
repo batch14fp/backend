@@ -601,7 +601,7 @@ public class ActivityDao extends AbstractJpaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Activity> getListActivityByCategoriesAndType(final List<String> categoryCodes, final String typeCode,
-			final int offset, final int limit) {
+			final int offset, final int limit, final String sortType) {
 
 		StringBuilder sqlQuery = new StringBuilder();
 		List<Activity> listActivity = new ArrayList<>();
@@ -626,6 +626,21 @@ public class ActivityDao extends AbstractJpaDao {
 			}
 			if (typeCode != null && !typeCode.isEmpty()) {
 				sqlQuery.append("AND tat.type_code = :typeCode ");
+			}
+			if (sortType != null) {
+				switch (sortType.toLowerCase()) {
+				case "highest":
+					sqlQuery.append("ORDER BY a.price DESC ");
+					break;
+				case "lowest":
+					sqlQuery.append("ORDER BY a.price ASC ");
+					break;
+				case "created_at":
+					sqlQuery.append("ORDER BY a.created_at DESC ");
+					break;
+				default:
+					throw new IllegalArgumentException("Invalid sort type: " + sortType);
+				}
 			}
 
 			Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);

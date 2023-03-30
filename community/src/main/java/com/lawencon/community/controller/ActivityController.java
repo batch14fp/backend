@@ -137,10 +137,11 @@ public class ActivityController {
 	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
 	    		@RequestParam(value = "typeCode", required = false) String typeCode,
 	            @RequestParam(value = "page", defaultValue = "0") int page,
-	            @RequestParam(value = "size", defaultValue = "10") int size
+	            @RequestParam(value = "size", defaultValue = "10") int size,
+			    @RequestParam(value = "sortType",defaultValue = "created_at") String sortType
 	    ) {
 	        try {
-	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size);
+	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size, sortType);
 	            if (activities == null) {
 	            
 	                return ResponseEntity.noContent().build();
