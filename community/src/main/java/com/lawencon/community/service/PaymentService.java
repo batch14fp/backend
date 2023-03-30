@@ -159,6 +159,7 @@ public class PaymentService {
 
 	}
 
+	
 	public PojoPaymentDetailRes getPaymentDetail(String invoiceId) {
 		PojoPaymentDetailRes res = new PojoPaymentDetailRes();
 		paymentDao.getAllPaymentByInvoiceId(invoiceId).forEach(data -> {
@@ -179,7 +180,15 @@ public class PaymentService {
 			res.setTitleActivity(data.getInvoice().getActivity().getTitle());
 			res.setStartDate(data.getInvoice().getActivity().getStartDate());
 			}
-		
+			if(data.getInvoice().getMemberStatus()!=null){
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPrice(data.getInvoice().getMemberStatus().getPrice());
+			}
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());

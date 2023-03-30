@@ -21,7 +21,6 @@ import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqInsert;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeReqUpdate;
 import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
 import com.lawencon.community.service.ActivityTypeService;
-import com.lawencon.community.service.PaymentService;
 
 @RestController
 @RequestMapping("activity-types")
