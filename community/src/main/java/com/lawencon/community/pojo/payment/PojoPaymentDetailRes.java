@@ -1,12 +1,15 @@
 package com.lawencon.community.pojo.payment;
 
+import java.util.List;
+
 public class PojoPaymentDetailRes {
-	private PojoPaymentDetailResData data;
+	private List<PojoPaymentDetailResData> data;
 	private Integer total;
-	public PojoPaymentDetailResData getData() {
+
+	public List<PojoPaymentDetailResData> getData() {
 		return data;
 	}
-	public void setData(PojoPaymentDetailResData data) {
+	public void setData(List<PojoPaymentDetailResData> data) {
 		this.data = data;
 	}
 	public Integer getTotal() {

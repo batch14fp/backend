@@ -201,6 +201,7 @@ public class PaymentService {
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
+			res.setIsPaid(data.getIsPaid());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 		}
@@ -212,8 +213,8 @@ public class PaymentService {
 		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
 		List<PojoPaymentDetailResData> resList = new ArrayList<>();
 		final User user = userDao.getByIdRef(User.class, principalService.getAuthPrincipal());
-		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
 		paymentDao.getAllPaymentByUserId(user.getId(), isPaid, offset, limit).forEach(data -> {
+			PojoPaymentDetailResData res = new PojoPaymentDetailResData();
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
@@ -247,12 +248,13 @@ public class PaymentService {
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
+			res.setIsPaid(data.getIsPaid());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 			resList.add(res);
 
 		});
-		paymentDetail.setData(res);
+		paymentDetail.setData(resList);
 		paymentDetail.setTotal(resList.size());
 		return paymentDetail;
 
@@ -260,8 +262,10 @@ public class PaymentService {
 	public PojoPaymentDetailRes getAll(Boolean isPaid, Integer offset, Integer limit) {
 		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
 		List<PojoPaymentDetailResData> resList = new ArrayList<>();
-		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		
 		paymentDao.getAllPayment(isPaid, offset, limit).forEach(data -> {
+			PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
@@ -293,13 +297,14 @@ public class PaymentService {
 			res.setPaymentId(data.getId());
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
+			res.setIsPaid(data.getIsPaid());
 			res.setSubTotal(data.getSubtotal());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 			resList.add(res);
 
 		});
-		paymentDetail.setData(res);
+		paymentDetail.setData(resList);
 		paymentDetail.setTotal(resList.size());
 		return paymentDetail;
 

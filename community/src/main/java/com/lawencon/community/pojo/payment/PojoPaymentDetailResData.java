@@ -26,6 +26,7 @@ public class PojoPaymentDetailResData {
 	private String statusName;
 	private Integer periodDay;
 	private BigDecimal priceMemberShip;
+	private Boolean isPaid;
 	private String invoiceCode;
 	public String getCodeStatus() {
 		return codeStatus;
@@ -167,4 +168,11 @@ public class PojoPaymentDetailResData {
 	public void setPriceMemberShip(BigDecimal priceMemberShip) {
 		this.priceMemberShip = priceMemberShip;
 	}
+	public Boolean getIsPaid() {
+		return isPaid;
+	}
+	public void setIsPaid(Boolean isPaid) {
+		this.isPaid = isPaid;
+	}
+	
 }

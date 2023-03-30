@@ -386,9 +386,13 @@ public class ActivityController {
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
 	@GetMapping("/my-transactions")
-	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid",required=false) Boolean isPaid, @RequestParam(value="offset", defaultValue="0") Integer offset,
+	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid",required=false) String isPaid, @RequestParam(value="offset", defaultValue="0") Integer offset,
 			@RequestParam(value="limit", defaultValue="0") Integer limit){
-	        final PojoPaymentDetailRes data = paymentService.getByUserId(isPaid, offset, limit);
+			Boolean isPaidParam = null;
+			if(isPaid!=null) {
+				isPaidParam = Boolean.valueOf(isPaid);
+			}
+	        final PojoPaymentDetailRes data = paymentService.getByUserId(isPaidParam, offset, limit);
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
 	
