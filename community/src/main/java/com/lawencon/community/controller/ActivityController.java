@@ -174,6 +174,7 @@ public class ActivityController {
 	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(@RequestParam(required = false) String startDate,
 			@RequestParam(required = false) String endDate, @RequestParam(required = false) Integer offset,
 			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
+		try {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
 		if(startDate!=null&&endDate!=null) {
@@ -182,7 +183,10 @@ public class ActivityController {
 		}
 		PojoReportActivityMemberRes activities = activityService.getMemberReport(startDateParam,endDateParam , offset,limit, typeCode);
 		return ResponseEntity.ok(activities);
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 		
 	}
 
