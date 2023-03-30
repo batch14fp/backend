@@ -136,7 +136,7 @@ public class ArticleDao extends AbstractJpaDao {
 	    final List<Article> listArticle = new ArrayList<>();
 	    final StringBuilder sqlQuery = new StringBuilder();
 
-	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
+	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
 	    sqlQuery.append("FROM t_article a ");
 	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -177,6 +177,7 @@ public class ArticleDao extends AbstractJpaDao {
 	            article.setUser(user);
 	            article.setVersion(Integer.valueOf(obj[10].toString()));
 	            article.setIsActive(Boolean.valueOf(obj[11].toString()));
+	            article.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 	            listArticle.add(article);
 	        }
 
@@ -193,7 +194,7 @@ public class ArticleDao extends AbstractJpaDao {
 	    final List<Article> listArticle = new ArrayList<>();
 	    final StringBuilder sqlQuery = new StringBuilder();
 
-	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active ");
+	    sqlQuery.append("SELECT a.id, a.file_id, f.file_name, f.file_content, f.file_extension, a.title, a.content_article, a.user_id, u.profile_id, p.fullname, a.ver, a.is_active, a.created_at ");
 	    sqlQuery.append("FROM t_article a ");
 	    sqlQuery.append("INNER JOIN t_user u ON u.id = a.user_id ");
 	    sqlQuery.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -233,6 +234,7 @@ public class ArticleDao extends AbstractJpaDao {
 	            article.setUser(user);
 	            article.setVersion(Integer.valueOf(obj[10].toString()));
 	            article.setIsActive(Boolean.valueOf(obj[11].toString()));
+	            article.setCreatedAt(Timestamp.valueOf(obj[12].toString()).toLocalDateTime());
 	            listArticle.add(article);
 	        }
 
