@@ -60,11 +60,12 @@ public class PaymentDao extends AbstractJpaDao {
 			final User user = new User();
 			user.setId(obj[2].toString());
 			invoice.setUser(user);
-
+			if(obj[3]!=null) {
 			final Voucher voucher = new Voucher();
 			voucher.setId(obj[3].toString());
 			voucher.setVoucherCode(obj[4].toString());
 			invoice.setVoucher(voucher);
+			}
 			if (obj[5] != null) {
 				final Activity activity = new Activity();
 
@@ -87,20 +88,27 @@ public class PaymentDao extends AbstractJpaDao {
 			invoice.setVersion(Integer.valueOf(obj[15].toString()));
 			invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
 			payment.setId(obj[17].toString());
+			
+			if(obj[18]!=null) {
 			final File file = new File();
 			file.setId(obj[18].toString());
 			payment.setFile(file);
-			final BankPayment bankPayment = new BankPayment();
-			bankPayment.setId(obj[19].toString());
-			bankPayment.setAccountName(obj[25].toString());
-			bankPayment.setAccountNumber(obj[26].toString());
-			bankPayment.setBankName(obj[27].toString());
-			payment.setBankPayment(bankPayment);
+			}
+			if(obj[19]!=null) {
+				final BankPayment bankPayment = new BankPayment();
+				bankPayment.setId(obj[19].toString());
+				bankPayment.setAccountName(obj[25].toString());
+				bankPayment.setAccountNumber(obj[26].toString());
+				bankPayment.setBankName(obj[27].toString());
+				payment.setBankPayment(bankPayment);
+				}
 			payment.setTotal(BigDecimal.valueOf(Long.valueOf(obj[20].toString())));
 			payment.setExpired(Timestamp.valueOf(obj[21].toString()).toLocalDateTime());
 			payment.setSubtotal(BigDecimal.valueOf(Long.valueOf(obj[22].toString())));
 			payment.setTaxAmount(BigDecimal.valueOf(Long.valueOf(obj[23].toString())));
-			payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+			if(obj[24]!=null) {
+				payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+				}
 			payment.setInvoice(invoice);
 
 		} catch (Exception e) {
@@ -157,10 +165,12 @@ public class PaymentDao extends AbstractJpaDao {
 				user.setId(obj[2].toString());
 				invoice.setUser(user);
 
-				final Voucher voucher = new Voucher();
-				voucher.setId(obj[3].toString());
-				voucher.setVoucherCode(obj[4].toString());
-				invoice.setVoucher(voucher);
+				if(obj[3]!=null) {
+					final Voucher voucher = new Voucher();
+					voucher.setId(obj[3].toString());
+					voucher.setVoucherCode(obj[4].toString());
+					invoice.setVoucher(voucher);
+					}
 				if (obj[5] != null) {
 					final Activity activity = new Activity();
 
@@ -183,20 +193,28 @@ public class PaymentDao extends AbstractJpaDao {
 				invoice.setVersion(Integer.valueOf(obj[15].toString()));
 				invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
 				payment.setId(obj[17].toString());
+				
+				if(obj[18]!=null) {
 				final File file = new File();
 				file.setId(obj[18].toString());
 				payment.setFile(file);
-				final BankPayment bankPayment = new BankPayment();
-				bankPayment.setId(obj[19].toString());
-				bankPayment.setAccountName(obj[25].toString());
-				bankPayment.setAccountNumber(obj[26].toString());
-				bankPayment.setBankName(obj[27].toString());
-				payment.setBankPayment(bankPayment);
+				}
+				
+				if(obj[19]!=null) {
+					final BankPayment bankPayment = new BankPayment();
+					bankPayment.setId(obj[19].toString());
+					bankPayment.setAccountName(obj[25].toString());
+					bankPayment.setAccountNumber(obj[26].toString());
+					bankPayment.setBankName(obj[27].toString());
+					payment.setBankPayment(bankPayment);
+					}
 				payment.setTotal(BigDecimal.valueOf(Long.valueOf(obj[20].toString())));
 				payment.setExpired(Timestamp.valueOf(obj[21].toString()).toLocalDateTime());
 				payment.setSubtotal(BigDecimal.valueOf(Long.valueOf(obj[22].toString())));
 				payment.setTaxAmount(BigDecimal.valueOf(Long.valueOf(obj[23].toString())));
-				payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+				if(obj[24]!=null) {
+					payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+					}
 				payment.setInvoice(invoice);
 				paymentList.add(payment);
 			}
@@ -252,11 +270,12 @@ public class PaymentDao extends AbstractJpaDao {
 				final User user = new User();
 				user.setId(obj[2].toString());
 				invoice.setUser(user);
-
-				final Voucher voucher = new Voucher();
-				voucher.setId(obj[3].toString());
-				voucher.setVoucherCode(obj[4].toString());
-				invoice.setVoucher(voucher);
+				if(obj[3]!=null) {
+					final Voucher voucher = new Voucher();
+					voucher.setId(obj[3].toString());
+					voucher.setVoucherCode(obj[4].toString());
+					invoice.setVoucher(voucher);
+					}
 				if (obj[5] != null) {
 					final Activity activity = new Activity();
 
@@ -279,20 +298,26 @@ public class PaymentDao extends AbstractJpaDao {
 				invoice.setVersion(Integer.valueOf(obj[15].toString()));
 				invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
 				payment.setId(obj[17].toString());
+				if(obj[18]!=null) {
 				final File file = new File();
 				file.setId(obj[18].toString());
 				payment.setFile(file);
+				}
 				final BankPayment bankPayment = new BankPayment();
+				if(obj[19]!=null) {
 				bankPayment.setId(obj[19].toString());
 				bankPayment.setAccountName(obj[25].toString());
 				bankPayment.setAccountNumber(obj[26].toString());
 				bankPayment.setBankName(obj[27].toString());
 				payment.setBankPayment(bankPayment);
+				}
 				payment.setTotal(BigDecimal.valueOf(Long.valueOf(obj[20].toString())));
 				payment.setExpired(Timestamp.valueOf(obj[21].toString()).toLocalDateTime());
 				payment.setSubtotal(BigDecimal.valueOf(Long.valueOf(obj[22].toString())));
 				payment.setTaxAmount(BigDecimal.valueOf(Long.valueOf(obj[23].toString())));
+				if(obj[24]!=null) {
 				payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+				}
 				payment.setInvoice(invoice);
 				paymentList.add(payment);
 			}
