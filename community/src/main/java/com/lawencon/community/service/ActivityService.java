@@ -323,7 +323,7 @@ public class ActivityService {
 		if (data.getVoucherCode() != null && data.getLimitApplied() != null) {
 			voucher.setUsedCount(0);
 			voucher.setIsActive(true);
-			voucher.setVoucherCode(data.getVoucherCode());
+			voucher.setVoucherCode(data.getVoucherCode().toUpperCase());
 			voucher.setLimitApplied(data.getLimitApplied());
 			voucher.setExpDate(data.getEndAt());
 			voucher.setDiscountPercent((data.getDiscountPercent() / 100));
@@ -578,7 +578,7 @@ public class ActivityService {
 					&& expDate.isAfter(LocalDate.now())) {
 				if (activityVoucher.getVoucher().getLimitApplied() > activityVoucher.getVoucher().getUsedCount()) {
 					res.setIsAllowed(true);
-					Voucher voucher = voucherDao.getByCode(data.getVoucherCode()).get();
+					Voucher voucher = voucherDao.getByCode(data.getVoucherCode().toUpperCase()).get();
 					res.setVoucherId(voucher.getId());
 					
 
