@@ -1,11 +1,9 @@
 package com.lawencon.community.pojo.profile;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.file.PojoFileReqUpdate;
-import com.lawencon.community.pojo.socialmedia.PojoSocialMediaUserReqUpdate;
 
 public class PojoProfileReqUpdate {
 	private String profileId;

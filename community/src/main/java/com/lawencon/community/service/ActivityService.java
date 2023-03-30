@@ -104,10 +104,10 @@ public class ActivityService {
 	}
 
 	public List<PojoReportActivityMemberResData> getMemberReportFile(final String id, final LocalDate startDate,
-			final LocalDate endDate, Integer offset, Integer limit) {
+			final LocalDate endDate, Integer offset, Integer limit, String typeCode) {
 		final List<PojoReportActivityMemberResData> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(id);
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),typeCode, offset,
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
@@ -130,11 +130,11 @@ public class ActivityService {
 	
 	
 	public PojoReportActivityMemberRes getMemberReport( final LocalDate startDate,
-			final LocalDate endDate, Integer offset, Integer limit) {
+			final LocalDate endDate, Integer offset, Integer limit, String typeCode) {
 		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
 		final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), offset,
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),typeCode, offset,
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
@@ -212,9 +212,9 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate	) {
+	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate, final String typeCode	) {
 		final List<PojoReportActivityAdminResData> res = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, null, null);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null,typeCode, null, null);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
@@ -233,11 +233,11 @@ public class ActivityService {
 	}
 
 	public PojoReportActivityAdminRes getAdminReport(final LocalDate startDate, final LocalDate endDate, Integer offset,
-			Integer limit) {
+			Integer limit, String typeCode) {
 		final PojoReportActivityAdminRes res = new PojoReportActivityAdminRes();
 
 		final List<PojoReportActivityAdminResData> resList = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, offset, limit);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null,typeCode, offset, limit);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
@@ -424,7 +424,49 @@ public class ActivityService {
 	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
 			int limit) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit);
+				limit, null);
+		if (listActivity == null || listActivity.isEmpty()) {
+			return null;
+		}
+
+		final List<PojoActivityRes> pojoList = new ArrayList<>();
+		for (Activity activity : listActivity) {
+			final PojoActivityRes pojo = new PojoActivityRes();
+			pojo.setActivityId(activity.getId());
+			pojo.setTitle(activity.getTitle());
+			pojo.setContent(activity.getDescription());
+			pojo.setCategoryCode(activity.getCategory().getCategoryCode());
+			pojo.setCategoryName(activity.getCategory().getCategoryName());
+			pojo.setTypeCode(activity.getTypeActivity().getTypeCode());
+			pojo.setTypeName(activity.getTypeActivity().getActivityName());
+			pojo.setProviders(activity.getProvider());
+			pojo.setPrice(activity.getPrice());
+			pojo.setStartDate(activity.getStartDate());
+			pojo.setEndDate(activity.getEndDate());
+			pojo.setIsActive(activity.getIsActive());
+			pojo.setCreatedAt(activity.getCreatedAt());
+			pojo.setVer(activity.getVersion());
+
+			if (activity.getUser() != null) {
+				String fullname = activity.getUser().getProfile().getFullname();
+				pojo.setUserId(activity.getUser().getId());
+				pojo.setFullname(fullname);
+			}
+
+			String imgActivityId = activity.getFile() != null ? activity.getFile().getId() : null;
+			pojo.setImgActivityId(imgActivityId);
+
+			pojoList.add(pojo);
+		}
+		return pojoList;
+	}
+	
+	
+
+	public List<PojoActivityRes> getByUserIdActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
+			int limit) throws Exception {
+		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
+				limit,principalService.getAuthPrincipal());
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
