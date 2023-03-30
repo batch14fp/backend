@@ -549,13 +549,12 @@ public class ActivityDao extends AbstractJpaDao {
 		final StringBuilder sqlQuery = new StringBuilder();
 		try {
 		sqlQuery.append(
-				"SELECT i.id, a.start_date , tat.activity_name,a.title, COUNT(i.user_id) as total_participant ");
+				"SELECT i.id, a.start_date , tat.activity_name,a.title, COALESCE(COUNT(CASE WHEN p.is_paid = TRUE THEN i.user_id END), 0) as total_participant ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND a.start_date >= NOW() ");
+		sqlQuery.append("WHERE a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
@@ -580,8 +579,7 @@ public class ActivityDao extends AbstractJpaDao {
 		countQueryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		countQueryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		countQueryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		countQueryBuilder.append("WHERE p.is_paid = TRUE ");
-		countQueryBuilder.append("AND a.start_date >= NOW() ");
+		countQueryBuilder.append("WHERE a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			countQueryBuilder.append("AND tat.type_code = :typeCode ");
 		}
@@ -636,7 +634,6 @@ public class ActivityDao extends AbstractJpaDao {
 			}
 			sqlQuery.append(") ");
 		}
-
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND at.type_code = :typeCode ");
 		}
@@ -648,7 +645,6 @@ public class ActivityDao extends AbstractJpaDao {
 				query.setParameter("categoryCodes" + i, categoryCodes.get(i));
 			}
 		}
-
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}

@@ -23,8 +23,6 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
-import com.lawencon.community.model.ProfileSocialMedia;
-import com.lawencon.community.model.SocialMedia;
 import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Wallet;
