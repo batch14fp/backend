@@ -117,7 +117,7 @@ public class ActivityController {
 		}
 	}
 
-	  @GetMapping("/listByCategoryAndType")
+	  @GetMapping("/by-category-List")
 	    public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
 	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
 	    		@RequestParam(value = "typeCode", required = false) String typeCode,
@@ -230,7 +230,7 @@ public class ActivityController {
 	
 	@GetMapping("member/report/incomes/file")
 	public ResponseEntity<byte[]> generateReportFileIncomesMember(  @RequestParam String startDate, @RequestParam String endDate,
-		 @RequestParam(required = false) String typeCode) {
+		@RequestParam(required = false) String typeCode) {
 		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( Date.valueOf(startDate).toLocalDate(),
 				Date.valueOf(endDate).toLocalDate(),typeCode);
 		Map<String, Object> params = new HashMap<>();
