@@ -83,6 +83,8 @@ public class InvoiceDao extends BaseMasterDao<Invoice> {
 
 		return invoiceList;
 	}
+	
+	
 
 	@Override
 	public Optional<Invoice> getById(String id) {
