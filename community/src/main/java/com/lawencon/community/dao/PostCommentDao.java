@@ -37,7 +37,7 @@ public class PostCommentDao extends AbstractJpaDao {
 
 		try {
 			final List<Object[]> listObj = ConnHandler.getManager().createNativeQuery(sql.toString())
-					.setParameter("postId", postId).setMaxResults(limit).setFirstResult(offset).getResultList();
+					.setParameter("postId", postId).setMaxResults(limit).setFirstResult((offset-1)*limit).getResultList();
 			final List<PostComment> listResult = new ArrayList<>();
 			for (Object[] obj : listObj) {
 				final PostComment postComment = new PostComment();
