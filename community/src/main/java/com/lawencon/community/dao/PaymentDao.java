@@ -32,7 +32,7 @@ public class PaymentDao extends AbstractJpaDao {
 		return super.getByIdRef(Payment.class, id);
 	}
 
-	public Optional<Payment> getAllPaymentByInvoiceId(String invoiceId) {
+	public Optional<Payment> getPaymentByInvoiceId(String invoiceId) {
 		Payment payment = new Payment();
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
@@ -51,6 +51,94 @@ public class PaymentDao extends AbstractJpaDao {
 
 		try {
 
+			Object[] obj = (Object[]) result;
+
+			Invoice invoice = new Invoice();
+			invoice.setId(obj[0].toString());
+			invoice.setInvoiceCode(obj[1].toString());
+
+			final User user = new User();
+			user.setId(obj[2].toString());
+			invoice.setUser(user);
+			if(obj[3]!=null) {
+			final Voucher voucher = new Voucher();
+			voucher.setId(obj[3].toString());
+			voucher.setVoucherCode(obj[4].toString());
+			invoice.setVoucher(voucher);
+			}
+			if (obj[5] != null) {
+				final Activity activity = new Activity();
+
+				activity.setId(obj[5].toString());
+				activity.setTitle(obj[6].toString());
+				activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
+				activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
+				activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
+				invoice.setActivity(activity);
+			}
+			if (obj[10] != null) {
+				final MemberStatus memberStatus = new MemberStatus();
+				memberStatus.setId(obj[10].toString());
+				memberStatus.setStatusName(obj[11].toString());
+				memberStatus.setCodeStatus(obj[12].toString());
+				memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
+				memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
+				invoice.setMemberStatus(memberStatus);
+			}
+			invoice.setVersion(Integer.valueOf(obj[15].toString()));
+			invoice.setIsActive(Boolean.valueOf(obj[16].toString()));
+			payment.setId(obj[17].toString());
+			
+			if(obj[18]!=null) {
+			final File file = new File();
+			file.setId(obj[18].toString());
+			payment.setFile(file);
+			}
+			if(obj[19]!=null) {
+				final BankPayment bankPayment = new BankPayment();
+				bankPayment.setId(obj[19].toString());
+				bankPayment.setAccountName(obj[25].toString());
+				bankPayment.setAccountNumber(obj[26].toString());
+				bankPayment.setBankName(obj[27].toString());
+				payment.setBankPayment(bankPayment);
+				}
+			payment.setTotal(BigDecimal.valueOf(Long.valueOf(obj[20].toString())));
+			payment.setExpired(Timestamp.valueOf(obj[21].toString()).toLocalDateTime());
+			payment.setSubtotal(BigDecimal.valueOf(Long.valueOf(obj[22].toString())));
+			payment.setTaxAmount(BigDecimal.valueOf(Long.valueOf(obj[23].toString())));
+			if(obj[24]!=null) {
+				payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
+				}
+			payment.setIsPaid(Boolean.valueOf(obj[28].toString()));
+			payment.setInvoice(invoice);
+			payment.setVersion(Integer.valueOf(obj[29].toString()));
+
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to retrieve payment ", e);
+
+		}
+		return Optional.ofNullable(payment);
+	}
+	
+	
+	
+	public Optional<Payment> getPaymentById(String paymentId) {
+		Payment payment = new Payment();
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append(
+				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver as payment_ver ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
+		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
+		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("LEFT JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
+		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
+		sqlQuery.append("WHERE p.id = :paymentId ");
+		sqlQuery.append("ORDER BY p.created_at DESC ");
+
+		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setParameter("paymentId", paymentId).setFirstResult(0).getSingleResult();
+		try {
 			Object[] obj = (Object[]) result;
 
 			Invoice invoice = new Invoice();

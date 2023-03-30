@@ -76,9 +76,6 @@ public class ActivityService {
 	}
 	
 	
-	
-	
-	
 
 	public List<PojoActivityRes> getAll(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
