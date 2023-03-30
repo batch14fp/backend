@@ -29,6 +29,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
@@ -376,7 +377,13 @@ public class ActivityController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-
+	
+	@GetMapping("/{invoiceId}/payment/detail-payment")
+	public ResponseEntity<PojoPaymentDetailRes> getDetailPayment(@PathVariable("invoiceId") String invoiceId){
+	        final PojoPaymentDetailRes data = paymentService.getPaymentDetail(invoiceId);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
+	
 
 
 }
