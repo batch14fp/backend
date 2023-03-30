@@ -29,6 +29,8 @@ import com.lawencon.community.pojo.activity.PojoActivityReqInsert;
 import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailResData;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
@@ -136,10 +138,11 @@ public class ActivityController {
 	            @RequestParam(value = "categoryCodes", required = false)  List<String>categoryCodes,
 	    		@RequestParam(value = "typeCode", required = false) String typeCode,
 	            @RequestParam(value = "page", defaultValue = "0") int page,
-	            @RequestParam(value = "size", defaultValue = "10") int size
+	            @RequestParam(value = "size", defaultValue = "10") int size,
+			    @RequestParam(value = "sortType",defaultValue = "created_at") String sortType
 	    ) {
 	        try {
-	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size);
+	            List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes, typeCode, page, size, sortType);
 	            if (activities == null) {
 	            
 	                return ResponseEntity.noContent().build();
@@ -155,8 +158,8 @@ public class ActivityController {
 	  @GetMapping("/upcoming")
 	    public ResponseEntity<PojoUpcomingActivityByTypeRes> getUpcomingActivity(
 	            @RequestParam(value = "typeCode", required = false) String typeCode,
-	            @RequestParam(value = "page", required = false) int page,
-	            @RequestParam(value = "size",required = false) int size
+	            @RequestParam(value = "page") int page,
+	            @RequestParam(value = "size") int size
 	    ) {
 	        try {
 	        	PojoUpcomingActivityByTypeRes activities = activityService.getUpcomingEvent(page, size, typeCode);
@@ -376,7 +379,23 @@ public class ActivityController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-
+	
+	@GetMapping("/{invoiceId}/payment/detail-payment")
+	public ResponseEntity<PojoPaymentDetailResData> getDetailPayment(@PathVariable("invoiceId") String invoiceId){
+	        final PojoPaymentDetailResData data = paymentService.getPaymentDetail(invoiceId);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
+	@GetMapping("/my-transactions")
+	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid",required=false) String isPaid, @RequestParam(value="offset", defaultValue="0") Integer offset,
+			@RequestParam(value="limit", defaultValue="0") Integer limit){
+			Boolean isPaidParam = null;
+			if(isPaid!=null) {
+				isPaidParam = Boolean.valueOf(isPaid);
+			}
+	        final PojoPaymentDetailRes data = paymentService.getByUserId(isPaidParam, offset, limit);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
+	
 
 
 }

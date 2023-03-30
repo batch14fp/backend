@@ -26,6 +26,7 @@ import com.lawencon.community.service.ActivityTypeService;
 @RequestMapping("activity-types")
 public class ActivityTypeController {
 	private ActivityTypeService activityTypeService;
+
 	
 	public ActivityTypeController(final ActivityTypeService activityTypeService) {
 		this.activityTypeService = activityTypeService;
@@ -59,6 +60,8 @@ public class ActivityTypeController {
 	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
+
+	
 	
 	
 }

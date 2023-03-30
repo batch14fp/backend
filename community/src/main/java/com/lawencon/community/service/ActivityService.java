@@ -509,9 +509,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String> categoryCodes,
-			final String typeCode, final int offset, final int limit) {
+			final String typeCode, final int offset, final int limit, final String sortType) {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(categoryCodes, typeCode,
-				offset, limit);
+				offset, limit,sortType);
 
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;

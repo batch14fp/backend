@@ -2,6 +2,8 @@ package com.lawencon.community.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,13 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Subscription;
+import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailResData;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
@@ -44,8 +49,9 @@ public class PaymentService {
 	private SubscriptionDao subscriptionDao;
 	private VoucherDao voucherDao;
 
-	public PaymentService(final VoucherDao voucherDao, final SubscriptionDao subscriptionDao, final UserDao userDao, final SalesSettingDao salesSettingDao, final WalletDao walletDao,
-			final FileDao fileDao, final BankPaymentDao bankPaymentDao, final PaymentDao paymentDao) {
+	public PaymentService(final VoucherDao voucherDao, final SubscriptionDao subscriptionDao, final UserDao userDao,
+			final SalesSettingDao salesSettingDao, final WalletDao walletDao, final FileDao fileDao,
+			final BankPaymentDao bankPaymentDao, final PaymentDao paymentDao) {
 		this.paymentDao = paymentDao;
 		this.bankPaymentDao = bankPaymentDao;
 		this.fileDao = fileDao;
@@ -57,9 +63,6 @@ public class PaymentService {
 
 	}
 
-
-
-
 	public PojoRes updateByAdmin(PojoConfirmPaymentReqUpdate data) {
 		ConnHandler.begin();
 		final PojoRes res = new PojoRes();
@@ -70,15 +73,17 @@ public class PaymentService {
 			payment.setVersion(data.getVer());
 			payment.setIsPaid(data.getIsPaid());
 			if (data.getIsPaid()) {
-				if(payment.getInvoice().getActivity()==null) {
+				if (payment.getInvoice().getActivity() == null) {
 					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal()).get();
 					final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
 					final BigDecimal newIncomSystem = payment.getTotal();
-					walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
+					walletRefSystem
+							.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
 					walletRefSystem.setVersion(walletRefSystem.getVersion());
 					walletDao.save(walletRefSystem);
-					final Subscription subs = subscriptionDao.getByProfileId(payment.getInvoice().getUser().getProfile().getId()).get();
+					final Subscription subs = subscriptionDao
+							.getByProfileId(payment.getInvoice().getUser().getProfile().getId()).get();
 					final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
 					subs.setMemberStatus(payment.getInvoice().getMemberStatus());
 					subs.setProfile(payment.getInvoice().getUser().getProfile());
@@ -86,23 +91,24 @@ public class PaymentService {
 					Long day = (long) payment.getInvoice().getMemberStatus().getPeriodDay();
 					subs.setEndDate(LocalDateTime.now().plusDays(day));
 					subscriptionDao.save(subsRef);
-					
-					
+
 					res.setMessage("Update Membership Success");
-					
-				}
-				else {
-					if(payment.getInvoice().getVoucher()!=null) {
-					Voucher voucher = voucherDao.getByIdRef(Voucher.class, payment.getInvoice().getVoucher().getId());
-					voucher.setUsedCount((voucher.getUsedCount()+1));
-					voucherDao.save(voucher);
+
+				} else {
+					if (payment.getInvoice().getVoucher() != null) {
+						Voucher voucher = voucherDao.getByIdRef(Voucher.class,
+								payment.getInvoice().getVoucher().getId());
+						voucher.setUsedCount((voucher.getUsedCount() + 1));
+						voucherDao.save(voucher);
 					}
 					final SalesSettings setting = salesSettingDao.getSalesSetting();
 
-					final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId()).get();
+					final Wallet wallet = walletDao.getByUserId(payment.getInvoice().getActivity().getUser().getId())
+							.get();
 					final Wallet walletRef = walletDao.getByIdRef(wallet.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRef.getId());
-					final BigDecimal newIncome = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getMemberIncome()));
+					final BigDecimal newIncome = payment.getSubtotal()
+							.multiply(BigDecimal.valueOf(setting.getMemberIncome()));
 					walletRef.setBalance(walletRef.getBalance().add(newIncome));
 					walletRef.setVersion(walletRef.getVersion());
 					walletDao.save(walletRef);
@@ -110,9 +116,11 @@ public class PaymentService {
 					final Wallet walletSystem = walletDao.getByUserId(principalService.getAuthPrincipal()).get();
 					final Wallet walletRefSystem = walletDao.getByIdRef(walletSystem.getId());
 					walletDao.getByIdAndDetach(Wallet.class, walletRefSystem.getId());
-					final BigDecimal newIncomSystem = payment.getSubtotal().multiply(BigDecimal.valueOf(setting.getSystemIncome()));
-					
-					walletRefSystem.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
+					final BigDecimal newIncomSystem = payment.getSubtotal()
+							.multiply(BigDecimal.valueOf(setting.getSystemIncome()));
+
+					walletRefSystem
+							.setBalance(walletRefSystem.getBalance().add(newIncomSystem).add(payment.getTaxAmount()));
 					walletRefSystem.setVersion(walletRefSystem.getVersion());
 					walletDao.save(walletRefSystem);
 					res.setMessage("Sava Success");
@@ -152,6 +160,153 @@ public class PaymentService {
 		final PojoRes res = new PojoRes();
 		res.setMessage("Transaction proof uploaded successfully!");
 		return res;
+
+	}
+
+	public PojoPaymentDetailResData getPaymentDetail(String invoiceId) {
+		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		if (paymentDao.getAllPaymentByInvoiceId(invoiceId).isPresent()) {
+			Payment data = paymentDao.getAllPaymentByInvoiceId(invoiceId).get();
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+				res.setAccountName(data.getBankPayment().getAccountName());
+
+			}
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+			}
+			if (data.getInvoice().getMemberStatus() != null) {
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
+			}
+
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
+			res.setPaymentExpired(data.getExpired());
+			res.setPaymentId(data.getId());
+			res.setSubTotal(data.getSubtotal());
+			res.setIsPaid(data.getIsPaid());
+			res.setTaxAmmount(data.getTaxAmount());
+			res.setTotal(data.getTotal());
+		}
+		return res;
+
+	}
+
+	public PojoPaymentDetailRes getByUserId(Boolean isPaid, Integer offset, Integer limit) {
+		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
+		List<PojoPaymentDetailResData> resList = new ArrayList<>();
+		final User user = userDao.getByIdRef(User.class, principalService.getAuthPrincipal());
+		paymentDao.getAllPaymentByUserId(user.getId(), isPaid, offset, limit).forEach(data -> {
+			PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountName(data.getBankPayment().getAccountName());
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+			}
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+			}
+			if (data.getInvoice().getMemberStatus() != null) {
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
+			}
+
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
+			res.setPaymentExpired(data.getExpired());
+			res.setPaymentId(data.getId());
+			res.setSubTotal(data.getSubtotal());
+			res.setIsPaid(data.getIsPaid());
+			res.setTaxAmmount(data.getTaxAmount());
+			res.setTotal(data.getTotal());
+			resList.add(res);
+
+		});
+		paymentDetail.setData(resList);
+		paymentDetail.setTotal(resList.size());
+		return paymentDetail;
+
+	}
+	public PojoPaymentDetailRes getAll(Boolean isPaid, Integer offset, Integer limit) {
+		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
+		List<PojoPaymentDetailResData> resList = new ArrayList<>();
+		
+		paymentDao.getAllPayment(isPaid, offset, limit).forEach(data -> {
+			PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountName(data.getBankPayment().getAccountName());
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+			}
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+			}
+			if (data.getInvoice().getMemberStatus() != null) {
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
+			}
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
+			res.setPaymentExpired(data.getExpired());
+			res.setPaymentId(data.getId());
+			res.setIsPaid(data.getIsPaid());
+			res.setSubTotal(data.getSubtotal());
+			res.setTaxAmmount(data.getTaxAmount());
+			res.setTotal(data.getTotal());
+			resList.add(res);
+
+		});
+		paymentDetail.setData(resList);
+		paymentDetail.setTotal(resList.size());
+		return paymentDetail;
 
 	}
 
