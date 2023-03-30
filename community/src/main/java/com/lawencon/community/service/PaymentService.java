@@ -257,5 +257,52 @@ public class PaymentService {
 		return paymentDetail;
 
 	}
+	public PojoPaymentDetailRes getAll(Boolean isPaid, Integer offset, Integer limit) {
+		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
+		List<PojoPaymentDetailResData> resList = new ArrayList<>();
+		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		paymentDao.getAllPayment(isPaid, offset, limit).forEach(data -> {
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountName(data.getBankPayment().getAccountName());
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+			}
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+			}
+			if (data.getInvoice().getMemberStatus() != null) {
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
+			}
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
+			res.setPaymentExpired(data.getExpired());
+			res.setPaymentId(data.getId());
+			res.setSubTotal(data.getSubtotal());
+			res.setTaxAmmount(data.getTaxAmount());
+			res.setTotal(data.getTotal());
+			resList.add(res);
+
+		});
+		paymentDetail.setData(res);
+		paymentDetail.setTotal(resList.size());
+		return paymentDetail;
+
+	}
 
 }
