@@ -1,7 +1,5 @@
 package com.lawencon.community.pojo.report;
 
-import java.time.LocalDate;
-
 public class PojoReportActivityAdminResData {
 	private Integer no;
 	private String memberName;

@@ -2,6 +2,7 @@ package com.lawencon.community.pojo.profile;
 
 import java.time.LocalDate;
 
+import com.lawencon.community.pojo.bankpayment.PojoBankPaymentReqUpdate;
 import com.lawencon.community.pojo.file.PojoFileReqUpdate;
 
 public class PojoProfileReqUpdate {
@@ -18,12 +19,10 @@ public class PojoProfileReqUpdate {
 	private String industryId;
 	private String positionId;
 	private String phoneNumber;
-	
+	private Integer walletVer;
+	private PojoBankPaymentReqUpdate bankUserAccount;
 	private PojoFileReqUpdate file;
 	
-
-	
-
 	public PojoFileReqUpdate getFile() {
 		return file;
 	}
@@ -128,6 +127,20 @@ public class PojoProfileReqUpdate {
 	public void setWalletId(String walletId) {
 		this.walletId = walletId;
 	}
+
+	public PojoBankPaymentReqUpdate getBankUserAccount() {
+		return bankUserAccount;
+	}
+	public void setBankUserAccount(PojoBankPaymentReqUpdate bankUserAccount) {
+		this.bankUserAccount = bankUserAccount;
+	}
+	public Integer getWalletVer() {
+		return walletVer;
+	}
+	public void setWalletVer(Integer walletVer) {
+		this.walletVer = walletVer;
+	}
+
 	
 	
 }
