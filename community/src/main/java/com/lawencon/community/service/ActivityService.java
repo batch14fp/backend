@@ -139,6 +139,7 @@ public class ActivityService {
 		try {
 			final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(),typeCode, offset,
+
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
