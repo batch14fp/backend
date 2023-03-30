@@ -269,6 +269,7 @@ public class ActivityDao extends AbstractJpaDao {
 	        sqlQuery.append("WHERE a.is_active = TRUE ");
 	        
 	        if(userId!=null) {
+	        	System.out.println(userId);
 	            sqlQuery.append("AND a.user_id = :userId ");
 	        }
 	        

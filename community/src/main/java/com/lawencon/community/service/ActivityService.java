@@ -134,7 +134,8 @@ public class ActivityService {
 		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
 		final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),typeCode, offset,
+
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, principalService.getAuthPrincipal() ,typeCode, offset,
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
