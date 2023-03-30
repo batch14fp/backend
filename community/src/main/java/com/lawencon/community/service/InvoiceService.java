@@ -149,7 +149,10 @@ public class InvoiceService {
 		res.setInvoiceId(invoice.getId());
 		res.setVer(invoice.getVersion());
 		res.setIsActive(invoice.getIsActive());
-		res.setMembershipId(invoice.getMemberStatus().getId());
+		if(invoice.getMemberStatus() != null) {
+			res.setMembershipId(invoice.getMemberStatus().getId());
+		}
+
 		res.setImageId(invoice.getActivity().getFile().getId());
 		res.setPrice(invoice.getActivity().getPrice());
 		res.setStartDate(invoice.getActivity().getStartDate());
