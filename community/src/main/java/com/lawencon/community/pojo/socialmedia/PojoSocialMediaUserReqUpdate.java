@@ -2,6 +2,7 @@ package com.lawencon.community.pojo.socialmedia;
 
 public class PojoSocialMediaUserReqUpdate {
 	private String profileSocialMediaId;
+	private String socialMediaId;
 	private String url;
 	private Boolean isActive;
 	private Integer ver;
@@ -31,5 +32,12 @@ public class PojoSocialMediaUserReqUpdate {
 	public void setProfileSocialMediaId(String profileSocialMediaId) {
 		this.profileSocialMediaId = profileSocialMediaId;
 	}
+	public String getSocialMediaId() {
+		return socialMediaId;
+	}
+	public void setSocialMediaId(String socialMediaId) {
+		this.socialMediaId = socialMediaId;
+	}
+	
 	
 }

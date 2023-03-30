@@ -143,7 +143,7 @@ public class UserService implements UserDetailsService {
 		
 		final Wallet wallet = new Wallet();
 	
-		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		wallet.setBalance(BigDecimal.ZERO);
 		
 		final Wallet walletNew = walletDao.save(wallet);
 
@@ -185,7 +185,7 @@ public class UserService implements UserDetailsService {
 		res.setId(profileNew.getId());
 		final User user = new User();
 		final Wallet wallet = new Wallet();
-		wallet.setBalance(BigDecimal.valueOf(Long.valueOf("0")));
+		wallet.setBalance(BigDecimal.ZERO);
 		final Wallet walletNew = walletDao.save(wallet);
 		final Role role = roleDao.getRoleByCode(RoleEnum.ADMIN.getRoleCode()).get();
 		user.setRole(role);

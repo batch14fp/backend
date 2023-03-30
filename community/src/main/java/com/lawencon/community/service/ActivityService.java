@@ -243,8 +243,8 @@ public class ActivityService {
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
 
 			reportMember.setNo(i + 1);
-			reportMember.setStartDate(
-					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
+			reportMember.setStartDate(Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
+					
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
