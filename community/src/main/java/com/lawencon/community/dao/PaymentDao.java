@@ -150,7 +150,7 @@ public class PaymentDao extends BaseMasterDao<Payment> {
 					"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name ");
 			sqlQuery.append("FROM t_payment p ");
 			sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
-			sqlQuery.append("INNER JOIN t_voucher v ON v.id = i.voucher_id ");
+			sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
 			sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
 			sqlQuery.append("INNER JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
 			sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
@@ -196,7 +196,7 @@ public class PaymentDao extends BaseMasterDao<Payment> {
 					memberStatus.setCodeStatus(obj[12].toString());
 					memberStatus.setPeriodDay(Integer.valueOf(obj[13].toString()));
 					memberStatus.setPrice(BigDecimal.valueOf(Long.valueOf(obj[14].toString())));
-
+					invoice.setMemberStatus(memberStatus);
 				}
 				invoice.setVersion(Integer.valueOf(obj[15].toString()));
 				invoice.setIsActive(Boolean.valueOf(obj[16].toString()));

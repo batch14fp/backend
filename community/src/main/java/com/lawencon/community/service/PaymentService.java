@@ -18,6 +18,7 @@ import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.dao.WalletDao;
 import com.lawencon.community.model.BankPayment;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.MemberStatus;
 import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Subscription;
@@ -179,7 +180,12 @@ public class PaymentService {
 			res.setTitleActivity(data.getInvoice().getActivity().getTitle());
 			res.setStartDate(data.getInvoice().getActivity().getStartDate());
 			}
-		
+			if(data.getInvoice().getMemberStatus()!=null){
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPrice(data.getInvoice().getMemberStatus().getPrice());
+			}
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
