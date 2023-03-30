@@ -46,6 +46,7 @@ public class PaymentDao extends BaseMasterDao<Payment> {
 		}
 		return paymentList;
 	}
+	
 
 	@Override
 	public Optional<Payment> getByIdAndDetach(String id) {
