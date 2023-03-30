@@ -36,7 +36,7 @@ public class PaymentDao extends AbstractJpaDao {
 		Payment payment = new Payment();
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid ");
+				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver as payment_ver ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
 		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
@@ -111,6 +111,7 @@ public class PaymentDao extends AbstractJpaDao {
 				}
 			payment.setIsPaid(Boolean.valueOf(obj[28].toString()));
 			payment.setInvoice(invoice);
+			payment.setVersion(Integer.valueOf(obj[29].toString()));
 
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to retrieve payment ", e);
@@ -124,7 +125,7 @@ public class PaymentDao extends AbstractJpaDao {
 		
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid ");
+				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver  as payment_ver ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
 		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
@@ -219,6 +220,7 @@ public class PaymentDao extends AbstractJpaDao {
 					}
 				payment.setIsPaid(Boolean.valueOf(obj[28].toString()));
 				payment.setInvoice(invoice);
+				payment.setVersion(Integer.valueOf(obj[29].toString()));
 				paymentList.add(payment);
 			}
 		} catch (Exception e) {
@@ -234,7 +236,7 @@ public class PaymentDao extends AbstractJpaDao {
 		
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid ");
+				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver  as payment_ver ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
 		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
@@ -324,6 +326,7 @@ public class PaymentDao extends AbstractJpaDao {
 				}
 				payment.setIsPaid(Boolean.valueOf(obj[28].toString()));
 				payment.setInvoice(invoice);
+				payment.setVersion(Integer.valueOf(obj[29].toString()));
 				paymentList.add(payment);
 			}
 		} catch (Exception e) {

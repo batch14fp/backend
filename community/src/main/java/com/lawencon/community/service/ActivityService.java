@@ -74,6 +74,11 @@ public class ActivityService {
 		this.salesSettingDao = salesSettingDao;
 
 	}
+	
+	
+	
+	
+	
 
 	public List<PojoActivityRes> getAll(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
