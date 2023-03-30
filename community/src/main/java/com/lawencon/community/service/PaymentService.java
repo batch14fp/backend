@@ -167,13 +167,16 @@ public class PaymentService {
 		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
 		if (paymentDao.getAllPaymentByInvoiceId(invoiceId).isPresent()) {
 			Payment data = paymentDao.getAllPaymentByInvoiceId(invoiceId).get();
-			res.setAccountName(data.getBankPayment().getAccountName());
-			res.setDiscAmmount(data.getDiscAmount());
-			res.setAccountNumber(data.getBankPayment().getAccountNumber());
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+				res.setAccountName(data.getBankPayment().getAccountName());
 
-			res.setBankName(data.getBankPayment().getBankName());
-			res.setBankPaymetId(data.getBankPayment().getId());
-
+			}
 			if (data.getInvoice().getActivity() != null) {
 				if (data.getInvoice().getActivity().getFile() != null) {
 					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
@@ -204,21 +207,22 @@ public class PaymentService {
 		return res;
 
 	}
-	
-	
+
 	public PojoPaymentDetailRes getByUserId(Boolean isPaid, Integer offset, Integer limit) {
 		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
 		List<PojoPaymentDetailResData> resList = new ArrayList<>();
 		final User user = userDao.getByIdRef(User.class, principalService.getAuthPrincipal());
 		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
-		paymentDao.getAllPaymentByUserId(user.getId(), isPaid, offset, limit).forEach(data->{
-			res.setAccountName(data.getBankPayment().getAccountName());
-			res.setDiscAmmount(data.getDiscAmount());
-			res.setAccountNumber(data.getBankPayment().getAccountNumber());
-
-			res.setBankName(data.getBankPayment().getBankName());
-			res.setBankPaymetId(data.getBankPayment().getId());
-
+		paymentDao.getAllPaymentByUserId(user.getId(), isPaid, offset, limit).forEach(data -> {
+			if (data.getDiscAmount() != null) {
+				res.setDiscAmmount(data.getDiscAmount());
+			}
+			if (data.getBankPayment() != null) {
+				res.setAccountName(data.getBankPayment().getAccountName());
+				res.setAccountNumber(data.getBankPayment().getAccountNumber());
+				res.setBankName(data.getBankPayment().getBankName());
+				res.setBankPaymetId(data.getBankPayment().getId());
+			}
 			if (data.getInvoice().getActivity() != null) {
 				if (data.getInvoice().getActivity().getFile() != null) {
 					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
@@ -244,9 +248,9 @@ public class PaymentService {
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
 			res.setTaxAmmount(data.getTaxAmount());
-			res.setTotal(data.getTotal());	
+			res.setTotal(data.getTotal());
 			resList.add(res);
-			
+
 		});
 		paymentDetail.setData(res);
 		paymentDetail.setTotal(resList.size());
