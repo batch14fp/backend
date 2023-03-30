@@ -30,6 +30,7 @@ import com.lawencon.community.pojo.activity.PojoActivityReqUpdate;
 import com.lawencon.community.pojo.activity.PojoActivityRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailResData;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminRes;
 import com.lawencon.community.pojo.report.PojoReportActivityAdminResData;
@@ -380,8 +381,14 @@ public class ActivityController {
 
 	
 	@GetMapping("/{invoiceId}/payment/detail-payment")
-	public ResponseEntity<PojoPaymentDetailRes> getDetailPayment(@PathVariable("invoiceId") String invoiceId){
-	        final PojoPaymentDetailRes data = paymentService.getPaymentDetail(invoiceId);
+	public ResponseEntity<PojoPaymentDetailResData> getDetailPayment(@PathVariable("invoiceId") String invoiceId){
+	        final PojoPaymentDetailResData data = paymentService.getPaymentDetail(invoiceId);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
+	@GetMapping("/my-transactions")
+	public ResponseEntity<PojoPaymentDetailRes> getAllMyTransaction(@PathVariable(value="isPaid",required=false) Boolean isPaid, @RequestParam("offset") Integer offset,
+			@RequestParam("limit") Integer limit){
+	        final PojoPaymentDetailRes data = paymentService.getByUserId(isPaid, offset, limit);
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
 	
