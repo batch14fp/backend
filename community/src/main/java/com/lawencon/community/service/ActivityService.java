@@ -47,8 +47,7 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class ActivityService {
 
-	@Autowired
-	private PrincipalService principalService;
+
 
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
@@ -57,9 +56,11 @@ public class ActivityService {
 	private final ActivityVoucherDao activityVoucherDao;
 	private final UserDao userDao;
 	private final SalesSettingDao salesSettingDao;
-
 	private final FileDao fileDao;
-
+	
+	@Autowired
+	private PrincipalService principalService;
+	
 	public ActivityService(final SalesSettingDao salesSettingDao, final UserDao userDao,
 			final ActivityVoucherDao activityVoucherDao, final VoucherDao voucherDao, final ActivityDao activityDao,
 			final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
@@ -130,11 +131,15 @@ public class ActivityService {
 	
 	
 	public PojoReportActivityMemberRes getMemberReport( final LocalDate startDate,
+		
 			final LocalDate endDate, Integer offset, Integer limit, String typeCode) {
 		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
-		final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),typeCode, offset,
+	
+		try {
+			final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(),typeCode, offset,
+
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
@@ -148,8 +153,11 @@ public class ActivityService {
 		}
 		res.setData(resList);
 		res.setTotal((long)resList.size());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	
 		return res;
-
 	}
 
 	

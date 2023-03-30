@@ -150,23 +150,6 @@ public class AbstractJpaDao {
 	    return savedEntities;
 	}
 	
-	public <T extends BaseEntity> List<T> saveAllAndFlush(List<T> entities) {
-	    List<T> savedEntities = new ArrayList<>();
-	    for (T entity : entities) {
-	        final T savedEntity = save(entity);
-	        if (em().contains(savedEntity)) {
-	            em().flush();
-	        }
-	        savedEntities.add(savedEntity);
-	    }
-	    return savedEntities;
-	}
-	
-
-
-
-
-	
 	
 
 }

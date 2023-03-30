@@ -262,13 +262,18 @@ public class ActivityDao extends AbstractJpaDao {
 	        StringBuilder sqlQuery = new StringBuilder();
 	        sqlQuery.append("SELECT * ");
 	        sqlQuery.append("FROM t_activity a ");
+			sqlQuery.append("INNER JOIN t_invoice i ");
+			sqlQuery.append("ON i.activity_id = a.id ");
+			sqlQuery.append("INNER JOIN t_payment p ");
+			sqlQuery.append("ON p.invoice_id = i.id ");
 	        sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 	        sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 	        sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
-	        sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
+	        sqlQuery.append("INNER JOIN t_profile pr ON u.profile_id = pr.id ");
 	        sqlQuery.append("WHERE a.is_active = TRUE ");
-	        
-	        if(userId!=null) {
+
+			sqlQuery.append("AND p.is_paid = TRUE ");
+	        if(userId!=null&&!userId.isEmpty()) {
 	            sqlQuery.append("AND a.user_id = :userId ");
 	        }
 	        
