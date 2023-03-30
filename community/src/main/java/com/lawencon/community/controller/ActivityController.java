@@ -156,8 +156,8 @@ public class ActivityController {
 	  @GetMapping("/upcoming")
 	    public ResponseEntity<PojoUpcomingActivityByTypeRes> getUpcomingActivity(
 	            @RequestParam(value = "typeCode", required = false) String typeCode,
-	            @RequestParam(value = "page", required = false) int page,
-	            @RequestParam(value = "size",required = false) int size
+	            @RequestParam(value = "page") int page,
+	            @RequestParam(value = "size") int size
 	    ) {
 	        try {
 	        	PojoUpcomingActivityByTypeRes activities = activityService.getUpcomingEvent(page, size, typeCode);
