@@ -25,7 +25,6 @@ public class VoucherDao extends AbstractJpaDao{
 					.setParameter("code", code)
 					.getSingleResult();
 			Object[] obj = (Object[]) result;
-			
 			voucher.setId(obj[0].toString());
 			voucher.setVoucherCode(obj[1].toString());
 		} catch (Exception e) {

@@ -390,7 +390,7 @@ public class ActivityController {
 			@RequestParam(value="limit", defaultValue="0") Integer limit){
 			Boolean isPaidParam = null;
 			if(isPaid!=null) {
-				isPaidParam = Boolean.valueOf(isPaid);
+				isPaidParam = Boolean.valueOf(isPaid.toUpperCase());
 			}
 	        final PojoPaymentDetailRes data = paymentService.getByUserId(isPaidParam, offset, limit);
 	        return new ResponseEntity<>(data, HttpStatus.OK);

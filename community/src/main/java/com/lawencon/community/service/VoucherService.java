@@ -33,6 +33,8 @@ public class VoucherService {
 		ConnHandler.begin();
 		if(data.getActivityId()!=null) {
 		final Voucher voucher = new Voucher();
+
+		voucher.setVoucherCode(data.getVoucherCode().toUpperCase());
 		voucher.setDiscountPercent((data.getDiscountPercent()/100));
 		voucher.setExpDate(data.getExpDate());
 		voucher.setLimitApplied(data.getLimitApplied());

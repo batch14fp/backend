@@ -130,22 +130,23 @@ public class PaymentDao extends AbstractJpaDao {
 		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
 		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("LEFT JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
-		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
-		sqlQuery.append("WHERE i.user_id = :userId ");
+		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id=i.membership_id ");
+		sqlQuery.append("WHERE i.user_id= :userId ");
 
 		if (isPaid != null) {
-			sqlQuery.append("AND p.is_paid = :isPaid ");
+			sqlQuery.append("AND p.is_paid= :isPaid ");
 		}
 
 		sqlQuery.append("ORDER BY p.created_at DESC ");
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.setFirstResult(offset)
-				.setMaxResults(limit)
 				.setParameter("userId", userId);
 
-		if (isPaid != null) {
+
+		if (isPaid!= null) {
 			query.setParameter("isPaid", isPaid);
 		}
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
 
 		final List<Object[]> resultList = query.getResultList();
 
@@ -242,17 +243,18 @@ public class PaymentDao extends AbstractJpaDao {
 		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
 
 		if (isPaid != null) {
-			sqlQuery.append("WHERE p.is_paid = :isPaid ");
+			sqlQuery.append("WHERE p.is_paid= :isPaid ");
 		}
 
 		sqlQuery.append("ORDER BY p.created_at DESC ");
-		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
-				.setFirstResult(offset)
-				.setMaxResults(limit);
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 
 		if (isPaid!= null) {
 			query.setParameter("isPaid", isPaid);
 		}
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
+
 
 		final List<Object[]> resultList = query.getResultList();
 
