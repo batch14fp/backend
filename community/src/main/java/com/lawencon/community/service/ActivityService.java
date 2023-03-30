@@ -138,16 +138,12 @@ public class ActivityService {
 				limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
-
 			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
-
 			reportMember.setNo(i + 1);
-
 			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
-
 			resList.add(reportMember);
 		}
 		res.setData(resList);
@@ -234,9 +230,10 @@ public class ActivityService {
 
 	public PojoReportActivityAdminRes getAdminReport(final LocalDate startDate, final LocalDate endDate, Integer offset,
 			Integer limit, String typeCode) {
+		final List<PojoReportActivityAdminResData> resList = new ArrayList<>();
 		final PojoReportActivityAdminRes res = new PojoReportActivityAdminRes();
 
-		final List<PojoReportActivityAdminResData> resList = new ArrayList<>();
+		
 		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null,typeCode, offset, limit);
 		for (int i = 0; i < activityList.size(); i++) {
 

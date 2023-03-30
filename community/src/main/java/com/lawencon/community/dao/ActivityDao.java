@@ -33,9 +33,9 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<Activity> listActivities = new ArrayList<>();
 		
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, at.id AS at_id, at.type_code, at.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
 		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
@@ -108,9 +108,9 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<Activity> searchActivities(int offset, int limit, String sortType, String title) {
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, at.id AS at_id, at.type_code, at.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active, a.created_at ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
 		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("INNER JOIN t_activity_type at ON at.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 		sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 		sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
@@ -258,11 +258,11 @@ public class ActivityDao extends AbstractJpaDao {
 	@SuppressWarnings("unchecked")
 	public List<Activity> getAllByDateRange(LocalDate startDate, LocalDate endDate, String userId, String typeCode, Integer offset,
 	            Integer limit) {
-	        
+	   
 	        StringBuilder sqlQuery = new StringBuilder();
 	        sqlQuery.append("SELECT * ");
 	        sqlQuery.append("FROM t_activity a ");
-	        sqlQuery.append("INNER JOIN t_activity_type tat ON at.id = a.type_activity_id ");
+	        sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 	        sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
 	        sqlQuery.append("INNER JOIN t_user u ON a.user_id = u.id ");
 	        sqlQuery.append("INNER JOIN t_profile p ON u.profile_id = p.id ");
@@ -402,7 +402,7 @@ public class ActivityDao extends AbstractJpaDao {
 		sql.append(
 				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
 		sql.append("FROM t_activity a ");
-		sql.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+		sql.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
 		sql.append("JOIN t_category c ON a.category_id = c.id ");
 		sql.append("WHERE 1=1 ");
 
@@ -411,7 +411,7 @@ public class ActivityDao extends AbstractJpaDao {
 		}
 
 		if (typeCode != null && !typeCode.isEmpty()) {
-			sql.append("AND at.type_code = :typeCode ");
+			sql.append("AND tat.type_code = :typeCode ");
 		}
 		
 		if (userId != null && !userId.isEmpty()) {
@@ -549,13 +549,12 @@ public class ActivityDao extends AbstractJpaDao {
 		final StringBuilder sqlQuery = new StringBuilder();
 		try {
 		sqlQuery.append(
-				"SELECT i.id, a.start_date , tat.activity_name,a.title, COUNT(i.user_id) as total_participant ");
+				"SELECT i.id, a.start_date , tat.activity_name,a.title, COALESCE(COUNT(CASE WHEN p.is_paid = TRUE THEN i.user_id END), 0) as total_participant ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		sqlQuery.append("WHERE p.is_paid = TRUE ");
-		sqlQuery.append("AND a.start_date >= NOW() ");
+		sqlQuery.append("WHERE a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
@@ -580,8 +579,7 @@ public class ActivityDao extends AbstractJpaDao {
 		countQueryBuilder.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		countQueryBuilder.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
 		countQueryBuilder.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
-		countQueryBuilder.append("WHERE p.is_paid = TRUE ");
-		countQueryBuilder.append("AND a.start_date >= NOW() ");
+		countQueryBuilder.append("WHERE a.start_date >= NOW() ");
 		if (typeCode != null && !typeCode.isEmpty()) {
 			countQueryBuilder.append("AND tat.type_code = :typeCode ");
 		}
@@ -623,7 +621,7 @@ public class ActivityDao extends AbstractJpaDao {
 		sqlQuery.append(
 				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
 		sqlQuery.append("FROM t_activity a ");
-		sqlQuery.append("JOIN t_activity_type at ON a.type_activity_id = at.id ");
+		sqlQuery.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
 		sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
 		sqlQuery.append("WHERE 1=1 ");
 		if (categoryCodes != null && !categoryCodes.isEmpty()) {
@@ -636,9 +634,8 @@ public class ActivityDao extends AbstractJpaDao {
 			}
 			sqlQuery.append(") ");
 		}
-
 		if (typeCode != null && !typeCode.isEmpty()) {
-			sqlQuery.append("AND at.type_code = :typeCode ");
+			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
 
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString(), Activity.class);
@@ -648,7 +645,6 @@ public class ActivityDao extends AbstractJpaDao {
 				query.setParameter("categoryCodes" + i, categoryCodes.get(i));
 			}
 		}
-
 		if (typeCode != null && !typeCode.isEmpty()) {
 			query.setParameter("typeCode", typeCode);
 		}

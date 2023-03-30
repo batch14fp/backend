@@ -813,9 +813,7 @@ public class PostService {
 		postCommentDao.getByIdAndDetach(postComment.getId());
 		postComment.setVersion(data.getVer());
 		postComment.setBody(data.getContentComment());
-	
 		postCommentDao.save(postComment);
-
 		ConnHandler.commit();
 
 		final PojoRes res = new PojoRes();
@@ -846,7 +844,6 @@ public class PostService {
 				postCommentData.setCreatedAt(data.getCreatedAt());
 				listCommentData.add(postCommentData);
 			}
-			
 			else {
 			
 			final PojoPostCommentRes postComment = new PojoPostCommentRes();
