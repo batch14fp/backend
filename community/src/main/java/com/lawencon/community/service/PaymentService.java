@@ -2,6 +2,8 @@ package com.lawencon.community.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,13 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.Payment;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.model.Subscription;
+import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.payment.PojoConfirmPaymentReqUpdate;
 import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
+import com.lawencon.community.pojo.payment.PojoPaymentDetailResData;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
 import com.lawencon.community.util.GenerateString;
 import com.lawencon.security.principal.PrincipalService;
@@ -159,33 +163,35 @@ public class PaymentService {
 
 	}
 
-	
-	public PojoPaymentDetailRes getPaymentDetail(String invoiceId) {
-		PojoPaymentDetailRes res = new PojoPaymentDetailRes();
-		paymentDao.getAllPaymentByInvoiceId(invoiceId).forEach(data -> {
+	public PojoPaymentDetailResData getPaymentDetail(String invoiceId) {
+		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		if (paymentDao.getAllPaymentByInvoiceId(invoiceId).isPresent()) {
+			Payment data = paymentDao.getAllPaymentByInvoiceId(invoiceId).get();
 			res.setAccountName(data.getBankPayment().getAccountName());
 			res.setDiscAmmount(data.getDiscAmount());
 			res.setAccountNumber(data.getBankPayment().getAccountNumber());
-			
+
 			res.setBankName(data.getBankPayment().getBankName());
 			res.setBankPaymetId(data.getBankPayment().getId());
-		
-			if(data.getInvoice().getActivity()!=null) {
-			if(data.getInvoice().getActivity().getFile()!=null) {
-			res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
 			}
-			res.setEndDate(data.getInvoice().getActivity().getEndDate());
-			res.setActivityId(data.getInvoice().getActivity().getId());
-			res.setActivityPrice(data.getInvoice().getActivity().getPrice());
-			res.setTitleActivity(data.getInvoice().getActivity().getTitle());
-			res.setStartDate(data.getInvoice().getActivity().getStartDate());
-			}
-			if(data.getInvoice().getMemberStatus()!=null){
+			if (data.getInvoice().getMemberStatus() != null) {
 				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
 				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
 				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
-				res.setPrice(data.getInvoice().getMemberStatus().getPrice());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
 			}
+
 			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
 			res.setInvoiceId(data.getInvoice().getId());
 			res.setPaymentId(data.getId());
@@ -194,10 +200,58 @@ public class PaymentService {
 			res.setSubTotal(data.getSubtotal());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
+		}
+		return res;
+
+	}
+	
+	
+	public PojoPaymentDetailRes getByUserId(Boolean isPaid, Integer offset, Integer limit) {
+		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
+		List<PojoPaymentDetailResData> resList = new ArrayList<>();
+		final User user = userDao.getByIdRef(User.class, principalService.getAuthPrincipal());
+		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
+		paymentDao.getAllPaymentByUserId(user.getId(), isPaid, offset, limit).forEach(data->{
+			res.setAccountName(data.getBankPayment().getAccountName());
+			res.setDiscAmmount(data.getDiscAmount());
+			res.setAccountNumber(data.getBankPayment().getAccountNumber());
+
+			res.setBankName(data.getBankPayment().getBankName());
+			res.setBankPaymetId(data.getBankPayment().getId());
+
+			if (data.getInvoice().getActivity() != null) {
+				if (data.getInvoice().getActivity().getFile() != null) {
+					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
+				}
+				res.setEndDate(data.getInvoice().getActivity().getEndDate());
+				res.setActivityId(data.getInvoice().getActivity().getId());
+				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
+				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
+				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+			}
+			if (data.getInvoice().getMemberStatus() != null) {
+				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
+				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
+				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
+				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
+			}
+
+			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
+			res.setInvoiceId(data.getInvoice().getId());
+			res.setPaymentId(data.getId());
+			res.setPaymentExpired(data.getExpired());
+			res.setPaymentId(data.getId());
+			res.setSubTotal(data.getSubtotal());
+			res.setTaxAmmount(data.getTaxAmount());
+			res.setTotal(data.getTotal());	
+			resList.add(res);
+			
 		});
+		paymentDetail.setData(res);
+		paymentDetail.setTotal(resList.size());
+		return paymentDetail;
 
-	return res;
-
-}
+	}
 
 }
