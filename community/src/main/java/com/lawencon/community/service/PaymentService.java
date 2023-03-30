@@ -201,7 +201,6 @@ public class PaymentService {
 			res.setPaymentExpired(data.getExpired());
 			res.setPaymentId(data.getId());
 			res.setSubTotal(data.getSubtotal());
-			res.setIsPaid(data.getIsPaid());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setTotal(data.getTotal());
 		}
