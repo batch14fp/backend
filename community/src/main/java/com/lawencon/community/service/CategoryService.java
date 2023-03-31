@@ -2,7 +2,9 @@ package com.lawencon.community.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.model.Category;
@@ -21,7 +23,37 @@ public class CategoryService extends BaseService<PojoCategoryRes>{
 		this.categoryDao = categoryDao;
 	}
 	
+
+	private void validateBkNotNull(PojoCategoryReqInsert category) {
+	    if(category.getCategoryCode() == null) {
+	        throw new RuntimeException("Category Code cannot be empty.");
+	    }
 	
+	}
+
+	private void validateNonBk(PojoCategoryReqInsert category) {
+	
+	    if(category.getCategoryName() == null) {
+	        throw new RuntimeException("Category Name cannot be empty.");
+	    }
+	   
+	}
+	private void validateNonBk(PojoCategoryReqUpdate category) {
+
+		 if(	category.getCategoryId() == null) {
+		        throw new RuntimeException("Category ID cannot be empty.");
+		    }
+		
+		
+		 if(	category.getVer() == null) {
+		        throw new RuntimeException("Category version cannot be empty.");
+		    }
+		 if(	category.getCategoryName() == null) {
+		        throw new RuntimeException("Category Name cannot be empty.");
+		    }
+		 
+		}
+
 	@Override
 	public List<PojoCategoryRes> getAll() throws Exception{
 		final List<PojoCategoryRes>  listPojoResGetCategory = new ArrayList<>();
@@ -58,13 +90,14 @@ public class CategoryService extends BaseService<PojoCategoryRes>{
 	}
 	
 	public PojoUpdateRes update(PojoCategoryReqUpdate data) {
+		validateNonBk(data);
+		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
 			Category category = categoryDao.getByIdRef(data.getCategoryId());
 			categoryDao.getByIdAndDetach(Category.class, category.getId());
 				category.setId(category.getId());
-				category.setCategoryCode(data.getCategoryCode());;
 				category.setCategoryName(data.getCategoryName());
 				category.setIsActive(data.getIsActive());
 				category.setVersion(data.getVer());
@@ -83,6 +116,9 @@ public class CategoryService extends BaseService<PojoCategoryRes>{
 		
 	}
 	public PojoInsertRes save(PojoCategoryReqInsert data) {
+		validateBkNotNull(data);
+		validateNonBk(data);
+		
 		ConnHandler.begin();
 		Category category = new Category();
 			category.setCategoryCode(data.getCategoryCode());;

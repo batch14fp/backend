@@ -25,6 +25,31 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 		this.industryDao = industryDao;
 	}
 
+	private void validateNonBk(PojoIndustryReqInsert industry) {
+
+		if (industry.getIndustryName() == null) {
+
+			throw new RuntimeException("Industry Name cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoIndustryReqUpdate industry) {
+		if (industry.getIndustryId() == null) {
+
+			throw new RuntimeException("Industry ID cannot be empty.");
+		}
+
+		if (industry.getIndustryName() == null) {
+
+			throw new RuntimeException("Industry Name cannot be empty.");
+		}
+
+		if (industry.getVer() == null) {
+			throw new RuntimeException("Industry version cannot be empty.");
+		}
+	}
+
 	@Override
 	public List<PojoIndustryRes> getAll() {
 
@@ -61,6 +86,8 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 	}
 
 	public PojoInsertRes save(PojoIndustryReqInsert data) {
+		
+		validateNonBk(data);
 		ConnHandler.begin();
 		final Industry industry = new Industry();
 
@@ -77,10 +104,12 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 	}
 
 	public PojoUpdateRes update(PojoIndustryReqUpdate data) {
+		validateNonBk(data);
+		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
 			ConnHandler.begin();
-			final Industry industry  = industryDao.getByIdRef(data.getIndustryId());
+			final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 			industryDao.getByIdAndDetach(Industry.class, industry.getId());
 			industry.setId(industry.getId());
 			industry.setIndustryName(data.getIndustryId());
@@ -89,17 +118,17 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 
 			final Industry industryNew = industryDao.saveAndFlush(industry);
 			ConnHandler.commit();
-	
+
 			pojoUpdateRes.setId(industryNew.getId());
 			pojoUpdateRes.setMessage("Save Success!");
 			pojoUpdateRes.setVer(industryNew.getVersion());
-		
+
 		} catch (Exception e) {
 			pojoUpdateRes.setId(data.getIndustryId());
 			pojoUpdateRes.setMessage("Something wrong,you cannot update this data");
 		}
 		return pojoUpdateRes;
-		
+
 	}
 
 }

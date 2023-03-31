@@ -6,8 +6,8 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.SalesSettingDao;
 import com.lawencon.community.model.SalesSettings;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
 import com.lawencon.community.pojo.salessetting.PojoSalesSettingReqUpdate;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
 
 @Service
 public class SalesSettingService {
@@ -17,6 +17,29 @@ public class SalesSettingService {
 		this.salesSettingDao = salesSettingDao;
 	}
 	
+	private void validateNonBk(PojoSalesSettingReqUpdate salesSettings) {
+		if (salesSettings.getSalesSettingId() == null) {
+			throw new RuntimeException("Sales Settings ID cannot be empty.");
+		}
+		
+		if (salesSettings.getVer() == null) {
+			throw new RuntimeException("Sales Settings version cannot be empty.");
+		}
+		
+		if (salesSettings.getMemberIncome() == null) {
+			throw new RuntimeException("Sales settings member income cannot be empty.");
+		}
+		
+		if (salesSettings.getSystemIncome()== null) {
+			throw new RuntimeException("Sales Settings System Income cannot be empty.");
+		}
+		if (salesSettings.getTax()== null) {
+			throw new RuntimeException("Sales Settings Tax cannot be empty.");
+		}
+		
+	}
+
+
 	public PojoSalesSettingRes getSalesSetting() {
 		final SalesSettings data = salesSettingDao.getSalesSetting();
 		final PojoSalesSettingRes res = new PojoSalesSettingRes();
@@ -33,6 +56,8 @@ public class SalesSettingService {
 	public PojoUpdateRes update(PojoSalesSettingReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final SalesSettings salesSetting = salesSettingDao.getByIdRef(data.getSalesSettingId());
 			salesSettingDao.getByIdAndDetach(SalesSettings.class, data.getSalesSettingId());
@@ -41,6 +66,7 @@ public class SalesSettingService {
 			salesSetting.setSystemIncome(data.getSystemIncome());
 			salesSetting.setTax(data.getTax());
 			salesSetting.setVersion(data.getVer());
+			
 			final SalesSettings salesSettingsNew = salesSettingDao.saveAndFlush(salesSetting);
 			ConnHandler.commit();
 

@@ -24,6 +24,38 @@ public class PostTypeService {
 		this.postTypeDao = postTypeDao;
 
 	}
+	
+	private void validateBkNotNull(PojoPostTypeReqInsert postType) {
+		if (postType.getPostTypeCode() == null) {
+			throw new RuntimeException("Post Type Code cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoPostTypeReqInsert postType) {
+
+		if (postType.getPostTypeName() == null) {
+			throw new RuntimeException("Position Name cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoPostTypeReqUpdate postType) {
+
+		if (postType.getPostTypeId() == null) {
+			throw new RuntimeException("Post type cannot be empty.");
+		}
+
+		if (postType.getVer() == null) {
+			throw new RuntimeException("Post type version cannot be empty.");
+		}
+		if (postType.getPostTypeName() == null) {
+			throw new RuntimeException("Post type name cannot be empty.");
+		}
+	}
+
+	
+	
 	public List<PojoPostTypeRes> getAll() {
 		List<PojoPostTypeRes> res = new ArrayList<>();
 
@@ -60,6 +92,9 @@ public class PostTypeService {
 	}
 
 	public PojoInsertRes save(PojoPostTypeReqInsert data) {
+		validateBkNotNull(data);
+		validateNonBk(data);
+		
 		ConnHandler.begin();
 
 		final PostType postType = new PostType();
@@ -80,12 +115,13 @@ public class PostTypeService {
 	public PojoUpdateRes update(PojoPostTypeReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final PostType postType  = postTypeDao.getByIdRef(data.getPostTypeId());
 			postTypeDao.getByIdAndDetach(PostType.class, postType.getId());
 			postType.setId(postType.getId());
 			postType.setTypeName(data.getPostTypeName());
-			postType.setTypeCode(data.getPostTypeCode());
 			postType.setIsActive(data.getIsActive());
 			postType.setVersion(data.getVer());
 			final PostType postTypeNew = postTypeDao.saveAndFlush(postType);

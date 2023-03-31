@@ -1,7 +1,6 @@
 package com.lawencon.community.pojo.post;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class PojoPostCommentRes {
 	private String postCommentId;
@@ -13,7 +12,6 @@ public class PojoPostCommentRes {
 	private LocalDateTime createdAt;
 	private Integer ver;
 	
-	private List <PojoPostCommentReplyResData> data;
 	public String getPostCommentId() {
 		return postCommentId;
 	}
@@ -38,12 +36,7 @@ public class PojoPostCommentRes {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-	public List<PojoPostCommentReplyResData> getData() {
-		return data;
-	}
-	public void setData(List<PojoPostCommentReplyResData> data) {
-		this.data = data;
-	}
+
 	public String getFullname() {
 		return fullname;
 	}

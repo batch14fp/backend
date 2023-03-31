@@ -4,7 +4,7 @@ public class PojoUserPaymentReqUpdate {
 	
 	private String paymentId;
 	private String bankPaymentId;
-	private String fileName;
+
 	private String fileExtension;
 	private String fileContent;
 	private Integer ver;
@@ -35,13 +35,6 @@ public class PojoUserPaymentReqUpdate {
 		this.bankPaymentId = bankPaymentId;
 	}
 
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
 
 	public String getFileExtension() {
 		return fileExtension;

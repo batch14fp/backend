@@ -41,6 +41,9 @@ public class InvoiceService {
 	@Autowired
 	private PrincipalService principalService;
 
+	
+
+	
 	public InvoiceService(final MemberStatusDao memberStatusDao, final PaymentDao paymentDao,
 			final SalesSettingDao salesSettingDao, final InvoiceDao invoiceDao, final UserDao userDao,
 			final ActivityDao activityDao, final VoucherDao voucherDao) {
@@ -52,8 +55,19 @@ public class InvoiceService {
 		this.salesSettingDao = salesSettingDao;
 		this.memberStatusDao = memberStatusDao;
 	}
+	
+	
+	private void validateNonBk(PojoInvoiceReqInsert invoice) {
+	
+	    if(invoice.getActivityId() == null) {
+	        throw new RuntimeException("Activity ID cannot be empty.");
+	    }
+
+	}
+	
 
 	public PojoInsertRes save(PojoInvoiceReqInsert data) {
+		validateNonBk(data);
 		ConnHandler.begin();
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();

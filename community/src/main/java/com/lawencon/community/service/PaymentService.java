@@ -63,7 +63,46 @@ public class PaymentService {
 
 	}
 
+
+	private void validateNonBk(PojoUserPaymentReqUpdate payment) {
+
+		if (payment.getPaymentId() == null) {
+			throw new RuntimeException("Payment cannot be empty.");
+		}
+
+		if (payment.getVer() == null) {
+			throw new RuntimeException("Payment Version cannot be empty.");
+		}
+		
+		if(payment.getBankPaymentId()==null) {
+			throw new RuntimeException("Bank Payment cannot be empty.");
+		}
+		if(payment.getFileContent()==null) {
+			throw new RuntimeException("File content cannot be empty.");
+		}
+		if(payment.getFileExtension()==null) {
+			throw new RuntimeException("File extension cannot be empty.");
+		}
+	}
+	private void validateNonBk(PojoConfirmPaymentReqUpdate payment) {
+
+		if (payment.getPaymentId() == null) {
+			throw new RuntimeException("Payment ID cannot be empty.");
+		}
+
+		if (payment.getVer() == null) {
+			throw new RuntimeException("Payment version cannot be empty.");
+		}
+		if (payment.getIsPaid() == null) {
+			throw new RuntimeException("Payment paid status cannot be empty.");
+		}
+
+	}
+	
+
+
 	public PojoRes updateByAdmin(PojoConfirmPaymentReqUpdate data) {
+		validateNonBk(data);
 		ConnHandler.begin();
 		final PojoRes res = new PojoRes();
 		final String codeRole = userDao.getByIdRef(principalService.getAuthPrincipal()).getRole().getRoleCode();
@@ -139,6 +178,7 @@ public class PaymentService {
 	}
 
 	public PojoRes updateByUser(PojoUserPaymentReqUpdate data) {
+		validateNonBk(data);
 		ConnHandler.begin();
 		final Payment payment = paymentDao.getByIdRef(data.getPaymentId());
 		paymentDao.getByIdAndDetach(payment.getId());
@@ -170,7 +210,7 @@ public class PaymentService {
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
-			if(data.getFile()!=null) {
+			if (data.getFile() != null) {
 				res.setFilePaymentId(data.getFile().getId());
 			}
 			if (data.getBankPayment() != null) {
@@ -222,7 +262,7 @@ public class PaymentService {
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
-			if(data.getFile()!=null) {
+			if (data.getFile() != null) {
 				res.setFilePaymentId(data.getFile().getId());
 			}
 			if (data.getBankPayment() != null) {
@@ -267,13 +307,14 @@ public class PaymentService {
 		return paymentDetail;
 
 	}
+
 	public PojoPaymentDetailRes getAll(Boolean isPaid, Integer offset, Integer limit) {
 		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
 		List<PojoPaymentDetailResData> resList = new ArrayList<>();
-		
+
 		paymentDao.getAllPayment(isPaid, offset, limit).forEach(data -> {
 			PojoPaymentDetailResData res = new PojoPaymentDetailResData();
-		
+
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
@@ -300,8 +341,8 @@ public class PaymentService {
 				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
 				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
 			}
-			
-			if(data.getFile()!=null) {
+
+			if (data.getFile() != null) {
 				res.setFilePaymentId(data.getFile().getId());
 			}
 			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
@@ -322,7 +363,7 @@ public class PaymentService {
 		return paymentDetail;
 
 	}
-	
+
 	public PojoPaymentDetailResData getPaymentDetailById(String paymentId) {
 		PojoPaymentDetailResData res = new PojoPaymentDetailResData();
 		if (paymentDao.getPaymentById(paymentId).isPresent()) {
@@ -330,7 +371,7 @@ public class PaymentService {
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
-			if(data.getFile()!=null) {
+			if (data.getFile() != null) {
 				res.setFilePaymentId(data.getFile().getId());
 			}
 			if (data.getBankPayment() != null) {

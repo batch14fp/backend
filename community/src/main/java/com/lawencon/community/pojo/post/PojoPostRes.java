@@ -32,6 +32,7 @@ public class PojoPostRes {
 	private LocalDate endAt;
 	private List<PojoPollingOptionRes> pollingOption;
 	private List<PojoFileResData> data;
+	private Boolean isMoreContent;
 	
 
 	public PojoPollingResponRes getPollingRespon() {
@@ -202,6 +203,12 @@ public class PojoPostRes {
 	}
 	public void setPollingResponId(String pollingResponId) {
 		this.pollingResponId = pollingResponId;
+	}
+	public Boolean getIsMoreContent() {
+		return isMoreContent;
+	}
+	public void setIsMoreContent(Boolean isMoreContent) {
+		this.isMoreContent = isMoreContent;
 	}
 	
 	

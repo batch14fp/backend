@@ -27,16 +27,58 @@ import com.lawencon.security.principal.PrincipalService;
 public class MemberStatusService {
 	private MemberStatusDao memberStatusDao;
 	private UserDao userDao;
-	private SubscriptionDao subscriptionDao;	
-	
+	private SubscriptionDao subscriptionDao;
+
 	@Autowired
 	private PrincipalService principalService;
-	
-	
-	public MemberStatusService(final SubscriptionDao subscriptionDao, final UserDao userDao, final MemberStatusDao memberStatusDao) {
+
+	public MemberStatusService(final SubscriptionDao subscriptionDao, final UserDao userDao,
+			final MemberStatusDao memberStatusDao) {
 		this.memberStatusDao = memberStatusDao;
 		this.userDao = userDao;
 		this.subscriptionDao = subscriptionDao;
+	}
+
+	private void validateBkNotNull(PojoMemberStatusReqInsert memberStatus) {
+		if (memberStatus.getCodeStatus() == null) {
+			throw new RuntimeException("Member Status cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoMemberStatusReqInsert memberStatus) {
+
+		if (memberStatus.getStatusName() == null) {
+			throw new RuntimeException("Member Status Name cannot be empty.");
+		}
+		if (memberStatus.getPeriodDay() == null) {
+			throw new RuntimeException("Member Status Period cannot be empty.");
+		}
+		if (memberStatus.getPrice() == null) {
+			throw new RuntimeException("Member Status Price cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoMemberStatusReqUpdate memberStatus) {
+
+		if (memberStatus.getMemberStatusId() == null) {
+			throw new RuntimeException("Member Status ID cannot be empty.");
+		}
+
+		if (memberStatus.getVer() == null) {
+			throw new RuntimeException("Member Status Version cannot be empty.");
+		}
+		if (memberStatus.getStatusName() == null) {
+			throw new RuntimeException("Member Status Name cannot be empty.");
+		}
+		if (memberStatus.getPeriodDay() == null) {
+			throw new RuntimeException("Member Status Period cannot be empty.");
+		}
+		if (memberStatus.getPrice() == null) {
+			throw new RuntimeException("Member Status Price cannot be empty.");
+		}
+
 	}
 
 	public List<PojoMemberStatusRes> getAll() {
@@ -59,8 +101,10 @@ public class MemberStatusService {
 		return res;
 	}
 
-
 	public PojoInsertRes save(PojoMemberStatusReqInsert data) {
+		validateNonBk(data);
+		validateBkNotNull(data);
+
 		ConnHandler.begin();
 		final MemberStatus memberStatus = new MemberStatus();
 		memberStatus.setCodeStatus(data.getCodeStatus());
@@ -75,13 +119,16 @@ public class MemberStatusService {
 		pojoRes.setMessage("Save Success!");
 		return pojoRes;
 	}
+
 	public PojoUpdateRes update(PojoMemberStatusReqUpdate data) {
+
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
 			ConnHandler.begin();
 			final MemberStatus memberStatus = memberStatusDao.getByIdRef(data.getMemberStatusId());
 			memberStatusDao.getByIdAndDetach(MemberStatus.class, memberStatus.getId());
-		
+
 			memberStatus.setStatusName(data.getStatusName());
 			memberStatus.setPeriodDay(data.getPeriodDay());
 			memberStatus.setVersion(data.getVer());
@@ -100,7 +147,7 @@ public class MemberStatusService {
 		return pojoUpdateRes;
 
 	}
-	
+
 	public PojoRes deleteById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
@@ -117,24 +164,19 @@ public class MemberStatusService {
 		}
 
 	}
+
 	public PojoMemberPremiumRes getIsPremiumMember() {
 		PojoMemberPremiumRes res = new PojoMemberPremiumRes();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final Subscription subs = subscriptionDao.getByProfileId(userRef.getProfile().getId()).get();
 		final Subscription subsRef = subscriptionDao.getByIdRef(subs.getId());
-		
-		if(subsRef.getMemberStatus().getCodeStatus().equalsIgnoreCase(StatusEnum.REGULAR.getStatusCode())){
+
+		if (subsRef.getMemberStatus().getCodeStatus().equalsIgnoreCase(StatusEnum.REGULAR.getStatusCode())) {
 			res.setIsPremiumMember(false);
-		}
-		else {
+		} else {
 			res.setIsPremiumMember(true);
 		}
 		return res;
 	}
-	
-	
-	
-	
-	
 
 }
