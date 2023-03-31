@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.PostTypeEnum;
+import com.lawencon.community.constant.StatusEnum;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.FilePostDao;
@@ -21,6 +22,7 @@ import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostLikeDao;
 import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.dao.ProfileDao;
+import com.lawencon.community.dao.SubscriptionDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
@@ -34,6 +36,7 @@ import com.lawencon.community.model.PostBookmark;
 import com.lawencon.community.model.PostComment;
 import com.lawencon.community.model.PostLike;
 import com.lawencon.community.model.PostType;
+import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
@@ -70,26 +73,16 @@ public class PostService {
 	private PollingOptionDao pollingOptionDao;
 	private PollingResponDao pollingResponDao;
 	private PositionDao positionDao;
-	
-
-	
-	private void validateBkNotExist(String id) {
-		if (postDao.getById(id).isEmpty()) {
-			throw new RuntimeException("Post cannot be empty.");
-		}
-	}
-
-
-	
+	private SubscriptionDao subscriptionDao;
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public PostService(final PositionDao positionDao, final ProfileDao profileDao,
-			final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao,
-			final PollingDao pollingDao, final FilePostDao filePostDao, final PostDao postDao,
-			final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao, final PostTypeDao postTypeDao,
-			final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao,
+	public PostService(final SubscriptionDao subscriptionDao, final PositionDao positionDao,
+			final ProfileDao profileDao, final PollingResponDao pollingResponDao,
+			final PollingOptionDao pollingOptionDao, final PollingDao pollingDao, final FilePostDao filePostDao,
+			final PostDao postDao, final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao,
+			final PostTypeDao postTypeDao, final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao,
 			final CategoryDao categoryDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
@@ -104,19 +97,26 @@ public class PostService {
 		this.pollingOptionDao = pollingOptionDao;
 		this.pollingResponDao = pollingResponDao;
 		this.positionDao = positionDao;
+		this.subscriptionDao = subscriptionDao;
 
 	}
-	public static final int MAX_SHORT_CONTENT_LENGTH = 500; 
+
+	public static final int MAX_SHORT_CONTENT_LENGTH = 500;
+
+	private void validateBkNotExist(String id) {
+		if (postDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Post cannot be empty.");
+		}
+	}
 
 	public PojoPostRes getById(String id) throws Exception {
-		
+
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
-		
-		
+
+		final Subscription subs = subscriptionDao.getByProfileId(userRef.getProfile().getId()).get();
 
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
-	
 		res.setId(data.getId());
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());
@@ -183,7 +183,19 @@ public class PostService {
 		res.setIsBookmark(getIsBookmarkPost(userRef.getId(), data.getId()));
 		res.setIsLike(getIsLike(userRef.getId(), data.getId()));
 
-		return res;
+		if (data.getPostType().getTypeCode().equalsIgnoreCase(PostTypeEnum.PREMIUM.getCode())) {
+
+			if (subs.getMemberStatus().getCodeStatus().equalsIgnoreCase(StatusEnum.REGULAR.getStatusCode())) {
+				return null;
+			} else {
+				return res;
+			}
+
+		} else {
+
+			return res;
+		}
+
 	}
 
 	private Boolean getIsLike(String userId, String postId) {
@@ -208,7 +220,7 @@ public class PostService {
 
 	public PojoRes deleteById(String id) {
 		validateBkNotExist(id);
-		
+
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");
@@ -473,22 +485,22 @@ public class PostService {
 
 	public List<PojoPostRes> getData(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getGetAllPost(offset, limit);
-	
+
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		for (Post data : posts) {
 			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			 String content = data.getContentPost();
-		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
-		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
-		        	res.setIsMoreContent(true);
-		        } else {
-		        	res.setIsMoreContent(false);
-		            res.setContent(content);
-		        
-		        }
+			String content = data.getContentPost();
+			if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+				res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+				res.setIsMoreContent(true);
+			} else {
+				res.setIsMoreContent(false);
+				res.setContent(content);
+
+			}
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			if (data.getUser().getProfile().getImageProfile() != null) {
@@ -582,15 +594,15 @@ public class PostService {
 			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			 String content = data.getContentPost();
-		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
-		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
-		        	res.setIsMoreContent(true);
-		        } else {
-		        	res.setIsMoreContent(false);
-		            res.setContent(content);
-		        
-		        }
+			String content = data.getContentPost();
+			if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+				res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+				res.setIsMoreContent(true);
+			} else {
+				res.setIsMoreContent(false);
+				res.setContent(content);
+
+			}
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			if (data.getUser().getProfile().getImageProfile() != null) {
@@ -671,15 +683,15 @@ public class PostService {
 			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			 String content = data.getContentPost();
-		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
-		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
-		        	res.setIsMoreContent(true);
-		        } else {
-		        	res.setIsMoreContent(false);
-		            res.setContent(content);
-		        
-		        }
+			String content = data.getContentPost();
+			if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+				res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+				res.setIsMoreContent(true);
+			} else {
+				res.setIsMoreContent(false);
+				res.setContent(content);
+
+			}
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			res.setFullname(data.getUser().getProfile().getFullname());
@@ -754,15 +766,15 @@ public class PostService {
 			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			 String content = data.getContentPost();
-		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
-		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
-		        	res.setIsMoreContent(true);
-		        } else {
-		        	res.setIsMoreContent(false);
-		            res.setContent(content);
-		        
-		        }
+			String content = data.getContentPost();
+			if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+				res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+				res.setIsMoreContent(true);
+			} else {
+				res.setIsMoreContent(false);
+				res.setContent(content);
+
+			}
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			res.setFullname(data.getUser().getProfile().getFullname());
