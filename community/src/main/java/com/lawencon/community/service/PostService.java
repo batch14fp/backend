@@ -100,18 +100,14 @@ public class PostService {
 		this.subscriptionDao = subscriptionDao;
 
 	}
-<<<<<<< HEAD
+
 	public static final int MAX_SHORT_CONTENT_LENGTH = 300; 
-=======
-
-	public static final int MAX_SHORT_CONTENT_LENGTH = 500;
-
 	private void validateBkNotExist(String id) {
 		if (postDao.getById(id).isEmpty()) {
 			throw new RuntimeException("Post cannot be empty.");
 		}
 	}
->>>>>>> c8a47132c65c626c184a651b577cc718f3e8f0e2
+
 
 	public PojoPostRes getById(String id) throws Exception {
 
