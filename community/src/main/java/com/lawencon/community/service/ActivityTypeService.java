@@ -24,7 +24,6 @@ public class ActivityTypeService {
 
 	public ActivityTypeService(final ActivityTypeDao activityTypeDao) {
 		this.activityTypeDao = activityTypeDao;
-
 	}
 	private void validateBkNotNull(PojoActivityTypeReqInsert activityType) {
 	    if(activityType.getTypeCode() == null) {
