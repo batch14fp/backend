@@ -2,7 +2,7 @@ package com.lawencon.community.constant;
 
 public enum PostTypeEnum {
 	
-	POLLING("PPOL", "POLLING");
+	POLLING("PPOL", "Post Polling"),PREMIUM("PPRM","Post Premium" );
 	
 	private String code;
 	private String name;
