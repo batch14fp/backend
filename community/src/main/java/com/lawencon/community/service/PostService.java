@@ -202,7 +202,7 @@ public class PostService {
 		return countLike;
 	}
 
-	public PojoRes ById(String id) {
+	public PojoRes deleteById(String id) {
 		validateBkNotExist(id);
 		
 		ConnHandler.begin();

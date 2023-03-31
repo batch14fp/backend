@@ -188,7 +188,7 @@ public class ActivityService {
 				resList.add(reportMember);
 			}
 			res.setData(resList);
-			res.setTotal((long) resList.size());
+			res.setTotal(activityDao.getTotalDataAllByDateRange(startDate, endDate,  user.getId(), typeCode));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -214,7 +214,7 @@ public class ActivityService {
 		final List<PojoReportIncomesMemberResData> resList = activityDao.getActivityIncomeByUser(user.getId(),
 				percentMember, startDate, endDate, typeCode, offset, limit);
 		res.setData(resList);
-		res.setTotal((long) resList.size());
+		res.setTotal(activityDao.getTotalActivityIncomeByUser(principalService.getAuthPrincipal(),startDate, endDate, typeCode));
 		return res;
 
 	}
@@ -235,7 +235,7 @@ public class ActivityService {
 				endDate, typeCode, offset, limit);
 
 		res.setData(resList);
-		res.setTotal((long) resList.size());
+		res.setTotal((activityDao.getTotalDataActivityIncome(startDate, endDate, typeCode)));
 		return res;
 	}
 
@@ -293,7 +293,7 @@ public class ActivityService {
 			resList.add(reportMember);
 		}
 		res.setData(resList);
-		res.setTotal((long) activityList.size());
+		res.setTotal(activityDao.getTotalDataAllByDateRange(startDate, endDate,  null, typeCode));
 		return res;
 
 	}
@@ -357,8 +357,6 @@ public class ActivityService {
 		ConnHandler.begin();
 		validateNonBk(data);
 	
-		
-		
 		Voucher voucherNew = null;
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
