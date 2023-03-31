@@ -109,10 +109,14 @@ public class PostService {
 	public static final int MAX_SHORT_CONTENT_LENGTH = 500; 
 
 	public PojoPostRes getById(String id) throws Exception {
+		
+		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
+		
+		
 
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
-		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
+	
 		res.setId(data.getId());
 		res.setTitle(data.getTitle());
 		res.setContent(data.getContentPost());

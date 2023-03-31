@@ -17,6 +17,7 @@ public class Polling extends BaseEntity{
 	
 	@Column(nullable=false )
 	private LocalDate endAt;
+	
 	@Column(nullable=false )
 	private Boolean isOpen;
 	

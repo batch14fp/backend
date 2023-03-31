@@ -27,7 +27,7 @@ public class Subscription extends BaseEntity{
 	
 	
 	@OneToOne
-	@JoinColumn(name = "member_status_id")
+	@JoinColumn(name = "member_status_id", nullable=false)
 	private MemberStatus memberStatus;
 	
 	

@@ -9,15 +9,16 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "t_file")
 public class File extends BaseEntity{
-	@Column(columnDefinition = "text")
+	
+	@Column(columnDefinition = "text",nullable=false)
 	private String fileContent;
 	
-	@Column(length = 5)
+	@Column(length = 5, nullable=false)
 	private String fileExtension;
 	
 	
 
-	@Column(length = 50)
+	@Column(length = 50,nullable=false)
 	private String fileName;
 	
 
