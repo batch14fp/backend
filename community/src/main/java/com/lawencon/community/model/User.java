@@ -27,7 +27,7 @@ public class User extends BaseEntity {
 	private Role role;
 
 	@OneToOne
-	@JoinColumn(name = "profile_id")
+	@JoinColumn(name = "profile_id", nullable = false)
 	private Profile profile;
 	
 	@OneToOne

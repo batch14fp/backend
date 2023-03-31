@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
@@ -31,7 +32,7 @@ public class Activity extends BaseEntity{
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
 		
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="file_id")
 	private File file;
 	
@@ -44,7 +45,7 @@ public class Activity extends BaseEntity{
 	@Column(length=36, nullable= false)
 	private String provider;
 	
-	@Column(length=50)
+	@Column(length=50,  nullable= false)
 	private String activityLocation;
 
 	
@@ -55,10 +56,9 @@ public class Activity extends BaseEntity{
 	@Column(nullable=false)
 	private LocalDateTime endDate;
 	
-	
+	@Column(length=50,  nullable= false)
 	private String description;
 	
-
 	
 	public ActivityType getTypeActivity() {
 		return typeActivity;
@@ -130,9 +130,4 @@ public class Activity extends BaseEntity{
 		this.description = description;
 	}
 	
-	
-	
-	
-
-
 }

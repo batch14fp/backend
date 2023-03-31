@@ -21,8 +21,6 @@ public class Post  extends BaseEntity{
 	@JoinColumn(name="user_id", nullable=false)
 	private User user ;
 	
-	
-	
 	@ManyToOne
 	@JoinColumn(name="post_type_id", nullable=false)
 	private PostType postType;

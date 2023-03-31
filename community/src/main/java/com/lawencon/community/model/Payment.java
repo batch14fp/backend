@@ -3,6 +3,7 @@ package com.lawencon.community.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -32,6 +33,7 @@ public class Payment  extends BaseEntity{
 	private Boolean isPaid;
 	
 	
+	@Column(nullable=false)
 	private LocalDateTime expired;
 	
 	
@@ -45,7 +47,6 @@ public class Payment  extends BaseEntity{
 	
 	
 	private BigDecimal total;
-	
 	
 
 	public BigDecimal getDiscAmount() {

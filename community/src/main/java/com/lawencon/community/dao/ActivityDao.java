@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,8 @@ import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeResData;
-import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
+import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
 
 @Repository
 public class ActivityDao extends AbstractJpaDao {
@@ -482,56 +483,60 @@ public class ActivityDao extends AbstractJpaDao {
 		return Optional.ofNullable(super.getByIdAndDetach(Activity.class, id));
 
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode,
-			final int offset, final int limit, final String userId) throws Exception {
-		StringBuilder sql = new StringBuilder();
-		sql.append(
-				"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
-		sql.append(
-				"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
-		sql.append("FROM t_activity a ");
-		sql.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
-		sql.append("JOIN t_category c ON a.category_id = c.id ");
-		sql.append("WHERE 1=1 ");
+	        final int offset, final int limit, final String userId) throws Exception {
+	    StringBuilder sql = new StringBuilder();
+	    List<Activity> listActivity = new ArrayList<>();
+	    try {
+	    sql.append("SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
+	    sql.append("a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+	    sql.append("FROM t_activity a ");
+	    sql.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
+	    sql.append("JOIN t_category c ON a.category_id = c.id ");
+	    sql.append("WHERE 1=1 ");
 
-		if (categoryCode != null && !categoryCode.isEmpty()) {
-			sql.append("AND c.category_code = :categoryCode ");
-		}
+	    if (categoryCode != null) {
+	        sql.append("AND c.category_code = :categoryCode ");
+	    }
 
-		if (typeCode != null && !typeCode.isEmpty()) {
-			sql.append("AND tat.type_code = :typeCode ");
-		}
+	    if (typeCode != null) {
+	        sql.append("AND tat.type_code = :typeCode ");
+	    }
 
-		if (userId != null && !userId.isEmpty()) {
-			sql.append("AND a.user_id = :userId ");
-		}
+	    if (userId != null && !userId.isEmpty()) {
+	        sql.append("AND a.user_id = :userId ");
+	    }
 
-		Query q = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
+	    Query q = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
 
-		if (categoryCode != null && !categoryCode.isEmpty()) {
-			q.setParameter("categoryCode", categoryCode);
-		}
+	    if (categoryCode != null ) {
+	        q.setParameter("categoryCode", categoryCode);
+	    }
 
-		if (typeCode != null && !typeCode.isEmpty()) {
-			q.setParameter("typeCode", typeCode);
-		}
-		if (userId != null && !userId.isEmpty()) {
-			q.setParameter("userId", userId);
-		}
-		q.setMaxResults(limit);
-		q.setFirstResult((offset - 1) * limit);
+	    if (typeCode != null ) {
+	        q.setParameter("typeCode", typeCode);
+	    }
 
-		@SuppressWarnings("unchecked")
-		List<Activity> listActivity = q.getResultList();
+	    if (userId != null && !userId.isEmpty()) {
+	        q.setParameter("userId", userId);
+	    }
 
-		if (listActivity.isEmpty()) {
-			return null;
-		}
+	    q.setMaxResults(limit);
+	    q.setFirstResult((offset - 1) * limit);
 
-		return listActivity;
+	    listActivity = q.getResultList();
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
 
+	    if (listActivity == null || listActivity.isEmpty()) {
+	        return Collections.emptyList();
+	    }
+
+	    return listActivity;
 	}
+
 
 	@SuppressWarnings("unchecked")
 	public List<PojoReportIncomesAdminResData> getActivityIncome(Float percentIncome, LocalDate startDate,
