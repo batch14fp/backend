@@ -99,7 +99,7 @@ public class PostService {
 		this.positionDao = positionDao;
 
 	}
-	public static final int MAX_SHORT_CONTENT_LENGTH = 500; 
+	public static final int MAX_SHORT_CONTENT_LENGTH = 300; 
 
 	public PojoPostRes getById(String id) throws Exception {
 
