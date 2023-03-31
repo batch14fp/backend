@@ -83,8 +83,6 @@ public class InvoiceDao extends BaseMasterDao<Invoice> {
 
 		return invoiceList;
 	}
-	
-	
 
 	@Override
 	public Optional<Invoice> getById(String id) {
@@ -155,6 +153,28 @@ public class InvoiceDao extends BaseMasterDao<Invoice> {
 
 		return Optional.ofNullable(super.getByIdAndDetach(Invoice.class, id));
 
+	}
+
+	@SuppressWarnings("unused")
+	public Boolean getIsBought(String activityId, String userId) {
+		StringBuilder sqlQuery = new StringBuilder();
+		 Boolean data = false;
+		sqlQuery.append("SELECT i.id ");
+		sqlQuery.append("FROM t_invoice i ");
+		sqlQuery.append("INNER JOIN t_voucher v ON v.id = i.voucher_id ");
+		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("WHERE i.i.activity_id = :activityId ");
+		sqlQuery.append("AND i.user_id = :userId ");
+		try {
+		final Object result = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setParameter("activityId", activityId)
+				.setParameter("userId", userId)
+				.getSingleResult();
+		data =true;
+
+		} catch (Exception e) {
+		}
+		return data;
 	}
 
 }
