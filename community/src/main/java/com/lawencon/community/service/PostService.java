@@ -99,7 +99,7 @@ public class PostService {
 		this.positionDao = positionDao;
 
 	}
-	public static final int MAX_SHORT_CONTENT_LENGTH = 50; 
+	public static final int MAX_SHORT_CONTENT_LENGTH = 500; 
 
 	public PojoPostRes getById(String id) throws Exception {
 
@@ -469,7 +469,7 @@ public class PostService {
 			res.setTitle(data.getTitle());
 			 String content = data.getContentPost();
 		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
-		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH) + "..."));
+		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
 		        	res.setIsMoreContent(true);
 		        } else {
 		        	res.setIsMoreContent(false);
@@ -569,7 +569,15 @@ public class PostService {
 			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			res.setContent(data.getContentPost());
+			 String content = data.getContentPost();
+		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+		        	res.setIsMoreContent(true);
+		        } else {
+		        	res.setIsMoreContent(false);
+		            res.setContent(content);
+		        
+		        }
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			if (data.getUser().getProfile().getImageProfile() != null) {
@@ -650,7 +658,15 @@ public class PostService {
 			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			res.setContent(data.getContentPost());
+			 String content = data.getContentPost();
+		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+		        	res.setIsMoreContent(true);
+		        } else {
+		        	res.setIsMoreContent(false);
+		            res.setContent(content);
+		        
+		        }
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			res.setFullname(data.getUser().getProfile().getFullname());
@@ -725,7 +741,15 @@ public class PostService {
 			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			res.setContent(data.getContentPost());
+			 String content = data.getContentPost();
+		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH)));
+		        	res.setIsMoreContent(true);
+		        } else {
+		        	res.setIsMoreContent(false);
+		            res.setContent(content);
+		        
+		        }
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
 			res.setFullname(data.getUser().getProfile().getFullname());
