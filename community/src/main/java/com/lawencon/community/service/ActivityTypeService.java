@@ -48,6 +48,12 @@ public class ActivityTypeService {
 			throw new RuntimeException("Activity Type Name cannot be empty.");
 		}
 	}
+	
+	private void validateBkNotExist(String id) {
+		if(activityTypeDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Activity Type cannot be empty.");
+		}
+	}
 
 	
 	public List<PojoActivityTypeRes> getAll() {
@@ -77,9 +83,8 @@ public class ActivityTypeService {
 
 	}
 
-
-
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

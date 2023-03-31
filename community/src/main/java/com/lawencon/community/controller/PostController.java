@@ -39,10 +39,15 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PojoPostRes> getActivity(@PathVariable ("id")String id) throws Exception{
-		PojoPostRes resGet = postService.getById(id);
-		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	public ResponseEntity<PojoPostRes> getActivity(@PathVariable("id") String id) throws Exception {
+	    PojoPostRes resGet = postService.getById(id);
+	    if (resGet == null) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	    } else {
+	        return ResponseEntity.ok(resGet);
+	    }
 	}
+
 	
 	@PostMapping
 	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostReqInsert data){

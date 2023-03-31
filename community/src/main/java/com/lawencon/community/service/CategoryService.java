@@ -53,6 +53,12 @@ public class CategoryService extends BaseService<PojoCategoryRes>{
 		    }
 		 
 		}
+	
+	private void validateBkNotExist(String id) {
+		if (categoryDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Category cannot be empty.");
+		}
+	}
 
 	@Override
 	public List<PojoCategoryRes> getAll() throws Exception{
@@ -71,8 +77,8 @@ public class CategoryService extends BaseService<PojoCategoryRes>{
 	}
 	
 	
-	
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

@@ -36,8 +36,9 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + "." + file.get().getFileExtension())
                 .body(fileBytes);
     }
+	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoFileReqInsert data){
+	public ResponseEntity<PojoInsertRes> insertFile(@RequestBody PojoFileReqInsert data){
 		PojoInsertRes resGet = fileService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}

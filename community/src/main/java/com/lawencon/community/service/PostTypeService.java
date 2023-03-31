@@ -54,7 +54,13 @@ public class PostTypeService {
 		}
 	}
 
-	
+	private void validateBkNotExist(String id) {
+		if (postTypeDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Post Type cannot be empty.");
+		}
+	}
+
+
 	
 	public List<PojoPostTypeRes> getAll() {
 		List<PojoPostTypeRes> res = new ArrayList<>();
@@ -75,6 +81,8 @@ public class PostTypeService {
 	
 	
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

@@ -10,8 +10,8 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name="t_bank_payment",
 uniqueConstraints = {
-        @UniqueConstraint(name = "bank_bk", 
-                columnNames = {"bankName" }
+        @UniqueConstraint(name = "account_number_bk", 
+                columnNames = {"accountNumber" }
         )
 		}) 
 public class BankPayment extends BaseEntity{

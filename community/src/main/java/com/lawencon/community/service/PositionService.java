@@ -55,7 +55,11 @@ public class PositionService extends BaseService<PojoPostionRes> {
 
 	}
 
-	
+	private void validateBkNotExist(String id) {
+		if (positionDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Position cannot be empty.");
+		}
+	}
 
 	@Override
 	public List<PojoPostionRes> getAll() {
@@ -74,6 +78,9 @@ public class PositionService extends BaseService<PojoPostionRes> {
 	}
 
 	public PojoRes deleteById(String id) {
+		
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

@@ -305,8 +305,6 @@ public class ActivityController {
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
 	
-	
-	
 	@GetMapping("/admin/report/incomes")
 	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports( @RequestParam String startDate, @RequestParam String endDate,
 			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,

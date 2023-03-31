@@ -24,6 +24,7 @@ public class Voucher extends BaseEntity{
 	@Column(length= 12, nullable= false)
 	private String voucherCode;
 	
+	@Column(nullable= false)
 	private Float discountPercent;
 	
 	

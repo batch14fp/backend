@@ -1,5 +1,6 @@
 package com.lawencon.community.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -16,7 +17,7 @@ public class PollingOption  extends BaseEntity{
 	@JoinColumn(name="polling_id", nullable=false)
 	private Polling polling;
 	
-	
+	@Column(nullable=false)
 	private String contentPolling;
 
 
