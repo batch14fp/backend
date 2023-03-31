@@ -15,6 +15,7 @@ import com.lawencon.community.dao.ActivityTypeDao;
 import com.lawencon.community.dao.ActivityVoucherDao;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.InvoiceDao;
 import com.lawencon.community.dao.SalesSettingDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.VoucherDao;
@@ -55,11 +56,12 @@ public class ActivityService {
 	private final UserDao userDao;
 	private final SalesSettingDao salesSettingDao;
 	private final FileDao fileDao;
+	private final InvoiceDao invoiceDao;
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public ActivityService(final SalesSettingDao salesSettingDao, final UserDao userDao,
+	public ActivityService(final InvoiceDao invoiceDao, final SalesSettingDao salesSettingDao, final UserDao userDao,
 			final ActivityVoucherDao activityVoucherDao, final VoucherDao voucherDao, final ActivityDao activityDao,
 			final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
 		this.activityDao = activityDao;
@@ -70,6 +72,7 @@ public class ActivityService {
 		this.activityVoucherDao = activityVoucherDao;
 		this.userDao = userDao;
 		this.salesSettingDao = salesSettingDao;
+		this.invoiceDao = invoiceDao;
 
 	}
 
@@ -117,6 +120,7 @@ public class ActivityService {
 		activityDao.getAll(offset, limit).forEach(data -> {
 			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
+			activity.setIsBought(getIsBought(data.getId(), principalService.getAuthPrincipal()));
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
 			activity.setTitle(data.getTitle());
@@ -307,6 +311,7 @@ public class ActivityService {
 		activityDao.searchActivities(offset, limit, sortType, title).forEach(data -> {
 			PojoActivityRes activity = new PojoActivityRes();
 			activity.setActivityId(data.getId());
+			activity.setIsBought(getIsBought(data.getId(),principalService.getAuthPrincipal()));
 			activity.setCategoryCode(data.getCategory().getCategoryCode());
 			activity.setCategoryName(data.getCategory().getCategoryName());
 			activity.setTitle(data.getTitle());
@@ -446,6 +451,7 @@ public class ActivityService {
 		final PojoActivityRes activity = new PojoActivityRes();
 		final Activity data = activityDao.getByIdRef(id);
 		activity.setActivityId(data.getId());
+		activity.setIsBought(getIsBought(data.getId(), principalService.getAuthPrincipal()));
 		activity.setCategoryCode(data.getCategory().getCategoryCode());
 		activity.setCategoryName(data.getCategory().getCategoryName());
 		activity.setTitle(data.getTitle());
@@ -479,6 +485,7 @@ public class ActivityService {
 			final PojoActivityRes pojo = new PojoActivityRes();
 			pojo.setActivityId(activity.getId());
 			pojo.setTitle(activity.getTitle());
+			pojo.setIsBought(getIsBought(activity.getId(), principalService.getAuthPrincipal()));
 			pojo.setContent(activity.getDescription());
 			pojo.setCategoryCode(activity.getCategory().getCategoryCode());
 			pojo.setCategoryName(activity.getCategory().getCategoryName());
@@ -518,6 +525,7 @@ public class ActivityService {
 		for (Activity activity : listActivity) {
 			final PojoActivityRes pojo = new PojoActivityRes();
 			pojo.setActivityId(activity.getId());
+			pojo.setIsBought(getIsBought(activity.getId(), principalService.getAuthPrincipal()));
 			pojo.setTitle(activity.getTitle());
 			pojo.setContent(activity.getDescription());
 			pojo.setCategoryCode(activity.getCategory().getCategoryCode());
@@ -558,6 +566,7 @@ public class ActivityService {
 		for (Activity activity : listActivity) {
 			final PojoActivityRes pojo = new PojoActivityRes();
 			pojo.setActivityId(activity.getId());
+			pojo.setIsBought(getIsBought(activity.getId(), principalService.getAuthPrincipal()));
 			pojo.setTitle(activity.getTitle());
 			pojo.setContent(activity.getDescription());
 			pojo.setActivityLocation(activity.getActivityLocation());
@@ -582,6 +591,11 @@ public class ActivityService {
 			pojoList.add(pojo);
 		}
 		return pojoList;
+	}
+	
+	
+	public Boolean getIsBought(String activityId, String userId) {
+		return invoiceDao.getIsBought(activityId, userId);
 	}
 
 	public PojoUpcomingActivityByTypeRes getUpcomingEvent(final int offset, final int limit, final String typeCode) {

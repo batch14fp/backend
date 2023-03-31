@@ -20,6 +20,7 @@ public class PojoActivityRes {
 	private String categoryName;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
+	private Boolean isBought;
 	private Integer ver;
 
 	private Boolean isActive;
@@ -126,6 +127,13 @@ public class PojoActivityRes {
 	}
 	public void setActivityLocation(String activityLocation) {
 		this.activityLocation = activityLocation;
+	}
+
+	public Boolean getIsBought() {
+		return isBought;
+	}
+	public void setIsBought(Boolean isBought) {
+		this.isBought = isBought;
 	}
 	public Integer getVer() {
 		return ver;
