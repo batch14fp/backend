@@ -4,43 +4,40 @@ public class PojoSalesSettingReqUpdate {
 	
 	
 	private String salesSettingId;
-	private float systemIncome;
-	private float memberIncome;
-	private float tax;
+	private Float systemIncome;
+	private Float memberIncome;
+	private Float tax;
 	private Integer ver;
-
-	public Integer getVer() {
-		return ver;
-	}
-	public void setVer(Integer ver) {
-		this.ver = ver;
-	}
-	public float getSystemIncome() {
-		return systemIncome;
-	}
-	public void setSystemIncome(float systemIncome) {
-		this.systemIncome = systemIncome;
-	}
-	public float getMemberIncome() {
-		return memberIncome;
-	}
-	public void setMemberIncome(float memberIncome) {
-		this.memberIncome = memberIncome;
-	}
-	public float getTax() {
-		return tax;
-	}
-	public void setTax(float tax) {
-		this.tax = tax;
-	}
 	public String getSalesSettingId() {
 		return salesSettingId;
 	}
 	public void setSalesSettingId(String salesSettingId) {
 		this.salesSettingId = salesSettingId;
 	}
-	
-	
-	
+	public Float getSystemIncome() {
+		return systemIncome;
+	}
+	public void setSystemIncome(Float systemIncome) {
+		this.systemIncome = systemIncome;
+	}
+	public Float getMemberIncome() {
+		return memberIncome;
+	}
+	public void setMemberIncome(Float memberIncome) {
+		this.memberIncome = memberIncome;
+	}
+	public Float getTax() {
+		return tax;
+	}
+	public void setTax(Float tax) {
+		this.tax = tax;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+
 
 }

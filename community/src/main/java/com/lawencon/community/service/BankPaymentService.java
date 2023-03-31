@@ -22,6 +22,35 @@ public class BankPaymentService extends BaseService<PojoBankPaymentRes> {
 	public BankPaymentService(final BankPaymentDao bankPaymentDao) {
 		this.bankPaymentDao = bankPaymentDao;
 	}
+	
+		private void validateBkNotNull(PojoBankPaymentReqInsert bankPayment) {
+		    if(bankPayment.getAccountNumber() == null) {
+		        throw new RuntimeException("Account Number be empty.");
+		    }
+		
+		}
+
+		private void validateNonBk(PojoBankPaymentReqInsert bankPayment) {
+		
+		    if(bankPayment.getBankPaymentName() == null) {
+		        throw new RuntimeException("Bank Name cannot be empty.");
+		    }
+		    if(bankPayment.getAccountName() == null) {
+		        throw new RuntimeException("Account Name cannot be empty.");
+		    }
+		}
+		
+		private void validateNonBk(PojoBankPaymentReqUpdate bankPayment) {
+
+			 if(	bankPayment.getBankPaymentId() == null) {
+			        throw new RuntimeException("Bank Payment cannot be empty.");
+			    }
+			
+			
+			 if(	bankPayment.getVer() == null) {
+			        throw new RuntimeException("Bank Payment version cannot be empty.");
+			    }
+			}
 
 	@Override
 	public List<PojoBankPaymentRes> getAll() {
@@ -58,6 +87,9 @@ public class BankPaymentService extends BaseService<PojoBankPaymentRes> {
 	}
 
 	public PojoInsertRes save(PojoBankPaymentReqInsert data) {
+		validateNonBk(data);
+		validateBkNotNull(data);
+		
 		ConnHandler.begin();
 		final BankPayment bankPayment = new BankPayment();
 		bankPayment.setBankName(data.getBankPaymentName());
@@ -75,7 +107,10 @@ public class BankPaymentService extends BaseService<PojoBankPaymentRes> {
 	public PojoUpdateRes update(PojoBankPaymentReqUpdate data) {
 
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
+	
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final BankPayment bankPayment = bankPaymentDao.getByIdRef(data.getBankPaymentId());
 			bankPaymentDao.getByIdAndDetach(BankPayment.class, bankPayment.getId());

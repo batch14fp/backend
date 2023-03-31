@@ -3,7 +3,6 @@ package com.lawencon.community.pojo.activitytype;
 public class PojoActivityTypeReqUpdate {
 	private String activityTypeId;
 	private String typeName;
-	private String typeCode;
 	private Boolean isActive;
 	private Integer ver;
 	public String getTypeName() {
@@ -12,12 +11,7 @@ public class PojoActivityTypeReqUpdate {
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
-	public String getTypeCode() {
-		return typeCode;
-	}
-	public void setTypeCode(String typeCode) {
-		this.typeCode = typeCode;
-	}
+
 	public String getActivityTypeId() {
 		return activityTypeId;
 	}

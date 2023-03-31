@@ -5,19 +5,13 @@ import java.time.LocalDate;
 public class PojoVoucherReqInsert {
 	
 	private String activityId;
-	private String vourcherName;
 	private Integer limitApplied;
 	private Integer usedCount;
 	private String voucherCode;
 	private LocalDate expDate;	
 	private Float discountPercent;
 	
-	public String getVourcherName() {
-		return vourcherName;
-	}
-	public void setVourcherName(String vourcherName) {
-		this.vourcherName = vourcherName;
-	}
+
 	public Integer getLimitApplied() {
 		return limitApplied;
 	}

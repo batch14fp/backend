@@ -47,8 +47,6 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class ActivityService {
 
-
-
 	private final ActivityDao activityDao;
 	private final CategoryDao categoryDao;
 	private final ActivityTypeDao activityTypeDao;
@@ -57,10 +55,10 @@ public class ActivityService {
 	private final UserDao userDao;
 	private final SalesSettingDao salesSettingDao;
 	private final FileDao fileDao;
-	
+
 	@Autowired
 	private PrincipalService principalService;
-	
+
 	public ActivityService(final SalesSettingDao salesSettingDao, final UserDao userDao,
 			final ActivityVoucherDao activityVoucherDao, final VoucherDao voucherDao, final ActivityDao activityDao,
 			final CategoryDao categoryDao, final ActivityTypeDao activityTypeDao, final FileDao fileDao) {
@@ -74,8 +72,38 @@ public class ActivityService {
 		this.salesSettingDao = salesSettingDao;
 
 	}
-	
-	
+
+	private void validateNonBk(PojoActivityReqInsert activity) {
+
+		if (activity.getCategoryId() == null) {
+			throw new RuntimeException("Activity Category cannot be empty.");
+		}
+		if (activity.getTypeId() == null) {
+			throw new RuntimeException("Activity Type cannot be empty.");
+		}
+		if (activity.getTitle() == null) {
+			throw new RuntimeException("Activity Title cannot be empty.");
+		}
+		if (activity.getProviders() == null) {
+
+			throw new RuntimeException("Activity Providers cannot be empty.");
+		}
+		if (activity.getStartDate() == null) {
+			throw new RuntimeException("Activity Start Date cannot be empty.");
+		}
+		if (activity.getEndDate() == null) {
+			throw new RuntimeException("Activity End Date cannot be empty.");
+		}
+	}
+
+	private void validateNonBk(PojoActivityReqUpdate activity) {
+		if (activity.getActivityId() == null) {
+			throw new RuntimeException("Activity cannot be empty.");
+		}
+		if (activity.getVer() == null) {
+			throw new RuntimeException("Activity version cannot be empty.");
+		}
+	}
 
 	public List<PojoActivityRes> getAll(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
@@ -110,8 +138,8 @@ public class ActivityService {
 			final LocalDate endDate, Integer offset, Integer limit, String typeCode) {
 		final List<PojoReportActivityMemberResData> res = new ArrayList<>();
 		final User user = userDao.getByIdRef(id);
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),typeCode, offset,
-				limit);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(), typeCode,
+				offset, limit);
 
 		for (int i = 0; i < activityList.size(); i++) {
 
@@ -130,40 +158,38 @@ public class ActivityService {
 		return res;
 
 	}
-	
-	
-	public PojoReportActivityMemberRes getMemberReport( final LocalDate startDate,
-		
+
+	public PojoReportActivityMemberRes getMemberReport(final LocalDate startDate,
+
 			final LocalDate endDate, Integer offset, Integer limit, String typeCode) {
 		final PojoReportActivityMemberRes res = new PojoReportActivityMemberRes();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-	
+
 		try {
 			final List<PojoReportActivityMemberResData> resList = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate,user.getId(),typeCode, offset,
+			final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, user.getId(),
+					typeCode, offset,
 
-				limit);
+					limit);
 
-		for (int i = 0; i < activityList.size(); i++) {
-			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
-			reportMember.setNo(i + 1);
-			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
-			reportMember.setTitle(activityList.get(i).getTitle());
-			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
-			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
-			resList.add(reportMember);
-		}
-		res.setData(resList);
-		res.setTotal((long)resList.size());
-		}catch(Exception e) {
+			for (int i = 0; i < activityList.size(); i++) {
+				final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
+				reportMember.setNo(i + 1);
+				reportMember.setStartDate(activityList.get(i).getStartDate().toString());
+				reportMember.setTitle(activityList.get(i).getTitle());
+				reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
+				reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
+				resList.add(reportMember);
+			}
+			res.setData(resList);
+			res.setTotal((long) resList.size());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 		return res;
 	}
 
-	
-	
 	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final LocalDate startDate,
 			final LocalDate endDate, String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
@@ -173,8 +199,6 @@ public class ActivityService {
 		return res;
 
 	}
-	
-	
 
 	public PojoReportIncomesMemberRes getMemberIncomesReport(final LocalDate startDate, final LocalDate endDate,
 			String typeCode, Integer offset, Integer limit) {
@@ -182,9 +206,9 @@ public class ActivityService {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoReportIncomesMemberResData> resList = activityDao.getActivityIncomeByUser(user.getId(),
-				percentMember, startDate, endDate, typeCode,offset, limit );
+				percentMember, startDate, endDate, typeCode, offset, limit);
 		res.setData(resList);
-		res.setTotal((long)resList.size());
+		res.setTotal((long) resList.size());
 		return res;
 
 	}
@@ -192,22 +216,22 @@ public class ActivityService {
 	public List<PojoReportIncomesAdminResData> getIncomesReportAdminFile(final LocalDate startDate,
 			final LocalDate endDate, String typeCode) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final List<PojoReportIncomesAdminResData> res = activityDao.getActivityIncome(percentMember, startDate,
-				endDate, typeCode, null, null);
+		final List<PojoReportIncomesAdminResData> res = activityDao.getActivityIncome(percentMember, startDate, endDate,
+				typeCode, null, null);
 		return res;
 	}
-	public PojoReportIncomesAdminRes getIncomesReportAdmin(final LocalDate startDate,
-			final LocalDate endDate, String typeCode, Integer offset, Integer limit) {
+
+	public PojoReportIncomesAdminRes getIncomesReportAdmin(final LocalDate startDate, final LocalDate endDate,
+			String typeCode, Integer offset, Integer limit) {
 		PojoReportIncomesAdminRes res = new PojoReportIncomesAdminRes();
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
 		final List<PojoReportIncomesAdminResData> resList = activityDao.getActivityIncome(percentMember, startDate,
 				endDate, typeCode, offset, limit);
-		
+
 		res.setData(resList);
-		res.setTotal((long)resList.size());
+		res.setTotal((long) resList.size());
 		return res;
 	}
-	
 
 	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final String userId,
 			final LocalDate startDate, final LocalDate endDate, Integer offset, Integer limit, String categoryCode) {
@@ -218,9 +242,11 @@ public class ActivityService {
 
 	}
 
-	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate, final String typeCode	) {
+	public List<PojoReportActivityAdminResData> getAdminReportFile(final LocalDate startDate, final LocalDate endDate,
+			final String typeCode) {
 		final List<PojoReportActivityAdminResData> res = new ArrayList<>();
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null,typeCode, null, null);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, typeCode, null,
+				null);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
@@ -232,7 +258,8 @@ public class ActivityService {
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setProviderName(activityList.get(i).getProvider());
-			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), activityList.get(i).getUser().getId()));
+			reportMember.setTotalParticipants(
+					getCountParticipant(activityList.get(i).getId(), activityList.get(i).getUser().getId()));
 			res.add(reportMember);
 		}
 		return res;
@@ -243,15 +270,16 @@ public class ActivityService {
 		final List<PojoReportActivityAdminResData> resList = new ArrayList<>();
 		final PojoReportActivityAdminRes res = new PojoReportActivityAdminRes();
 
-		
-		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null,typeCode, offset, limit);
+		final List<Activity> activityList = activityDao.getAllByDateRange(startDate, endDate, null, typeCode, offset,
+				limit);
 		for (int i = 0; i < activityList.size(); i++) {
 
 			final PojoReportActivityAdminResData reportMember = new PojoReportActivityAdminResData();
 
 			reportMember.setNo(i + 1);
-			reportMember.setStartDate(Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
-					
+			reportMember.setStartDate(
+					Timestamp.valueOf(activityList.get(i).getStartDate()).toLocalDateTime().toLocalDate().toString());
+
 			reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setMemberName(activityList.get(i).getUser().getProfile().getFullname());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
@@ -319,6 +347,10 @@ public class ActivityService {
 
 	public PojoInsertRes save(PojoActivityReqInsert data) {
 		ConnHandler.begin();
+		validateNonBk(data);
+	
+		
+		
 		Voucher voucherNew = null;
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
@@ -368,7 +400,8 @@ public class ActivityService {
 
 	public PojoUpdateRes update(PojoActivityReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
-		try {
+		validateNonBk(data);
+	
 			ConnHandler.begin();
 			final Activity activity = activityDao.getByIdRef(data.getActivityId());
 			activityDao.getByIdAndDetach(Activity.class, activity.getId());
@@ -396,10 +429,9 @@ public class ActivityService {
 			pojoUpdateRes.setMessage("Save Success!");
 			pojoUpdateRes.setVer(activityNew.getVersion());
 
-		} catch (Exception e) {
 			pojoUpdateRes.setId(data.getActivityId());
 			pojoUpdateRes.setMessage("Something wrong,you cannot update this data");
-		}
+		
 		return pojoUpdateRes;
 
 	}
@@ -467,13 +499,11 @@ public class ActivityService {
 		}
 		return pojoList;
 	}
-	
-	
 
 	public List<PojoActivityRes> getByUserIdActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
 			int limit) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit,principalService.getAuthPrincipal());
+				limit, principalService.getAuthPrincipal());
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
@@ -513,7 +543,7 @@ public class ActivityService {
 	public List<PojoActivityRes> getListActivityByListCategoryAndType(final List<String> categoryCodes,
 			final String typeCode, final int offset, final int limit, final String sortType) {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoriesAndType(categoryCodes, typeCode,
-				offset, limit,sortType);
+				offset, limit, sortType);
 
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
@@ -568,8 +598,7 @@ public class ActivityService {
 	}
 
 	public PojoVoucherAppliedRes getVoucherApplied(PojoVoucherAppliedReq data) {
-	PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
-	
+		PojoVoucherAppliedRes res = new PojoVoucherAppliedRes();
 
 		final List<ActivityVoucher> acticvityVoucherList = activityVoucherDao
 				.getListActivityVoucher(data.getActivityId());
@@ -582,15 +611,14 @@ public class ActivityService {
 					res.setIsAllowed(true);
 					Voucher voucher = voucherDao.getByCode(data.getVoucherCode().toUpperCase()).get();
 					res.setVoucherId(voucher.getId());
-					
 
 				} else {
 					res.setIsAllowed(false);
-			
+
 				}
 			} else {
 				res.setIsAllowed(false);
-			
+
 			}
 
 		});

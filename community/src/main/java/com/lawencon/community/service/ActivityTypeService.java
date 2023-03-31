@@ -26,6 +26,29 @@ public class ActivityTypeService {
 		this.activityTypeDao = activityTypeDao;
 
 	}
+	private void validateBkNotNull(PojoActivityTypeReqInsert activityType) {
+	    if(activityType.getTypeCode() == null) {
+	        throw new RuntimeException("Activity Type Code cannot be empty.");
+	    }
+	}
+
+	private void validateNonBk(PojoActivityTypeReqInsert activityType) {
+
+		if (activityType.getTypeName() == null) {
+			throw new RuntimeException("Activity Type Name cannot be empty.");
+		}
+	}
+	private void validateNonBk(PojoActivityTypeReqUpdate activityType) {
+		if (activityType == null) {
+			throw new RuntimeException("Activity cannot be empty.");
+		}
+		if (activityType.getVer() == null) {
+			throw new RuntimeException("Activity version cannot be empty.");
+		}
+		if (activityType.getTypeName() == null) {
+			throw new RuntimeException("Activity Type Name cannot be empty.");
+		}
+	}
 
 	
 	public List<PojoActivityTypeRes> getAll() {
@@ -74,6 +97,9 @@ public class ActivityTypeService {
 	}
 
 	public PojoInsertRes save(PojoActivityTypeReqInsert data) {
+		validateBkNotNull(data);
+		validateNonBk(data);
+		
 		ConnHandler.begin();
 		final ActivityType activityType = new ActivityType();
 		activityType.setTypeCode(data.getTypeCode());
@@ -89,13 +115,15 @@ public class ActivityTypeService {
 	}
 
 	public PojoUpdateRes update(PojoActivityTypeReqUpdate data) {
+		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final ActivityType  activityType = activityTypeDao.getByIdRef(data.getActivityTypeId());
 			activityTypeDao.getByIdAndDetach(ActivityType.class, activityType.getId());
 			activityType.setId(activityType.getId());
-			activityType.setTypeCode(data.getTypeCode());
 			activityType.setActivityName(data.getTypeName());
 			activityType.setIsActive(data.getIsActive());
 			activityType.setVersion(data.getVer());

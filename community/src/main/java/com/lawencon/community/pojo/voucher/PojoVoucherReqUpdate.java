@@ -11,6 +11,7 @@ public class PojoVoucherReqUpdate {
 	private Float discountPercent;
 	private LocalDate expDate;
 	private Boolean isActive;
+	private Integer ver;
 	public String getVoucherId() {
 		return voucherId;
 	}
@@ -59,6 +60,13 @@ public class PojoVoucherReqUpdate {
 	public void setExpDate(LocalDate expDate) {
 		this.expDate = expDate;
 	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	
 	
 	
 	

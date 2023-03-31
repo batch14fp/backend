@@ -27,8 +27,30 @@ public class VoucherService {
 		this.activityVoucherDao = activityVoucherDao;
 		this.activityDao = activityDao;
 	}
+	
+	
+	private void validateBkNotNull(PojoVoucherReqInsert voucher) {
+	    if(voucher.getVoucherCode() == null) {
+	        throw new RuntimeException("Voucher Code cannot be empty.");
+	    }
+	}
+	private void validateNonBk(PojoVoucherReqInsert voucher) {
+	
+	    if(voucher.getDiscountPercent() == null) {
+	        throw new RuntimeException("Discount Percent Voucher cannot be empty.");
+	    }
+	    if(voucher.getExpDate() == null) {
+	        throw new RuntimeException("Expired Date Voucher cannot be empty.");
+	    }
+	    
+	   
+	}
+
 
 	public PojoInsertRes save(PojoVoucherReqInsert data) {
+		validateBkNotNull(data);
+		validateNonBk(data);
+		
 		final PojoInsertRes res = new PojoInsertRes();
 		ConnHandler.begin();
 		if(data.getActivityId()!=null) {

@@ -13,10 +13,6 @@ import com.lawencon.base.BaseEntity;
 public class PostComment  extends BaseEntity{
 	
 	@OneToOne
-	@JoinColumn(name="comment_id")
-	private PostComment comment;
-	
-	@OneToOne
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	
@@ -35,13 +31,6 @@ public class PostComment  extends BaseEntity{
 		this.body = body;
 	}
 
-	public PostComment getComment() {
-		return comment;
-	}
-
-	public void setComment(PostComment comment) {
-		this.comment = comment;
-	}
 
 	public User getUser() {
 		return user;

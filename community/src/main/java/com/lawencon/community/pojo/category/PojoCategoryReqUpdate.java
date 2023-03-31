@@ -4,7 +4,6 @@ public class PojoCategoryReqUpdate {
 
 	private String categoryId;
 	private String categoryName;
-	private String categoryCode;
 	private Integer ver;
 	private Boolean isActive;
 
@@ -40,12 +39,5 @@ public class PojoCategoryReqUpdate {
 		this.categoryName = categoryName;
 	}
 
-	public String getCategoryCode() {
-		return categoryCode;
-	}
-
-	public void setCategoryCode(String categoryCode) {
-		this.categoryCode = categoryCode;
-	}
 
 }

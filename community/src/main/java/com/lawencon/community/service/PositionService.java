@@ -25,6 +25,38 @@ public class PositionService extends BaseService<PojoPostionRes> {
 
 	}
 
+	private void validateBkNotNull(PojoPositionReqInsert position) {
+		if (position.getPositionCode() == null) {
+			throw new RuntimeException("Position Code cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoPositionReqInsert position) {
+
+		if (position.getPositionName() == null) {
+			throw new RuntimeException("Position Name cannot be empty.");
+		}
+
+	}
+
+	private void validateNonBk(PojoPositionReqUpdate position) {
+
+		if (position.getPositionId() == null) {
+			throw new RuntimeException("Position ID cannot be empty.");
+		}
+
+		if (position.getVer() == null) {
+			throw new RuntimeException("Position version cannot be empty.");
+		}
+		if (position.getPositionName() == null) {
+			throw new RuntimeException("Position Name cannot be empty.");
+		}
+
+	}
+
+	
+
 	@Override
 	public List<PojoPostionRes> getAll() {
 		final List<PojoPostionRes> positions = new ArrayList<>();
@@ -59,13 +91,16 @@ public class PositionService extends BaseService<PojoPostionRes> {
 	}
 
 	public PojoInsertRes save(PojoPositionReqInsert data) {
+		validateBkNotNull(data);
+		validateNonBk(data);
+		
 		ConnHandler.begin();
 
 		final Position position = new Position();
 
 		position.setPositionName(data.getPositionName());
 		position.setPositionCode(data.getPositionCode());
-		
+
 		position.setIsActive(true);
 
 		final Position positionNew = positionDao.save(position);
@@ -80,11 +115,12 @@ public class PositionService extends BaseService<PojoPostionRes> {
 	public PojoUpdateRes update(PojoPositionReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final Position position = positionDao.getByIdRef(data.getPositionId());
 			positionDao.getByIdAndDetach(Position.class, position.getId());
 			position.setId(position.getId());
-			position.setPositionCode(data.getPositionCode());
 			position.setPositionName(data.getPositionName());
 			position.setIsActive(data.getIsActive());
 			position.setVersion(data.getVer());

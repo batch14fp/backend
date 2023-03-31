@@ -42,6 +42,33 @@ public class ArticleService {
 		this.userDao = userDao;
 		this.articleViewerDao = articleViewerDao;}
 
+
+
+	private void validateNonBk(PojoArticleReqInsert article) {
+
+		if (article.getContent() == null) {
+			throw new RuntimeException("Article Content cannot be empty.");
+		}
+
+		if (article.getTitle() == null) {
+			throw new RuntimeException("Article Title cannot be empty.");
+		}
+		
+	}
+	
+	
+	private void validateNonBk(PojoArticleReqUpdate article) {
+		if (article.getArticleId() == null) {
+			throw new RuntimeException("Activity cannot be empty.");
+		}
+		if (article.getVer() == null) {
+			throw new RuntimeException("Activity version cannot be empty.");
+		}
+	}
+	
+	
+	
+	
 	public PojoArticleRes getAll(int offset, int limit) {
 		final PojoArticleRes articles = new PojoArticleRes();
 		final List<PojoArticleResData> articleList = new ArrayList<>();
@@ -240,6 +267,8 @@ public class ArticleService {
 	public PojoUpdateRes update(PojoArticleReqUpdate data) {
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		try {
+			validateNonBk(data);
+			
 			ConnHandler.begin();
 			final Article article = articleDao.getByIdRef(data.getArticleId());
 			articleDao.getByIdAndDetach(Article.class, article.getId());
@@ -269,6 +298,8 @@ public class ArticleService {
 	}
 
 	public PojoInsertRes save(PojoArticleReqInsert data) {
+		validateNonBk(data);
+		
 		ConnHandler.begin();
 		final Article article = new Article();
 		article.setContentArticle(data.getContent());

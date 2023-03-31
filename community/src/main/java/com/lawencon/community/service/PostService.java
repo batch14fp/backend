@@ -45,7 +45,6 @@ import com.lawencon.community.pojo.post.PojoPollingOptionReqUpdate;
 import com.lawencon.community.pojo.post.PojoPollingOptionRes;
 import com.lawencon.community.pojo.post.PojoPollingResponRes;
 import com.lawencon.community.pojo.post.PojoPostBookmarkReqInsert;
-import com.lawencon.community.pojo.post.PojoPostCommentReplyResData;
 import com.lawencon.community.pojo.post.PojoPostCommentReqInsert;
 import com.lawencon.community.pojo.post.PojoPostCommentReqUpdate;
 import com.lawencon.community.pojo.post.PojoPostCommentRes;
@@ -71,14 +70,20 @@ public class PostService {
 	private PollingOptionDao pollingOptionDao;
 	private PollingResponDao pollingResponDao;
 	private PositionDao positionDao;
+	
+
+
+	
 
 	@Autowired
 	private PrincipalService principalService;
 
-	public PostService(final PositionDao positionDao, final ProfileDao profileDao, final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao, final PollingDao pollingDao,
-			final FilePostDao filePostDao, final PostDao postDao, final PostBookmarkDao postBookmarkDao,
-			final PostCommentDao postCommentDao, final PostTypeDao postTypeDao, final FileDao fileDao,
-			final PostLikeDao postLikeDao, final UserDao userDao, final CategoryDao categoryDao) {
+	public PostService(final PositionDao positionDao, final ProfileDao profileDao,
+			final PollingResponDao pollingResponDao, final PollingOptionDao pollingOptionDao,
+			final PollingDao pollingDao, final FilePostDao filePostDao, final PostDao postDao,
+			final PostBookmarkDao postBookmarkDao, final PostCommentDao postCommentDao, final PostTypeDao postTypeDao,
+			final FileDao fileDao, final PostLikeDao postLikeDao, final UserDao userDao,
+			final CategoryDao categoryDao) {
 		this.postDao = postDao;
 		this.postTypeDao = postTypeDao;
 		this.fileDao = fileDao;
@@ -94,9 +99,10 @@ public class PostService {
 		this.positionDao = positionDao;
 
 	}
+	public static final int MAX_SHORT_CONTENT_LENGTH = 50; 
 
 	public PojoPostRes getById(String id) throws Exception {
-		
+
 		final Post data = postDao.getByIdRef(id);
 		final PojoPostRes res = new PojoPostRes();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -105,23 +111,24 @@ public class PostService {
 		res.setContent(data.getContentPost());
 		res.setUserId(data.getUser().getId());
 		res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
-		if(data.getUser().getProfile().getImageProfile()!=null) {
+		if (data.getUser().getProfile().getImageProfile() != null) {
 			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
-			}
+		}
 		res.setFullname(data.getUser().getProfile().getFullname());
 		res.setTypeName(data.getPostType().getTypeName());
 		res.setCategoryName(data.getCategory().getCategoryName());
 		if (data.getPolling() != null) {
 			final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 			res.setPollingId(polling.getId());
-			res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
-			if(getIsVote(userRef.getId(),data.getPolling().getId())){
-				PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+			res.setIsVote(getIsVote(userRef.getId(), data.getPolling().getId()));
+			if (getIsVote(userRef.getId(), data.getPolling().getId())) {
+				PollingRespon pollingRespionData = pollingResponDao
+						.getPollingRespon(userRef.getId(), data.getPolling().getId()).get();
 				res.setPollingResponId(pollingRespionData.getId());
 			}
-			res.setEndAt(polling.getEndAt());		
+			res.setEndAt(polling.getEndAt());
 			final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
-				
+
 			List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
 			res.setTitlePolling(polling.getTitle());
 			final List<PojoPollingOptionRes> options = new ArrayList<>();
@@ -129,18 +136,17 @@ public class PostService {
 			for (PollingOption pollingOption : pollingOptions) {
 				final PojoPollingOptionRes option = new PojoPollingOptionRes();
 				option.setPollingOptionId(pollingOption.getId());
-			 
+
 				option.setPollingContent(pollingOption.getContentPolling());
 				option.setVer(pollingOption.getVersion());
 				options.add(option);
 			}
-		    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-		    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-		    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		     
-		     
-	        pollingRes.setData(pollingOptionUserCounts);
-	
+			pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+			pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
+			pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+
+			pollingRes.setData(pollingOptionUserCounts);
+
 			res.setPollingOption(options);
 			res.setPollingRespon(pollingRes);
 		}
@@ -195,33 +201,31 @@ public class PostService {
 		pojoRes.setMessage("Delete Success!");
 		final PojoRes pojoResFail = new PojoRes();
 		pojoResFail.setMessage("Delete Failed!");
-		if(postLikeDao.getByIdPost(id)!=null) {
-		final List<PostLike> postLike = postLikeDao.getByIdPost(id);
-		postLike.forEach(data->{
-			postLikeDao.deleteById(PostLike.class, data.getId());
-		});
-				}
-		if(filePostDao.getAllFileByPostId(id)!=null) {
+		if (postLikeDao.getByIdPost(id) != null) {
+			final List<PostLike> postLike = postLikeDao.getByIdPost(id);
+			postLike.forEach(data -> {
+				postLikeDao.deleteById(PostLike.class, data.getId());
+			});
+		}
+		if (filePostDao.getAllFileByPostId(id) != null) {
 			final List<FilePost> filePostList = filePostDao.getAllFileByPostId(id);
-			filePostList.forEach(data->{
+			filePostList.forEach(data -> {
 				filePostDao.deleteById(FilePost.class, data.getId());
 			});
 		}
-		if(postBookmarkDao.getByPostId(id)!=null) {
-		final List<PostBookmark> postBookmark = postBookmarkDao.getByPostId(id);
-		postBookmark.forEach(data->{
-			postBookmarkDao.deleteById(PostBookmark.class, data.getId());
-			
-		});
-			}
-		if(postCommentDao.getByIdRef(id)!=null) {
-		final List<PostComment> postComment = postCommentDao.getByPostId(id);
-		postComment.forEach(data->{
-			postCommentDao.deleteById(PostComment.class,data.getId()
-					);
-		});
-		
-			
+		if (postBookmarkDao.getByPostId(id) != null) {
+			final List<PostBookmark> postBookmark = postBookmarkDao.getByPostId(id);
+			postBookmark.forEach(data -> {
+				postBookmarkDao.deleteById(PostBookmark.class, data.getId());
+
+			});
+		}
+		if (postCommentDao.getByIdRef(id) != null) {
+			final List<PostComment> postComment = postCommentDao.getByPostId(id);
+			postComment.forEach(data -> {
+				postCommentDao.deleteById(PostComment.class, data.getId());
+			});
+
 		}
 		final Boolean result = postDao.deleteById(Post.class, id);
 		ConnHandler.commit();
@@ -254,27 +258,26 @@ public class PostService {
 			files.add(filePost);
 
 		});
-		
-		if(postTypeDao.getByIdRef(postType.getId()).getTypeCode().equalsIgnoreCase(PostTypeEnum.POLLING.getCode())) {
-		final Polling polling = new Polling();
-		polling.setTitle(data.getPollingInsert().getPollingTitle());
-		polling.setIsOpen(true);
-		polling.setEndAt(data.getPollingInsert().getEndAt());
-		polling.setIsActive(true);
-		final Polling pollingNew = pollingDao.save(polling);
-		final List<PollingOption> options = new ArrayList<>();
-		for (PojoPollingOptionReqInsert option : data.getPollingInsert().getPollingOptions()) {
-			final PollingOption pollingOption = new PollingOption();
-			pollingOption.setPolling(pollingNew);
-			pollingOption.setContentPolling(option.getPollingContent());
-			options.add(pollingOption);
+
+		if (postTypeDao.getByIdRef(postType.getId()).getTypeCode().equalsIgnoreCase(PostTypeEnum.POLLING.getCode())) {
+			final Polling polling = new Polling();
+			polling.setTitle(data.getPollingInsert().getPollingTitle());
+			polling.setIsOpen(true);
+			polling.setEndAt(data.getPollingInsert().getEndAt());
+			polling.setIsActive(true);
+			final Polling pollingNew = pollingDao.save(polling);
+			final List<PollingOption> options = new ArrayList<>();
+			for (PojoPollingOptionReqInsert option : data.getPollingInsert().getPollingOptions()) {
+				final PollingOption pollingOption = new PollingOption();
+				pollingOption.setPolling(pollingNew);
+				pollingOption.setContentPolling(option.getPollingContent());
+				options.add(pollingOption);
+			}
+			pollingOptionDao.saveAll(options);
+			post.setPolling(pollingNew);
+
 		}
-		pollingOptionDao.saveAll(options);
-		post.setPolling(pollingNew);
-		
-		}
-	
-	
+
 		final List<File> fileList = fileDao.saveAll(files);
 		post.setIsActive(true);
 		final Post postNew = postDao.save(post);
@@ -374,21 +377,20 @@ public class PostService {
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 
 		if (getIsLike(user.getId(), post.getId())) {
-			
+
 			postLike = postLikeDao.getByUserIdAndPostId(user.getId(), post.getId());
 			pojoRes.setId(postLike.getId());
 			postLikeDao.deleteById(PostLike.class, postLike.getId());
-			
+
 			pojoRes.setMessage("The post has already been disliked!");
-			
-			
+
 		} else {
-		
+
 			postLike.setPost(post);
 			postLike.setUser(user);
 			postLike.setIsActive(true);
 			final PostLike postLikeNew = postLikeDao.save(postLike);
-		
+
 			pojoRes.setId(postLikeNew.getId());
 			pojoRes.setMessage("The post has already been liked!");
 		}
@@ -419,26 +421,25 @@ public class PostService {
 		final Post post = postDao.getByIdRef(data.getPostId());
 		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
 		if (getIsBookmarkPost(user.getId(), post.getId())) {
-			 postBookmark = postBookmarkDao.getByUserIdAndPostId(user.getId(), post.getId());
-			 pojoRes.setId(postBookmark.getId());
-			 postBookmarkDao.deleteById(PostBookmark.class, postBookmark.getId());
-			
+			postBookmark = postBookmarkDao.getByUserIdAndPostId(user.getId(), post.getId());
+			pojoRes.setId(postBookmark.getId());
+			postBookmarkDao.deleteById(PostBookmark.class, postBookmark.getId());
+
 			pojoRes.setMessage("The post has already been deleted from bookmark!");
 		} else {
-	
 
 			postBookmark.setPost(post);
 			postBookmark.setUser(user);
 			postBookmark.setIsActive(true);
 			final PostBookmark postBookmarkNew = postBookmarkDao.save(postBookmark);
-			
+
 			pojoRes.setId(postBookmarkNew.getId());
 			pojoRes.setMessage("The post has already been save to bookmark!");
 
 		}
 		ConnHandler.commit();
 		return pojoRes;
-		
+
 	}
 
 	public PojoRes deletePostBookmarkById(String id) {
@@ -459,18 +460,27 @@ public class PostService {
 
 	public List<PojoPostRes> getData(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getGetAllPost(offset, limit);
+	
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		for (Post data : posts) {
 			PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
 			res.setTitle(data.getTitle());
-			res.setContent(data.getContentPost());
+			 String content = data.getContentPost();
+		        if (content.length() > MAX_SHORT_CONTENT_LENGTH) {
+		            res.setContent((content.substring(0, MAX_SHORT_CONTENT_LENGTH) + "..."));
+		        	res.setIsMoreContent(true);
+		        } else {
+		        	res.setIsMoreContent(false);
+		            res.setContent(content);
+		        
+		        }
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
-			if(data.getUser().getProfile().getImageProfile()!=null) {
+			if (data.getUser().getProfile().getImageProfile() != null) {
 				res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
-				}
+			}
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setTypeName(data.getPostType().getTypeName());
 			res.setCategoryName(data.getCategory().getCategoryName());
@@ -478,32 +488,33 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
-				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
-				if(getIsVote(userRef.getId(),data.getPolling().getId())){
-					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+				res.setIsVote(getIsVote(userRef.getId(), data.getPolling().getId()));
+				if (getIsVote(userRef.getId(), data.getPolling().getId())) {
+					PollingRespon pollingRespionData = pollingResponDao
+							.getPollingRespon(userRef.getId(), data.getPolling().getId()).get();
 					res.setPollingResponId(pollingRespionData.getId());
 				}
-				res.setEndAt(polling.getEndAt());		
+				res.setEndAt(polling.getEndAt());
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
-					
+
 				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-				
+
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
-				 
+
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        pollingRes.setData(pollingOptionUserCounts);
-		  
+				pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+				pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
+				pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+				pollingRes.setData(pollingOptionUserCounts);
+
 				res.setPollingOption(options);
 				res.setPollingRespon(pollingRes);
 			}
@@ -548,11 +559,10 @@ public class PostService {
 	public Boolean getIsVote(String userId, String pollingId) {
 		return pollingResponDao.getIsVote(userId, pollingId);
 	}
-	
 
 	public List<PojoPostRes> getMostLike(int offset, int limit) throws Exception {
 		final List<Post> posts = postDao.getPostsByMostLikes(offset, limit);
-		
+
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 		for (Post data : posts) {
@@ -562,8 +572,8 @@ public class PostService {
 			res.setContent(data.getContentPost());
 			res.setUserId(data.getUser().getId());
 			res.setPosition(data.getUser().getProfile().getPosition().getPositionName());
-			if(data.getUser().getProfile().getImageProfile()!=null) {
-			res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+			if (data.getUser().getProfile().getImageProfile() != null) {
+				res.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
 			}
 			res.setFullname(data.getUser().getProfile().getFullname());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -572,33 +582,34 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
-				res.setEndAt(polling.getEndAt());				
+				res.setEndAt(polling.getEndAt());
 				res.setIsVote(getIsVote(userRef.getId(), polling.getId()));
-				if(getIsVote(userRef.getId(),data.getPolling().getId())){
-					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+				if (getIsVote(userRef.getId(), data.getPolling().getId())) {
+					PollingRespon pollingRespionData = pollingResponDao
+							.getPollingRespon(userRef.getId(), data.getPolling().getId()).get();
 					res.setPollingResponId(pollingRespionData.getId());
 				}
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
-					
+
 				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-				
+
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
-				 
+
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
-		        
-		        pollingRes.setData(pollingOptionUserCounts);
-		  
+				pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+				pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
+				pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+
+				pollingRes.setData(pollingOptionUserCounts);
+
 				res.setPollingOption(options);
 				res.setPollingRespon(pollingRes);
 			}
@@ -629,11 +640,12 @@ public class PostService {
 
 	}
 
-	public List<PojoPostRes> getAllPostByLikeOrBookmark(int offset, int limit, String criteria) throws Exception  {
+	public List<PojoPostRes> getAllPostByLikeOrBookmark(int offset, int limit, String criteria) throws Exception {
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
 
-		final List<Post> posts = postDao.getGetAllPostByCriteria(offset, limit, criteria, principalService.getAuthPrincipal() );
+		final List<Post> posts = postDao.getGetAllPostByCriteria(offset, limit, criteria,
+				principalService.getAuthPrincipal());
 		for (Post data : posts) {
 			final PojoPostRes res = new PojoPostRes();
 			res.setId(data.getId());
@@ -648,33 +660,34 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
-				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
-				if(getIsVote(userRef.getId(),data.getPolling().getId())){
-					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+				res.setIsVote(getIsVote(userRef.getId(), data.getPolling().getId()));
+				if (getIsVote(userRef.getId(), data.getPolling().getId())) {
+					PollingRespon pollingRespionData = pollingResponDao
+							.getPollingRespon(userRef.getId(), data.getPolling().getId()).get();
 					res.setPollingResponId(pollingRespionData.getId());
 				}
-				res.setEndAt(polling.getEndAt());		
+				res.setEndAt(polling.getEndAt());
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
-					
+
 				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-				
+
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
-				 
+
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
-			     
-		        pollingRes.setData(pollingOptionUserCounts);
-		  
+				pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+				pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
+				pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+
+				pollingRes.setData(pollingOptionUserCounts);
+
 				res.setPollingOption(options);
 				res.setPollingRespon(pollingRes);
 			}
@@ -686,7 +699,7 @@ public class PostService {
 				filePostData.setVer(filePost.getVersion());
 				files.add(filePostData);
 			}
-			
+
 			res.setData(files);
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -702,8 +715,7 @@ public class PostService {
 		return listPost;
 
 	}
-	
-	
+
 	public List<PojoPostRes> getAllPostByUserId(int offset, int limit) throws Exception {
 		final List<PojoPostRes> listPost = new ArrayList<>();
 		final User userRef = userDao.getByIdRef(principalService.getAuthPrincipal());
@@ -723,33 +735,34 @@ public class PostService {
 			if (data.getPolling() != null) {
 				final Polling polling = pollingDao.getByIdRef(data.getPolling().getId());
 				res.setPollingId(polling.getId());
-				res.setIsVote(getIsVote(userRef.getId(),data.getPolling().getId())) ;
-				if(getIsVote(userRef.getId(),data.getPolling().getId())){
-					PollingRespon pollingRespionData = pollingResponDao.getPollingRespon(userRef.getId(),data.getPolling().getId()).get();
+				res.setIsVote(getIsVote(userRef.getId(), data.getPolling().getId()));
+				if (getIsVote(userRef.getId(), data.getPolling().getId())) {
+					PollingRespon pollingRespionData = pollingResponDao
+							.getPollingRespon(userRef.getId(), data.getPolling().getId()).get();
 					res.setPollingResponId(pollingRespionData.getId());
 				}
-				res.setEndAt(polling.getEndAt());		
+				res.setEndAt(polling.getEndAt());
 				final PojoPollingResponRes pollingRes = new PojoPollingResponRes();
-					
+
 				List<PojoOptionCountRes> pollingOptionUserCounts = new ArrayList<>();
-				
+
 				res.setTitlePolling(polling.getTitle());
 				final List<PojoPollingOptionRes> options = new ArrayList<>();
 				final List<PollingOption> pollingOptions = pollingOptionDao.getAllOptionByPollingId(polling.getId());
 				for (PollingOption pollingOption : pollingOptions) {
 					final PojoPollingOptionRes option = new PojoPollingOptionRes();
 					option.setPollingOptionId(pollingOption.getId());
-				 
+
 					option.setPollingContent(pollingOption.getContentPolling());
 					option.setVer(pollingOption.getVersion());
 					options.add(option);
 				}
-			    pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
-			    pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
-			    pollingOptionUserCounts  = pollingOptionDao.countPollingOptionUsers(polling.getId());
-			     
-		        pollingRes.setData(pollingOptionUserCounts);
-		  
+				pollingRes.setTotalRespondents(pollingOptionDao.countTotalPollingUsers(polling.getId()));
+				pollingRes.setTotalOption(pollingOptionDao.countOptionByPollingId(polling.getId()));
+				pollingOptionUserCounts = pollingOptionDao.countPollingOptionUsers(polling.getId());
+
+				pollingRes.setData(pollingOptionUserCounts);
+
 				res.setPollingOption(options);
 				res.setPollingRespon(pollingRes);
 			}
@@ -761,7 +774,7 @@ public class PostService {
 				filePostData.setVer(filePost.getVersion());
 				files.add(filePostData);
 			}
-			
+
 			res.setData(files);
 			res.setTypeCode(data.getPostType().getTypeCode());
 			res.setTypeName(data.getPostType().getTypeName());
@@ -777,8 +790,6 @@ public class PostService {
 		return listPost;
 
 	}
-	
-	
 
 	public PojoInsertRes savePostComment(PojoPostCommentReqInsert data) {
 		ConnHandler.begin();
@@ -787,17 +798,9 @@ public class PostService {
 		postComment.setUser(user);
 		postComment.setBody(data.getContentComment());
 		postComment.setIsActive(true);
-		if (data.getCommentId() != null) {
-			final PostComment postCommentReply = postCommentDao.getByIdRef(data.getCommentId());
-			postComment.setComment(postCommentReply);
-			final Post post = postDao.getByIdRef(postCommentReply.getPost().getId());
-			postComment.setPost(post);
-		} else {
-			final Post post = postDao.getByIdRef(data.getPostId());
-			postComment.setPost(post);
-		}
+		final Post post = postDao.getByIdRef(data.getPostId());
+		postComment.setPost(post);
 		final PostComment postCommentNew = postCommentDao.save(postComment);
-
 		ConnHandler.commit();
 
 		final PojoInsertRes res = new PojoInsertRes();
@@ -821,53 +824,32 @@ public class PostService {
 		return res;
 
 	}
-	
-	
 
 	public List<PojoPostCommentRes> getAllCommentByPostId(final String postId, int offset, int limit) throws Exception {
 
 		final List<PojoPostCommentRes> listComment = new ArrayList<>();
-		final List<PojoPostCommentReplyResData> listCommentData = new ArrayList<>();
 		postCommentDao.getAllByPostId(postId, limit, offset).forEach(data -> {
-			if (data.getComment()!= null) {
-				final PojoPostCommentReplyResData postCommentData = new PojoPostCommentReplyResData();
-				postCommentData.setCommentId(data.getComment().getId());
-				postCommentData.setUserId(data.getUser().getId());
-				postCommentData.setContentComment(data.getBody());
-				
-				if(data.getUser().getProfile().getImageProfile()!=null) {
-					postCommentData.setImageProfileId(data.getUser().getProfile().getId());
-					}
-				final Position position = positionDao.getByIdRef(data.getUser().getProfile().getPosition().getId());
-				postCommentData.setPosition(position.getPositionName());
-				postCommentData.setFullname(data.getUser().getProfile().getFullname());
-				postCommentData.setCreatedAt(data.getCreatedAt());
-				listCommentData.add(postCommentData);
-			}
-			else {
-			
+
 			final PojoPostCommentRes postComment = new PojoPostCommentRes();
 			postComment.setContentComment(data.getBody());
 			postComment.setPostCommentId(data.getId());
 			postComment.setUserId(data.getUser().getId());
-		
-			if(data.getUser().getProfile().getImageProfile()!=null) {
-			postComment.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
+
+			if (data.getUser().getProfile().getImageProfile() != null) {
+				postComment.setImageProfileId(data.getUser().getProfile().getImageProfile().getId());
 			}
 			final Position position = positionDao.getByIdRef(data.getUser().getProfile().getPosition().getId());
 			postComment.setPosition(position.getPositionName());
 			postComment.setFullname(data.getUser().getProfile().getFullname());
 			postComment.setCreatedAt(data.getCreatedAt());
 			postComment.setVer(data.getVersion());
-			postComment.setData(listCommentData);
 			listComment.add(postComment);
-			
-			}
+
 		});
-	
+
 		return listComment;
 	}
-	
+
 	public PojoRes deletePostCommentById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
@@ -883,9 +865,7 @@ public class PostService {
 		}
 
 	}
-	
-	
-	
+
 	public PojoRes deletePostResponById(String id) {
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();

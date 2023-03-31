@@ -2,7 +2,6 @@ package com.lawencon.community.pojo.position;
 
 public class PojoPositionReqUpdate {
 	private String positionId;
-	private String positionCode;
 	private String positionName;
 	private Integer ver;
 	private Boolean isActive;
@@ -26,12 +25,7 @@ public class PojoPositionReqUpdate {
 	public void setPositionId(String positionId) {
 		this.positionId = positionId;
 	}
-	public String getPositionCode() {
-		return positionCode;
-	}
-	public void setPositionCode(String positionCode) {
-		this.positionCode = positionCode;
-	}
+
 	public String getPositionName() {
 		return positionName;
 	}
