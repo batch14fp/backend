@@ -49,6 +49,11 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 			throw new RuntimeException("Industry version cannot be empty.");
 		}
 	}
+	private void validateBkNotExist(String id) {
+		if (industryDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Industry cannot be empty.");
+		}
+	}
 
 	@Override
 	public List<PojoIndustryRes> getAll() {
@@ -69,6 +74,7 @@ public class IndustryService extends BaseService<PojoIndustryRes> {
 	}
 
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

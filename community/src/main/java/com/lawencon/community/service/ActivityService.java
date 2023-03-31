@@ -95,6 +95,12 @@ public class ActivityService {
 			throw new RuntimeException("Activity End Date cannot be empty.");
 		}
 	}
+	
+	private void validateBkNotExist(String id) {
+		if(activityDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Activity cannot be empty.");
+		}
+	}
 
 	private void validateNonBk(PojoActivityReqUpdate activity) {
 		if (activity.getActivityId() == null) {
@@ -330,6 +336,8 @@ public class ActivityService {
 	}
 
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");
@@ -384,7 +392,7 @@ public class ActivityService {
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setIsActive(true);
 		final Activity activityNew = activityDao.save(activity);
-		if (activityNew.getId() != null && voucherNew.getId() != null) {
+		if (activityNew.getId() != null || voucherNew.getId() != null) {
 			final ActivityVoucher activityVoucher = new ActivityVoucher();
 			activityVoucher.setActivity(activityNew);
 			activityVoucher.setVoucher(voucherNew);

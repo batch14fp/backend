@@ -79,5 +79,8 @@ public class MemberStatusDao extends AbstractJpaDao {
 	public MemberStatus getByIdRef(String id) {
 		return super.getByIdRef(MemberStatus.class, id);
 	}
+	public Optional<MemberStatus> getById(String id) {
+		return Optional.ofNullable(super.getById(MemberStatus.class, id));
+	}
 
 }

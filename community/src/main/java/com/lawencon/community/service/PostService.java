@@ -72,6 +72,13 @@ public class PostService {
 	private PositionDao positionDao;
 	
 
+	
+	private void validateBkNotExist(String id) {
+		if (postDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Post cannot be empty.");
+		}
+	}
+
 
 	
 
@@ -195,7 +202,9 @@ public class PostService {
 		return countLike;
 	}
 
-	public PojoRes deleteById(String id) {
+	public PojoRes ById(String id) {
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

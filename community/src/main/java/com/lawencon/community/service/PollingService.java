@@ -56,6 +56,12 @@ public class PollingService {
 		
 	}
 	
+	private void validateBkNotExist(String id) {
+		if (pollingDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Polling cannot be empty.");
+		}
+	}
+	
 	public PojoInsertRes save(PojoPollingReqInsert data) {
 	    ConnHandler.begin();
 
@@ -162,6 +168,8 @@ public class PollingService {
 	
 	
 	public PojoRes delete(String id) throws Exception {
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");
