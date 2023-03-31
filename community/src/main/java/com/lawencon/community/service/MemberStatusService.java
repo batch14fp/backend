@@ -80,6 +80,12 @@ public class MemberStatusService {
 		}
 
 	}
+	
+	private void validateBkNotExist(String id) {
+		if (memberStatusDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Member Status cannot be empty.");
+		}
+	}
 
 	public List<PojoMemberStatusRes> getAll() {
 
@@ -149,6 +155,8 @@ public class MemberStatusService {
 	}
 
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
+		
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");

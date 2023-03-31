@@ -47,6 +47,7 @@ import com.lawencon.community.pojo.verificationcode.PojoResGetVerificationCode;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationCodeReqInsert;
 import com.lawencon.community.pojo.verificationcode.PojoVerificationRes;
 import com.lawencon.community.util.GenerateString;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -63,6 +64,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	@Autowired
+	private PrincipalService principalService;
 	public UserService(final SubscriptionDao subscriptionDao, final WalletDao walletDao, final UserDao userDao, final ProfileDao profileDao, final RoleDao roleDao,
 			final EmailSenderService emailSenderService, final CodeVerificationDao codeVerificationDao,
 			final PositionDao positionDao, final IndustryDao industryDao, final MemberStatusDao memberStatusDao) {
@@ -345,6 +349,12 @@ public class UserService implements UserDetailsService {
 		ConnHandler.commit();
 		return res;
 		
+	}
+	
+	
+	public User getUserPrincipal() {
+		return userDao.getById(principalService.getAuthPrincipal()).get();
+	
 	}
 	
 	

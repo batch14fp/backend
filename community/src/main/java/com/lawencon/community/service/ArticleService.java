@@ -66,7 +66,11 @@ public class ArticleService {
 		}
 	}
 	
-	
+	private void validateBkNotExist(String id) {
+		if(articleDao.getById(id).isEmpty()) {
+			throw new RuntimeException("Article cannot be empty.");
+		}
+	}
 	
 	
 	public PojoArticleRes getAll(int offset, int limit) {
@@ -248,6 +252,7 @@ public class ArticleService {
 	}
 
 	public PojoRes deleteById(String id) {
+		validateBkNotExist(id);
 		ConnHandler.begin();
 		final PojoRes pojoRes = new PojoRes();
 		pojoRes.setMessage("Delete Success!");
