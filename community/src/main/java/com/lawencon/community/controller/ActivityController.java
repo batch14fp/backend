@@ -180,7 +180,13 @@ public class ActivityController {
 		try {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
@@ -198,7 +204,13 @@ public class ActivityController {
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
@@ -226,7 +238,13 @@ public class ActivityController {
 			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
@@ -239,7 +257,13 @@ public class ActivityController {
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,  @RequestParam(required = false) String typeCode) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
@@ -267,7 +291,13 @@ public class ActivityController {
 		try {
 			LocalDate startDateParam=null;
 			LocalDate endDateParam=null;
-			if(startDate!=null&&endDate!=null) {
+			if(startDate.equalsIgnoreCase("undefined")) {
+				startDate=null;
+			}
+			if(endDate.equalsIgnoreCase("undefined")) {
+				endDate=null;
+			}
+			if((startDate!=null&&endDate!=null)) {
 				startDateParam =Date.valueOf(startDate).toLocalDate();
 				endDateParam = Date.valueOf(endDate).toLocalDate();
 			}
@@ -284,11 +314,17 @@ public class ActivityController {
 		@RequestParam(required = false) String typeCode,@RequestParam("userId") String userId ) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
-		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( startDateParam, endDateParam,typeCode, userId);
+		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile(startDateParam, endDateParam,typeCode, userId);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
@@ -311,7 +347,13 @@ public class ActivityController {
 			@RequestParam(required = false) Integer limit) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
@@ -329,7 +371,13 @@ public class ActivityController {
 		 @RequestParam(required = false) String typeCode) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
-		if(startDate!=null&&endDate!=null) {
+		if(startDate.equalsIgnoreCase("undefined")) {
+			startDate=null;
+		}
+		if(endDate.equalsIgnoreCase("undefined")) {
+			endDate=null;
+		}
+		if((startDate!=null&&endDate!=null)) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
