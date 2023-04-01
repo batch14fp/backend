@@ -280,15 +280,15 @@ public class ActivityController {
 	}
 	
 	@GetMapping("member/report/incomes/file")
-	public ResponseEntity<byte[]> generateReportFileIncomesMember(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-		@RequestParam(required = false) String typeCode) {
+	public ResponseEntity<byte[]> generateReportFileIncomesMember(@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+		@RequestParam(required = false) String typeCode,@RequestParam("userId") String userId ) {
 		LocalDate startDateParam=null;
 		LocalDate endDateParam=null;
 		if(startDate!=null&&endDate!=null) {
 			startDateParam =Date.valueOf(startDate).toLocalDate();
 			endDateParam = Date.valueOf(endDate).toLocalDate();
 		}
-		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( startDateParam, endDateParam,typeCode);
+		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( startDateParam, endDateParam,typeCode, userId);
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);

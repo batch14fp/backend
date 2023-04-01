@@ -41,15 +41,10 @@ public class GenerateString {
 	        return String.format("%d_%03d%s", timestamp, randomNum, "."+fileExtension);
 	    }
 	  
-	  
-	  
-	  
-	  
-	  public static String getIndonesianDate() {
-	        final LocalDate currentDate = LocalDate.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-	        String formattedDate = currentDate.format(formatter);
-	        return formattedDate;
-	    }
+	  public static String getIndonesianDate(LocalDate date) {
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		    String formattedDate = date.format(formatter);
+		    return formattedDate;
+		}
 
 }

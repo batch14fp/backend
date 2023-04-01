@@ -34,7 +34,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<Activity> listActivities = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active, a.created_at  ");
 		sqlQuery.append("FROM t_activity a ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
@@ -108,7 +108,7 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<Activity> searchActivities(int offset, int limit, String sortType, String title) {
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active, a.created_at ");
 		sqlQuery.append("FROM t_activity a ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
@@ -196,6 +196,7 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
 			LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
+		try {
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
@@ -248,6 +249,11 @@ public class ActivityDao extends AbstractJpaDao {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}
 			resultList.add(data);
+		}
+		}
+		catch(Exception e) {
+		e.printStackTrace();
+		
 		}
 
 		return resultList;
@@ -750,7 +756,7 @@ public class ActivityDao extends AbstractJpaDao {
 			sqlQuery.append(
 					"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
 			sqlQuery.append(
-					"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+					"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active, a.created_at ");
 			sqlQuery.append("FROM t_activity a ");
 			sqlQuery.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
 			sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
