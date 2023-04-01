@@ -181,11 +181,11 @@
 				<text><![CDATA[Member Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="379" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
+				<reportElement mode="Opaque" x="379" y="3" width="140" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
+				<box topPadding="10" leftPadding="10" rightPadding="5"/>
+				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<text><![CDATA[Total Incomes]]></text>
@@ -215,11 +215,11 @@
 				<textFieldExpression><![CDATA[$F{memberName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="379" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
+				<reportElement x="379" y="0" width="140" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
+				<box topPadding="10" leftPadding="10" rightPadding="5"/>
+				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
@@ -233,6 +233,14 @@
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="53" y="0" width="33" height="30" uuid="365f2f3c-1f3e-4da7-9f5b-65cb4f5f7b1d"/>
+				<box topPadding="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lato"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

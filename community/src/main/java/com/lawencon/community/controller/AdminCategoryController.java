@@ -22,16 +22,16 @@ import com.lawencon.community.pojo.category.PojoCategoryRes;
 import com.lawencon.community.service.CategoryService;
 
 @RestController
-@RequestMapping("categories")
-public class CategoryController {
+@RequestMapping("admin/categories")
+public class AdminCategoryController {
 	private CategoryService categoryService;
 	
-	public CategoryController(final CategoryService categoryService) {
+	public AdminCategoryController(final CategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PojoCategoryRes>> getAllCategory() throws Exception{
+	public ResponseEntity<List<PojoCategoryRes>> getAllCategories() throws Exception{
 		List<PojoCategoryRes> resGet = categoryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
@@ -47,7 +47,6 @@ public class CategoryController {
 		PojoUpdateRes resGet = categoryService.update(data);	
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
-	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deleteCategory(@PathVariable ("id")String id){
 		PojoRes resDelete = categoryService.deleteById(id);

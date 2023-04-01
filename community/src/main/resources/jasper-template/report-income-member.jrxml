@@ -62,12 +62,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="no" class="java.lang.Integer">
-		<fieldDescription><![CDATA[no]]></fieldDescription>
-	</field>
 	<field name="title" class="java.lang.String"/>
 	<field name="totalIncomes" class="java.math.BigDecimal"/>
-	<field name="totalParticipants" class="java.lang.Long"/>
 	<field name="type" class="java.lang.String"/>
 	<title>
 		<band height="219" splitType="Stretch">
@@ -177,7 +173,7 @@
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="138" y="3" width="213" height="30" backcolor="#F2F2F2" uuid="7b6b7511-ad85-4702-ab94-e55c285ff5f1"/>
+				<reportElement mode="Opaque" x="170" y="3" width="213" height="30" backcolor="#F2F2F2" uuid="7b6b7511-ad85-4702-ab94-e55c285ff5f1"/>
 				<box topPadding="10" leftPadding="10"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
@@ -185,17 +181,17 @@
 				<text><![CDATA[Title]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="351" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
+				<reportElement mode="Opaque" x="383" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<text><![CDATA[Total Incomes]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="86" y="3" width="52" height="30" backcolor="#F2F2F2" uuid="1c43ab9b-e913-409a-872d-23766a70f6a2">
+				<reportElement mode="Opaque" x="86" y="3" width="84" height="30" backcolor="#F2F2F2" uuid="1c43ab9b-e913-409a-872d-23766a70f6a2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf62917e-9597-4720-a286-6644bfc2d678"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -209,17 +205,7 @@
 	<detail>
 		<band height="186">
 			<textField>
-				<reportElement x="53" y="0" width="33" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
-				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{no}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="138" y="0" width="213" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
+				<reportElement x="170" y="0" width="213" height="30" uuid="bffbb99f-6e3f-4be9-b381-07860c1adf3f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec14ba10-b451-41ab-b9d2-3125f330647d"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -229,17 +215,17 @@
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="351" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
+				<reportElement x="383" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="86" y="0" width="52" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
+				<reportElement x="86" y="0" width="84" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf62917e-9597-4720-a286-6644bfc2d678"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>
@@ -247,6 +233,14 @@
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="53" y="0" width="33" height="30" uuid="478dcad1-f8bb-4b93-82e3-53c2c8acec8c"/>
+				<box topPadding="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lato"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

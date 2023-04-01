@@ -1,6 +1,5 @@
 package com.lawencon.community.dao;
 
-
 import java.sql.Timestamp;
 import java.util.Optional;
 
@@ -19,7 +18,8 @@ public class SubscriptionDao extends AbstractJpaDao {
 
 		Subscription subscription = new Subscription();
 		try {
-			sqlQuery.append("SELECT  s.id AS subscription_id, s.start_date, s.end_date, s.created_at, s.created_by, s.is_active, s.ver, ");
+			sqlQuery.append(
+					"SELECT  s.id AS subscription_id, s.start_date, s.end_date, s.created_at, s.created_by, s.is_active, s.ver, ");
 			sqlQuery.append("m.id AS member_status_id, m.status_name, m.period_day, m.code_status ");
 			sqlQuery.append("FROM t_subscription s ");
 			sqlQuery.append("INNER JOIN t_profile p ON p.id = s.profile_id ");
@@ -39,7 +39,7 @@ public class SubscriptionDao extends AbstractJpaDao {
 				subscription.setCreatedBy(obj[4].toString());
 				subscription.setIsActive(Boolean.valueOf(obj[5].toString()));
 				subscription.setVersion(Integer.valueOf(obj[6].toString()));
-				
+
 				final MemberStatus memberStatus = new MemberStatus();
 				memberStatus.setId(obj[7].toString());
 				memberStatus.setStatusName(obj[8].toString());

@@ -23,17 +23,14 @@ import com.lawencon.community.pojo.activitytype.PojoActivityTypeRes;
 import com.lawencon.community.service.ActivityTypeService;
 
 @RestController
-@RequestMapping("activity-types")
+@RequestMapping("admin/activity-types")
 public class ActivityTypeController {
 	private ActivityTypeService activityTypeService;
-
-	
 	public ActivityTypeController(final ActivityTypeService activityTypeService) {
 		this.activityTypeService = activityTypeService;
 	}
-	
 	@GetMapping
-	public ResponseEntity<List<PojoActivityTypeRes>> getAllActivityType(){
+	public ResponseEntity<List<PojoActivityTypeRes>> getAllActivityTypes(){
 		List<PojoActivityTypeRes> resGet = activityTypeService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
@@ -55,13 +52,9 @@ public class ActivityTypeController {
 		PojoRes resDelete = activityTypeService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
-	@GetMapping("/byCode")
-	public ResponseEntity<PojoActivityTypeRes> getData(@RequestParam("typeCode") String typeCode){
+	@GetMapping("/find")
+	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
 	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
 	        return new ResponseEntity<>(data, HttpStatus.OK);
 	    }
-
-	
-	
-	
 }
