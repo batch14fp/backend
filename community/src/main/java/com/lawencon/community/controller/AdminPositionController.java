@@ -16,43 +16,37 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.posttype.PojoPostTypeReqInsert;
-import com.lawencon.community.pojo.posttype.PojoPostTypeReqUpdate;
-import com.lawencon.community.pojo.posttype.PojoPostTypeRes;
-import com.lawencon.community.service.PostTypeService;
-
+import com.lawencon.community.pojo.position.PojoPositionReqInsert;
+import com.lawencon.community.pojo.position.PojoPositionReqUpdate;
+import com.lawencon.community.pojo.position.PojoPostionRes;
+import com.lawencon.community.service.PositionService;
 
 @RestController
-@RequestMapping("post-types")
-public class PostTypeController {
-	private PostTypeService postTypeService;
+@RequestMapping("admin/positions")
+public class AdminPositionController {
+	private PositionService positionService;
 	
-	public PostTypeController(final PostTypeService postTypeService) {
-		this.postTypeService = postTypeService;
+	public AdminPositionController(final PositionService positionService) {
+		this.positionService = positionService;
 	}
-	
 	@GetMapping
-	public ResponseEntity<List<PojoPostTypeRes>> getAllPostType(){
-		List<PojoPostTypeRes> resGet = postTypeService.getAll();
+	public ResponseEntity<List<PojoPostionRes>> getAllPositions(){
+		List<PojoPostionRes> resGet = positionService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
-	
 	@PostMapping
-	public ResponseEntity<PojoInsertRes> updatePostType(@RequestBody PojoPostTypeReqInsert data){
-		PojoInsertRes resGet = postTypeService.save(data);
+	public ResponseEntity<PojoInsertRes> insertPosition(@RequestBody PojoPositionReqInsert data){
+		PojoInsertRes resGet = positionService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePostType(@RequestBody PojoPostTypeReqUpdate data){
-		PojoUpdateRes resGet = postTypeService.update(data);
+	public ResponseEntity<PojoUpdateRes> updatePosition(@RequestBody PojoPositionReqUpdate data){
+		PojoUpdateRes resGet = positionService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
-	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoRes> deletePostType(@PathVariable ("id")String id) {
-		PojoRes resDelete = postTypeService.deleteById(id);
+	public ResponseEntity<PojoRes> deletePosition(@PathVariable ("id")String id) {
+		PojoRes resDelete = positionService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 }

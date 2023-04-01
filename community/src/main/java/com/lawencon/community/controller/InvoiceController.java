@@ -37,9 +37,8 @@ public class InvoiceController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
-
-	@GetMapping
-	public ResponseEntity<PojoInvoiceRes> getInvoiceByCode(@RequestParam String codeInvoice) throws Exception {
+	@GetMapping("/activity")
+	public ResponseEntity<PojoInvoiceRes> getInvoiceActivityByCode(@RequestParam String codeInvoice) throws Exception {
 	final PojoInvoiceRes resGet = invoiceService.getByCode(codeInvoice);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
@@ -50,11 +49,4 @@ public class InvoiceController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	
-	
-	
-	
-	
-	
-	
-
 }

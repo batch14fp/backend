@@ -10,13 +10,13 @@ import javax.persistence.Table;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_wallet")
-public class Wallet extends BaseEntity{
-	
+@Table(name = "t_wallet")
+public class Wallet extends BaseEntity {
+
 	@OneToOne
 	@JoinColumn(name = "bank_payment_id")
 	private BankPayment bankPayment;
-	
+
 	private BigDecimal balance;
 
 	public BankPayment getBankPayment() {
@@ -34,7 +34,5 @@ public class Wallet extends BaseEntity{
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
-
-
 
 }

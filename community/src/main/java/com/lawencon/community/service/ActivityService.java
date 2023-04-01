@@ -1,6 +1,5 @@
 package com.lawencon.community.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -471,9 +470,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, null);
+				limit, null, sortType);
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
@@ -512,9 +511,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getByUserIdActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, principalService.getAuthPrincipal());
+				limit, principalService.getAuthPrincipal(),sortType );
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}

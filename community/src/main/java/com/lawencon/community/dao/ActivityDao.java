@@ -491,7 +491,7 @@ public class ActivityDao extends AbstractJpaDao {
 	}
 	@SuppressWarnings("unchecked")
 	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode,
-	        final int offset, final int limit, final String userId) throws Exception {
+	        final int offset, final int limit, final String userId, String sortType) throws Exception {
 	    StringBuilder sql = new StringBuilder();
 	    List<Activity> listActivity = new ArrayList<>();
 	    try {
@@ -513,6 +513,22 @@ public class ActivityDao extends AbstractJpaDao {
 	    if (userId != null && !userId.isEmpty()) {
 	        sql.append("AND a.user_id = :userId ");
 	    }
+	    if (sortType != null) {
+			switch (sortType.toLowerCase()) {
+			case "highest":
+				sql.append("ORDER BY a.price DESC ");
+				break;
+			case "lowest":
+				sql.append("ORDER BY a.price ASC ");
+				break;
+			case "created_at":
+				sql.append("ORDER BY a.created_at DESC ");
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid sort type: " + sortType);
+			}
+		}
+
 
 	    Query q = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
 
@@ -777,13 +793,13 @@ public class ActivityDao extends AbstractJpaDao {
 			if (sortType != null) {
 				switch (sortType.toLowerCase()) {
 				case "highest":
-					sqlQuery.append("ORDER BY a.price DESC ");
+					sqlQuery.append(" ORDER BY a.price DESC ");
 					break;
 				case "lowest":
-					sqlQuery.append("ORDER BY a.price ASC ");
+					sqlQuery.append(" ORDER BY a.price ASC ");
 					break;
 				case "created_at":
-					sqlQuery.append("ORDER BY a.created_at DESC ");
+					sqlQuery.append(" ORDER BY a.created_at DESC ");
 					break;
 				default:
 					throw new IllegalArgumentException("Invalid sort type: " + sortType);
