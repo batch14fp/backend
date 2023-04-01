@@ -1,5 +1,6 @@
 package com.lawencon.community.service;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -156,9 +157,7 @@ public class ActivityService {
 			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 
 			reportMember.setNo(i + 1);
-
-			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
-			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));	reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
 
@@ -185,7 +184,7 @@ public class ActivityService {
 			for (int i = 0; i < activityList.size(); i++) {
 				final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 				reportMember.setNo(i + 1);
-				reportMember.setStartDate(activityList.get(i).getStartDate().toString());
+				reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));
 				reportMember.setTitle(activityList.get(i).getTitle());
 				reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 				reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
@@ -201,10 +200,9 @@ public class ActivityService {
 	}
 
 	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final LocalDate startDate,
-			final LocalDate endDate, String typeCode) {
+			final LocalDate endDate, String typeCode, String userId) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(user.getId(),
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(userId,
 				percentMember, startDate, endDate, typeCode, null, null);
 		return res;
 
