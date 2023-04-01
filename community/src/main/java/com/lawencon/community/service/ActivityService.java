@@ -157,9 +157,7 @@ public class ActivityService {
 			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 
 			reportMember.setNo(i + 1);
-
-			reportMember.setStartDate(GenerateString.getIndonesianDate(Date.valueOf(activityList.get(i).getStartDate().toString()).toLocalDate()));
-			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));	reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
 
@@ -186,7 +184,7 @@ public class ActivityService {
 			for (int i = 0; i < activityList.size(); i++) {
 				final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 				reportMember.setNo(i + 1);
-				reportMember.setStartDate(GenerateString.getIndonesianDate(Date.valueOf(activityList.get(i).getStartDate().toString()).toLocalDate()));
+				reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));
 				reportMember.setTitle(activityList.get(i).getTitle());
 				reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 				reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));

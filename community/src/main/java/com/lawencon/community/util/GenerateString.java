@@ -1,8 +1,9 @@
 package com.lawencon.community.util;
 import java.text.DecimalFormat;
+
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
@@ -41,9 +42,9 @@ public class GenerateString {
 	        return String.format("%d_%03d%s", timestamp, randomNum, "."+fileExtension);
 	    }
 	  
-	  public static String getIndonesianDate(LocalDate date) {
+	  public static String getIndonesianDate(LocalDateTime dateTime) {
 		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		    String formattedDate = date.format(formatter);
+		    String formattedDate = dateTime.format(formatter);
 		    return formattedDate;
 		}
 
