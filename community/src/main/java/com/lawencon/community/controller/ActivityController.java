@@ -165,7 +165,7 @@ public class ActivityController {
 	}
 
 	@GetMapping("/vouchers-list")
-	public ResponseEntity<List<PojoActivityVoucherRes>> getListVooucher(@RequestParam("activityId") String activityId) {
+	public ResponseEntity<List<PojoActivityVoucherRes>> getListVoucher(@RequestParam("activityId") String activityId) {
 		final List<PojoActivityVoucherRes> res = voucherService.getListVoucher(activityId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -227,6 +227,11 @@ public class ActivityController {
 		List<PojoBankPaymentRes> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	@GetMapping("/find")
+	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
+	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
 	
 
 }

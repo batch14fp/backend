@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -24,9 +23,9 @@ import com.lawencon.community.service.ActivityTypeService;
 
 @RestController
 @RequestMapping("admin/activity-types")
-public class ActivityTypeController {
+public class AdminActivityTypeController {
 	private ActivityTypeService activityTypeService;
-	public ActivityTypeController(final ActivityTypeService activityTypeService) {
+	public AdminActivityTypeController(final ActivityTypeService activityTypeService) {
 		this.activityTypeService = activityTypeService;
 	}
 	@GetMapping
@@ -52,9 +51,5 @@ public class ActivityTypeController {
 		PojoRes resDelete = activityTypeService.deleteById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
-	@GetMapping("/find")
-	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
-	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
-	        return new ResponseEntity<>(data, HttpStatus.OK);
-	    }
+	
 }
