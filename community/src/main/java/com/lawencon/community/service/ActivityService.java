@@ -81,9 +81,6 @@ public class ActivityService {
 		if (activity.getCategoryId() == null) {
 			throw new RuntimeException("Activity Category cannot be empty.");
 		}
-		if (activity.getTypeId() == null) {
-			throw new RuntimeException("Activity Type cannot be empty.");
-		}
 		if (activity.getTitle() == null) {
 			throw new RuntimeException("Activity Title cannot be empty.");
 		}
@@ -470,9 +467,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, null);
+				limit, null, sortType);
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
@@ -511,9 +508,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getByUserIdActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, principalService.getAuthPrincipal());
+				limit, principalService.getAuthPrincipal(),sortType );
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}

@@ -59,10 +59,10 @@ public class ArticleService {
 	
 	private void validateNonBk(PojoArticleReqUpdate article) {
 		if (article.getArticleId() == null) {
-			throw new RuntimeException("Activity cannot be empty.");
+			throw new RuntimeException("Article cannot be empty.");
 		}
 		if (article.getVer() == null) {
-			throw new RuntimeException("Activity version cannot be empty.");
+			throw new RuntimeException("Article version cannot be empty.");
 		}
 	}
 	

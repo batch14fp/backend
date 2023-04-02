@@ -22,20 +22,18 @@ import com.lawencon.community.pojo.industry.PojoIndustryRes;
 import com.lawencon.community.service.IndustryService;
 
 @RestController
-@RequestMapping("industries")
-public class IndustryController {
+@RequestMapping("admin/industries")
+public class AdminIndustryController {
 	private IndustryService industryService;
 	
-	public IndustryController(final IndustryService industryService) {
+	public AdminIndustryController(final IndustryService industryService) {
 		this.industryService = industryService;
 	}
-	
 	@GetMapping
-	public ResponseEntity<List<PojoIndustryRes>> getAllIndustry(){
+	public ResponseEntity<List<PojoIndustryRes>> getAllIndustries(){
 		List<PojoIndustryRes> resGet = industryService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
-	
 	@PostMapping
 	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryReqInsert data){
 		PojoInsertRes resGet = industryService.save(data);

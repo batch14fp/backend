@@ -56,12 +56,12 @@ public class ProfileController {
 		PojoInsertRes resGet = socialMediaService.userSaveSocialMedia(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
-	@PutMapping("/password")
+	@PutMapping("/edit/password")
 	public ResponseEntity<PojoUpdateRes>updatePass(@RequestBody PojoPasswordReqUpdate data){
 		PojoUpdateRes resGet = userService.updatePassword(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	
 	
 	
 }
