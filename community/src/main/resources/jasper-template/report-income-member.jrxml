@@ -86,34 +86,6 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
-			<image>
-				<reportElement x="50" y="0" width="92" height="78" uuid="f017f216-36d1-4b07-a418-57d727342bce"/>
-				<imageExpression><![CDATA["https://raw.githubusercontent.com/batch14fp/backend/main/community/src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="190" y="40" width="205" height="15" uuid="98df426c-44cf-4189-9da3-9e526fd3d27d"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="172" y="10" width="210" height="25" uuid="d75839b4-e5b4-489a-b45e-1cb611e7992a">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font fontName="Lato" size="19" isBold="true"/>
-				</textElement>
-				<text><![CDATA[WECOMMUNITY]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="166" y="52" width="245" height="30" uuid="393f64a5-3c4c-46c3-8de2-8394cab73ce9"/>
-				<textElement>
-					<font fontName="Lato"/>
-				</textElement>
-				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="100" y="150" width="114" height="20" uuid="9fc9c517-c804-45c9-b81c-8200486388e1"/>
 				<textElement>
@@ -164,6 +136,34 @@
 				</textElement>
 				<text><![CDATA[Generate on]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="173" y="11" width="210" height="25" uuid="b3c42509-4a2f-4f80-93e2-aee2e5da4a6a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Lato" size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WECOMMUNITY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="41" width="205" height="15" uuid="cf534919-7a3f-47bd-bef2-c0d8a04afc90"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Jl. Menteng Pulo II No.16, RW.5, Menteng Dalam]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="50" width="294" height="30" uuid="58cc59bd-130b-4826-9439-430e85ffd316"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12960]]></text>
+			</staticText>
+			<image>
+				<reportElement x="51" y="1" width="92" height="78" uuid="fc24d026-6f87-4fe7-8dcb-23c3a2140515"/>
+				<imageExpression><![CDATA["src/main/resources/jasper-template/asset/logo.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>

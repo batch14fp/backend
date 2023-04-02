@@ -26,6 +26,9 @@ public class PojoPaymentDetailResData {
 	private String codeStatus;
 	private String statusName;
 	private Integer periodDay;
+	private String nameCreated;
+	private String type;
+	private String categoryName;
 	private BigDecimal priceMemberShip;
 	private Boolean isPaid;
 	private String invoiceCode;
@@ -188,5 +191,24 @@ public class PojoPaymentDetailResData {
 	public void setFilePaymentId(String filePaymentId) {
 		this.filePaymentId = filePaymentId;
 	}
+	public String getNameCreated() {
+		return nameCreated;
+	}
+	public void setNameCreated(String nameCreated) {
+		this.nameCreated = nameCreated;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	
 	
 }

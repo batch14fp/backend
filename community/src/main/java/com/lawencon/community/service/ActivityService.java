@@ -1,6 +1,5 @@
 package com.lawencon.community.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
