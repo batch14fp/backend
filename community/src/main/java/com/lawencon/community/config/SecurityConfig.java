@@ -54,6 +54,8 @@ public class SecurityConfig {
 		matcher.add(new AntPathRequestMatcher("/report/member/activity/file/**", HttpMethod.GET.name()));
 		matcher.add(new AntPathRequestMatcher("/report/admin/incomes/file/**", HttpMethod.GET.name()));
 		matcher.add(new AntPathRequestMatcher("/report/member/incomes/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/users/industries", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/users/positions", HttpMethod.GET.name()));
 		return matcher;
 	}
 	
