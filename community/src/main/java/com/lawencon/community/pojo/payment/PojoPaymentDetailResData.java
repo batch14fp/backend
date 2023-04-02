@@ -33,6 +33,15 @@ public class PojoPaymentDetailResData {
 	private Boolean isPaid;
 	private String invoiceCode;
 	private Integer ver;
+	private String statusTrans;
+	
+	
+	public String getStatusTrans() {
+		return statusTrans;
+	}
+	public void setStatusTrans(String statusTrans) {
+		this.statusTrans = statusTrans;
+	}
 	public String getCodeStatus() {
 		return codeStatus;
 	}
