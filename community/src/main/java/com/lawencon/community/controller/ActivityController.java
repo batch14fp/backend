@@ -217,6 +217,11 @@ public class ActivityController {
 		List<PojoActivityTypeRes> resGet = activityTypeService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	@GetMapping("/activity-types/find")
+	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
+	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	}
 	@GetMapping("/member-status")
 	public ResponseEntity<List<PojoMemberStatusRes>>getAllMemberStatus(){
 		List<PojoMemberStatusRes> resGet = memberStatusService.getAll();
@@ -227,11 +232,7 @@ public class ActivityController {
 		List<PojoBankPaymentRes> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
-	@GetMapping("/find")
-	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
-	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
-	        return new ResponseEntity<>(data, HttpStatus.OK);
-	    }
+	
 	
 
 }

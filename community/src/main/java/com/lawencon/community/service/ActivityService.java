@@ -81,9 +81,6 @@ public class ActivityService {
 		if (activity.getCategoryId() == null) {
 			throw new RuntimeException("Activity Category cannot be empty.");
 		}
-		if (activity.getTypeId() == null) {
-			throw new RuntimeException("Activity Type cannot be empty.");
-		}
 		if (activity.getTitle() == null) {
 			throw new RuntimeException("Activity Title cannot be empty.");
 		}
