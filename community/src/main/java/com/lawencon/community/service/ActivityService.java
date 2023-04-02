@@ -81,6 +81,9 @@ public class ActivityService {
 		if (activity.getCategoryId() == null) {
 			throw new RuntimeException("Activity Category cannot be empty.");
 		}
+		if (activity.getTypeId() == null) {
+			throw new RuntimeException("Activity Type cannot be empty.");
+		}
 		if (activity.getTitle() == null) {
 			throw new RuntimeException("Activity Title cannot be empty.");
 		}
@@ -96,6 +99,8 @@ public class ActivityService {
 		}
 	}
 	
+
+	
 	private void validateBkNotExist(String id) {
 		if(activityDao.getById(id).isEmpty()) {
 			throw new RuntimeException("Activity cannot be empty.");
@@ -110,6 +115,9 @@ public class ActivityService {
 			throw new RuntimeException("Activity version cannot be empty.");
 		}
 	}
+	
+	
+	
 
 	public List<PojoActivityRes> getAll(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
@@ -355,6 +363,7 @@ public class ActivityService {
 	public PojoInsertRes save(PojoActivityReqInsert data) {
 		ConnHandler.begin();
 		validateNonBk(data);
+
 	
 		Voucher voucherNew = null;
 		final Activity activity = new Activity();
