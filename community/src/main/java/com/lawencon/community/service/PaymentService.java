@@ -172,11 +172,8 @@ public class PaymentService {
 		} else {
 			res.setMessage("Transaction cannot be performed because you are not an admin.");
 		}
-
 		return res;
-
 	}
-
 	public PojoRes updateByUser(PojoUserPaymentReqUpdate data) {
 		validateNonBk(data);
 		ConnHandler.begin();
@@ -250,9 +247,7 @@ public class PaymentService {
 			res.setTotal(data.getTotal());
 		}
 		return res;
-
 	}
-
 	public PojoPaymentDetailRes getByUserId(Boolean isPaid, Integer offset, Integer limit) {
 		PojoPaymentDetailRes paymentDetail = new PojoPaymentDetailRes();
 		List<PojoPaymentDetailResData> resList = new ArrayList<>();
@@ -303,7 +298,7 @@ public class PaymentService {
 
 		});
 		paymentDetail.setData(resList);
-		paymentDetail.setTotal(resList.size());
+		paymentDetail.setTotal(paymentDao.getAllPaymentByUserIdCount(user.getId(), isPaid));
 		return paymentDetail;
 
 	}
@@ -318,6 +313,9 @@ public class PaymentService {
 			if (data.getDiscAmount() != null) {
 				res.setDiscAmmount(data.getDiscAmount());
 			}
+			if (data.getFile() != null) {
+				res.setFilePaymentId(data.getFile().getId());
+			}
 			if (data.getBankPayment() != null) {
 				res.setAccountName(data.getBankPayment().getAccountName());
 				res.setAccountNumber(data.getBankPayment().getAccountNumber());
@@ -325,6 +323,7 @@ public class PaymentService {
 				res.setBankPaymetId(data.getBankPayment().getId());
 			}
 			if (data.getInvoice().getActivity() != null) {
+				res.setType(data.getInvoice().getActivity().getTypeActivity().getActivityName());
 				if (data.getInvoice().getActivity().getFile() != null) {
 					res.setImageActivity(data.getInvoice().getActivity().getFile().getId());
 				}
@@ -333,11 +332,14 @@ public class PaymentService {
 				res.setActivityPrice(data.getInvoice().getActivity().getPrice());
 				res.setTitleActivity(data.getInvoice().getActivity().getTitle());
 				res.setStartDate(data.getInvoice().getActivity().getStartDate());
+				res.setCategoryName(data.getInvoice().getActivity().getCategory().getCategoryName());
 			}
 			if (data.getInvoice().getMemberStatus() != null) {
+				res.setType("Membership");
 				res.setCodeStatus(data.getInvoice().getMemberStatus().getCodeStatus());
 				res.setStatusName(data.getInvoice().getMemberStatus().getStatusName());
 				res.setPeriodDay(data.getInvoice().getMemberStatus().getPeriodDay());
+				res.setCategoryName(data.getInvoice().getMemberStatus().getStatusName());
 				res.setPriceMemberShip(data.getInvoice().getMemberStatus().getPrice());
 				res.setMembershipId(data.getInvoice().getMemberStatus().getId());
 			}
@@ -345,6 +347,8 @@ public class PaymentService {
 			if (data.getFile() != null) {
 				res.setFilePaymentId(data.getFile().getId());
 			}
+			final User user = userDao.getById(data.getUpdatedBy()).get();
+			res.setNameCreated(user.getProfile().getFullname());
 			res.setInvoiceCode(data.getInvoice().getInvoiceCode());
 			res.setInvoiceId(data.getInvoice().getId());
 			res.setPaymentId(data.getId());
@@ -359,9 +363,8 @@ public class PaymentService {
 
 		});
 		paymentDetail.setData(resList);
-		paymentDetail.setTotal(resList.size());
+		paymentDetail.setTotal(paymentDao.getAllPaymentCount(isPaid));
 		return paymentDetail;
-
 	}
 
 	public PojoPaymentDetailResData getPaymentDetailById(String paymentId) {

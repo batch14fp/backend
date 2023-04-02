@@ -24,6 +24,7 @@ import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
+import com.lawencon.community.util.GenerateString;
 
 @Repository
 public class ActivityDao extends AbstractJpaDao {
@@ -199,7 +200,7 @@ public class ActivityDao extends AbstractJpaDao {
 		try {
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("SELECT tat.activity_name,a.title,p.updated_at SUM(p.subtotal * :percentValue) as total_income ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
@@ -215,7 +216,7 @@ public class ActivityDao extends AbstractJpaDao {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
 
-		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title, p.updated_at ");
 
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("userId", userId);
@@ -241,13 +242,21 @@ public class ActivityDao extends AbstractJpaDao {
 		for (Object objs : result) {
 			final Object[] obj = (Object[]) objs;
 			final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
+<<<<<<< HEAD
 			data.setTitle(obj[1].toString());
 			data.setType(obj[0].toString());
 			if (obj[2] != null) {
 				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+=======
+			data.setTitle(obj[0].toString());
+			data.setType(obj[1].toString());
+			if (obj[3] != null) {
+				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+>>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 			} else {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}
+			data.setDateReceived(GenerateString.getIndonesianDate(Timestamp.valueOf(obj[2].toString()).toLocalDateTime()));
 			resultList.add(data);
 		}
 		}
@@ -567,7 +576,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT pr.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("SELECT pr.fullname,a.title,p.updated_at SUM(p.subtotal * :percentValue) as total_income ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
@@ -585,7 +594,7 @@ public class ActivityDao extends AbstractJpaDao {
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
-		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title, p.updated_at ");
 
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("percentValue", percentValue);
@@ -615,11 +624,12 @@ public class ActivityDao extends AbstractJpaDao {
 			data.setMemberName(obj[0].toString());
 			data.setType(obj[1].toString());
 
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+			if (obj[3] != null) {
+				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
 			} else {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}
+			data.setDateReceived(GenerateString.getIndonesianDate(Timestamp.valueOf(obj[2].toString()).toLocalDateTime()));
 			resultList.add(data);
 		}
 
