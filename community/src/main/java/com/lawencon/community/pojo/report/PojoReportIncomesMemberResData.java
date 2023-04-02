@@ -7,7 +7,7 @@ public class PojoReportIncomesMemberResData {
 	private String type;
 	private String title;
 	private BigDecimal totalIncomes;
-
+	private String dateReceived;
 	public String getType() {
 		return type;
 	}
@@ -26,6 +26,13 @@ public class PojoReportIncomesMemberResData {
 	public void setTotalIncomes(BigDecimal totalIncomes) {
 		this.totalIncomes = totalIncomes;
 	}
+	public String getDateReceived() {
+		return dateReceived;
+	}
+	public void setDateReceived(String dateReceived) {
+		this.dateReceived = dateReceived;
+	}
+	
 	
 	
 	

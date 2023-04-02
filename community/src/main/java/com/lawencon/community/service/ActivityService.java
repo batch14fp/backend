@@ -362,7 +362,7 @@ public class ActivityService {
 		Voucher voucherNew = null;
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
-		if (data.getVoucherCode() != null && data.getLimitApplied() != null) {
+		if (data.getVoucherCode() != null) {
 			voucher.setUsedCount(0);
 			voucher.setIsActive(true);
 			voucher.setVoucherCode(data.getVoucherCode().toUpperCase());
@@ -392,7 +392,7 @@ public class ActivityService {
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setIsActive(true);
 		final Activity activityNew = activityDao.save(activity);
-		if (activityNew.getId() != null || voucherNew.getId() != null) {
+		if (activityNew != null && voucherNew != null) {
 			final ActivityVoucher activityVoucher = new ActivityVoucher();
 			activityVoucher.setActivity(activityNew);
 			activityVoucher.setVoucher(voucherNew);

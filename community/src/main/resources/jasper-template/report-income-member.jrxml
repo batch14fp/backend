@@ -66,7 +66,6 @@
 		<fieldDescription><![CDATA[no]]></fieldDescription>
 	</field>
 	<field name="title" class="java.lang.String"/>
-	<field name="totalIncomes" class="java.math.BigDecimal"/>
 	<field name="totalParticipants" class="java.lang.Long"/>
 	<field name="type" class="java.lang.String"/>
 	<title>
@@ -188,11 +187,11 @@
 				<reportElement mode="Opaque" x="351" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
+				<box topPadding="10" rightPadding="10"/>
+				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
-				<text><![CDATA[Total Incomes]]></text>
+				<text><![CDATA[Total Incomes (Rp)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="86" y="3" width="52" height="30" backcolor="#F2F2F2" uuid="1c43ab9b-e913-409a-872d-23766a70f6a2">
@@ -207,7 +206,8 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="186">
+		<band height="30">
+			<property name="com.jaspersoft.studio.layout"/>
 			<textField>
 				<reportElement x="53" y="0" width="33" height="30" uuid="b1ea3dd4-f430-4f69-8725-153322aa791d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
@@ -227,16 +227,6 @@
 					<font fontName="Lato" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="351" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
-				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="86" y="0" width="52" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
@@ -271,9 +261,9 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="28">
+		<band height="45">
 			<staticText>
-				<reportElement x="400" y="4" width="100" height="20" uuid="20d73ec8-838b-49ce-ae6c-3f6ae1ea11cd"/>
+				<reportElement x="351" y="4" width="88" height="20" uuid="20d73ec8-838b-49ce-ae6c-3f6ae1ea11cd"/>
 				<textElement>
 					<font fontName="Lato" size="12"/>
 				</textElement>
