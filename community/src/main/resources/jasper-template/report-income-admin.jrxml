@@ -235,22 +235,12 @@
 				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
 			<textField>
-<<<<<<< HEAD
 				<reportElement x="53" y="0" width="33" height="30" uuid="365f2f3c-1f3e-4da7-9f5b-65cb4f5f7b1d"/>
 				<box topPadding="10"/>
 				<textElement textAlignment="Center">
 					<font fontName="Lato"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
-=======
-				<reportElement x="49" y="0" width="37" height="30" uuid="7a3dfa60-821b-42f7-85cb-e4f52b6d0799">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bcc4cd-0c74-4b0d-a5c9-e19b6c013cc2"/>
-				</reportElement>
-				<box topPadding="10" leftPadding="10"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 			</textField>
 		</band>
 	</detail>

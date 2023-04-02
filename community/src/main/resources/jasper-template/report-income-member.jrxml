@@ -63,11 +63,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="title" class="java.lang.String"/>
-<<<<<<< HEAD
 	<field name="totalIncomes" class="java.math.BigDecimal"/>
-=======
-	<field name="totalParticipants" class="java.lang.Long"/>
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 	<field name="type" class="java.lang.String"/>
 	<title>
 		<band height="219" splitType="Stretch">
@@ -188,11 +184,7 @@
 				<reportElement mode="Opaque" x="383" y="3" width="122" height="30" backcolor="#F2F2F2" uuid="d34465dd-5766-40cc-8d40-7efa7e9579a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
-<<<<<<< HEAD
-				<box topPadding="10" leftPadding="10"/>
-=======
 				<box topPadding="10" rightPadding="10"/>
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 				<textElement textAlignment="Right">
 					<font fontName="Lato" size="12"/>
 				</textElement>
@@ -224,7 +216,6 @@
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
 			<textField>
-<<<<<<< HEAD
 				<reportElement x="383" y="0" width="122" height="30" uuid="1b45fa74-5596-4fe1-9e20-f68967c2326a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a52a2e3-9e3a-4dc2-b72c-b23666bb9cec"/>
 				</reportElement>
@@ -236,9 +227,6 @@
 			</textField>
 			<textField>
 				<reportElement x="86" y="0" width="84" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
-=======
-				<reportElement x="86" y="0" width="52" height="30" uuid="21fa1c05-4082-45c7-9e69-c6cf3fb070f8">
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf62917e-9597-4720-a286-6644bfc2d678"/>
 				</reportElement>
 				<box topPadding="10" leftPadding="10"/>

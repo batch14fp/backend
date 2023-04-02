@@ -24,9 +24,9 @@ import com.lawencon.community.service.ActivityTypeService;
 
 @RestController
 @RequestMapping("admin/activity-types")
-public class ActivityTypeController {
+public class AdminActivityTypeController {
 	private ActivityTypeService activityTypeService;
-	public ActivityTypeController(final ActivityTypeService activityTypeService) {
+	public AdminActivityTypeController(final ActivityTypeService activityTypeService) {
 		this.activityTypeService = activityTypeService;
 	}
 	@GetMapping

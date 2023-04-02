@@ -18,7 +18,7 @@ import com.lawencon.community.service.InvoiceService;
 import com.lawencon.community.service.MemberStatusService;
 
 @RestController
-@RequestMapping("members/status")
+@RequestMapping("members-status")
 public class MemberStatusController {
 	private MemberStatusService memberStatusService;
 	private InvoiceService invoiceService;

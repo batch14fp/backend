@@ -32,9 +32,7 @@ public class PojoReportIncomesAdminResData {
 	public void setTotalIncomes(BigDecimal totalIncomes) {
 		this.totalIncomes = totalIncomes;
 	}
-<<<<<<< HEAD
 
-=======
 	public String getDateReceived() {
 		return dateReceived;
 	}
@@ -43,6 +41,4 @@ public class PojoReportIncomesAdminResData {
 	}
 	
 	
-	
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 }

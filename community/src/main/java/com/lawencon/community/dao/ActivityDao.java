@@ -242,17 +242,11 @@ public class ActivityDao extends AbstractJpaDao {
 		for (Object objs : result) {
 			final Object[] obj = (Object[]) objs;
 			final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
-<<<<<<< HEAD
-			data.setTitle(obj[1].toString());
-			data.setType(obj[0].toString());
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-=======
+
 			data.setTitle(obj[0].toString());
 			data.setType(obj[1].toString());
 			if (obj[3] != null) {
 				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 			} else {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}

@@ -80,7 +80,7 @@ public class ReportController {
 	public ResponseEntity<byte[]> generateReportFile(@RequestParam String id,
 			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,
-			@RequestParam(required = false) String typeCode) {
+			@RequestParam(required = false) String typeCode) throws Exception {
 		LocalDate startDateParam = null;
 		LocalDate endDateParam = null;
 		if ((startDate != null && endDate != null)) {
@@ -97,15 +97,26 @@ public class ReportController {
 		}
 		List<PojoReportActivityMemberResData> data = activityService.getMemberReportFile(id, startDateParam,
 				endDateParam, offset, limit, typeCode);
+		if ((startDate != null && endDate != null)) {
+			if (endDate.equalsIgnoreCase("undefined")) {
+				endDate = data.get(data.size()-1).getStartDate();
+			} else {
+				endDate = data.get(data.size()-1).getStartDate();
+			}
+			if (startDate.equalsIgnoreCase("undefined")) {
+				startDate = data.get(0).getStartDate();
+			} else {
+				startDate = data.get(0).getStartDate();
+			}
+		}
 		Map<String, Object> params = new HashMap<>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		byte[] pdfBytes;
-		try {
+	
 			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDispositionFormData("attachment", "report.pdf");
@@ -164,6 +175,18 @@ public class ReportController {
 		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile(startDateParam,
 				endDateParam, typeCode, userId);
 		Map<String, Object> params = new HashMap<>();
+		if ((startDate != null && endDate != null)) {
+			if (endDate.equalsIgnoreCase("undefined")) {
+				endDate = data.get((data.size()-1)).getDateReceived();
+			} else {
+				startDateParam = Date.valueOf(startDate).toLocalDate();
+			}
+			if (startDate.equalsIgnoreCase("undefined")) {
+				startDate = data.get(0).getDateReceived();
+			} else {
+				endDateParam = Date.valueOf(endDate).toLocalDate();
+			}
+		}
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		byte[] pdfBytes;
@@ -208,10 +231,9 @@ public class ReportController {
 	@GetMapping("/admin/activity/file")
 	public ResponseEntity<byte[]> generateReportFileAdmin(@RequestParam(required = false) String startDate,
 			@RequestParam(required = false) String endDate, @RequestParam(required = false) Integer offset,
-			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) {
+			@RequestParam(required = false) Integer limit, @RequestParam(required = false) String typeCode) throws Exception {
 		LocalDate startDateParam = null;
 		LocalDate endDateParam = null;
-
 		if ((startDate != null && endDate != null)) {
 			if (endDate.equalsIgnoreCase("undefined")) {
 				endDate = null;
@@ -224,17 +246,28 @@ public class ReportController {
 				endDateParam = Date.valueOf(endDate).toLocalDate();
 			}
 		}
-		List<PojoReportActivityAdminResData> data = activityService.getAdminReportFile(startDateParam, endDateParam,
-				typeCode);
+		List<PojoReportActivityAdminResData> data = activityService.getAdminReportFile( startDateParam, endDateParam, typeCode);
 		Map<String, Object> params = new HashMap<>();
+		if ((startDate != null && endDate != null)) {
+			if (endDate.equalsIgnoreCase("undefined")) {
+				endDate = data.get(data.size()-1).getStartDate();
+			} else {
+				endDate = data.get(data.size()-1).getStartDate();
+			}
+			if (startDate.equalsIgnoreCase("undefined")) {
+				startDate = data.get(0).getStartDate();
+			} else {
+				startDate = data.get(0).getStartDate();
+
+			}
+		}
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		byte[] pdfBytes;
-		try {
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+	
+			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-admin");
+		
+	
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		headers.setContentDispositionFormData("attachment", "report.pdf");
@@ -293,6 +326,18 @@ public class ReportController {
 		List<PojoReportIncomesAdminResData> data = activityService.getIncomesReportAdminFile(startDateParam,
 				endDateParam, typeCode);
 		Map<String, Object> params = new HashMap<>();
+		if ((startDate != null && endDate != null)) {
+			if (endDate.equalsIgnoreCase("undefined")) {
+				endDate = data.get((data.size()-1)).getDateReceived();
+			} else {
+				endDate = data.get((data.size()-1)).getDateReceived();endDate = data.get((data.size()-1)).getDateReceived();
+			}
+			if (startDate.equalsIgnoreCase("undefined")) {
+				startDate = data.get(0).getDateReceived();
+			} else {
+				startDate = data.get(0).getDateReceived();
+			}
+		}
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
 		byte[] pdfBytes;

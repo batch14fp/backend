@@ -1,11 +1,5 @@
 package com.lawencon.community.controller;
 
-<<<<<<< HEAD
-=======
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.HashMap;
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -57,21 +51,14 @@ public class ActivityController {
 	private MemberStatusService memberStatusService;
 	private BankPaymentService bankPaymentService;
 
-<<<<<<< HEAD
 	public ActivityController(final BankPaymentService bankPaymentService, final MemberStatusService memberStatusService,final ActivityTypeService activityTypeService, final VoucherService voucherService, final PaymentService paymentService,
-=======
-	public ActivityController(final VoucherService voucherService, final PaymentService paymentService,
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 			final ActivityService activityService) {
 		this.activityService = activityService;
 		this.paymentService = paymentService;
 		this.voucherService = voucherService;
-<<<<<<< HEAD
 		this.activityTypeService = activityTypeService;
 		this.memberStatusService = memberStatusService;
 		this.bankPaymentService = bankPaymentService;
-=======
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 	}
 
 	@GetMapping
@@ -81,17 +68,6 @@ public class ActivityController {
 		return new ResponseEntity<>(dataList, HttpStatus.OK);
 	}
 
-<<<<<<< HEAD
-=======
-	@GetMapping("/sort")
-	public ResponseEntity<List<PojoActivityRes>> getDataActivity(@RequestParam("page") int page,
-			@RequestParam("size") int size, @RequestParam(required = false) String sortType,
-			@RequestParam(defaultValue = "") String title) {
-		final List<PojoActivityRes> dataList = activityService.getAllBySort(page, size, sortType, title);
-		return new ResponseEntity<>(dataList, HttpStatus.OK);
-	}
-
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoActivityRes> getActivity(@PathVariable("id") String id) {
 		PojoActivityRes resGet = activityService.getById(id);
@@ -164,360 +140,17 @@ public class ActivityController {
 	@GetMapping("/filter")
 	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(@RequestParam("page") int page,
 			@RequestParam("size") int size, @RequestParam(value = "categoryCode", required = false) String categoryCode,
-<<<<<<< HEAD
 			@RequestParam(value = "typeCode", required = false) String typeCode,
 			@RequestParam(value = "sortType", defaultValue = "created_at") String sortType) {
 		try {
 			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode, typeCode,
 					page, size, sortType);
-=======
-			@RequestParam(value = "typeCode", required = false) String typeCode) {
-		try {
-			List<PojoActivityRes> activities = activityService.getListActivityByCategoryAndType(categoryCode, typeCode,
-					page, size);
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 			return ResponseEntity.ok(activities);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-<<<<<<< HEAD
-=======
-
-	@GetMapping("/my-activity/filter")
-	public ResponseEntity<List<PojoActivityRes>> getMyActivityByCategoryAndType(@RequestParam("page") int page,
-			@RequestParam("size") int size, @RequestParam(value = "categoryCode", required = false) String categoryCode,
-			@RequestParam(value = "typeCode", required = false) String typeCode) {
-		try {
-			List<PojoActivityRes> activities = activityService.getByUserIdActivityByCategoryAndType(categoryCode,
-					typeCode, page, size);
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
-	@GetMapping("/by-category-List")
-	public ResponseEntity<List<PojoActivityRes>> getListActivityByCategoryAndType(
-			@RequestParam(value = "categoryCodes", required = false) List<String> categoryCodes,
-			@RequestParam(value = "typeCode", required = false) String typeCode,
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size,
-			@RequestParam(value = "sortType", defaultValue = "created_at") String sortType) {
-		try {
-			List<PojoActivityRes> activities = activityService.getListActivityByListCategoryAndType(categoryCodes,
-					typeCode, page, size, sortType);
-			if (activities == null) {
-
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
-	@GetMapping("/upcoming")
-	public ResponseEntity<PojoUpcomingActivityByTypeRes> getUpcomingActivity(
-			@RequestParam(value = "typeCode", required = false) String typeCode, @RequestParam(value = "page") int page,
-			@RequestParam(value = "size") int size) {
-		try {
-			PojoUpcomingActivityByTypeRes activities = activityService.getUpcomingEvent(page, size, typeCode);
-			if (activities == null) {
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
-	@GetMapping("member/report")
-	public ResponseEntity<PojoReportActivityMemberRes> getAllByDateRange(
-			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,
-			@RequestParam(required = false) String typeCode) {
-		try {
-			LocalDate startDateParam = null;
-			LocalDate endDateParam = null;
-			if (startDate != null && endDate != null) {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-			PojoReportActivityMemberRes activities = activityService.getMemberReport(startDateParam, endDateParam,
-					offset, limit, typeCode);
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-
-	}
-
-	@GetMapping("member/report/file")
-	public ResponseEntity<byte[]> generateReportFile(@RequestParam String id,
-			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,
-			@RequestParam(required = false) String typeCode) throws Exception {
-		LocalDate startDateParam = null;
-		LocalDate endDateParam = null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		List<PojoReportActivityMemberResData> data = activityService.getMemberReportFile(id, startDateParam,
-				endDateParam, offset, limit, typeCode);
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = data.get(data.size()-1).getStartDate();
-			} else {
-				endDate = data.get(data.size()-1).getStartDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = data.get(0).getStartDate();
-			} else {
-				startDate = data.get(0).getStartDate();
-			}
-		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
-		byte[] pdfBytes;
-	
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report");
-	
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDispositionFormData("attachment", "report.pdf");
-		headers.setContentLength(pdfBytes.length);
-		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-	}
-
-	@GetMapping("admin/report")
-	public ResponseEntity<PojoReportActivityAdminRes> getAllByDateRangeAdmin(
-			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,
-			@RequestParam(required = false) String typeCode) {
-		LocalDate startDateParam = null;
-		LocalDate endDateParam = null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		PojoReportActivityAdminRes activities = activityService.getAdminReport(startDateParam, endDateParam, offset,
-				limit, typeCode);
-		return ResponseEntity.ok(activities);
-	}
-
-	@GetMapping("admin/report/file")
-	public ResponseEntity<byte[]> generateReportFileAdmin(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit,  @RequestParam(required = false) String typeCode) throws Exception {
-		LocalDate startDateParam = null;
-		LocalDate endDateParam = null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		List<PojoReportActivityAdminResData> data = activityService.getAdminReportFile( startDateParam, endDateParam, typeCode);
-		Map<String, Object> params = new HashMap<>();
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = data.get(data.size()-1).getStartDate();
-			} else {
-				endDate = data.get(data.size()-1).getStartDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = data.get(0).getStartDate();
-			} else {
-				startDate = data.get(0).getStartDate();
-
-			}
-		}
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
-		byte[] pdfBytes;
-	
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-admin");
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDispositionFormData("attachment", "report.pdf");
-		headers.setContentLength(pdfBytes.length);
-		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-	}
-
-	@GetMapping("/member/report/incomes")
-	public ResponseEntity<PojoReportIncomesMemberRes> getMemberReport( @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-			@RequestParam(required = false) String typeCode, @RequestParam(required = false) Integer offset,
-			@RequestParam(required = false) Integer limit) {
-		try {
-			LocalDate startDateParam = null;
-			LocalDate endDateParam = null;
-			if ((startDate != null && endDate != null)) {
-				if (endDate.equalsIgnoreCase("undefined")) {
-					endDate = null;
-				} else {
-					startDateParam = Date.valueOf(startDate).toLocalDate();
-				}
-				if (startDate.equalsIgnoreCase("undefined")) {
-					startDate = null;
-				} else {
-					endDateParam = Date.valueOf(endDate).toLocalDate();
-				}
-			}
-			PojoReportIncomesMemberRes activities = activityService.getMemberIncomesReport(startDateParam, endDateParam, typeCode, offset,  limit);
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
-	@GetMapping("member/report/incomes/file")
-	public ResponseEntity<byte[]> generateReportFileIncomesMember(@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-		@RequestParam(required = false) String typeCode,@RequestParam("userId") String userId ) throws Exception {
-		LocalDate startDateParam = null;
-		LocalDate endDateParam = null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		List<PojoReportIncomesMemberResData> data = activityService.getMemberIncomesReportFile( startDateParam, endDateParam,typeCode, userId);
-		Map<String, Object> params = new HashMap<>();
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = data.get((data.size()-1)).getDateReceived();
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = data.get(0).getDateReceived();
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
-		byte[] pdfBytes;
-	
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-income-member");
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDispositionFormData("attachment", "report.pdf");
-		headers.setContentLength(pdfBytes.length);
-		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-	}
-
-	@GetMapping("/admin/report/incomes")
-	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports(@RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam(required = false) String typeCode,
-			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
-		LocalDate startDateParam = null;
-		LocalDate endDateParam = null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}try {
-			PojoReportIncomesAdminRes activities = activityService.getIncomesReportAdmin(startDateParam, endDateParam,
-					typeCode, offset, limit);
-			return ResponseEntity.ok(activities);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-
-	@GetMapping("admin/report/incomes/file")
-	public ResponseEntity<byte[]> generateReportFileIncomesAdmin(  @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
-		 @RequestParam(required = false) String typeCode) {
-		LocalDate startDateParam=null;
-		LocalDate endDateParam=null;
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = null;
-			} else {
-				startDateParam = Date.valueOf(startDate).toLocalDate();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = null;
-			} else {
-				endDateParam = Date.valueOf(endDate).toLocalDate();
-			}
-		}
-		List<PojoReportIncomesAdminResData> data = activityService.getIncomesReportAdminFile( startDateParam, endDateParam,typeCode);
-		Map<String, Object> params = new HashMap<>();
-		if ((startDate != null && endDate != null)) {
-			if (endDate.equalsIgnoreCase("undefined")) {
-				endDate = data.get((data.size()-1)).getDateReceived();
-			} else {
-				endDate = data.get((data.size()-1)).getDateReceived();endDate = data.get((data.size()-1)).getDateReceived();
-			}
-			if (startDate.equalsIgnoreCase("undefined")) {
-				startDate = data.get(0).getDateReceived();
-			} else {
-				startDate = data.get(0).getDateReceived();
-			}
-		}
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
-		byte[] pdfBytes;
-		try {
-			pdfBytes = jasperUtil.responseToByteArray(data, params, "report-income-admin");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDispositionFormData("attachment", "report.pdf");
-		headers.setContentLength(pdfBytes.length);
-		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-	}
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 
 	@PutMapping("/payment")
 	public ResponseEntity<PojoRes> updateByUser(@RequestBody PojoUserPaymentReqUpdate data) {
@@ -531,17 +164,8 @@ public class ActivityController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 
-<<<<<<< HEAD
-=======
-	@GetMapping("/total")
-	public ResponseEntity<PojoReportCountMemberRes> getDataActivity() {
-		final PojoReportCountMemberRes res = activityService.getTotalData();
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 	@GetMapping("/vouchers-list")
-	public ResponseEntity<List<PojoActivityVoucherRes>> getListVooucher(@RequestParam("activityId") String activityId) {
+	public ResponseEntity<List<PojoActivityVoucherRes>> getListVoucher(@RequestParam("activityId") String activityId) {
 		final List<PojoActivityVoucherRes> res = voucherService.getListVoucher(activityId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -567,7 +191,6 @@ public class ActivityController {
 		final PojoPaymentDetailRes data = paymentService.getByUserId(isPaid, offset, limit);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
-<<<<<<< HEAD
 
 	@GetMapping("/my-activity/filter")
 	public ResponseEntity<List<PojoActivityRes>> getMyActivityByCategoryAndType(@RequestParam("page") int page,
@@ -604,8 +227,11 @@ public class ActivityController {
 		List<PojoBankPaymentRes> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	@GetMapping("/find")
+	public ResponseEntity<PojoActivityTypeRes> getActivityTypeByCode(@RequestParam("typeCode") String typeCode){
+	        final PojoActivityTypeRes data = activityTypeService.getByCode(typeCode);
+	        return new ResponseEntity<>(data, HttpStatus.OK);
+	    }
 	
-=======
->>>>>>> 79a5c9a721a5880939cd6e8e16ba1696fec6c9cd
 
 }
