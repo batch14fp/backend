@@ -47,7 +47,7 @@ public class AdminPaymentController {
         return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	@PutMapping("/payments")
-	public ResponseEntity<PojoRes> updatByAdmin(@RequestBody PojoConfirmPaymentReqUpdate data){
+	public ResponseEntity<PojoRes> updateByAdmin(@RequestBody PojoConfirmPaymentReqUpdate data){
 		PojoRes resGet = paymentService.updateByAdmin(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
@@ -66,7 +66,7 @@ public class AdminPaymentController {
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
 	@PutMapping("/sales-settings")
-	public ResponseEntity<PojoUpdateRes> updatSetting(@RequestBody PojoSalesSettingReqUpdate data){
+	public ResponseEntity<PojoUpdateRes> updateSetting(@RequestBody PojoSalesSettingReqUpdate data){
 		PojoUpdateRes resGet = salesSettingService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
