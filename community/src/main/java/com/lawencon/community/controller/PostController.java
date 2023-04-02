@@ -27,17 +27,41 @@ import com.lawencon.community.pojo.post.PojoPostLikeReqInsert;
 import com.lawencon.community.pojo.post.PojoPostReqInsert;
 import com.lawencon.community.pojo.post.PojoPostReqUpdate;
 import com.lawencon.community.pojo.post.PojoPostRes;
+import com.lawencon.community.pojo.posttype.PojoPostTypeRes;
 import com.lawencon.community.service.PostService;
+import com.lawencon.community.service.PostTypeService;
 
 @RestController
 @RequestMapping("posts")
 public class PostController {
 	private PostService postService;
+	private PostTypeService postTypeService;
 	
-	public PostController(final PostService postService) {
+	public PostController(final PostTypeService postTypeService, final PostService postService) {
 		this.postService = postService;
+		this.postTypeService = postTypeService;
 	}
 
+
+	@PostMapping
+	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostReqInsert data){
+		PojoInsertRes resGet = postService.save(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	@PutMapping
+	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostReqUpdate data){
+		PojoUpdateRes resGet = postService.update(data);
+		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) throws Exception {
+	        final List<PojoPostRes> dataList = postService.getData(page, size);
+	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
+	    }
+	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<PojoPostRes> getActivity(@PathVariable("id") String id) throws Exception {
 	    PojoPostRes resGet = postService.getById(id);
@@ -47,18 +71,24 @@ public class PostController {
 	        return ResponseEntity.ok(resGet);
 	    }
 	}
-
 	
-	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostReqInsert data){
-		PojoInsertRes resGet = postService.save(data);
-		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
+		PojoRes resDelete = postService.deleteById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
+	
 	
 	@PostMapping("/like")
 	public ResponseEntity<PojoInsertRes> insertPostLike(@RequestBody PojoPostLikeReqInsert data){
 		PojoInsertRes resGet = postService.savePostLike(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/like/{id}")
+	public ResponseEntity<PojoRes> deletePostLike(@PathVariable ("id")String id){
+		PojoRes resDelete = postService.deletePostLikeById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
 	@PostMapping("/bookmark")
@@ -66,7 +96,12 @@ public class PostController {
 		PojoInsertRes resGet = postService.savePostBookmark(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
+
+	@DeleteMapping("/bookmark/{id}")
+	public ResponseEntity<PojoRes> deletePostBookmark(@PathVariable ("id")String id){
+		PojoRes resDelete = postService.deletePostBookmarkById(id);
+		return new ResponseEntity<>(resDelete, HttpStatus.OK);
+	}
 	@PostMapping("/comment")
 	public ResponseEntity<PojoInsertRes> insertPostComment(@RequestBody PojoPostCommentReqInsert data){
 		PojoInsertRes resGet = postService.savePostComment(data);
@@ -77,60 +112,27 @@ public class PostController {
 		PojoRes resGet = postService.updatePostComment(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-	
-	@PutMapping
-	public ResponseEntity<PojoUpdateRes> updatePost(@RequestBody PojoPostReqUpdate data){
-		PojoUpdateRes resGet = postService.update(data);
-		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
-	}
-	
-	
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoRes> deletePost(@PathVariable ("id")String id){
-		PojoRes resDelete = postService.deleteById(id);
-		return new ResponseEntity<>(resDelete, HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/like/{id}")
-	public ResponseEntity<PojoRes> deletePostLike(@PathVariable ("id")String id){
-		PojoRes resDelete = postService.deletePostLikeById(id);
-		return new ResponseEntity<>(resDelete, HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/bookmark/{id}")
-	public ResponseEntity<PojoRes> deletePostBookmark(@PathVariable ("id")String id){
-		PojoRes resDelete = postService.deletePostBookmarkById(id);
-		return new ResponseEntity<>(resDelete, HttpStatus.OK);
-	}
-	
+		
+	@GetMapping("/comment/{id}")
+	public ResponseEntity<List<PojoPostCommentRes>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
+	                                         @RequestParam("size") int size) throws Exception{
+	        final List<PojoPostCommentRes> dataList = postService.getAllCommentByPostId(id, page, size);
+	        return new ResponseEntity<>(dataList, HttpStatus.OK);
+	   }
 	@DeleteMapping("/comment/{id}")
 	public ResponseEntity<PojoRes> deletePostComment(@PathVariable ("id")String id){
 		PojoRes resDelete = postService.deletePostCommentById(id);
 		return new ResponseEntity<>(resDelete, HttpStatus.OK);
 	}
 	
-	
-	@GetMapping
-	public ResponseEntity<List<PojoPostRes>> getData(@RequestParam("page") int page,
-	                                         @RequestParam("size") int size) throws Exception {
-	        final List<PojoPostRes> dataList = postService.getData(page, size);
-	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
-	    }
-	
+
 	@GetMapping("/most-like")
 	public ResponseEntity<List<PojoPostRes>> getAllPostByMostLike(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
 	        final List<PojoPostRes> dataList = postService.getMostLike(page, size);
 	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
-	@GetMapping("/{id}/comment")
-	public ResponseEntity<List<PojoPostCommentRes>> getAllCommentByPostId(@PathVariable ("id")String id,@RequestParam("page") int page,
-	                                         @RequestParam("size") int size) throws Exception{
-	        final List<PojoPostCommentRes> dataList = postService.getAllCommentByPostId(id, page, size);
-	        return new ResponseEntity<>(dataList, HttpStatus.OK);
-	    }
-	
+
 	@GetMapping("/user")
 	public ResponseEntity<List<PojoPostRes>> getAllPostByUser(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size) throws Exception{
@@ -139,20 +141,17 @@ public class PostController {
 	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
 	
-	@DeleteMapping("/unvote/{id}")
-	public ResponseEntity<PojoRes> deletePollingRespon(@PathVariable ("id")String id) throws Exception{
-		PojoRes resDelete = postService.deletePostResponById(id);
-		return new ResponseEntity<>(resDelete, HttpStatus.OK);
-	}
-	
-	
-	
-	
-	@GetMapping("/all")
-	public ResponseEntity<List<PojoPostRes>> getAllPostByLikeOrBookmark(@RequestParam("page") int page,
+
+	@GetMapping("/my-post")
+	public ResponseEntity<List<PojoPostRes>> getAllPostByisLikeOrisBookmark(@RequestParam("page") int page,
 	                                         @RequestParam("size") int size, @RequestParam(defaultValue="bookmark") String criteria) throws Exception {
 	        final List<PojoPostRes> dataList = postService.getAllPostByLikeOrBookmark(page, size, criteria);
 	        return new ResponseEntity<>(dataList,  HttpStatus.OK);
 	    }
+	@GetMapping("/post-types")
+	public ResponseEntity<List<PojoPostTypeRes>> getAllPostType(){
+		List<PojoPostTypeRes> resGet = postTypeService.getAll();
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
 	
 }

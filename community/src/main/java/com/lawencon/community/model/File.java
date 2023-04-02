@@ -8,19 +8,16 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_file")
-public class File extends BaseEntity{
-	
-	@Column(columnDefinition = "text",nullable=false)
-	private String fileContent;
-	
-	@Column(length = 5, nullable=false)
-	private String fileExtension;
-	
-	
+public class File extends BaseEntity {
 
-	@Column(length = 50,nullable=false)
+	@Column(columnDefinition = "text", nullable = false)
+	private String fileContent;
+
+	@Column(length = 5, nullable = false)
+	private String fileExtension;
+
+	@Column(length = 50, nullable = false)
 	private String fileName;
-	
 
 	public String getFileContent() {
 		return fileContent;
@@ -45,7 +42,5 @@ public class File extends BaseEntity{
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
-	
 
 }

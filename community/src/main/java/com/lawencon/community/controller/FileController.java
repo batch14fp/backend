@@ -37,10 +37,5 @@ public class FileController {
                 .body(fileBytes);
     }
 	
-	@PostMapping
-	public ResponseEntity<PojoInsertRes> insertFile(@RequestBody PojoFileReqInsert data){
-		PojoInsertRes resGet = fileService.save(data);
-		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
-	}
 
 }

@@ -22,15 +22,14 @@ import com.lawencon.community.pojo.socialmedia.PojoSocialMediaAdminReqUpdate;
 import com.lawencon.community.service.SocialMediaService;
 
 @RestController
-@RequestMapping("social-media")
-public class SocialMediaController {
+@RequestMapping("admin/social-media")
+public class AdminSocialMediaController {
 
 	private SocialMediaService socialMediaService;
 
-	public SocialMediaController(final SocialMediaService socialMediaService) {
+	public AdminSocialMediaController(final SocialMediaService socialMediaService) {
 		this.socialMediaService = socialMediaService;
 	}
-
 	@GetMapping
 	public ResponseEntity<List<PojoSocialMediaRes>> getAllSocialMedia() {
 		List<PojoSocialMediaRes> resGet = socialMediaService.getAll();
@@ -42,13 +41,11 @@ public class SocialMediaController {
 		PojoInsertRes resGet = socialMediaService.save(data);
 		return new ResponseEntity<>(resGet, HttpStatus.CREATED);
 	}
-
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updateSocialMedia(@RequestBody PojoSocialMediaAdminReqUpdate data) {
 		PojoUpdateRes resGet = socialMediaService.update(data);
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
-
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoRes> deleteSocialMedia(@PathVariable ("id")String id) {
 		PojoRes resDelete = socialMediaService.deleteById(id);

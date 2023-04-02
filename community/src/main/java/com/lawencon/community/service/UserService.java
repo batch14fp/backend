@@ -37,6 +37,7 @@ import com.lawencon.community.model.Subscription;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Wallet;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.profile.PojoForgetPasswordEmailReq;
 import com.lawencon.community.pojo.profile.PojoPasswordReqUpdate;
@@ -92,6 +93,9 @@ public class UserService implements UserDetailsService {
 
 		throw new UsernameNotFoundException("Wrong email and password!");
 	}
+	
+	
+	
 
 	public Optional<User> login(final String email) {
 		return userDao.login(email);
@@ -351,6 +355,22 @@ public class UserService implements UserDetailsService {
 		
 	}
 	
+	public PojoRes deleteById(String id) {
+		ConnHandler.begin();
+		final PojoRes pojoRes = new PojoRes();
+		pojoRes.setMessage("Delete Success!");
+		final PojoRes pojoResFail = new PojoRes();
+		pojoResFail.setMessage("Delete Failed!");
+
+		Boolean result = userDao.deleteById(User.class, id);
+		ConnHandler.commit();
+		if (result) {
+			return pojoRes;
+		} else {
+			return pojoResFail;
+		}
+
+	}
 	
 	public User getUserPrincipal() {
 		return userDao.getById(principalService.getAuthPrincipal()).get();

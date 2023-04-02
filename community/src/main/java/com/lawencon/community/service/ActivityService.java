@@ -99,6 +99,8 @@ public class ActivityService {
 		}
 	}
 	
+
+	
 	private void validateBkNotExist(String id) {
 		if(activityDao.getById(id).isEmpty()) {
 			throw new RuntimeException("Activity cannot be empty.");
@@ -113,6 +115,9 @@ public class ActivityService {
 			throw new RuntimeException("Activity version cannot be empty.");
 		}
 	}
+	
+	
+	
 
 	public List<PojoActivityRes> getAll(int offset, int limit) {
 		final List<PojoActivityRes> activityList = new ArrayList<>();
@@ -156,9 +161,7 @@ public class ActivityService {
 			final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 
 			reportMember.setNo(i + 1);
-
-			reportMember.setStartDate(activityList.get(i).getStartDate().toString());
-			reportMember.setTitle(activityList.get(i).getTitle());
+			reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));	reportMember.setTitle(activityList.get(i).getTitle());
 			reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 			reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
 
@@ -185,7 +188,7 @@ public class ActivityService {
 			for (int i = 0; i < activityList.size(); i++) {
 				final PojoReportActivityMemberResData reportMember = new PojoReportActivityMemberResData();
 				reportMember.setNo(i + 1);
-				reportMember.setStartDate(activityList.get(i).getStartDate().toString());
+				reportMember.setStartDate(GenerateString.getIndonesianDate(activityList.get(i).getStartDate()));
 				reportMember.setTitle(activityList.get(i).getTitle());
 				reportMember.setType(activityList.get(i).getTypeActivity().getActivityName());
 				reportMember.setTotalParticipants(getCountParticipant(activityList.get(i).getId(), user.getId()));
@@ -201,10 +204,9 @@ public class ActivityService {
 	}
 
 	public List<PojoReportIncomesMemberResData> getMemberIncomesReportFile(final LocalDate startDate,
-			final LocalDate endDate, String typeCode) {
+			final LocalDate endDate, String typeCode, String userId) {
 		final Float percentMember = salesSettingDao.getSalesSetting().getMemberIncome();
-		final User user = userDao.getByIdRef(principalService.getAuthPrincipal());
-		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(user.getId(),
+		final List<PojoReportIncomesMemberResData> res = activityDao.getActivityIncomeByUser(userId,
 				percentMember, startDate, endDate, typeCode, null, null);
 		return res;
 
@@ -361,11 +363,12 @@ public class ActivityService {
 	public PojoInsertRes save(PojoActivityReqInsert data) {
 		ConnHandler.begin();
 		validateNonBk(data);
+
 	
 		Voucher voucherNew = null;
 		final Activity activity = new Activity();
 		final Voucher voucher = new Voucher();
-		if (data.getVoucherCode() != null && data.getLimitApplied() != null) {
+		if (data.getVoucherCode() != null) {
 			voucher.setUsedCount(0);
 			voucher.setIsActive(true);
 			voucher.setVoucherCode(data.getVoucherCode().toUpperCase());
@@ -395,7 +398,7 @@ public class ActivityService {
 		activity.setTypeActivity(activityTypeDao.getByIdRef(data.getTypeId()));
 		activity.setIsActive(true);
 		final Activity activityNew = activityDao.save(activity);
-		if (activityNew.getId() != null || voucherNew.getId() != null) {
+		if (activityNew != null && voucherNew != null) {
 			final ActivityVoucher activityVoucher = new ActivityVoucher();
 			activityVoucher.setActivity(activityNew);
 			activityVoucher.setVoucher(voucherNew);
@@ -473,9 +476,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getListActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, null);
+				limit, null, sortType);
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}
@@ -514,9 +517,9 @@ public class ActivityService {
 	}
 
 	public List<PojoActivityRes> getByUserIdActivityByCategoryAndType(String categoryCode, String typeCode, int offset,
-			int limit) throws Exception {
+			int limit, String sortType) throws Exception {
 		final List<Activity> listActivity = activityDao.getListActivityByCategoryAndType(categoryCode, typeCode, offset,
-				limit, principalService.getAuthPrincipal());
+				limit, principalService.getAuthPrincipal(),sortType );
 		if (listActivity == null || listActivity.isEmpty()) {
 			return null;
 		}

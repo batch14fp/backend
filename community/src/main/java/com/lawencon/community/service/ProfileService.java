@@ -144,8 +144,6 @@ public class ProfileService {
 
 		}
 
-	
-
 		BankPayment bankPaymentRef = new BankPayment();
 		Optional<Wallet> walletOptional = walletDao.getByUserId(principalService.getAuthPrincipal());
 		if (walletOptional.isPresent()) {
@@ -172,7 +170,6 @@ public class ProfileService {
 			}
 
 		}
-
 		profile.setProvince(data.getProvince());
 		final Industry industry = industryDao.getByIdRef(data.getIndustryId());
 		profile.setIndustry(industry);
@@ -190,39 +187,4 @@ public class ProfileService {
 
 	}
 	
-	
-	
-	
-	
-	
-//	final List<ProfileSocialMedia> profileSocialMediaList = profileSocialMediaDao.getByProfileId(profile.getId());
-//	final List<ProfileSocialMedia> dataList = new ArrayList<>();
-//
-//	for (int i = 0; i < data.getSocialMedia().size(); i++) {
-//	    if (data.getSocialMedia().get(i).getProfileSocialMediaId() != null) {
-//	        for (int j = 0; j < profileSocialMediaList.size(); j++) {
-//	            if (profileSocialMediaList.get(j).getId()
-//	                    .equals(data.getSocialMedia().get(i).getProfileSocialMediaId())) {
-//	                ProfileSocialMedia psm = new ProfileSocialMedia();
-//	                psm.setId(profileSocialMediaList.get(j).getId());
-//	                psm.setVersion(data.getSocialMedia().get(i).getVer());
-//	                psm.setUrl(data.getSocialMedia().get(i).getUrl());
-//	                SocialMedia sm = new SocialMedia();
-//	                sm.setId(data.getSocialMedia().get(i).getSocialMediaId());
-//	                psm.setSocialMedia(sm);
-//	                psm.setProfile(profile);
-//	                dataList.add(psm);
-//	            }
-//	        }
-//	    } else {
-//	        final ProfileSocialMedia profileSocialMedia = new ProfileSocialMedia();
-//	        final SocialMedia socialMedia = new SocialMedia();
-//	        socialMedia.setId(data.getSocialMedia().get(i).getSocialMediaId());
-//	        profileSocialMedia.setProfile(profile);
-//	        profileSocialMedia.setUrl(data.getSocialMedia().get(i).getUrl());
-//	        dataList.add(profileSocialMedia);
-//	    }
-//	}
-//	profileSocialMediaDao.saveAll(dataList);
-
 }

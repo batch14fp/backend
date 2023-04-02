@@ -50,8 +50,12 @@ public class SecurityConfig {
 		matcher.add(new AntPathRequestMatcher("/industries", HttpMethod.GET.name()));
 		matcher.add(new AntPathRequestMatcher("/positions", HttpMethod.GET.name()));
 		matcher.add(new AntPathRequestMatcher("/files/**", HttpMethod.GET.name()));
-		matcher.add(new AntPathRequestMatcher("/activities/admin/report/file/**", HttpMethod.GET.name()));
-		matcher.add(new AntPathRequestMatcher("/activities/member/report/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/report/admin/activity/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/report/member/activity/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/report/admin/incomes/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/report/member/incomes/file/**", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/users/industries", HttpMethod.GET.name()));
+		matcher.add(new AntPathRequestMatcher("/users/positions", HttpMethod.GET.name()));
 		return matcher;
 	}
 	
@@ -61,7 +65,7 @@ public class SecurityConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("http://localhost:4200")
-				.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(),
+				 .allowedHeaders("*").allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(),
 				HttpMethod.PUT.name(),
 				HttpMethod.DELETE.name(),
 				HttpMethod.PATCH.name());

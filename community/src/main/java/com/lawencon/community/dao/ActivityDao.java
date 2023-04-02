@@ -24,6 +24,7 @@ import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeRes;
 import com.lawencon.community.pojo.activity.PojoUpcomingActivityByTypeResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesAdminResData;
 import com.lawencon.community.pojo.report.PojoReportIncomesMemberResData;
+import com.lawencon.community.util.GenerateString;
 
 @Repository
 public class ActivityDao extends AbstractJpaDao {
@@ -34,7 +35,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<Activity> listActivities = new ArrayList<>();
 
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active, a.created_at  ");
 		sqlQuery.append("FROM t_activity a ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
@@ -108,7 +109,7 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<Activity> searchActivities(int offset, int limit, String sortType, String title) {
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active ");
+				"SELECT a.id AS a_id, a.category_id, c.category_code, c.category_name, tat.id AS tat_id, tat.type_code, tat.activity_name, a.file_id, a.user_id, a.price, a.title, a.provider, a.activity_location, a.start_date, a.end_date,a.description,u.profile_id ,p.fullname, a.ver, a.is_active, a.created_at ");
 		sqlQuery.append("FROM t_activity a ");
 		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
 		sqlQuery.append("INNER JOIN t_category c ON a.category_id = c.id ");
@@ -196,9 +197,10 @@ public class ActivityDao extends AbstractJpaDao {
 	public List<PojoReportIncomesMemberResData> getActivityIncomeByUser(String userId, Float percentIncome,
 			LocalDate startDate, LocalDate endDate, String typeCode, Integer offset, Integer limit) {
 		final List<PojoReportIncomesMemberResData> resultList = new ArrayList<>();
+		try {
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT tat.activity_name,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("SELECT tat.activity_name,a.title,p.updated_at SUM(p.subtotal * :percentValue) as total_income ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
@@ -214,7 +216,7 @@ public class ActivityDao extends AbstractJpaDao {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
 
-		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, i.activity_id, tat.activity_name, a.title, p.updated_at ");
 
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("userId", userId);
@@ -240,14 +242,21 @@ public class ActivityDao extends AbstractJpaDao {
 		for (Object objs : result) {
 			final Object[] obj = (Object[]) objs;
 			final PojoReportIncomesMemberResData data = new PojoReportIncomesMemberResData();
+
 			data.setTitle(obj[0].toString());
 			data.setType(obj[1].toString());
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+			if (obj[3] != null) {
+				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
 			} else {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}
+			data.setDateReceived(GenerateString.getIndonesianDate(Timestamp.valueOf(obj[2].toString()).toLocalDateTime()));
 			resultList.add(data);
+		}
+		}
+		catch(Exception e) {
+		e.printStackTrace();
+		
 		}
 
 		return resultList;
@@ -485,7 +494,7 @@ public class ActivityDao extends AbstractJpaDao {
 	}
 	@SuppressWarnings("unchecked")
 	public List<Activity> getListActivityByCategoryAndType(final String categoryCode, final String typeCode,
-	        final int offset, final int limit, final String userId) throws Exception {
+	        final int offset, final int limit, final String userId, String sortType) throws Exception {
 	    StringBuilder sql = new StringBuilder();
 	    List<Activity> listActivity = new ArrayList<>();
 	    try {
@@ -507,6 +516,22 @@ public class ActivityDao extends AbstractJpaDao {
 	    if (userId != null && !userId.isEmpty()) {
 	        sql.append("AND a.user_id = :userId ");
 	    }
+	    if (sortType != null) {
+			switch (sortType.toLowerCase()) {
+			case "highest":
+				sql.append("ORDER BY a.price DESC ");
+				break;
+			case "lowest":
+				sql.append("ORDER BY a.price ASC ");
+				break;
+			case "created_at":
+				sql.append("ORDER BY a.created_at DESC ");
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid sort type: " + sortType);
+			}
+		}
+
 
 	    Query q = ConnHandler.getManager().createNativeQuery(sql.toString(), Activity.class);
 
@@ -545,7 +570,7 @@ public class ActivityDao extends AbstractJpaDao {
 		final List<PojoReportIncomesAdminResData> resultList = new ArrayList<>();
 		BigDecimal percentValue = new BigDecimal(Float.toString(percentIncome));
 		final StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("SELECT pr.fullname,a.title, SUM(p.subtotal * :percentValue) as total_income ");
+		sqlQuery.append("SELECT pr.fullname,a.title,p.updated_at SUM(p.subtotal * :percentValue) as total_income ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON p.invoice_id = i.id ");
 		sqlQuery.append("INNER JOIN t_activity a ON i.activity_id = a.id ");
@@ -563,7 +588,7 @@ public class ActivityDao extends AbstractJpaDao {
 		if (typeCode != null && !typeCode.isEmpty()) {
 			sqlQuery.append("AND tat.type_code = :typeCode ");
 		}
-		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title ");
+		sqlQuery.append("GROUP BY a.type_activity_id, pr.fullname, a.title, p.updated_at ");
 
 		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
 		query.setParameter("percentValue", percentValue);
@@ -593,11 +618,12 @@ public class ActivityDao extends AbstractJpaDao {
 			data.setMemberName(obj[0].toString());
 			data.setType(obj[1].toString());
 
-			if (obj[2] != null) {
-				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+			if (obj[3] != null) {
+				data.setTotalIncomes(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
 			} else {
 				data.setTotalIncomes(BigDecimal.ZERO);
 			}
+			data.setDateReceived(GenerateString.getIndonesianDate(Timestamp.valueOf(obj[2].toString()).toLocalDateTime()));
 			resultList.add(data);
 		}
 
@@ -750,7 +776,7 @@ public class ActivityDao extends AbstractJpaDao {
 			sqlQuery.append(
 					"SELECT a.id, a.category_id, a.description, a.user_id,a.type_activity_id, a.file_id, a.title, a.provider, a.activity_location, ");
 			sqlQuery.append(
-					"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active ");
+					"a.start_date, a.end_date, a.price, a.created_at, a.created_by, a.updated_at, a.updated_by, a.ver, a.is_active, a.created_at ");
 			sqlQuery.append("FROM t_activity a ");
 			sqlQuery.append("JOIN t_activity_type tat ON a.type_activity_id = tat.id ");
 			sqlQuery.append("JOIN t_category c ON a.category_id = c.id ");
@@ -771,13 +797,13 @@ public class ActivityDao extends AbstractJpaDao {
 			if (sortType != null) {
 				switch (sortType.toLowerCase()) {
 				case "highest":
-					sqlQuery.append("ORDER BY a.price DESC ");
+					sqlQuery.append(" ORDER BY a.price DESC ");
 					break;
 				case "lowest":
-					sqlQuery.append("ORDER BY a.price ASC ");
+					sqlQuery.append(" ORDER BY a.price ASC ");
 					break;
 				case "created_at":
-					sqlQuery.append("ORDER BY a.created_at DESC ");
+					sqlQuery.append(" ORDER BY a.created_at DESC ");
 					break;
 				default:
 					throw new IllegalArgumentException("Invalid sort type: " + sortType);

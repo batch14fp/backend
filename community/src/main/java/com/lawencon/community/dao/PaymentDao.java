@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Activity;
+import com.lawencon.community.model.ActivityType;
 import com.lawencon.community.model.BankPayment;
+import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Invoice;
 import com.lawencon.community.model.MemberStatus;
@@ -318,17 +320,46 @@ public class PaymentDao extends AbstractJpaDao {
 		return paymentList;
 	}
 	
+public Integer getAllPaymentByUserIdCount(String userId, Boolean isPaid) {
+		
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append("SELECT COUNT(p.id) ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
+		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
+		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("LEFT JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
+		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id=i.membership_id ");
+		sqlQuery.append("WHERE i.user_id= :userId ");
+
+		if (isPaid != null) {
+			sqlQuery.append("AND p.is_paid= :isPaid ");
+		}
+
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString())
+				.setParameter("userId", userId);
+
+		if (isPaid!= null) {
+			query.setParameter("isPaid", isPaid);
+		}
+
+		Integer count = ((Number) query.getSingleResult()).intValue();
+		
+		return count;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Payment> getAllPayment(Boolean isPaid, Integer offset, Integer limit) {
 		
 		StringBuilder sqlQuery = new StringBuilder();
 		sqlQuery.append(
-				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver  as payment_ver ");
+				"SELECT i.id as invoice_id, i.invoice_code, i.user_id, i.voucher_id,v.voucher_code,  i.activity_id, a.title, a.price as activity_price, a.start_date, a.end_date,i.membership_id, ms.status_name, ms.code_status, ms.period_day, ms.price as ms_price, i.ver, i.is_active, p.id as payment_id, p.file_id, p.bank_payment_id, p.total,p.expired, p.subtotal, p.tax_amount, p.disc_amount, bp.account_name, bp.account_number, bp.bank_name, p.is_paid, p.ver  as payment_ver, tat.activity_name, c.category_name, p.updated_by ");
 		sqlQuery.append("FROM t_payment p ");
 		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
 		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
 		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_category c ON c.id = a.category_id ");
 		sqlQuery.append("LEFT JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
 		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
 
@@ -378,6 +409,12 @@ public class PaymentDao extends AbstractJpaDao {
 					activity.setPrice(BigDecimal.valueOf(Long.valueOf(obj[7].toString())));
 					activity.setStartDate(Timestamp.valueOf(obj[8].toString()).toLocalDateTime());
 					activity.setEndDate(Timestamp.valueOf(obj[9].toString()).toLocalDateTime());
+					final ActivityType activityType = new ActivityType();
+					activityType.setActivityName(obj[30].toString());
+					activity.setTypeActivity(activityType);
+					final Category category = new Category();
+					category.setCategoryName(obj[31].toString());
+					activity.setCategory(category);
 					invoice.setActivity(activity);
 				}
 				if (obj[10] != null) {
@@ -412,9 +449,12 @@ public class PaymentDao extends AbstractJpaDao {
 				if(obj[24]!=null) {
 				payment.setDiscAmount(BigDecimal.valueOf(Long.valueOf(obj[24].toString())));
 				}
+				
+			
 				payment.setIsPaid(Boolean.valueOf(obj[28].toString()));
 				payment.setInvoice(invoice);
 				payment.setVersion(Integer.valueOf(obj[29].toString()));
+				payment.setUpdatedBy(obj[32].toString());
 				paymentList.add(payment);
 			}
 		} catch (Exception e) {
@@ -422,6 +462,35 @@ public class PaymentDao extends AbstractJpaDao {
 
 		}
 		return paymentList;
+	}
+	
+public Integer getAllPaymentCount(Boolean isPaid) {
+		
+		StringBuilder sqlQuery = new StringBuilder();
+		sqlQuery.append(
+				"SELECT COUNT(p.id) ");
+		sqlQuery.append("FROM t_payment p ");
+		sqlQuery.append("INNER JOIN t_invoice i ON i.id = p.invoice_id ");
+		sqlQuery.append("LEFT JOIN t_voucher v ON v.id = i.voucher_id ");
+		sqlQuery.append("LEFT JOIN t_activity a ON i.activity_id = a.id ");
+		sqlQuery.append("INNER JOIN t_activity_type tat ON tat.id = a.type_activity_id ");
+		sqlQuery.append("INNER JOIN t_category c ON c.id = a.category_id ");
+		sqlQuery.append("LEFT JOIN t_bank_payment bp ON p.bank_payment_id = bp.id ");
+		sqlQuery.append("LEFT JOIN t_member_status ms ON ms.id =i.membership_id ");
+
+		if (isPaid != null) {
+			sqlQuery.append("WHERE p.is_paid= :isPaid ");
+		}
+
+		Query query = ConnHandler.getManager().createNativeQuery(sqlQuery.toString());
+
+		if (isPaid!= null) {
+			query.setParameter("isPaid", isPaid);
+		}
+
+		final Integer result = ((Number) query.getSingleResult()).intValue();
+
+		return result;
 	}
 
 
