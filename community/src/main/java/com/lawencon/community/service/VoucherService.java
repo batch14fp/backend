@@ -42,8 +42,6 @@ public class VoucherService {
 	    if(voucher.getExpDate() == null) {
 	        throw new RuntimeException("Expired Date Voucher cannot be empty.");
 	    }
-	    
-	   
 	}
 
 

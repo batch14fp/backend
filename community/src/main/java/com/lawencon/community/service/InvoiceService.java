@@ -64,6 +64,9 @@ public class InvoiceService {
 	    }
 
 	}
+
+	
+	
 	
 
 	public PojoInsertRes save(PojoInvoiceReqInsert data) {
@@ -89,12 +92,15 @@ public class InvoiceService {
 		final BigDecimal price = invoiceNew.getActivity().getPrice();
 		final SalesSettings setting = salesSettingDao.getSalesSetting();
 		final BigDecimal taxAmount = price.multiply(BigDecimal.valueOf(setting.getTax()));
-		BigDecimal discAmount = null;
+		BigDecimal discAmount = BigDecimal.ZERO;
+		BigDecimal subTotal = price;
 		if (invoice.getVoucher() != null) {
 			if (invoice.getVoucher().getUsedCount() <= invoice.getVoucher().getLimitApplied()) {
 				discAmount = price.multiply(BigDecimal.valueOf(invoice.getVoucher().getDiscountPercent()));
+				subTotal= price.subtract(discAmount);
 			}
-			final BigDecimal subTotal = price.subtract(discAmount);
+		}
+			
 			payment.setDiscAmount(discAmount);
 			payment.setSubtotal(subTotal);
 			payment.setTaxAmount(taxAmount);
@@ -108,7 +114,7 @@ public class InvoiceService {
 
 			pojoInsertRes.setId(invoiceNew.getId());
 			pojoInsertRes.setMessage("Save Success!");
-		}
+		
 		
 		ConnHandler.commit();
 		return pojoInsertRes;
@@ -167,12 +173,18 @@ public class InvoiceService {
 			res.setMembershipId(invoice.getMemberStatus().getId());
 		}
 
+		Long discountNum=null;
+		if(invoice.getActivity().getFile()!=null) {
 		res.setImageId(invoice.getActivity().getFile().getId());
+		}
 		res.setPrice(invoice.getActivity().getPrice());
 		res.setStartDate(invoice.getActivity().getStartDate());
+		if(invoice.getVoucher()!=null) {
 		res.setVoucherId(invoice.getVoucher().getId());
 		res.setVoucherCode(invoice.getVoucher().getVoucherCode());
-		Long discountNum = (long) (invoice.getVoucher().getDiscountPercent()*100);
+		discountNum= (long) (invoice.getVoucher().getDiscountPercent()*100);
+		}
+		
 		res.setDiscountNum(discountNum);
 		res.setProvider(invoice.getActivity().getProvider());
 		res.setLocation(invoice.getActivity().getActivityLocation());

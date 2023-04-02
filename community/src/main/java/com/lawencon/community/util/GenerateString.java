@@ -26,12 +26,21 @@ public class GenerateString {
 	}
 	
 	    public static String generateInvoice() {
-	        String pattern = "yyMMdd";
+	    	String pattern = "yyMMdd";
 	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 	        String date = simpleDateFormat.format(new Date());
-	        DecimalFormat decimalFormat = new DecimalFormat("000000");
+	        DecimalFormat decimalFormat = new DecimalFormat("000");
 	        String counterString = decimalFormat.format(++counter);
-	        return date + counterString;
+	        Random random = new Random();
+	        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	        StringBuilder sb = new StringBuilder();
+	        for (int i = 0; i < 3; i++) {
+	            int index = random.nextInt(alphabet.length());
+	            sb.append(alphabet.charAt(index));
+	        }
+	        String randomString = sb.toString();
+	        
+	        return date + counterString + randomString;
 	  
 	}
 	   
