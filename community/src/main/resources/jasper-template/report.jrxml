@@ -292,14 +292,6 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="53">
-			<staticText>
-				<reportElement x="370" y="10" width="100" height="20" uuid="20d73ec8-838b-49ce-ae6c-3f6ae1ea11cd"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<text><![CDATA[Total Participants :]]></text>
-			</staticText>
-		</band>
+		<band height="53"/>
 	</summary>
 </jasperReport>
