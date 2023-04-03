@@ -28,6 +28,7 @@ import com.lawencon.community.pojo.memberstatus.PojoMemberStatusRes;
 import com.lawencon.community.pojo.payment.PojoPaymentDetailRes;
 import com.lawencon.community.pojo.payment.PojoPaymentDetailResData;
 import com.lawencon.community.pojo.payment.PojoUserPaymentReqUpdate;
+import com.lawencon.community.pojo.salessetting.PojoSalesSettingRes;
 import com.lawencon.community.pojo.voucher.PojoActivityVoucherRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherAppliedRes;
@@ -37,6 +38,7 @@ import com.lawencon.community.service.BankPaymentService;
 import com.lawencon.community.service.CategoryService;
 import com.lawencon.community.service.MemberStatusService;
 import com.lawencon.community.service.PaymentService;
+import com.lawencon.community.service.SalesSettingService;
 import com.lawencon.community.service.VoucherService;
 
 @RestController
@@ -50,8 +52,8 @@ public class ActivityController {
 	private ActivityTypeService activityTypeService;
 	private MemberStatusService memberStatusService;
 	private BankPaymentService bankPaymentService;
-
-	public ActivityController(final BankPaymentService bankPaymentService, final MemberStatusService memberStatusService,final ActivityTypeService activityTypeService, final VoucherService voucherService, final PaymentService paymentService,
+	private SalesSettingService salesSettingService;
+	public ActivityController(final SalesSettingService salesSettingService, final BankPaymentService bankPaymentService, final MemberStatusService memberStatusService,final ActivityTypeService activityTypeService, final VoucherService voucherService, final PaymentService paymentService,
 			final ActivityService activityService) {
 		this.activityService = activityService;
 		this.paymentService = paymentService;
@@ -59,6 +61,7 @@ public class ActivityController {
 		this.activityTypeService = activityTypeService;
 		this.memberStatusService = memberStatusService;
 		this.bankPaymentService = bankPaymentService;
+		this.salesSettingService = salesSettingService;
 	}
 
 	@GetMapping
@@ -206,7 +209,6 @@ public class ActivityController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-
 	@GetMapping("/categories")
 	public ResponseEntity<List<PojoCategoryRes>> getAllCategories() throws Exception {
 		List<PojoCategoryRes> resGet = categoryService.getAll();
@@ -232,6 +234,12 @@ public class ActivityController {
 		List<PojoBankPaymentRes> resGet = bankPaymentService.getAll();
 		return new ResponseEntity<>(resGet, HttpStatus.OK);
 	}
+	@GetMapping("/sales-settings")
+	public ResponseEntity<PojoSalesSettingRes> getSalesSetting(){
+		PojoSalesSettingRes resGet = salesSettingService.getSalesSetting();
+		return new ResponseEntity<>(resGet, HttpStatus.OK);
+	}
+	
 	
 	
 

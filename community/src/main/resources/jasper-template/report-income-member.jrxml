@@ -266,14 +266,6 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="45">
-			<staticText>
-				<reportElement x="351" y="4" width="88" height="20" uuid="20d73ec8-838b-49ce-ae6c-3f6ae1ea11cd"/>
-				<textElement>
-					<font fontName="Lato" size="12"/>
-				</textElement>
-				<text><![CDATA[Total Incomes :]]></text>
-			</staticText>
-		</band>
+		<band height="45"/>
 	</summary>
 </jasperReport>

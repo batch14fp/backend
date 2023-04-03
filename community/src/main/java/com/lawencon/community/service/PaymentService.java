@@ -293,6 +293,20 @@ public class PaymentService {
 			res.setIsPaid(data.getIsPaid());
 			res.setTaxAmmount(data.getTaxAmount());
 			res.setVer(data.getVersion());
+			if(data.getVersion()<1) {
+				res.setStatusTrans("Unpaid");
+			}
+			else if(data.getVersion()==1){
+				res.setStatusTrans("On-Process");
+			}
+			else if(data.getVersion()>1) {
+				if(data.getIsPaid()) {
+				res.setStatusTrans("Approved");
+				}
+				else {
+					res.setStatusTrans("Disapproved");
+				}
+			}
 			res.setTotal(data.getTotal());
 			resList.add(res);
 
