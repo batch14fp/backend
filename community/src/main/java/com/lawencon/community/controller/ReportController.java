@@ -277,8 +277,8 @@ public class ReportController {
 
 
 	@GetMapping("/admin/incomes")
-	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports(@RequestParam String startDate,
-			@RequestParam String endDate, @RequestParam(required = false) String typeCode,
+	public ResponseEntity<PojoReportIncomesAdminRes> getAdminReports(@RequestParam(required = false) String startDate,
+			@RequestParam(required = false)  String endDate, @RequestParam(required = false) String typeCode,
 			@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
 		LocalDate startDateParam = null;
 		LocalDate endDateParam = null;
